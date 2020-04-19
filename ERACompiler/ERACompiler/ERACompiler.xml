@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ERACompiler</name>
+    </assembly>
+    <members>
+        <member name="T:ERACompiler.Modules.Compiler">
+            <summary> 
+            The main abstraction class of the compiler. 
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Compiler.Compile(System.String)">
+            <summary> 
+             Main compiler function.       
+            </summary>
+            <returns>
+             A string with the compiled source code. It is ready to be written to the file.
+            </returns>
+        </member>
+        <member name="T:ERACompiler.Program">
+            Entrance point of the compiler
+        </member>
+    </members>
+</doc>
