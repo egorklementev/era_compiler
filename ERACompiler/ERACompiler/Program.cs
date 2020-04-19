@@ -4,14 +4,14 @@ using ERACompiler.Modules;
 
 namespace ERACompiler
 {
-    /**
-     * Entrance point of the compiler
-     */
+    /// <summary>
+    /// The entrance point of the compiler.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            // TODO: use special folders for compilation of the files in it
+            // TODO: use special folders for compilation of the files in it.
 
             // Name of the file with the source code
             string fileName = "sample_code.era";
