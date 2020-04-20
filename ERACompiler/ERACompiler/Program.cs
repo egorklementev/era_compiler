@@ -14,7 +14,7 @@ namespace ERACompiler
             // TODO: use special folders for compilation of the files in it.
 
             // Name of the file with the source code
-            string fileName = "sample_code.era";
+            string fileName = "sample.era";
 
             try
             {

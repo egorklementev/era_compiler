@@ -87,10 +87,11 @@ namespace ERACompiler.Modules
                     {
                         lineChar = 0;
                         lineNumber++;
-                        while (c != '\n' || i < sourceCode.Length)
+                        while (c != '\n' && i < sourceCode.Length)
                         {
                             c = sourceCode[i++];                            
                         }
+                        remembered = "\r\n";
                     }
                     else
                     {
@@ -116,8 +117,7 @@ namespace ERACompiler.Modules
         /// <param name="list">List with tokens to be analyzed.</param>
         /// <returns>Compressed and improved token list.</returns>
         private List<Token> Analyze(List<Token> list)
-        {
-            
+        {          
             for (int i = 0; i < list.Count; i++)
             {
                 // Special case for ':=' operator.
@@ -131,57 +131,26 @@ namespace ERACompiler.Modules
                     }
                 }
             
-                // Combine identifier and number tokens into a single token            
-                if (list[i].Type == TokenType.IDENTIFIER)
+                // Combine identifier/register/keyword/number tokens into a single token if any
+                if (list[i].Type == TokenType.IDENTIFIER || list[i].Type == TokenType.KEYWORD || list[i].Type == TokenType.REGISTER)
                 {
                     int j = i;
                     TokenPosition pos = list[j].Position;
+                    TokenType savedType = list[j].Type;
                     int n = 0;
                     string value = "";
-                    while (j < list.Count && (list[j].Type == TokenType.IDENTIFIER || list[j].Type == TokenType.NUMBER))
+                    while (j < list.Count && 
+                        (list[j].Type == TokenType.NUMBER || 
+                        list[j].Type == TokenType.IDENTIFIER || 
+                        list[j].Type == TokenType.KEYWORD || 
+                        list[j].Type == TokenType.REGISTER))
                     {
                         value += list[j].Value;
                         n++;
                         j++;
                     }
                     list.RemoveRange(i, n);
-                    list.Insert(i, new Token(TokenType.IDENTIFIER, value, pos));
-                }
-            
-                // Combine digit tokens into a single token            
-                if (list[i].Type == TokenType.NUMBER)
-                {
-                    int j = i;
-                    TokenPosition pos = list[j].Position;
-                    int n = 0;
-                    string value = "";
-                    while (j < list.Count && list[j].Type == TokenType.NUMBER)
-                    {
-                        value += list[j].Value;
-                        n++;
-                        j++;
-                    }
-                    list.RemoveRange(i, n);
-
-                    list.Insert(i, new Token(TokenType.NUMBER, value, pos));
-                }
-
-                // Keyword special cases
-                if (i < list.Count - 1 && list[i].Type == TokenType.KEYWORD && list[i + 1].Type == TokenType.IDENTIFIER)
-                {
-                    TokenPosition pos = list[i].Position;
-                    string value = list[i].Value + list[i + 1].Value;
-                    list.RemoveRange(i, 2);
-                    list.Insert(i, new Token(TokenType.IDENTIFIER, value, pos));
-                    i--;
-                }
-                if (i < list.Count - 1 && list[i].Type == TokenType.IDENTIFIER && list[i + 1].Type == TokenType.KEYWORD)
-                {
-                    TokenPosition pos = list[i].Position;
-                    string value = list[i].Value + list[i + 1].Value;
-                    list.RemoveRange(i, 2);
-                    list.Insert(i, new Token(TokenType.IDENTIFIER, value, pos));
-                    i--;
+                    list.Insert(i, new Token(n > 1 ? TokenType.IDENTIFIER : savedType, value, pos));
                 }
             }
 
@@ -244,6 +213,12 @@ namespace ERACompiler.Modules
             if ((remembered + c).Equals("//"))
             {
                 return new Token(TokenType.DELIMITER, remembered + c, pos);
+            }
+
+            // Special case for '/=' operator
+            if ((remembered + c).Equals("/="))
+            {
+                return new Token(TokenType.OPERATOR, remembered + c, pos);
             }
 
             return null;

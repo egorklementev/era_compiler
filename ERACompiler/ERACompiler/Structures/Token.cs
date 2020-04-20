@@ -22,6 +22,8 @@ namespace ERACompiler.Structures
         {
             // To print newline symbols conveniently.
             string finalValue = Value;
+            if (finalValue.Equals("\t"))
+                finalValue = "\\t";
             if (finalValue.Equals("\n"))
                 finalValue = "\\n";
             if (finalValue.Equals("\r\n"))

@@ -42,12 +42,16 @@ namespace ERACompiler.Modules
                     foreach (Token t in lst)                    
                         sb.Append(t.ToString()).Append("\r\n");
                     return sb.ToString();
+
                 case CompilationMode.SYNTAX:
                     break;
+
                 case CompilationMode.SEMANTIC:
                     break;
+
                 case CompilationMode.GENERATION:
                     break;
+
                 default:
                     break;
             }
