@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ERACompiler.Structures;
+using ERACompiler.Utilities;
+using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Modules
 {
@@ -56,7 +58,7 @@ namespace ERACompiler.Modules
             //
             if (sourceCode.Length <= 2)
             {
-                // LOG ERROR AND EXIT
+                Logger.LogError(new LexicalError("The source code length should be at least more than two characters!!!"));
                 Environment.Exit(-1);
             }
             //

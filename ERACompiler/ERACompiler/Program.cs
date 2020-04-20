@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ERACompiler.Modules;
+using ERACompiler.Utilities;
 
 namespace ERACompiler
 {
@@ -15,6 +16,9 @@ namespace ERACompiler
 
             // Name of the file with the source code
             string fileName = "sample.era";
+
+            // Logging
+            Logger logger = new Logger(true);
 
             try
             {

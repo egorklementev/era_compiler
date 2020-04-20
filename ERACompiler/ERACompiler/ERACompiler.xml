@@ -74,15 +74,66 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
+        <member name="T:ERACompiler.Modules.SyntaxAnalyzer">
+            <summary>
+            The purpose of this class it to check the code for syntax errors and build Abstract Syntax Tree that can be used by Semantic Analyzer.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.SyntaxAnalyzer.#ctor">
+            <summary>
+            Used for initialization of some variables.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.SyntaxAnalyzer.BuildAST(System.Collections.Generic.List{ERACompiler.Structures.Token})">
+            <summary>
+            Main function of the class. It checks the structure of the token list for syntax errors and if it 
+            is correct, returns the root node of the constructed Abstract Syntax Tree.
+            </summary>
+            <param name="tokens">The list of tokens from Lexical Analyzer.</param>
+            <returns>Constructed Abstract Syntax Tree.</returns>
+        </member>
         <member name="T:ERACompiler.Program">
             <summary>
             The entrance point of the compiler.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.ASTEntry">
+            <summary>
+            The class representing Abstract Syntax Tree Entry
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.ASTEntry.Parent">
+            <summary>
+            Parent node. Only the root node has parent equals to null.
             </summary>
         </member>
         <member name="T:ERACompiler.Structures.Token">
             <summary>
             Represents a token which is used by Syntax Analyzer.
             </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Token.Type">
+            <summary>
+            A type that token prepresents.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Token.Value">
+            <summary>
+            A token value. For example, identifier name "arg1", or number 528.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Token.Position">
+            <summary>
+            A position of the token in the source code in terms of lines and characters.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Token.#ctor(ERACompiler.Structures.TokenType,System.String,ERACompiler.Structures.TokenPosition)">
+            <summary>
+            Allows to create token instances.
+            </summary>
+            <param name="type">The type of the token.</param>
+            <param name="value">The value token has.</param>
+            <param name="position">The position of the token in the source code.</param>
         </member>
         <member name="T:ERACompiler.Structures.TokenType">
             <summary>
@@ -95,6 +146,46 @@
         <member name="T:ERACompiler.Structures.TokenPosition">
             <summary>
             Position (in terms of line and characters on the line) of the token in the source code.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Utilities.Logger">
+            <summary>
+            Used to log the compilation process and display all the errors in compilation.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Utilities.Logger.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="path">Output file for logs.</param>
+            <param name="enableLogging">Whether or not to log anything.</param>
+        </member>
+        <member name="M:ERACompiler.Utilities.Logger.#ctor(System.Boolean)">
+            <summary>
+            Constuctor without specification of the output file.
+            </summary>
+            <param name="enableLogging">Whether or not to log anything.</param>
+        </member>
+        <member name="M:ERACompiler.Utilities.Logger.LogException(System.Exception)">
+            <summary>
+            Logs exception to the specified log file.
+            </summary>
+            <param name="ex">Exception to be logged.</param>
+        </member>
+        <member name="M:ERACompiler.Utilities.Logger.LogError(ERACompiler.Utilities.Errors.CompilationError)">
+            <summary>
+            Logs the compilation error to the specified log file.
+            </summary>
+            <param name="er">Error to be logged.</param>
+        </member>
+        <member name="M:ERACompiler.Utilities.Logger.EnableLogging">
+            <summary>
+            Enables the Logger to log compilation process to the file.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Utilities.Logger.DisableLogging">
+            <summary>
+            Disables the Logger from logging compilation process to the file.
             </summary>
         </member>
     </members>
