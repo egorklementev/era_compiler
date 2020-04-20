@@ -20,12 +20,21 @@ namespace ERACompiler.Structures
 
         public override string ToString()
         {
+            // To print newline symbols conveniently.
+            string finalValue = Value;
+            if (finalValue.Equals("\n"))
+                finalValue = "\\n";
+            if (finalValue.Equals("\r\n"))
+                finalValue = "\\r\\n";
+            if (finalValue.Equals(" "))
+                finalValue = "\" \"";
+
             StringBuilder sb = new StringBuilder();
             sb.Append("Token type: ")
                 .Append(Type.ToString())
                 .Append("\n")
                 .Append("Value: ")
-                .Append(Value)
+                .Append(finalValue)
                 .Append("\n")
                 .Append("Position: ")
                 .Append(Position.ToString())

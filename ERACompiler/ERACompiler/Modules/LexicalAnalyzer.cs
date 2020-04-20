@@ -138,7 +138,7 @@ namespace ERACompiler.Modules
                     TokenPosition pos = list[j].Position;
                     int n = 0;
                     string value = "";
-                    while (j < list.Count && list[j].Type == TokenType.IDENTIFIER || list[j].Type == TokenType.NUMBER)
+                    while (j < list.Count && (list[j].Type == TokenType.IDENTIFIER || list[j].Type == TokenType.NUMBER))
                     {
                         value += list[j].Value;
                         n++;
@@ -166,8 +166,16 @@ namespace ERACompiler.Modules
                     list.Insert(i, new Token(TokenType.NUMBER, value, pos));
                 }
 
-                // Keyword special case
+                // Keyword special cases
                 if (i < list.Count - 1 && list[i].Type == TokenType.KEYWORD && list[i + 1].Type == TokenType.IDENTIFIER)
+                {
+                    TokenPosition pos = list[i].Position;
+                    string value = list[i].Value + list[i + 1].Value;
+                    list.RemoveRange(i, 2);
+                    list.Insert(i, new Token(TokenType.IDENTIFIER, value, pos));
+                    i--;
+                }
+                if (i < list.Count - 1 && list[i].Type == TokenType.IDENTIFIER && list[i + 1].Type == TokenType.KEYWORD)
                 {
                     TokenPosition pos = list[i].Position;
                     string value = list[i].Value + list[i + 1].Value;

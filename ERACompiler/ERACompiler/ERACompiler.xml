@@ -9,13 +9,31 @@
             The main abstraction class of the compiler. 
             </summary>
         </member>
-        <member name="M:ERACompiler.Modules.Compiler.Compile(System.String)">
+        <member name="M:ERACompiler.Modules.Compiler.#ctor">
+            <summary>
+            Constructor for the compiler. Initializates all the modules such as Lexical Analyzer, etc.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Compiler.Compile(System.String,ERACompiler.Modules.Compiler.CompilationMode)">
             <summary> 
              Main compiler function.       
             </summary>
             <returns>
              A string with the compiled source code. It is ready to be written to the file.
             </returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Compiler.Compile(System.String)">
+            <summary>
+            General compilation function. Returns generated assembly code.
+            </summary>
+            <param name="sourceCode">A source code from a file.</param>
+            <returns>Generated string of assembly commands.</returns>
+        </member>
+        <member name="T:ERACompiler.Modules.Compiler.CompilationMode">
+            <summary>
+            Represents a level of compilation.
+            For example syntax means lexical analysis plus syntax analysis.
+            </summary>
         </member>
         <member name="T:ERACompiler.Modules.LexicalAnalyzer">
             <summary>
