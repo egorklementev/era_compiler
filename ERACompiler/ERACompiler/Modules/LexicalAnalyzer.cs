@@ -56,8 +56,8 @@ namespace ERACompiler.Modules
             //
             if (sourceCode.Length <= 2)
             {
-                throw (new Exception("Small or empty source code file!!!"));
-                //Environment.Exit(-1);
+                // LOG ERROR AND EXIT
+                Environment.Exit(-1);
             }
             //
             // ------------

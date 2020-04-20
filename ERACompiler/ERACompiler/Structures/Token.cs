@@ -5,12 +5,27 @@ namespace ERACompiler.Structures
     /// <summary>
     /// Represents a token which is used by Syntax Analyzer.
     /// </summary>
-    class Token
+    public class Token
     {
+        /// <summary>
+        /// A type that token prepresents.
+        /// </summary>
         public TokenType Type { get; }
+        /// <summary>
+        /// A token value. For example, identifier name "arg1", or number 528.
+        /// </summary>
         public string Value { get; }
+        /// <summary>
+        /// A position of the token in the source code in terms of lines and characters.
+        /// </summary>
         public TokenPosition Position { get; }
 
+        /// <summary>
+        /// Allows to create token instances.
+        /// </summary>
+        /// <param name="type">The type of the token.</param>
+        /// <param name="value">The value token has.</param>
+        /// <param name="position">The position of the token in the source code.</param>
         public Token(TokenType type, string value, TokenPosition position)
         {
             Type = type;
@@ -66,7 +81,7 @@ namespace ERACompiler.Structures
     /// <summary>
     /// Position (in terms of line and characters on the line) of the token in the source code.
     /// </summary>
-    class TokenPosition
+    public class TokenPosition
     {
         public int Line { get; }       // # of the line
         public int Character { get; }  // # of the char

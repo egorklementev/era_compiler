@@ -100,5 +100,17 @@ namespace ERACompilerUnitTests
             string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.LEXIS);
             Assert.AreEqual(expectedCode, actualCode);
         }
+
+        // ----------------------------------------------------------------------------------
+
+        [TestMethod]
+        public void CodeTest1()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText("tests/lexical_analyzer/code_test_1.era");
+            string expectedCode = File.ReadAllText("tests/lexical_analyzer/code_expected_1.era");
+            string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.LEXIS);
+            Assert.AreEqual(expectedCode, actualCode);
+        }
     }
 }
