@@ -26,11 +26,12 @@ namespace ERACompiler
                 string compiledCode = eraCompiler.Compile(sourceCode);
 
                 Console.WriteLine("Compilation has been finished.");
+                Console.ReadLine();
 
                 // Create a new file with the compiled code
                 File.WriteAllText("compiled_" + fileName, compiledCode);
             }
-            catch (FileNotFoundException)
+            catch (IOException)
             {
                 throw;
             }

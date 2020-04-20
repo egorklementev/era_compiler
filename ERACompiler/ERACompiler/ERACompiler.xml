@@ -17,8 +17,67 @@
              A string with the compiled source code. It is ready to be written to the file.
             </returns>
         </member>
+        <member name="T:ERACompiler.Modules.LexicalAnalyzer">
+            <summary>
+            Contains functionality for conversion of source code of the program to the list of tokens.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.LexicalAnalyzer.GetTokenList(System.String)">
+            <summary>
+            Converts a program source code to the list of tokens.
+            </summary>
+            <param name="sourceCode">A source code of a program loaded from the file.</param>
+            <returns>A list of tokens constructed from the source code.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.LexicalAnalyzer.Analyze(System.Collections.Generic.List{ERACompiler.Structures.Token})">
+            <summary>
+            Used for correction and analysis of the token list.
+            </summary>
+            <param name="list">List with tokens to be analyzed.</param>
+            <returns>Compressed and improved token list.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.LexicalAnalyzer.IsAbleToDetermineToken(System.Char)">
+            <summary>
+            Used for token determination.
+            </summary>
+            <returns>Whether or not is it possible to understand what token has to be added to the list.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.LexicalAnalyzer.DetermineToken(System.Char)">
+            <summary>
+            Constructs token judjing by the 'remembered' variable.
+            </summary>
+            <returns>Retruns the next token for the list.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.LexicalAnalyzer.DoesMatch(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Checks if any of the elements from the given list starts with the given sequence of charachters.
+            </summary>
+            <param name="list">A list with strings.</param>
+            <param name="sequence">A string for checking.</param>
+            <returns>Whether or not there is a match.</returns>
+        </member>
         <member name="T:ERACompiler.Program">
-            Entrance point of the compiler
+            <summary>
+            The entrance point of the compiler.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.Token">
+            <summary>
+            Represents a token which is used by Syntax Analyzer.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.TokenType">
+            <summary>
+            Represents a type of a token. Used by Syntax Analyzer.
+            </summary>
+            <remarks>
+            DO NOT CHANGE ORDER, ADD TO THE BOTTOM IF NEEDED!!!
+            </remarks>
+        </member>
+        <member name="T:ERACompiler.Structures.TokenPosition">
+            <summary>
+            Position (in terms of line and characters on the line) of the token in the source code.
+            </summary>
         </member>
     </members>
 </doc>

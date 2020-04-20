@@ -1,4 +1,8 @@
-﻿namespace ERACompiler.Modules
+﻿using System;
+using System.Collections.Generic;
+using ERACompiler.Structures;
+
+namespace ERACompiler.Modules
 {
     ///<summary> 
     ///The main abstraction class of the compiler. 
@@ -28,6 +32,12 @@
         {
 
             // Lexical analyzer
+            List<Token> lst = lexis.GetTokenList(sourceCode);
+            foreach (Token t in lst)
+            {
+                Console.WriteLine(t.ToString());
+            }
+
             // Syntax analyzer
             // Semantic analyzer
             // Generator

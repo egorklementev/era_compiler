@@ -1,4 +1,6 @@
-﻿namespace ERACompiler.Structures
+﻿using System.Text;
+
+namespace ERACompiler.Structures
 {
     /// <summary>
     /// Represents a token which is used by Syntax Analyzer.
@@ -16,19 +18,38 @@
             Position = position;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Token type: ")
+                .Append(Type.ToString())
+                .Append("\n")
+                .Append("Value: ")
+                .Append(Value)
+                .Append("\n")
+                .Append("Position: ")
+                .Append(Position.ToString())
+                .Append("\n");
+            return sb.ToString();
+        }
+
     }
 
     /// <summary>
     /// Represents a type of a token. Used by Syntax Analyzer.
     /// </summary>
+    /// <remarks>
+    /// DO NOT CHANGE ORDER, ADD TO THE BOTTOM IF NEEDED!!!
+    /// </remarks>
     public enum TokenType
     {
         KEYWORD,
-        IDENTIFIER,
-        DELIMITER,
         OPERATOR,
-        NUMBER,
-        REGISTER
+        REGISTER,
+        DELIMITER,
+        WHITESPACE,
+        IDENTIFIER,        
+        NUMBER       
     }
 
     /// <summary>
@@ -43,6 +64,11 @@
         {
             Line = line;
             Character = charachter;
+        }
+
+        public override string ToString()
+        {
+            return "Line: " + Line + ", Char: " + Character;
         }
     }
 }
