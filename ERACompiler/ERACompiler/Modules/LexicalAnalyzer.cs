@@ -149,6 +149,24 @@ namespace ERACompiler.Modules
                     list.RemoveRange(i, n);
                     list.Insert(i, new Token(n > 1 ? TokenType.IDENTIFIER : savedType, value, pos));
                 }
+
+                // Special case for numbers
+                if (list[i].Type == TokenType.NUMBER)
+                {
+                    int j = i;
+                    TokenPosition pos = list[j].Position;
+                    TokenType savedType = list[j].Type;
+                    int n = 0;
+                    string value = "";
+                    while (j < list.Count && list[j].Type == TokenType.NUMBER)
+                    {
+                        value += list[j].Value;
+                        n++;
+                        j++;
+                    }
+                    list.RemoveRange(i, n);
+                    list.Insert(i, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
+                }
             }
 
             return list;
