@@ -97,14 +97,34 @@
             The entrance point of the compiler.
             </summary>
         </member>
-        <member name="T:ERACompiler.Structures.ASTEntry">
+        <member name="T:ERACompiler.Structures.ASTNode">
             <summary>
-            The class representing Abstract Syntax Tree Entry
+            The class representing Abstract Syntax Tree node
             </summary>
         </member>
-        <member name="P:ERACompiler.Structures.ASTEntry.Parent">
+        <member name="P:ERACompiler.Structures.ASTNode.Parent">
             <summary>
             Parent node. Only the root node has parent equals to null.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.ASTNode.Children">
+            <summary>
+            Child nodes of the node.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.ASTNode.CrspToken">
+            <summary>
+            The token of the source code that corresponds to this node.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.ASTNode.Type">
+            <summary>
+            Represents the type of an AST entry.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.ASTNode.ASTNodeType">
+            <summary>
+            The type of the AST node.
             </summary>
         </member>
         <member name="T:ERACompiler.Structures.Token">
@@ -137,7 +157,7 @@
         </member>
         <member name="T:ERACompiler.Structures.TokenType">
             <summary>
-            Represents a type of a token. Used by Syntax Analyzer.
+            Represents a type of a token.
             </summary>
             <remarks>
             DO NOT CHANGE ORDER, ADD TO THE BOTTOM IF NEEDED!!!

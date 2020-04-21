@@ -52,17 +52,12 @@ namespace ERACompiler.Modules
         public List<Token> GetTokenList(string sourceCode)
         {
             List<Token> finalList = new List<Token>();
-
-            // ------------
-            // Empty or small enough file error
-            //
+            
             if (sourceCode.Length <= 2)
             {
                 Logger.LogError(new LexicalError("The source code length should be at least more than two characters!!!"));
-                Environment.Exit(-1);
+                Environment.Exit(0);
             }
-            //
-            // ------------
 
             remembered = sourceCode[0] + ""; // Will start traversal from the second character
 

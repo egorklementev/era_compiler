@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Collections.Generic;
 using ERACompiler.Structures;
 
@@ -39,26 +38,36 @@ namespace ERACompiler.Modules
                 // Only Lexical Analyzer.
                 // Returns a string with all tokens listed.
                 case CompilationMode.LEXIS:
-                    List<Token> lst = lexis.GetTokenList(sourceCode);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (Token t in lst)                    
-                        sb.Append(t.ToString()).Append("\r\n");
-                    return sb.ToString();
+                    {
+                        List<Token> lst = lexis.GetTokenList(sourceCode);
+                        StringBuilder sb = new StringBuilder();
+                        foreach (Token t in lst)
+                            sb.Append(t.ToString()).Append("\r\n");
+                        return sb.ToString();
+                    }
 
                 // Lexical and Syntax Analyzers.
                 // Returns a string with AST traversion listed.
                 case CompilationMode.SYNTAX:
-                    return "";
+                    {
+                        List<Token> lst = lexis.GetTokenList(sourceCode);
+                        ASTNode ast = syntax.BuildAST(lst);
+                        return ast.ToString();
+                    }
 
                 // Lexical, Syntax, and Semantic Analyzers.
                 // Returns a string with AAST traversion listed.
                 case CompilationMode.SEMANTIC:
-                    return "";
+                    {
+                        return "";
+                    }
 
                 // Full compilation.
                 // Returns actual assembly generated code.
                 case CompilationMode.GENERATION:
-                    return "";
+                    {
+                        return "";
+                    }
 
                 default:
                     return "";

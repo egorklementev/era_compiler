@@ -62,7 +62,7 @@ namespace ERACompiler.Structures
     }
 
     /// <summary>
-    /// Represents a type of a token. Used by Syntax Analyzer.
+    /// Represents a type of a token.
     /// </summary>
     /// <remarks>
     /// DO NOT CHANGE ORDER, ADD TO THE BOTTOM IF NEEDED!!!
@@ -75,7 +75,8 @@ namespace ERACompiler.Structures
         DELIMITER,
         WHITESPACE,
         IDENTIFIER,        
-        NUMBER       
+        NUMBER,
+        NO_TOKEN
     }
 
     /// <summary>

@@ -12,8 +12,4 @@
     <OutputPath></OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Structures\ASTNodes\" />
-  </ItemGroup>
-
 </Project>
