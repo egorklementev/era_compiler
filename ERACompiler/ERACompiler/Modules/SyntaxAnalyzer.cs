@@ -301,8 +301,11 @@ namespace ERACompiler.Modules
                 case "start":
                 case "entry":
                 case "routine":
-                    {                   
-                        return GetRoutine(tokens.GetRange(0, LocateRoutineEnd(tokens)), parent);
+                    {
+                        int end_i = LocateRoutineEnd(tokens);
+                        ASTNode routinrNode = GetRoutine(tokens.GetRange(0, end_i), parent);
+                        tokens.RemoveRange(0, end_i + 1); // Including 'end'
+                        return routinrNode;
                     }
                 case "pragma":
                     {
@@ -443,7 +446,7 @@ namespace ERACompiler.Modules
 
             if (tokens.Count > 0) // Has 'do' 'end' block
             {
-                routineNode.Children.Add(GetRoutineBody(tokens, routineNode));
+                routineNode.Children.Add(GetRoutineBody(tokens.GetRange(1, tokens.Count - 1), routineNode));
             }
 
             return routineNode;

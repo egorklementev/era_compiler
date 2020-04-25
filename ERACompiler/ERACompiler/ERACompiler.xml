@@ -92,14 +92,14 @@
             <param name="tokens">The list of tokens from Lexical Analyzer.</param>
             <returns>Constructed Abstract Syntax Tree.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SyntaxAnalyzer.GetStatementEnd(System.Collections.Generic.List{ERACompiler.Structures.Token})">
+        <member name="M:ERACompiler.Modules.SyntaxAnalyzer.LocateStatementEnd(System.Collections.Generic.List{ERACompiler.Structures.Token})">
             <summary>
             Locates an index of the ending token of the statement
             </summary>
             <param name="tokens">Token list that starts with statement.</param>
             <returns>Returns an index of the ending token of the statement</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SyntaxAnalyzer.GetRoutineEnd(System.Collections.Generic.List{ERACompiler.Structures.Token})">
+        <member name="M:ERACompiler.Modules.SyntaxAnalyzer.LocateRoutineEnd(System.Collections.Generic.List{ERACompiler.Structures.Token})">
             <summary>
             Locates an index of the ending token of the routine
             </summary>
