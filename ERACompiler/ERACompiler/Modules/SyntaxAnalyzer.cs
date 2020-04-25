@@ -309,7 +309,23 @@ namespace ERACompiler.Modules
                     }
                 case "pragma":
                     {
-                        return null;
+                        ASTNode annotationNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ANNOTATION);
+
+                        int end = 0;
+                        int lastComma = 0;
+                        while (!tokens[end].Value.Equals(";"))
+                        {
+                            if (tokens[end].Value.Equals(","))
+                            {
+                                annotationNode.Children.Add(GetPragmaDeclaration(tokens.GetRange(lastComma + 1, end - lastComma - 1), annotationNode));
+                                lastComma = end;                                
+                            }
+                            end++;
+                        }
+                        annotationNode.Children.Add(GetPragmaDeclaration(tokens.GetRange(lastComma + 1, end - lastComma - 1), annotationNode));
+                        tokens.RemoveRange(0, end + 1);
+
+                        return annotationNode;
                     }
                 default:
                     {
@@ -321,6 +337,23 @@ namespace ERACompiler.Modules
             }
         }
         
+        private ASTNode GetPragmaDeclaration(List<Token> tokens, ASTNode parent) // Identifier ( [ Text ] )
+        {
+            ASTNode prgmDeclNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.PRAGMA_DECLARATION);
+
+            if (tokens.Count == 3)
+            {
+                prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
+            }
+            else
+            {
+                prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
+                prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.IDENTIFIER)); // TODO: Fix to 'Text' rule
+            }
+
+            return prgmDeclNode;
+        }
+
         private ASTNode GetCode(List<Token> tokens, ASTNode parent) // code { VarDeclaration | Statement } end
         {
             ASTNode codeNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.CODE);
