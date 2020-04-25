@@ -36,27 +36,44 @@ namespace ERACompiler.Structures
             Type = type;
 
             if (parent != null) 
-                level = parent.level + 1;            
+                level = parent.level + 2;            
             else            
                 level = 0;            
         }
 
         public override string ToString()
         {
+            // Json format
+
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level)));
-            sb.Append("Node type: ").Append(Type.ToString()).Append("\r\n");
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level)));
-            sb.Append("Token: ").Append(CrspToken.Value);
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+                .Append("{\r\n");
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"type\": ").Append("\"" + Type.ToString() + "\"").Append(",\r\n");            
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");            
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"children\": [");            
 
             if (Children.Count > 0)
             {
                 foreach(ASTNode child in Children)
                 {
-                    sb.Append("\r\n").Append(child.ToString());
+                    sb.Append("\r\n").Append(child.ToString()).Append(',');
                 }
+                sb.Remove(sb.Length - 1, 1); // Remove last ','
+                sb.Append("\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                    .Append("]\r\n");
             }
+            else
+            {
+                sb.Append("]\r\n");
+            }
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+                .Append('}');
 
             return sb.ToString();
         }
@@ -86,6 +103,7 @@ namespace ERACompiler.Structures
             EXPRESSION,
             CONST_DEFINITION,
             LABEL,
+            ASSEMBLER_BLOCK,
             ASSEMBLER_STATEMENT,
             EXTENSION_STATEMENT,
             DIRECTIVE,
@@ -97,23 +115,27 @@ namespace ERACompiler.Structures
             REGISTER,
             PRIMARY,
             VARIABLE_REFERENCE,
+            REFERENCE,
             DEREFERENCE,
             ARRAY_ELEMENT,
             DATA_ELEMENT,
             EXPLICIT_ADDRESS,
             OPERAND,
             OPERATOR,
+            COMPARISON_OPERATOR,
             RECEIVER,
-            PRIMITIVE_OPERATOR,
             ASSIGNMENT,
             CALL,
+            CALL_ARGUMENTS,
             IF,
             WHILE,
             FOR,
             BREAK,
             SWAP,
             GOTO,
-            LOOP_BODY
+            LOOP,
+            LOOP_BODY,
+            BLOCK_BODY
         }
 
     }

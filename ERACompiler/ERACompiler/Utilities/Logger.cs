@@ -49,6 +49,7 @@ namespace ERACompiler.Utilities
         {
             if (isLoggingEnabled)
                 File.AppendAllText(logFilePath, er.ToString() + "\r\n\r\n");
+            Environment.Exit(0);
         }
 
         /// <summary>

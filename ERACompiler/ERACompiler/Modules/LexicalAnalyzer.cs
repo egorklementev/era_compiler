@@ -56,7 +56,6 @@ namespace ERACompiler.Modules
             if (sourceCode.Length <= 2)
             {
                 Logger.LogError(new LexicalError("The source code length should be at least more than two characters!!!"));
-                Environment.Exit(0);
             }
 
             remembered = sourceCode[0] + ""; // Will start traversal from the second character
