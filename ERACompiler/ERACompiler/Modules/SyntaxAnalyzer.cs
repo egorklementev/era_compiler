@@ -135,7 +135,9 @@ namespace ERACompiler.Modules
                 tokens[0].Value.Equals("data") ||
                 tokens[0].Value.Equals("pragma") || 
                 tokens[0].Value.Equals("module") ||
-                tokens[0].Value.Equals("routine");
+                tokens[0].Value.Equals("routine") ||
+                tokens[0].Value.Equals("start") ||
+                tokens[0].Value.Equals("entry");
         }
         
         private ASTNode GetNextUnit(List<Token> tokens, ASTNode parent) // Annotation | Data | Module | Routine | Code
@@ -303,9 +305,9 @@ namespace ERACompiler.Modules
                 case "routine":
                     {
                         int end_i = LocateRoutineEnd(tokens);
-                        ASTNode routinrNode = GetRoutine(tokens.GetRange(0, end_i), parent);
+                        ASTNode routineNode = GetRoutine(tokens.GetRange(0, end_i), parent);
                         tokens.RemoveRange(0, end_i + 1); // Including 'end'
-                        return routinrNode;
+                        return routineNode;
                     }
                 case "pragma":
                     {
@@ -461,25 +463,31 @@ namespace ERACompiler.Modules
             routineNode.Children.Add(new ASTNode(routineNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
             tokens.RemoveRange(0, 2);
 
-            if (tokens[0].Value.Equals("(")) // Has parameters
+            if (tokens.Count > 0)
             {
-                int paramEndIndex = 0;
-                while (!tokens[++paramEndIndex].Value.Equals(")")) ;
-                routineNode.Children.Add(GetParameters(tokens.GetRange(1, paramEndIndex - 1), routineNode));
-                tokens.RemoveRange(0, paramEndIndex + 1);
-            }
+                if (tokens[0].Value.Equals("(")) // Has parameters
+                {
+                    int paramEndIndex = 0;
+                    while (!tokens[++paramEndIndex].Value.Equals(")")) ;
+                    routineNode.Children.Add(GetParameters(tokens.GetRange(1, paramEndIndex - 1), routineNode));
+                    tokens.RemoveRange(0, paramEndIndex + 1);
+                }
 
-            if (tokens[0].Value.Equals(":")) // Has results
-            {
-                int resultsEndIndex = 0;
-                while (!tokens[resultsEndIndex].Value.Equals(";") && !tokens[resultsEndIndex].Value.Equals("do")) { resultsEndIndex++; }
-                routineNode.Children.Add(GetResults(tokens.GetRange(1, resultsEndIndex - 1), routineNode));
-                tokens.RemoveRange(0, resultsEndIndex + 1);
-            }
+                if (tokens.Count > 0)
+                {
+                    if (tokens[0].Value.Equals(":")) // Has results
+                    {
+                        int resultsEndIndex = 0;
+                        while (resultsEndIndex < tokens.Count && !tokens[resultsEndIndex].Value.Equals(";") && !tokens[resultsEndIndex].Value.Equals("do")) { resultsEndIndex++; }
+                        routineNode.Children.Add(GetResults(tokens.GetRange(1, resultsEndIndex - 1), routineNode));
+                        tokens.RemoveRange(0, resultsEndIndex);
+                    }
 
-            if (tokens.Count > 0) // Has 'do' 'end' block
-            {
-                routineNode.Children.Add(GetRoutineBody(tokens.GetRange(1, tokens.Count - 1), routineNode));
+                    if (tokens.Count > 0) // Has 'do' 'end' block
+                    {
+                        routineNode.Children.Add(GetRoutineBody(tokens.GetRange(1, tokens.Count - 1), routineNode));
+                    }
+                }    
             }
 
             return routineNode;
@@ -514,7 +522,7 @@ namespace ERACompiler.Modules
             else
             {
                 paramNode.Children.Add(new ASTNode(paramNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.TYPE));
-                paramNode.Children.Add(new ASTNode(paramNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.IDENTIFIER));
+                paramNode.Children.Add(new ASTNode(paramNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
             }
 
             return paramNode;

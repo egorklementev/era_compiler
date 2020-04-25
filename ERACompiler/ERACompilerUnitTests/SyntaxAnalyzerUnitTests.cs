@@ -8,53 +8,73 @@ namespace ERACompilerUnitTests
     public class SyntaxAnalyzerUnitTests
     {
         [TestMethod]
-        public void CodeRuleTest1()
+        public void CodeRuleTests()
         {
-            Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/syntax_analyzer/code_rule_test_1.era");
-            string expectedCode = File.ReadAllText("tests/syntax_analyzer/code_rule_expected_1.era");
-            string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-            Assert.AreEqual(expectedCode, actualCode);
+            int testsNum = 1;
+            for (int i = 1; i < testsNum + 1; i++)
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/code_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/code_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+            }
         }
 
         [TestMethod]
-        public void RoutineRuleTest1()
+        public void RoutineRuleTests()
         {
-            Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/syntax_analyzer/routine_rule_test_1.era");
-            string expectedCode = File.ReadAllText("tests/syntax_analyzer/routine_rule_expected_1.era");
-            string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-            Assert.AreEqual(expectedCode, actualCode);
+            int testsNum = 6;
+            for (int i = 1; i < testsNum + 1; i++)
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/routine_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/routine_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+            }
         }
 
         [TestMethod]
-        public void DataRuleTest1()
+        public void DataRuleTests()
         {
-            Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/syntax_analyzer/data_rule_test_1.era");
-            string expectedCode = File.ReadAllText("tests/syntax_analyzer/data_rule_expected_1.era");
-            string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-            Assert.AreEqual(expectedCode, actualCode);
+            int testsNum = 1;
+            for (int i = 1; i < testsNum + 1; i++)
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/data_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/data_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+            }
         }
 
         [TestMethod]
-        public void ModuleRuleTest1()
+        public void ModuleRuleTests()
         {
-            Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/syntax_analyzer/module_rule_test_1.era");
-            string expectedCode = File.ReadAllText("tests/syntax_analyzer/module_rule_expected_1.era");
-            string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-            Assert.AreEqual(expectedCode, actualCode);
+            int testsNum = 1;
+            for (int i = 1; i < testsNum + 1; i++)
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/module_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/module_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+            }
         }
 
         [TestMethod]
-        public void PragmaRuleTest1()
+        public void PragmaRuleTests()
         {
-            Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/syntax_analyzer/pragma_rule_test_1.era");
-            string expectedCode = File.ReadAllText("tests/syntax_analyzer/pragma_rule_expected_1.era");
-            string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-            Assert.AreEqual(expectedCode, actualCode);
+            int testsNum = 2;
+            for (int i = 1; i < testsNum + 1; i++)
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/pragma_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/pragma_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+            }            
         }
     }
 }
