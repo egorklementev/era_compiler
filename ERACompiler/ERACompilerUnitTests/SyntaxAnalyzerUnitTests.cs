@@ -68,6 +68,21 @@ namespace ERACompilerUnitTests
         }
 
         [TestMethod]
+        public void StructRuleTests()
+        {
+            int i = 1;
+            while (File.Exists("tests/syntax_analyzer/struct_rule_t_" + i + ".era"))
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/struct_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/struct_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+                i++;
+            }
+        }
+
+        [TestMethod]
         public void PragmaRuleTests()
         {
             int i = 1;

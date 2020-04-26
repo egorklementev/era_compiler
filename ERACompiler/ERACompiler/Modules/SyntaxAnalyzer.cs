@@ -151,7 +151,8 @@ namespace ERACompiler.Modules
                 tokens[0].Value.Equals("module") ||
                 tokens[0].Value.Equals("routine") ||
                 tokens[0].Value.Equals("start") ||
-                tokens[0].Value.Equals("entry");
+                tokens[0].Value.Equals("entry") ||
+                tokens[0].Value.Equals("struct");
         }
         
         private ASTNode GetNextUnit(List<Token> tokens, ASTNode parent) // Annotation | Data | Module | Routine | Code
@@ -285,7 +286,8 @@ namespace ERACompiler.Modules
                             }
                             if (
                                 tokens[i].Value.Equals("loop") ||
-                                tokens[i].Value.Equals("do")
+                                tokens[i].Value.Equals("do") || 
+                                tokens[i].Value.Equals("struct")
                                 )
                             {
                                 current++;
@@ -342,10 +344,19 @@ namespace ERACompiler.Modules
 
                         return annotationNode;
                     }
+                case "struct":
+                    {
+                        int end = 0;
+                        while (!tokens[end].Value.Equals("end")) { end++; }
+                        ASTNode structNode = GetStruct(tokens.GetRange(1, end - 1), parent);
+                        tokens.RemoveRange(0, end + 1);
+
+                        return structNode;
+                    }
                 default:
                     {
                         Logger.LogError(new SyntaxError(
-                            "Bad source code structure!!! No annotation, code, data, module, or routine found!"
+                            "Bad source code structure!!! No known units found!"
                             ));
                         return null;
                     }
@@ -437,7 +448,28 @@ namespace ERACompiler.Modules
 
             return codeNode;
         }
-        
+
+        private ASTNode GetStruct(List<Token> tokens, ASTNode parent) // struct Identifier { VarDeclaration } end
+        {
+            ASTNode structNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.STRUCTURE);
+            structNode.Children.Add(new ASTNode(structNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
+            tokens.RemoveAt(0);
+
+            int i = 0;
+            int lastSemicolon = -1;
+            while (i < tokens.Count)
+            {
+                if (tokens[i].Value.Equals(";"))
+                {
+                    structNode.Children.Add(GetVarDeclaration(tokens.GetRange(lastSemicolon + 1, i - lastSemicolon - 1), structNode));
+                    lastSemicolon = i;
+                }
+                i++;
+            }
+
+            return structNode;
+        }
+
         private ASTNode GetModule(List<Token> tokens, ASTNode parent) // module Identifier { VarDeclaration | Routine } end
         {
             ASTNode moduleNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.MODULE);
@@ -900,17 +932,24 @@ namespace ERACompiler.Modules
             }
         }
 
-        private ASTNode GetReceiver(List<Token> tokens, ASTNode parent) // Identifier | ArrayAccess | Register
+        private ASTNode GetReceiver(List<Token> tokens, ASTNode parent) // Identifier | ArrayAccess | Register | StructAccess
         {
             ASTNode recNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.RECEIVER);
 
             switch (tokens[0].Type)
             {
-                case TokenType.IDENTIFIER: // Identifier | ArrayAccess
+                case TokenType.IDENTIFIER: // Identifier | ArrayAccess | StructAccess
                     {
                         if (tokens.Count > 1)
                         {
-                            recNode.Children.Add(GetArrayAccess(tokens, recNode));
+                            if (tokens[1].Value.Equals("["))
+                            {
+                                recNode.Children.Add(GetArrayAccess(tokens, recNode));
+                            }
+                            else
+                            {
+                                recNode.Children.Add(GetStructAccess(tokens, recNode));
+                            }
                         }
                         else
                         {
@@ -965,7 +1004,7 @@ namespace ERACompiler.Modules
                     ));
             }
 
-            if (tokens[1].Type != TokenType.DELIMITER)
+            if (!tokens[1].Value.Equals("["))
             {
                 Logger.LogError(new SyntaxError(
                     "Missing '[' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
@@ -977,6 +1016,27 @@ namespace ERACompiler.Modules
             arrAccessNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), arrAccessNode));
 
             return arrAccessNode;
+        }
+
+        private ASTNode GetStructAccess(List<Token> tokens, ASTNode parent) // Identifier '.' [ Identifier | StructAccess ]
+        {
+            if (tokens.Count % 2 != 1)
+            {
+                Logger.LogError(new SyntaxError(
+                    "Incorrect structure access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    ));
+            }
+
+            ASTNode structAccessNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.STRUCTURE_ACCESS);
+            foreach (Token t in tokens)
+            {
+                if (t.Type == TokenType.IDENTIFIER)
+                {
+                    structAccessNode.Children.Add(new ASTNode(structAccessNode, new List<ASTNode>(), t, ASTNode.ASTNodeType.IDENTIFIER));
+                }
+            }
+
+            return structAccessNode;
         }
 
         private ASTNode GetStatement(List<Token> tokens, ASTNode parent) // [ Label ] ( AssemblyBlock | ExtensionStatement ) 

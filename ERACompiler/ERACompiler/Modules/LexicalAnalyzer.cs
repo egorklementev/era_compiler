@@ -283,7 +283,8 @@ namespace ERACompiler.Modules
                 "while",
                 "loop",
                 "break",
-                "goto"
+                "goto",
+                "struct"
             };
         }
         private void OperatorsInitialization()
