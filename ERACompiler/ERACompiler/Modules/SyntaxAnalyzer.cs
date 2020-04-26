@@ -405,10 +405,31 @@ namespace ERACompiler.Modules
                             break;
                         }
                     default:
-                        {                            
-                            int end_i = LocateStatementEnd(tokens); // Locate the end of the statement
-                            codeNode.Children.Add(GetStatement(tokens.GetRange(0, end_i), codeNode));
-                            tokens.RemoveRange(0, end_i + 1); // Including ';' or 'end'
+                        {                   
+                            if (tokens[0].Type == TokenType.IDENTIFIER && tokens[1].Type == TokenType.IDENTIFIER) // VarDeclaration with a user-defined type
+                            {
+                                int i = 1;
+                                while (!tokens[i].Value.Equals(";"))
+                                {
+                                    if (i == tokens.Count - 1)
+                                    {
+                                        Logger.LogError(new SyntaxError(
+                                            "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                            ));
+                                    }
+                                    i++;
+                                }
+
+                                codeNode.Children.Add(GetVarDeclaration(tokens.GetRange(0, i), codeNode));
+                                tokens.RemoveRange(0, i + 1); // Including ';'
+                            }
+                            else
+                            {
+                                int end_i = LocateStatementEnd(tokens); // Locate the end of the statement
+                                codeNode.Children.Add(GetStatement(tokens.GetRange(0, end_i), codeNode));
+                                tokens.RemoveRange(0, end_i + 1); // Including ';' or 'end'
+                            }
+                            
                             break;
                         }
                 }
