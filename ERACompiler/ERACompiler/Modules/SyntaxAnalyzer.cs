@@ -508,6 +508,14 @@ namespace ERACompiler.Modules
                             tokens.RemoveRange(0, end_i + 1);
                             break;
                          }
+                    case "struct": // Structure
+                        {
+                            int end_i = 0; // Locate the end of the structure
+                            while (!tokens[end_i].Value.Equals("end")) { end_i++; }
+                            moduleNode.Children.Add(GetStruct(tokens.GetRange(0, end_i), moduleNode));
+                            tokens.RemoveRange(0, end_i + 1);
+                            break;
+                        }
                     default:
                         {
                             Logger.LogError(new SyntaxError(

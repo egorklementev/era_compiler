@@ -5,6 +5,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
+    <Authors>Egor Klementev</Authors>
+    <Company>Innopolis University</Company>
+    <Description>ERA system-level programming language compiler.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
