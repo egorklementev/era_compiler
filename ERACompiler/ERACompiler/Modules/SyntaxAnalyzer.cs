@@ -655,9 +655,7 @@ namespace ERACompiler.Modules
                         ));
             }
 
-            ASTNode varDefNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.VAR_DEFINITION);
-            ASTNode id = new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER);
-            varDefNode.Children.Add(id);
+            ASTNode varDefNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.VAR_DEFINITION);            
 
             if (tokens.Count < 2) // If no definition
             {
@@ -667,10 +665,14 @@ namespace ERACompiler.Modules
             {
                 if (tokens[1].Type == TokenType.DELIMITER) // Identifier [ Expression ]
                 {
-                    varDefNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), varDefNode)); // Pass just expression tokens
+                    ASTNode arrayDeclNode = new ASTNode(varDefNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ARRAY_DECLARATION);
+                    arrayDeclNode.Children.Add(new ASTNode(arrayDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
+                    arrayDeclNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), arrayDeclNode)); // Pass just expression tokens
+                    varDefNode.Children.Add(arrayDeclNode);
                 }
                 else // Identifier [ := Expression ]
                 {
+                    varDefNode.Children.Add(new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
                     varDefNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 2), varDefNode)); // Pass just expression tokens
                 }
 

@@ -76,5 +76,19 @@ namespace ERACompilerUnitTests
                 Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
             }            
         }
+
+        [TestMethod]
+        public void VariableDeclarationRuleTests()
+        {
+            int testsNum = 2;
+            for (int i = 1; i < testsNum + 1; i++)
+            {
+                Compiler c = new Compiler();
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/variable_declaration_rule_t_" + i + ".era");
+                string expectedCode = File.ReadAllText("tests/syntax_analyzer/variable_declaration_rule_e_" + i + ".era");
+                string actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                Assert.AreEqual(expectedCode, actualCode, false, i.ToString());
+            }
+        }
     }
 }
