@@ -136,6 +136,7 @@ namespace ERACompiler.Structures
             LOOP,
             LOOP_BODY,
             ARRAY_DECLARATION,
+            TEXT,
             BLOCK_BODY
         }
 

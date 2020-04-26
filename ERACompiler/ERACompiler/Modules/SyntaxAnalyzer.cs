@@ -363,7 +363,12 @@ namespace ERACompiler.Modules
             else
             {
                 prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-                prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.IDENTIFIER)); // TODO: Fix to 'Text' rule
+                int i = 2;
+                while (!tokens[i].Value.Equals(")")) {
+                    prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[i], ASTNode.ASTNodeType.TEXT)); // Whatever the token is, we add it as text
+                    i++;
+                }
+
             }
 
             return prgmDeclNode;
