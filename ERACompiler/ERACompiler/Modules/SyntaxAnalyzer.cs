@@ -39,9 +39,23 @@ namespace ERACompiler.Modules
 
             try
             {
+                bool codeBlockFound = false;
                 while (HasNextUnit(tokens))
                 {
                     root.Children.Add(GetNextUnit(tokens, root));
+                    if (root.Children[root.Children.Count - 1].Type == ASTNode.ASTNodeType.CODE)
+                    {
+                        if (codeBlockFound)
+                        {
+                            Logger.LogError(new SyntaxError(
+                                "Multiple 'code' block found, only a single block allowed!!!"
+                                ));
+                        }
+                        else
+                        {
+                            codeBlockFound = true;
+                        }
+                    }
                 }
             }
             catch (ArgumentOutOfRangeException)
@@ -452,10 +466,13 @@ namespace ERACompiler.Modules
         private ASTNode GetRoutine(List<Token> tokens, ASTNode parent) // [ Attribute ] routine Identifier [ Parameters ] [ Results ] ( ; | RoutineBody )
         {
             ASTNode routineNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ROUTINE);
+            bool isInterfaceRoutine = false;
+            Token errorAnchor = tokens[0];
 
             if (!tokens[0].Value.Equals("routine")) // 'entry' / 'start'
             {
                 routineNode.Children.Add(new ASTNode(routineNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ATTRIBUTE));
+                if (tokens[0].Value.Equals("start")) isInterfaceRoutine = true;
                 tokens.RemoveAt(0);
             }
 
@@ -482,11 +499,29 @@ namespace ERACompiler.Modules
                         tokens.RemoveRange(0, resultsEndIndex);
                     }
 
-                    if (tokens.Count > 0) // Has 'do' 'end' block
+                    if (!isInterfaceRoutine && tokens.Count > 0) // Has 'do' 'end' block
                     {
-                        routineNode.Children.Add(GetRoutineBody(tokens.GetRange(1, tokens.Count - 1), routineNode));
+                        routineNode.Children.Add(GetRoutineBody(tokens.GetRange(1, tokens.Count - 1), routineNode));                        
+                    }
+                    else if (isInterfaceRoutine && tokens.Count > 0)
+                    {
+                        Logger.LogError(new SyntaxError(
+                            "Routines with attribute 'start' may not have a routine body! At (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")"
+                            ));
+                    }
+                    else if (!isInterfaceRoutine && tokens.Count == 0)
+                    {
+                        Logger.LogError(new SyntaxError(
+                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Character + ")"
+                            ));
                     }
                 }    
+            }
+            else if (!isInterfaceRoutine)
+            {
+                Logger.LogError(new SyntaxError(
+                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Character + ")"
+                            ));
             }
 
             return routineNode;

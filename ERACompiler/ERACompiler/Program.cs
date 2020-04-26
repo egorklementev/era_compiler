@@ -27,7 +27,7 @@ namespace ERACompiler
 
                 // Create instance of the era compiler and get the compiled code
                 Compiler eraCompiler = new Compiler();
-                string compiledCode = eraCompiler.Compile(sourceCode, Compiler.CompilationMode.LEXIS);
+                string compiledCode = eraCompiler.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
 
                 Console.WriteLine("Compilation has been finished.");
                 Console.ReadLine();
