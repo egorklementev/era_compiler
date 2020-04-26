@@ -172,7 +172,7 @@ namespace ERACompiler.Modules
                             }
                             if (
                                 tokens[i].Value.Equals("loop") ||
-                                tokens[i].Value.Equals("if")
+                                tokens[i].Value.Equals("do")
                                 )
                             {
                                 current++;
@@ -259,7 +259,7 @@ namespace ERACompiler.Modules
                                 {
                                     if (tokens[j].Value.Equals("end") || tokens[j].Value.Equals(";"))
                                     {
-                                        i = j + 1;
+                                        i = j;
                                         break;
                                     }
                                     j++;
@@ -271,7 +271,6 @@ namespace ERACompiler.Modules
                             }
                             if (
                                 tokens[i].Value.Equals("loop") ||
-                                tokens[i].Value.Equals("if") ||
                                 tokens[i].Value.Equals("do")
                                 )
                             {
@@ -416,7 +415,7 @@ namespace ERACompiler.Modules
                         {
                             // Locate the end of the declaration
                             int end = 0;
-                            while (end < tokens.Count && tokens[end].Value.Equals(";")) { end++; }
+                            while (end < tokens.Count && !tokens[end].Value.Equals(";")) { end++; }
                             if (end == tokens.Count)
                             {
                                 Logger.LogError(new SyntaxError(
@@ -659,6 +658,7 @@ namespace ERACompiler.Modules
 
             if (tokens.Count < 2) // If no definition
             {
+                varDefNode.Children.Add(new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
                 return varDefNode;
             }
             else
@@ -740,7 +740,7 @@ namespace ERACompiler.Modules
                 }
                 else
                 {
-                    if (tokens[i + 1].Type != TokenType.WHITESPACE) 
+                    if ((tokens[i].Value.Equals("&") || tokens[i].Value.Equals("*")) && tokens[i + 1].Type != TokenType.WHITESPACE) // Reference special case
                     {
                         expNode.Children.Add(GetOperand(tokens.GetRange(i, 2), expNode));
                         i++;
@@ -793,8 +793,8 @@ namespace ERACompiler.Modules
                 case "<=":
                 case ">=":
                     {
-                        ASTNode op = new ASTNode(parent, new List<ASTNode>(), token, ASTNode.ASTNodeType.OPERATOR);
-                        op.Children.Add(new ASTNode(parent, new List<ASTNode>(), token, ASTNode.ASTNodeType.COMPARISON_OPERATOR));
+                        ASTNode op = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.OPERATOR);
+                        op.Children.Add(new ASTNode(op, new List<ASTNode>(), token, ASTNode.ASTNodeType.COMPARISON_OPERATOR));
                         return op;
                     }
                 default:
@@ -947,7 +947,7 @@ namespace ERACompiler.Modules
             ASTNode asmBlockNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ASSEMBLER_BLOCK);
 
             List<Token> temp = new List<Token>();
-            for (int i = 0; i < tokens.Count; i++)
+            for (int i = 1; i < tokens.Count; i++)
             {
                 if (tokens[i].Value.Equals(","))
                 {
@@ -988,7 +988,7 @@ namespace ERACompiler.Modules
                             {
                                 asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER)); // Register 1
                                 asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.OPERATOR)); // := / += / ...
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[3], ASTNode.ASTNodeType.REGISTER)); // Register 2
+                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.REGISTER)); // Register 2
 
                                 return asStmntNode;
                             }
@@ -1014,16 +1014,25 @@ namespace ERACompiler.Modules
                         {
                             if (tokens[0].Value.Equals("if"))
                             {
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER)); // Register 1
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.OPERATOR)); // goto
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.REGISTER)); // Register 2
+                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REGISTER)); // Register 1
+                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.OPERATOR)); // goto
+                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[3], ASTNode.ASTNodeType.REGISTER)); // Register 2
 
                                 return asStmntNode;
                             }
                             else
                             {
                                 asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.OPERATOR)); // format
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.LITERAL)); // number
+                                if (tokens[2].Value.Equals("8") || tokens[2].Value.Equals("16") || tokens[2].Value.Equals("32"))
+                                {
+                                    asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.LITERAL)); // number
+                                }
+                                else
+                                {
+                                    Logger.LogError(new SyntaxError(
+                                        "Incorrect format at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!! Only 8, 16, or 32 allowed."
+                                        ));
+                                }
 
                                 return asStmntNode;
                             }
@@ -1033,8 +1042,8 @@ namespace ERACompiler.Modules
                             if (tokens.Count != 4)
                             {
                                 Logger.LogError(new SyntaxError(
-                                        "Incorrect register assignment at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
-                                        ));
+                                    "Incorrect register assignment at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                    ));
                             }
 
                             asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.OPERATOR)); // *
@@ -1215,6 +1224,7 @@ namespace ERACompiler.Modules
             int idNum = 1;
             foreach (Token t in tokens)
             {
+                if (t.Value.Equals("(")) break; // When reached arguments list
                 if (t.Value.Equals(".")) idNum++;
             }
 
@@ -1276,6 +1286,9 @@ namespace ERACompiler.Modules
             {
                 case "for": // for Identifier [ from Expression ] [ to Expression] [ step Expression ] LoopBody
                     {
+                        ASTNode forNode = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.FOR);
+                        loopNode.Children.Add(forNode);
+
                         // Locate possible keywords
                         bool hasFrom = false;
                         bool hasTo = false;
@@ -1286,70 +1299,75 @@ namespace ERACompiler.Modules
                             if (t.Value.Equals("from")) hasFrom = true;
                             if (t.Value.Equals("to")) hasTo = true;
                             if (t.Value.Equals("step")) hasStep = true;
+                            if (t.Value.Equals("loop")) break; // When reached loop
                         }
-                        loopNode.Children.Add(new ASTNode(loopNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
+
+                        forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
 
                         if (hasFrom)
                         {
                             // Locate 'from' and 'to'/'step'/'loop'
                             int fromIndex = 0;
-                            while (fromIndex < tokens.Count && !tokens[++fromIndex].Equals("from")) ;
+                            while (fromIndex < tokens.Count && !tokens[++fromIndex].Value.Equals("from")) ;
+                            forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[fromIndex], ASTNode.ASTNodeType.OPERATOR)); // To distinguish expressions
 
                             if (hasTo)
                             {
                                 int toIndex = fromIndex;
-                                while (toIndex < tokens.Count && !tokens[++toIndex].Equals("to")) ;
-                                loopNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, toIndex - fromIndex - 1), loopNode));
+                                while (toIndex < tokens.Count && !tokens[++toIndex].Value.Equals("to")) ;
+                                forNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, toIndex - fromIndex - 1), forNode));
                             }
                             else if (hasStep)
                             {
                                 int stepIndex = fromIndex;
-                                while (stepIndex < tokens.Count && !tokens[++stepIndex].Equals("step")) ;
-                                loopNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, stepIndex - fromIndex - 1), loopNode));
+                                while (stepIndex < tokens.Count && !tokens[++stepIndex].Value.Equals("step")) ;
+                                forNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, stepIndex - fromIndex - 1), forNode));
                             }
                             else
                             {
                                 int loopIndex = fromIndex;
-                                while (loopIndex < tokens.Count && !tokens[++loopIndex].Equals("loop")) ;
-                                loopNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, loopIndex - fromIndex - 1), loopNode));
+                                while (loopIndex < tokens.Count && !tokens[++loopIndex].Value.Equals("loop")) ;
+                                forNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, loopIndex - fromIndex - 1), forNode));
                             }
                         }
                         if (hasTo)
                         {
                             // Locate 'to' and 'step'/'loop'
                             int toIndex = 0;
-                            while (toIndex < tokens.Count && !tokens[++toIndex].Equals("to")) ;
+                            while (toIndex < tokens.Count && !tokens[++toIndex].Value.Equals("to")) ;
+                            forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[toIndex], ASTNode.ASTNodeType.OPERATOR)); // To distinguish expressions
 
                             if (hasStep)
                             {
                                 int stepIndex = toIndex;
-                                while (stepIndex < tokens.Count && !tokens[++stepIndex].Equals("step")) ;
-                                loopNode.Children.Add(GetExpression(tokens.GetRange(toIndex + 1, stepIndex - toIndex - 1), loopNode));
+                                while (stepIndex < tokens.Count && !tokens[++stepIndex].Value.Equals("step")) ;
+                                forNode.Children.Add(GetExpression(tokens.GetRange(toIndex + 1, stepIndex - toIndex - 1), forNode));
                             }
                             else
                             {
                                 int loopIndex = toIndex;
-                                while (loopIndex < tokens.Count && !tokens[++loopIndex].Equals("loop")) ;
-                                loopNode.Children.Add(GetExpression(tokens.GetRange(toIndex + 1, loopIndex - toIndex - 1), loopNode));
+                                while (loopIndex < tokens.Count && !tokens[++loopIndex].Value.Equals("loop")) ;
+                                forNode.Children.Add(GetExpression(tokens.GetRange(toIndex + 1, loopIndex - toIndex - 1), forNode));
                             }
                         }
                         if (hasStep)
                         {
                             // Locate 'step' and 'loop'
                             int stepIndex = 0;
-                            while (stepIndex < tokens.Count && !tokens[++stepIndex].Equals("step")) ;
-                            
+                            while (stepIndex < tokens.Count && !tokens[++stepIndex].Value.Equals("step")) ;
+                            forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[stepIndex], ASTNode.ASTNodeType.OPERATOR)); // To distinguish expressions
+
                             int loopIndex = stepIndex;
-                            while (loopIndex < tokens.Count && !tokens[++loopIndex].Equals("loop")) ;
-                            loopNode.Children.Add(GetExpression(tokens.GetRange(stepIndex + 1, loopIndex - stepIndex - 1), loopNode));
+                            while (loopIndex < tokens.Count && !tokens[++loopIndex].Value.Equals("loop")) ;
+                            forNode.Children.Add(GetExpression(tokens.GetRange(stepIndex + 1, loopIndex - stepIndex - 1), forNode));
                         }
 
                         int i = 0;
                         while (i < tokens.Count && !tokens[++i].Value.Equals("loop")) ;
 
-                        ASTNode loopBody = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
-                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), loopNode));
-                        loopNode.Children.Add(loopBody);
+                        ASTNode loopBody = new ASTNode(forNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
+                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), loopBody));
+                        forNode.Children.Add(loopBody);
 
                         break;
                     }
@@ -1358,10 +1376,13 @@ namespace ERACompiler.Modules
                         int i = 0;
                         while (i < tokens.Count && !tokens[++i].Value.Equals("loop")) ;
 
-                        loopNode.Children.Add(GetExpression(tokens.GetRange(1, i - 1), loopNode));
+                        ASTNode whileNode = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.WHILE);
+                        loopNode.Children.Add(whileNode);
+
+                        whileNode.Children.Add(GetExpression(tokens.GetRange(1, i - 1), whileNode));
 
                         ASTNode loopBody = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
-                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), loopNode));
+                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), loopBody));
                         loopNode.Children.Add(loopBody);
 
                         break;
@@ -1369,7 +1390,7 @@ namespace ERACompiler.Modules
                 case "loop": // loop BlockBody end
                     {
                         ASTNode loopBody = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
-                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(1, tokens.Count - 1), loopNode));
+                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(1, tokens.Count - 1), loopBody));
                         loopNode.Children.Add(loopBody);
                         break;
                     }
@@ -1406,7 +1427,7 @@ namespace ERACompiler.Modules
                 if (tokens[1].Type == TokenType.NUMBER) // ExplicitAddress
                 {
                     ASTNode expAddrNode = new ASTNode(primaryNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.EXPLICIT_ADDRESS);
-                    expAddrNode.Children.Add(new ASTNode(primaryNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.LITERAL));
+                    expAddrNode.Children.Add(new ASTNode(expAddrNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.LITERAL));
                     primaryNode.Children.Add(expAddrNode);
                 }
                 else // Dereference
@@ -1414,13 +1435,13 @@ namespace ERACompiler.Modules
                     if (tokens[1].Type == TokenType.REGISTER)
                     {
                         ASTNode derefNode = new ASTNode(primaryNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.DEREFERENCE);
-                        derefNode.Children.Add(new ASTNode(primaryNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REGISTER));
+                        derefNode.Children.Add(new ASTNode(derefNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REGISTER));
                         primaryNode.Children.Add(derefNode);
                     }
                     else
                     {
                         ASTNode derefNode = new ASTNode(primaryNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.DEREFERENCE);
-                        derefNode.Children.Add(new ASTNode(primaryNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
+                        derefNode.Children.Add(new ASTNode(derefNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
                         primaryNode.Children.Add(derefNode);
                     }
                 }
@@ -1448,8 +1469,8 @@ namespace ERACompiler.Modules
                 {
                     if (tokens[i].Value.Equals(","))
                     {
-                        lastComma = i;
                         callArgsNode.Children.Add(GetExpression(tokens.GetRange(lastComma + 1, i - lastComma - 1), callArgsNode));
+                        lastComma = i;
                     }
                 }
                 callArgsNode.Children.Add(GetExpression(tokens.GetRange(lastComma + 1, tokens.Count - lastComma - 2), callArgsNode));
@@ -1533,10 +1554,9 @@ namespace ERACompiler.Modules
                     {
                         end = 0;
                         while (!tokens[end].Value.Equals("loop")) { end++; } // Go to the 'loop'
-                        end++;
 
                         int current = 1;
-                        while (current > 0)
+                        while (current > 0 && end < tokens.Count)
                         {
                             end++;
                             if (tokens[end].Value.Equals("asm"))

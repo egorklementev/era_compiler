@@ -82,11 +82,11 @@ namespace ERACompiler.Modules
                     if (t.Type == TokenType.DELIMITER && t.Value.Equals("//"))
                     {
                         lineChar = 0;
-                        lineNumber++;
                         while (c != '\n' && i < sourceCode.Length)
                         {
                             c = sourceCode[i++];                            
                         }
+                        i--;
                         remembered = "\r\n";
                     }
                     else
@@ -298,6 +298,7 @@ namespace ERACompiler.Modules
                 "=",
                 "<",
                 ">",
+                "?",
                 "/=",
                 ":=",
                 "+=",

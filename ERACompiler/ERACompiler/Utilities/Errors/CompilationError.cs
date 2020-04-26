@@ -11,7 +11,7 @@
 
         public override string ToString()
         {
-            return GetType().ToString() + ":\r\n" + message + "!";
+            return GetType().ToString() + ":\r\n" + message;
         }
     }
 }
