@@ -187,6 +187,11 @@
             Used to log the compilation process and display all the errors in compilation.
             </summary>
         </member>
+        <member name="P:ERACompiler.Utilities.Logger.LoggingMode">
+            <summary>
+            0 for file logging, 1 for console logging
+            </summary>
+        </member>
         <member name="M:ERACompiler.Utilities.Logger.#ctor(System.String,System.Boolean)">
             <summary>
             Constructor.
@@ -208,7 +213,7 @@
         </member>
         <member name="M:ERACompiler.Utilities.Logger.LogError(ERACompiler.Utilities.Errors.CompilationError)">
             <summary>
-            Logs the compilation error to the specified log file.
+            Logs the compilation error to the specified log file and exits the program exection.
             </summary>
             <param name="er">Error to be logged.</param>
         </member>
@@ -220,6 +225,11 @@
         <member name="M:ERACompiler.Utilities.Logger.DisableLogging">
             <summary>
             Disables the Logger from logging compilation process to the file.
+            </summary>
+        </member>
+        <member name="T:NativeMethods">
+            <summary>
+            Used for console allocation.
             </summary>
         </member>
     </members>

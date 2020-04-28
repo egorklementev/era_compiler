@@ -9,6 +9,11 @@ namespace ERACompiler.Utilities
     /// </summary>
     public class Logger
     {
+        /// <summary>
+        /// 0 for file logging, 1 for console logging
+        /// </summary>
+        public static int LoggingMode { get; set; } = 1;
+        
         private static bool isLoggingEnabled = false;
         private static string logFilePath = "";
 
@@ -38,17 +43,49 @@ namespace ERACompiler.Utilities
         public static void LogException(Exception ex)
         {
             if (isLoggingEnabled)
-                File.AppendAllText(logFilePath, ex.Message + "\r\n\r\n");
+            {
+                
+                if (isLoggingEnabled)
+                {
+                    switch (LoggingMode)
+                    {
+                        case 0:
+                            {
+                                File.AppendAllText(logFilePath, ex.Message + "\r\n\r\n");
+                                break;
+                            }
+                        case 1:
+                            {
+                                Console.WriteLine(ex.ToString() + "\r\n\r\n");
+                                break;
+                            }
+                    }
+                }
+            }
         }
 
         /// <summary>
-        /// Logs the compilation error to the specified log file.
+        /// Logs the compilation error to the specified log file and exits the program exection.
         /// </summary>
         /// <param name="er">Error to be logged.</param>
         public static void LogError(CompilationError er)
         {
             if (isLoggingEnabled)
-                File.AppendAllText(logFilePath, er.ToString() + "\r\n\r\n");
+            {
+                switch(LoggingMode)
+                {
+                    case 0:
+                        {
+                            File.AppendAllText(logFilePath, er.ToString() + "\r\n\r\n");
+                            break;
+                        }
+                    case 1:
+                        {
+                            Console.WriteLine(er.ToString() + "\r\n\r\n");
+                            break;
+                        }
+                }
+            }
             Environment.Exit(0);
         }
 
