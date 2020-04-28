@@ -21,8 +21,9 @@ There are several arguments available:
 * `--lexis`  :  perform tokenization only  
 * `--syntax`  :  perform tokenization and AST assembling
 * `--semantic`  :  perform tokenization, AST assembling, and AAST assembling
-* `--flog`  :  log errors and exceptions to the file
-Examples:  
+* `--flog`  :  log errors and exceptions to the file  
+  
+Examples of commands:  
 `ERACompiler -h`  -  get help message  
 `ERACompiler -s test.txt folder1/file1.java`  -  will compile source files to `compiled_test.txt` and `folder1/compiled_file1.java`  
 `ERACompiler --lexis -o out.a`  -  will compile default `code.era` file to the `out.a` using only tokenization
