@@ -43,7 +43,7 @@ namespace ERACompiler.Modules
                 while (HasNextUnit(tokens))
                 {
                     root.Children.Add(GetNextUnit(tokens, root));
-                    if (root.Children[root.Children.Count - 1].Type == ASTNode.ASTNodeType.CODE)
+                    if (root.Children[^1].NodeType == ASTNode.ASTNodeType.CODE)
                     {
                         if (codeBlockFound)
                         {

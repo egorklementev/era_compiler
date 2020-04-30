@@ -24,7 +24,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// Represents the type of an AST entry.
         /// </summary>
-        public ASTNodeType Type { get; }
+        public ASTNodeType NodeType { get; }
 
         private int level; // How deep in the AST the node is located.
 
@@ -33,7 +33,7 @@ namespace ERACompiler.Structures
             Parent = parent;
             Children = children;
             CrspToken = token;
-            Type = type;
+            NodeType = type;
 
             if (parent != null) 
                 level = parent.level + 2;            
@@ -50,7 +50,7 @@ namespace ERACompiler.Structures
             sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
                 .Append("{\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"type\": ").Append("\"" + Type.ToString() + "\"").Append(",\r\n");            
+                .Append("\"type\": ").Append("\"" + NodeType.ToString() + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
