@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ERACompiler.Structures.Types
+﻿namespace ERACompiler.Structures.Types
 {
     public class ArrayType : VarType
     {

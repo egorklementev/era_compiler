@@ -99,5 +99,10 @@ namespace ERACompiler.Structures
 
             return null;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

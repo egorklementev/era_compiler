@@ -22,5 +22,10 @@
             ARRAY,
             NO_TYPE
         }
+
+        public override string ToString()
+        {
+            return Type.ToString();
+        }
     }
 }

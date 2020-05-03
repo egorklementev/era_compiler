@@ -67,7 +67,7 @@ namespace ERACompiler
                     {
                         string defaultFilename = sourceFilenames[i];
                         // If it is a path
-                        if (defaultFilename.Contains("/") || defaultFilename.Contains("\\") || defaultFilename.Contains("\\\\"))
+                        if (defaultFilename.Contains("/") || defaultFilename.Contains("\\"))
                         {
                             int j = defaultFilename.LastIndexOfAny(new char[] {'\\', '/'});
                             defaultFilename = defaultFilename.Insert(j + 1, "compiled_");

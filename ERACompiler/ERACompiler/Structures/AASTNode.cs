@@ -1,4 +1,7 @@
 ﻿using ERACompiler.Structures.Types;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace ERACompiler.Structures
 {
@@ -11,6 +14,11 @@ namespace ERACompiler.Structures
         /// Parent node of the node.
         /// </summary>
         public new AASTNode? Parent { get; set; }
+
+        /// <summary>
+        /// Children nodes of this AAST node.
+        /// </summary>
+        public new List<AASTNode> Children { get; set; }
 
         /// <summary>
         /// integer, array of 30 bytes, structure A, etc.
@@ -35,6 +43,7 @@ namespace ERACompiler.Structures
         public AASTNode(ASTNode node, VarType type) : base(null, null, node.CrspToken, node.NodeType)
         {
             Type = type;
+            Children = new List<AASTNode>();
         }
 
         /// <summary>
@@ -49,5 +58,53 @@ namespace ERACompiler.Structures
             Context = context;
         }
 
+        public override string ToString()
+        {
+            // Json format
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+                .Append("{\r\n");
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"type\": ").Append("\"" + Type.ToString() + "\"").Append(",\r\n");
+
+            if (HasContext)
+            {
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"context\": ").Append("\"" + Context.ToString() + "\"").Append(",\r\n");
+            }
+            else
+            {
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"context\": ").Append("\"none\"").Append(",\r\n");
+            }
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"children\": [");
+
+            if (Children.Count > 0)
+            {
+                foreach (ASTNode child in Children)
+                {
+                    sb.Append("\r\n").Append(child.ToString()).Append(',');
+                }
+                sb.Remove(sb.Length - 1, 1); // Remove last ','
+                sb.Append("\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                    .Append("]\r\n");
+            }
+            else
+            {
+                sb.Append("]\r\n");
+            }
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+                .Append('}');
+
+            return sb.ToString();
+        }
     }
 }

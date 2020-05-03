@@ -26,7 +26,10 @@ namespace ERACompiler.Structures
         /// </summary>
         public ASTNodeType NodeType { get; }
 
-        private int level; // How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
+        /// <summary>
+        /// How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
+        /// </summary>
+        protected int level;
 
         /// <summary>
         /// Creates an AST node.
@@ -129,7 +132,6 @@ namespace ERACompiler.Structures
             REFERENCE,
             DEREFERENCE,
             ARRAY_ELEMENT,
-            DATA_ELEMENT,
             EXPLICIT_ADDRESS,
             OPERAND,
             OPERATOR,
