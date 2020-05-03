@@ -12,7 +12,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// Parent node. Only the root node has parent equals to null.
         /// </summary>
-        public ASTNode Parent { get; }
+        public ASTNode? Parent { get; set;  }
         /// <summary>
         /// Child nodes of the node.
         /// </summary>
@@ -26,9 +26,16 @@ namespace ERACompiler.Structures
         /// </summary>
         public ASTNodeType NodeType { get; }
 
-        private int level; // How deep in the AST the node is located.
+        private int level; // How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
 
-        public ASTNode(ASTNode parent, List<ASTNode> children, Token token, ASTNodeType type)
+        /// <summary>
+        /// Creates an AST node.
+        /// </summary>
+        /// <param name="parent">Ref to the parent AST node.</param>
+        /// <param name="children">Ref to the list of AST children nodes.</param>
+        /// <param name="token">Corresponding token from the lexical analyzer.</param>
+        /// <param name="type">The type of the AST node (basically syntax rule).</param>
+        public ASTNode(ASTNode? parent, List<ASTNode>? children, Token token, ASTNodeType type)
         {
             Parent = parent;
             Children = children;
@@ -41,6 +48,10 @@ namespace ERACompiler.Structures
                 level = 0;            
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>A string in JSON format of the node and its children (works recursively).</returns>
         public override string ToString()
         {
             // Json format

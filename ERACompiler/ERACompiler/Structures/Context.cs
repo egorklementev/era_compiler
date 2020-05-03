@@ -4,21 +4,38 @@ using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Structures
 {
+    /// <summary>
+    /// Represents a single context in the program.
+    /// Used to check declaration issues and variable resolution.
+    /// </summary>
     public class Context
     {
         private readonly Dictionary<string, AASTNode> st; // Symbol Table
-        private readonly Context parent;
+        private readonly Context? parent;
 
-        public string Name { get; set; } // The name of the context
+        /// <summary>
+        /// The name of the context
+        /// </summary>
+        public string Name { get; set; }
 
-        public Context(string name, Context parent)
+        /// <summary>
+        /// Creates a context instance.
+        /// </summary>
+        /// <param name="name">The name of the context (may not be uniqie).</param>
+        /// <param name="parent">Parent context (may be null).</param>
+        public Context(string name, Context? parent)
         {
             Name = name;
             this.parent = parent;
             st = new Dictionary<string, AASTNode>();
         }
 
-        public ASTNode? GetVarValue(AASTNode identifier)
+        /// <summary>
+        /// Searches for the variable and tries to return the AAST node corresponding to it. If there is no such variable, raises error.
+        /// </summary>
+        /// <param name="identifier">The identifier AAST node that refers to the variable.</param>
+        /// <returns>Returns AAST node of the variable with the given identifier.</returns>
+        public AASTNode? GetVarValue(AASTNode identifier)
         {
             AASTNode? var = LocateVar(identifier);
 
@@ -36,6 +53,10 @@ namespace ERACompiler.Structures
             }
         }
 
+        /// <summary>
+        /// Tries to add a new variable to the context. Raises error if the variable already exists.
+        /// </summary>
+        /// <param name="variable">The variable node.</param>
         public void AddVar(AASTNode variable)
         {
             string varName = variable.Children[0].CrspToken.Value;
@@ -57,6 +78,11 @@ namespace ERACompiler.Structures
             }
         }
 
+        /// <summary>
+        /// Searches for the variable recursively up in the context tree.
+        /// </summary>
+        /// <param name="identifier">Identifier of the variable to be found.</param>
+        /// <returns>Null if there is no such variable in this context, AAST node with the variable if it exists.</returns>
         private AASTNode? LocateVar(AASTNode identifier)
         {
             string varName = identifier.CrspToken.Value;
