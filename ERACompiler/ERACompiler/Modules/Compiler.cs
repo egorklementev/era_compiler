@@ -9,10 +9,10 @@ namespace ERACompiler.Modules
     ///</summary>
     public class Compiler
     {
-        private LexicalAnalyzer lexis; // Used to retrieve tokens from the source code.
-        private SyntaxAnalyzer syntax; // Used to build AST.
-        private SemanticAnalyzer semantics; // Used to check semantics of AST and more.
-        private Generator generator; // Used to generate assembly code given AAST.
+        private readonly LexicalAnalyzer lexis;         // Used to retrieve tokens from the source code.
+        private readonly SyntaxAnalyzer syntax;         // Used to build AST.
+        private readonly SemanticAnalyzer semantics;    // Used to check semantics of AST and more.
+        private readonly Generator generator;           // Used to generate assembly code given AAST.
 
         /// <summary>
         /// Constructor for the compiler. Initializates all the modules such as Lexical Analyzer, etc.
@@ -57,9 +57,12 @@ namespace ERACompiler.Modules
 
                 // Lexical, Syntax, and Semantic Analyzers.
                 // Returns a string with AAST traversion listed.
-                case CompilationMode.SEMANTIC:
+                case CompilationMode.SEMANTICS:
                     {
-                        return "";
+                        List<Token> lst = lexis.GetTokenList(sourceCode);
+                        ASTNode ast = syntax.BuildAST(lst);
+                        AASTNode aast = semantics.BuildAAST(ast);
+                        return aast.ToString();
                     }
 
                 // Full compilation.
@@ -92,7 +95,7 @@ namespace ERACompiler.Modules
         {
             LEXIS,
             SYNTAX,
-            SEMANTIC,
+            SEMANTICS,
             GENERATION
         }
 

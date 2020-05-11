@@ -74,6 +74,13 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.FindContext(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Returns a context that the given node belongs to.
+            </summary>
+            <param name="node">Node for which we want to find its context.</param>
+            <returns>Reference to the context.</returns>
+        </member>
         <member name="T:ERACompiler.Modules.SyntaxAnalyzer">
             <summary>
             The purpose of this class it to check the code for syntax errors and build Abstract Syntax Tree that can be used by Semantic Analyzer.
@@ -111,6 +118,38 @@
             The entrance point of the compiler.
             </summary>
         </member>
+        <member name="T:ERACompiler.Structures.AASTNode">
+            <summary>
+            Annotated AST node. It contains additional information about node's type and context.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.Parent">
+            <summary>
+            Parent node of the node.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.Children">
+            <summary>
+            Children nodes of this AAST node.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.Type">
+            <summary>
+            integer, array of 30 bytes, structure A, etc.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.Context">
+            <summary>
+            The context that this node owns.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.AASTNode.#ctor(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Types.VarType)">
+            <summary>
+            Creates AAST without context in it.
+            </summary>
+            <param name="node">AST node to be annotated.</param>
+            <param name="type">The type of AAST.</param>
+        </member>
         <member name="T:ERACompiler.Structures.ASTNode">
             <summary>
             The class representing Abstract Syntax Tree node
@@ -131,15 +170,79 @@
             The token of the source code that corresponds to this node.
             </summary>
         </member>
-        <member name="P:ERACompiler.Structures.ASTNode.Type">
+        <member name="P:ERACompiler.Structures.ASTNode.NodeType">
             <summary>
             Represents the type of an AST entry.
             </summary>
+        </member>
+        <member name="F:ERACompiler.Structures.ASTNode.level">
+            <summary>
+            How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.ASTNode.#ctor(ERACompiler.Structures.ASTNode,System.Collections.Generic.List{ERACompiler.Structures.ASTNode},ERACompiler.Structures.Token,ERACompiler.Structures.ASTNode.ASTNodeType)">
+            <summary>
+            Creates an AST node.
+            </summary>
+            <param name="parent">Ref to the parent AST node.</param>
+            <param name="children">Ref to the list of AST children nodes.</param>
+            <param name="token">Corresponding token from the lexical analyzer.</param>
+            <param name="type">The type of the AST node (basically syntax rule).</param>
+        </member>
+        <member name="M:ERACompiler.Structures.ASTNode.ToString">
+            <summary>
+            
+            </summary>
+            <returns>A string in JSON format of the node and its children (works recursively).</returns>
         </member>
         <member name="T:ERACompiler.Structures.ASTNode.ASTNodeType">
             <summary>
             The type of the AST node.
             </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.Context">
+            <summary>
+            Represents a single context in the program.
+            Used to check declaration issues and variable resolution.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Context.level">
+            <summary>
+            Used in ToString()
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Context.Name">
+            <summary>
+            The name of the context
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.#ctor(System.String,ERACompiler.Structures.Context)">
+            <summary>
+            Creates a context instance.
+            </summary>
+            <param name="name">The name of the context (may not be uniqie).</param>
+            <param name="parent">Parent context (may be null).</param>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.GetVarValue(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Searches for the variable and tries to return the AAST node corresponding to it. If there is no such variable, raises error.
+            </summary>
+            <param name="identifier">The identifier AAST node that refers to the variable.</param>
+            <returns>Returns AAST node of the variable with the given identifier.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.AddVar(ERACompiler.Structures.AASTNode,System.String)">
+            <summary>
+            Tries to add a new variable to the context. Raises error if the variable already exists.
+            </summary>
+            <param name="variable">The variable node.</param>
+            <param name="identifier">The name of the variable node.</param>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.LocateVar(System.String)">
+            <summary>
+            Searches for the variable recursively up in the context tree.
+            </summary>
+            <param name="identifier">Identifier of the variable to be found.</param>
+            <returns>Null if there is no such variable in this context, AAST node with the variable if it exists.</returns>
         </member>
         <member name="T:ERACompiler.Structures.Token">
             <summary>

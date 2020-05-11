@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ERACompiler.Modules;
 using ERACompiler.Utilities;
+using ERACompiler.Utilities.Errors;
 
 /// <summary>
 /// Used for console allocation.
@@ -32,6 +33,8 @@ namespace ERACompiler
         {
             NativeMethods.AllocConsole();
 
+            //args = new string[] { "-s", "debug", "--semantics" };
+
             // Logging
             new Logger(true);
 
@@ -52,15 +55,13 @@ namespace ERACompiler
 
             try
             {
-                Compiler eraCompiler = new Compiler();
-
                 for (int i = 0; i < sourceFilenames.Count; i++)
                 {
                     // Loading of sample code
                     string sourceCode = File.ReadAllText(sourceFilenames[i]);
 
                     // Create instance of the era compiler and get the compiled code                    
-                    string compiledCode = eraCompiler.Compile(sourceCode, cmode);
+                    string compiledCode = new Compiler().Compile(sourceCode, cmode); // New everytime to refresh all the nodes (may be optimized obviously)
 
                     // Create a new file with the compiled code
                     if (i >= outputFilenames.Count)
@@ -98,26 +99,6 @@ namespace ERACompiler
             sourceFilenames = new List<string>();
             outputFilenames = new List<string>();
 
-            if (args.Length == 1 && args[0].Equals("-h"))
-            {
-                Console.Error.WriteLine(
-                    "      ERA COMPILER\n\r" +
-                    "  INNOPOLIS UNIVERSITY\n\r" +
-                    "\n\r" +
-                    "  Possible arguments:\n\r" +
-                    "  '-s' {filepath}  :  specify input file to be compiled\n\r" +
-                    "  '-o' {filepath}  :  specify output file for compiled source code\n\r" +
-                    "  '--lexis'  :  compile in lexis mode (separate into tokens only)\n\r" +
-                    "  '--syntax'  :  compile in syntax mode (build AST only)\n\r" +
-                    "  '--semantic'  :  compile in semantic mode (build AAST only)\n\r" +
-                    "  '--flog'  :  put compilation logs into file" +
-                    "  '-h'  :  show manual\n\r" +
-                    "  Default source code file is 'code.era'.\r\n" +
-                    "  Default output file is 'compiled_code.era'\r\n"
-                    );
-                return true;
-            }
-
             for (int i = 0; i < args.Length; i++)
             {
                 if (IsFlag(args[i]))
@@ -141,6 +122,27 @@ namespace ERACompiler
                                 i--;
                                 break;
                             }
+                        case "-d":
+                            {
+                                // No folders found
+                                if (i == args.Length - 1 || IsFlag(args[i + 1]))
+                                {
+                                    Console.Error.WriteLine("No source folders specified!!!");
+                                    return true;
+                                }
+                                i++;
+                                while (i < args.Length && !IsFlag(args[i]))
+                                {
+                                    string[] files = Directory.GetFiles(args[i]); 
+                                    foreach (string filename in files)
+                                    {
+                                        sourceFilenames.Add(filename);
+                                    }
+                                    i++;
+                                }
+                                i--;
+                                break;
+                            }
                         case "-o":
                             {
                                 // No files found
@@ -158,6 +160,26 @@ namespace ERACompiler
                                 i--;
                                 break;
                             }
+                        case "-h":
+                            {
+                                Console.Error.WriteLine(
+                                    "      ERA COMPILER\r\n" +
+                                    "  INNOPOLIS UNIVERSITY\r\n" +
+                                    "\r\n" +
+                                    "  Possible arguments:\r\n" +
+                                    "  '-s' {filepath}  :  specify input file to be compiled\r\n" +
+                                    "  '-d' {path}  :  specify the folders with files to be compiled\r\n" +
+                                    "  '-o' {filepath}  :  specify output file for compiled source code\r\n" +
+                                    "  '--lexis'  :  compile in lexis mode (separate into tokens only)\r\n" +
+                                    "  '--syntax'  :  compile in syntax mode (build AST only)\r\n" +
+                                    "  '--semantics'  :  compile in semantic mode (build AAST only)\r\n" +
+                                    "  '--flog'  :  put compilation logs into file\r\n" +
+                                    "  '-h'  :  show manual\r\n" +
+                                    "  Default source code file is 'code.era'.\r\n" +
+                                    "  Default output file is 'compiled_' + source code file name\r\n"
+                                    );
+                                break;
+                            }
                         case "--lexis":
                             {
                                 cmode = Compiler.CompilationMode.LEXIS;
@@ -168,14 +190,19 @@ namespace ERACompiler
                                 cmode = Compiler.CompilationMode.SYNTAX;
                                 break;
                             }
-                        case "--semantic":
+                        case "--semantics":
                             {
-                                cmode = Compiler.CompilationMode.SEMANTIC;
+                                cmode = Compiler.CompilationMode.SEMANTICS;
                                 break;
                             }
                         case "--flog":
                             {
                                 Logger.LoggingMode = 0;
+                                break;
+                            }
+                        default:
+                            {
+                                Logger.LogError(new CompilationError("Unknown parameter\"" + args[i] +"\" !!!"));
                                 break;
                             }
                     }

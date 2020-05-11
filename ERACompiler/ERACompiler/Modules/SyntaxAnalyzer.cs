@@ -11,7 +11,7 @@ namespace ERACompiler.Modules
     /// </summary>
     public class SyntaxAnalyzer
     {
-        private Token emptyToken; // Used for generalization purposes
+        private readonly Token emptyToken; // Used for generalization purposes
 
         /// <summary>
         /// Used for initialization of some variables.
@@ -326,7 +326,7 @@ namespace ERACompiler.Modules
                     }
                 case "pragma":
                     {
-                        ASTNode annotationNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ANNOTATION);
+                        ASTNode annotationNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ANNOTATION);
 
                         int end = 0;
                         int lastComma = 0;
@@ -365,7 +365,7 @@ namespace ERACompiler.Modules
         
         private ASTNode GetPragmaDeclaration(List<Token> tokens, ASTNode parent) // Identifier ( [ Text ] )
         {
-            ASTNode prgmDeclNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.PRAGMA_DECLARATION);
+            ASTNode prgmDeclNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.PRAGMA_DECLARATION);
 
             if (tokens.Count == 3)
             {
@@ -451,7 +451,7 @@ namespace ERACompiler.Modules
 
         private ASTNode GetStruct(List<Token> tokens, ASTNode parent) // struct Identifier { VarDeclaration } end
         {
-            ASTNode structNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.STRUCTURE);
+            ASTNode structNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.STRUCTURE);
             structNode.Children.Add(new ASTNode(structNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
             tokens.RemoveAt(0);
 
@@ -470,9 +470,9 @@ namespace ERACompiler.Modules
             return structNode;
         }
 
-        private ASTNode GetModule(List<Token> tokens, ASTNode parent) // module Identifier { VarDeclaration | Routine } end
+        private ASTNode GetModule(List<Token> tokens, ASTNode parent) // module Identifier { VarDeclaration | Routine | Structure } end
         {
-            ASTNode moduleNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.MODULE);
+            ASTNode moduleNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.MODULE);
             moduleNode.Children.Add(new ASTNode(moduleNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
             tokens.RemoveAt(0);
 
@@ -512,7 +512,7 @@ namespace ERACompiler.Modules
                         {
                             int end_i = 0; // Locate the end of the structure
                             while (!tokens[end_i].Value.Equals("end")) { end_i++; }
-                            moduleNode.Children.Add(GetStruct(tokens.GetRange(0, end_i), moduleNode));
+                            moduleNode.Children.Add(GetStruct(tokens.GetRange(1, end_i), moduleNode));
                             tokens.RemoveRange(0, end_i + 1);
                             break;
                         }
@@ -531,7 +531,7 @@ namespace ERACompiler.Modules
 
         private ASTNode GetRoutine(List<Token> tokens, ASTNode parent) // [ Attribute ] routine Identifier [ Parameters ] [ Results ] ( ; | RoutineBody )
         {
-            ASTNode routineNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ROUTINE);
+            ASTNode routineNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ROUTINE);
             bool isInterfaceRoutine = false;
             Token errorAnchor = tokens[0];
 
@@ -613,7 +613,7 @@ namespace ERACompiler.Modules
 
         private ASTNode GetParameter(List<Token> tokens, ASTNode parent) // Type Identifier | Register
         {
-            ASTNode paramNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.PARAMETER);
+            ASTNode paramNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.PARAMETER);
 
             if (tokens[0].Type == TokenType.REGISTER)
             {
@@ -755,7 +755,7 @@ namespace ERACompiler.Modules
                         ));
             }
 
-            ASTNode varDefNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.VAR_DEFINITION);            
+            ASTNode varDefNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.VARIABLE_DEFINITION);            
 
             if (tokens.Count < 2) // If no definition
             {
@@ -766,7 +766,7 @@ namespace ERACompiler.Modules
             {
                 if (tokens[1].Type == TokenType.DELIMITER) // Identifier [ Expression ]
                 {
-                    ASTNode arrayDeclNode = new ASTNode(varDefNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ARRAY_DECLARATION);
+                    ASTNode arrayDeclNode = new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ARRAY_DECLARATION);
                     arrayDeclNode.Children.Add(new ASTNode(arrayDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
                     arrayDeclNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), arrayDeclNode)); // Pass just expression tokens
                     varDefNode.Children.Add(arrayDeclNode);
@@ -811,7 +811,7 @@ namespace ERACompiler.Modules
                         ));
             }
 
-            ASTNode constDefNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.CONST_DEFINITION);
+            ASTNode constDefNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.CONST_DEFINITION);
             ASTNode id = new ASTNode(constDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER);
             constDefNode.Children.Add(id);
 
@@ -990,7 +990,7 @@ namespace ERACompiler.Modules
                     ));
             }
 
-            ASTNode refNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.REFERENCE);
+            ASTNode refNode = new ASTNode(parent, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REFERENCE);
             refNode.Children.Add(new ASTNode(refNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
 
             return refNode;
@@ -1019,7 +1019,7 @@ namespace ERACompiler.Modules
                     ));
             }
 
-            ASTNode arrAccessNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ARRAY_ELEMENT);
+            ASTNode arrAccessNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ARRAY_ELEMENT);
             arrAccessNode.Children.Add(new ASTNode(arrAccessNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
             arrAccessNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), arrAccessNode));
 
@@ -1035,7 +1035,7 @@ namespace ERACompiler.Modules
                     ));
             }
 
-            ASTNode structAccessNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.STRUCTURE_ACCESS);
+            ASTNode structAccessNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.STRUCTURE_ACCESS);
             foreach (Token t in tokens)
             {
                 if (t.Type == TokenType.IDENTIFIER)
@@ -1073,7 +1073,7 @@ namespace ERACompiler.Modules
 
         private ASTNode GetAssemblyBlock(List<Token> tokens, ASTNode parent) // asm ( AssemblyStatement; | AssemblyStatement {, AssemblyStatement} end)
         {
-            ASTNode asmBlockNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ASSEMBLER_BLOCK);
+            ASTNode asmBlockNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ASSEMBLER_BLOCK);
 
             List<Token> temp = new List<Token>();
             for (int i = 1; i < tokens.Count; i++)
@@ -1348,7 +1348,7 @@ namespace ERACompiler.Modules
 
         private ASTNode GetCall(List<Token> tokens, ASTNode parent) // [ Identifier. ] Identifier CallArgs ;
         {
-            ASTNode callNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.CALL);
+            ASTNode callNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.CALL);
 
             int idNum = 1;
             foreach (Token t in tokens)
@@ -1542,7 +1542,7 @@ namespace ERACompiler.Modules
 
         private ASTNode GetGoto(List<Token> tokens, ASTNode parent) // goto Identifier ;
         {
-            ASTNode gotoNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.GOTO);
+            ASTNode gotoNode = new ASTNode(parent, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.GOTO);
             gotoNode.Children.Add(new ASTNode(gotoNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
             return gotoNode;
         }

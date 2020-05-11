@@ -4,12 +4,16 @@ namespace ERACompiler.Structures.Types
 {
     public class StructType : VarType
     {
-        public List<VarType> ChildrenTypes { get; set; }
+        public string TypeName { get; set; }
 
-        public StructType() : base(VarTypeType.STRUCTURE)
+        public StructType(string typeName) : base(VarTypeType.STRUCTURE)
         {
-            ChildrenTypes = new List<VarType>();
+            TypeName = typeName;
         }
 
+        public override string ToString()
+        {
+            return TypeName;
+        }
     }
 }

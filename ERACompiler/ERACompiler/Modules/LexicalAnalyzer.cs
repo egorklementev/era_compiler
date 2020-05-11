@@ -16,12 +16,7 @@ namespace ERACompiler.Modules
         private int lineNumber; // Used for token position
 
         // Lists that contain terminals
-        private List<string> keywords;
-        private List<string> operators;
-        private List<string> registers;
-        private List<string> delimiters;
-        private List<string> whitespaces;
-        private List<List<string>> allLists;
+        private readonly List<List<string>> allLists;
 
         public LexicalAnalyzer()
         {
@@ -29,11 +24,11 @@ namespace ERACompiler.Modules
             lineChar = 1;
             lineNumber = 1;
 
-            KeywordsInitialization();
-            OperatorsInitialization();
-            RegistersInitialization();
-            DelimitersInitialization();
-            WhitespacesInitialization();
+            List<string> keywords = KeywordsInitialization();
+            List<string> operators = OperatorsInitialization();
+            List<string> registers = RegistersInitialization();
+            List<string> delimiters = DelimitersInitialization();
+            List<string> whitespaces = WhitespacesInitialization();
 
             allLists = new List<List<string>>() {
                 keywords,
@@ -253,9 +248,9 @@ namespace ERACompiler.Modules
         }
 
         // For convenience
-        private void KeywordsInitialization()
+        private List<string> KeywordsInitialization()
         {
-            keywords = new List<string>() {
+            return new List<string>() {
                 "pragma",
                 "module",
                 "data",
@@ -287,9 +282,9 @@ namespace ERACompiler.Modules
                 "struct"
             };
         }
-        private void OperatorsInitialization()
+        private List<string> OperatorsInitialization()
         {
-            operators = new List<string>() {
+            return new List<string>() {
                 "+",
                 "-",
                 "*",
@@ -315,17 +310,18 @@ namespace ERACompiler.Modules
                 "<=>"
             };
         }
-        private void RegistersInitialization()
+        private List<string> RegistersInitialization()
         {
-            registers = new List<string>();
+            List<string> registers = new List<string>();
             for (int i = 0; i < 32; i++)
             {
                 registers.Add("R" + i.ToString());
             }
+            return registers;
         }
-        private void DelimitersInitialization()
+        private List<string> DelimitersInitialization()
         {
-            delimiters = new List<string>()
+            return new List<string>()
             {
                 ":",
                 ";",
@@ -338,9 +334,9 @@ namespace ERACompiler.Modules
                 "//"
             };
         }
-        private void WhitespacesInitialization()
+        private List<string> WhitespacesInitialization()
         {
-            whitespaces = new List<string>() {
+            return new List<string>() {
                 " ",
                 "\t",
                 "\n",

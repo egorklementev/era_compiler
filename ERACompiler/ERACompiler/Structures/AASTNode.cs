@@ -10,10 +10,21 @@ namespace ERACompiler.Structures
     /// </summary>
     public class AASTNode : ASTNode
     {
+        private AASTNode? parent;
+
         /// <summary>
         /// Parent node of the node.
         /// </summary>
-        public new AASTNode? Parent { get; set; }
+        public new AASTNode? Parent 
+        { 
+            get => parent;
+            set
+            {
+                parent = value;
+                if (value != null)
+                    level = value.level + 2;
+            } 
+        }
 
         /// <summary>
         /// Children nodes of this AAST node.
@@ -26,14 +37,9 @@ namespace ERACompiler.Structures
         public VarType Type { get; set; }
 
         /// <summary>
-        /// Whether the node creates a new context or not
-        /// </summary>
-        public bool HasContext { get; } = false;
-
-        /// <summary>
         /// The context that this node owns.
         /// </summary>
-        public Context? Context { get; } 
+        public Context Context { get; set; } 
 
         /// <summary>
         /// Creates AAST without context in it.
@@ -44,18 +50,7 @@ namespace ERACompiler.Structures
         {
             Type = type;
             Children = new List<AASTNode>();
-        }
-
-        /// <summary>
-        /// Creates AAST with the context in it.
-        /// </summary>
-        /// <param name="node">AST node to be annotated.</param>
-        /// <param name="type">The type of AAST.</param>
-        /// <param name="context">The context that is owned by this node.</param>
-        public AASTNode(ASTNode node, VarType type, Context context) : this(node, type)
-        {
-            HasContext = true;
-            Context = context;
+            Context = new Context("none", null); // Dummy context            
         }
 
         public override string ToString()
@@ -67,19 +62,22 @@ namespace ERACompiler.Structures
             sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
                 .Append("{\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"node_type\": ").Append("\"" + NodeType.ToString() + "\"").Append(",\r\n");
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"type\": ").Append("\"" + Type.ToString() + "\"").Append(",\r\n");
 
-            if (HasContext)
+            Context.level = level + 1; // To make the output correct
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("\"context\": ");
+            if (Context.Name.Equals("none"))
             {
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"context\": ").Append("\"" + Context.ToString() + "\"").Append(",\r\n");
+                sb.Append("\"none\",\r\n");
             }
             else
             {
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"context\": ").Append("\"none\"").Append(",\r\n");
+                sb.Append("\r\n").Append(Context.ToString()).Append(",\r\n");             
             }
-
+            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))

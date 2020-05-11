@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Text;
+using System.Collections.Generic;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
+using System.Linq;
+using System.Collections;
 
 namespace ERACompiler.Structures
 {
@@ -10,6 +13,11 @@ namespace ERACompiler.Structures
     /// </summary>
     public class Context
     {
+        /// <summary>
+        /// Used in ToString()
+        /// </summary>
+        public int level { get; set; }
+
         private readonly Dictionary<string, AASTNode> st; // Symbol Table
         private readonly Context? parent;
 
@@ -37,7 +45,7 @@ namespace ERACompiler.Structures
         /// <returns>Returns AAST node of the variable with the given identifier.</returns>
         public AASTNode? GetVarValue(AASTNode identifier)
         {
-            AASTNode? var = LocateVar(identifier);
+            AASTNode? var = LocateVar(identifier.CrspToken.Value);
 
             if (var == null)
             {
@@ -57,22 +65,21 @@ namespace ERACompiler.Structures
         /// Tries to add a new variable to the context. Raises error if the variable already exists.
         /// </summary>
         /// <param name="variable">The variable node.</param>
-        public void AddVar(AASTNode variable)
+        /// <param name="identifier">The name of the variable node.</param>
+        public void AddVar(AASTNode variable, string identifier)
         {
-            string varName = variable.Children[0].CrspToken.Value;
-
-            AASTNode? var = LocateVar(variable);
+            AASTNode? var = LocateVar(identifier); // First is identifier
 
             if (var == null)
             {
-                st.Add(varName, variable);
+                st.Add(identifier, variable);
             }
             else
             {
-                TokenPosition pos = st[varName].Children[0].CrspToken.Position;
-                TokenPosition dPos = variable.Children[0].CrspToken.Position;
+                TokenPosition pos = st[identifier].Children[0].CrspToken.Position;
+                TokenPosition dPos = variable.CrspToken.Position;
                 Logger.LogError(new SemanticError(
-                    "The name " + varName + " is already declared at (" + pos.Line + ", " + pos.Character + ")!!!\r\n" +
+                    "The name " + identifier + " is already declared at (" + pos.Line + ", " + pos.Character + ")!!!\r\n" +
                     "The duplicate is at (" + dPos.Line + ", " + dPos.Character + ")."
                     ));
             }
@@ -83,18 +90,16 @@ namespace ERACompiler.Structures
         /// </summary>
         /// <param name="identifier">Identifier of the variable to be found.</param>
         /// <returns>Null if there is no such variable in this context, AAST node with the variable if it exists.</returns>
-        private AASTNode? LocateVar(AASTNode identifier)
+        private AASTNode? LocateVar(string identifier)
         {
-            string varName = identifier.CrspToken.Value;
-
-            if (!st.ContainsKey(varName))
+            if (!st.ContainsKey(identifier))
             {
                 if (parent != null)
                     return parent.LocateVar(identifier);
             }
             else
             {
-                return st[varName];
+                return st[identifier];
             }
 
             return null;
@@ -102,7 +107,46 @@ namespace ERACompiler.Structures
 
         public override string ToString()
         {
-            return Name;
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("{\r\n");
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 2)))
+                .Append("\"name\": \"").Append(Name).Append("\",\r\n");
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 2)))
+                .Append("\"symbol_table\": [");
+
+            foreach (KeyValuePair<string, AASTNode> pair in st)
+            {
+                string varName = pair.Key;
+                AASTNode var = pair.Value;
+
+                sb.Append("\r\n").Append(string.Concat(Enumerable.Repeat("\t", level + 3)))
+                    .Append("{\r\n");
+
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
+                    .Append("\"var_type\": \"").Append(var.Type.ToString()).Append("\",\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
+                    .Append("\"var_name\": \"").Append(varName).Append("\"\r\n");
+
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 3)))
+                    .Append("},");
+            }
+
+            if (st.Count > 0)
+            {
+                sb.Remove(sb.Length - 1, 1).Append("\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 2)));
+            }
+
+            sb.Append("]\r\n");
+
+            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                .Append("}");
+
+            return sb.ToString();
         }
     }
 }

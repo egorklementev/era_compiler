@@ -12,7 +12,8 @@ Represents the grammar for the ERA system-level programming language.
 * **VarDeclaration** : Variable | Constant
 * **Variable** : Type VarDefinition { `,` VarDefinition } `;`
 * **Type** : `int` | `short` | `byte` | Identifier
-* **VarDefinition** : Identifier [ `:=` Expression ] | Identifier `[` Expression `]`
+* **VarDefinition** : Identifier [ `:=` Expression ] | ArrayDeclaration
+* **ArrayDeclaration** : Identifier `[` Expression `]`
 * **Constant** : `const` ConstDefinition { `,` ConstDefinition } `;`
 * **ConstDefinition** : Identifier `=` Expression
 ---

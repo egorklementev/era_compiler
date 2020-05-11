@@ -1,6 +1,10 @@
 ﻿namespace ERACompiler.Modules
 {
-    class Generator
+    /// <summary>
+    /// Generates the actual assembly code
+    /// </summary>
+    public class Generator
     {
+
     }
 }

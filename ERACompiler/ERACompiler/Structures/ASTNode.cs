@@ -12,7 +12,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// Parent node. Only the root node has parent equals to null.
         /// </summary>
-        public ASTNode? Parent { get; set;  }
+        public ASTNode? Parent { get; set; }
         /// <summary>
         /// Child nodes of the node.
         /// </summary>
@@ -29,7 +29,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
         /// </summary>
-        protected int level;
+        protected int level = 0;
 
         /// <summary>
         /// Creates an AST node.
@@ -46,9 +46,7 @@ namespace ERACompiler.Structures
             NodeType = type;
 
             if (parent != null) 
-                level = parent.level + 2;            
-            else            
-                level = 0;            
+                level = parent.level + 2;                      
         }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace ERACompiler.Structures
             sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
                 .Append("{\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"type\": ").Append("\"" + NodeType.ToString() + "\"").Append(",\r\n");            
+                .Append("\"node_type\": ").Append("\"" + NodeType.ToString() + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
@@ -113,7 +111,7 @@ namespace ERACompiler.Structures
             LITERAL,
             DECLARATION,
             TYPE,
-            VAR_DEFINITION,
+            VARIABLE_DEFINITION,
             EXPRESSION,
             CONST_DEFINITION,
             LABEL,
