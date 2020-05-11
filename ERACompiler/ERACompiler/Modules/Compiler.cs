@@ -11,7 +11,7 @@ namespace ERACompiler.Modules
     {
         private readonly LexicalAnalyzer lexis;         // Used to retrieve tokens from the source code.
         private readonly SyntaxAnalyzer syntax;         // Used to build AST.
-        private readonly SemanticAnalyzer semantics;    // Used to check semantics of AST and more.
+        private readonly SemanticsAnalyzer semantics;    // Used to check semantics of AST and more.
         private readonly Generator generator;           // Used to generate assembly code given AAST.
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace ERACompiler.Modules
         {
             lexis = new LexicalAnalyzer();
             syntax = new SyntaxAnalyzer();
-            semantics = new SemanticAnalyzer();
+            semantics = new SemanticsAnalyzer();
             generator = new Generator();
         }
 
@@ -69,7 +69,10 @@ namespace ERACompiler.Modules
                 // Returns actual assembly generated code.
                 case CompilationMode.GENERATION:
                     {
-                        return "";
+                        List<Token> lst = lexis.GetTokenList(sourceCode);
+                        ASTNode ast = syntax.BuildAST(lst);
+                        AASTNode aast = semantics.BuildAAST(ast);                        
+                        return generator.GetAssemblyCode(aast);
                     }
 
                 default:

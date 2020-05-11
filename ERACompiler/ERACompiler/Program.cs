@@ -33,6 +33,7 @@ namespace ERACompiler
         {
             NativeMethods.AllocConsole();
 
+            //args = new string[] { "-s", "debug" };
             //args = new string[] { "-s", "debug", "--semantics" };
 
             // Logging
@@ -207,12 +208,6 @@ namespace ERACompiler
                             }
                     }
                 }
-            }
-
-            // If no '-s' argument specified
-            if (sourceFilenames.Count == 0)
-            {
-                sourceFilenames.Add("code.era");
             }
 
             return false;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ERACompiler.Modules
 {
-    class SemanticAnalyzer
+    class SemanticsAnalyzer
     {
         public AASTNode BuildAAST(ASTNode ASTRoot)
         {

@@ -35,6 +35,23 @@
             For example syntax means lexical analysis plus syntax analysis.
             </summary>
         </member>
+        <member name="T:ERACompiler.Modules.Generator">
+            <summary>
+            Generates the actual assembly code
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Generator.#ctor">
+            <summary>
+            Generator constructor
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Generator.GetAssemblyCode(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Constructs actual assembly code from the annotated AST.
+            </summary>
+            <param name="root">The root node of the AAST.</param>
+            <returns>A string containing assembly code build using AAST.</returns>
+        </member>
         <member name="T:ERACompiler.Modules.LexicalAnalyzer">
             <summary>
             Contains functionality for conversion of source code of the program to the list of tokens.
@@ -74,7 +91,7 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticAnalyzer.FindContext(ERACompiler.Structures.AASTNode)">
+        <member name="M:ERACompiler.Modules.SemanticsAnalyzer.FindContext(ERACompiler.Structures.AASTNode)">
             <summary>
             Returns a context that the given node belongs to.
             </summary>
