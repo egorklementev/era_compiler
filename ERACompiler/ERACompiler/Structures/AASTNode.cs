@@ -11,6 +11,12 @@ namespace ERACompiler.Structures
     public class AASTNode : ASTNode
     {
         private AASTNode? parent;
+        private int value;
+
+        /// <summary>
+        /// Represents local value of the variable (if the node represents value reference, for example)
+        /// </summary>
+        public int Value { get => value; set => this.value = value; }
 
         /// <summary>
         /// Parent node of the node.

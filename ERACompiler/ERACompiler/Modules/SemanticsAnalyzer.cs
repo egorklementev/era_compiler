@@ -1,6 +1,9 @@
 ﻿using ERACompiler.Structures;
 using ERACompiler.Structures.Types;
+using ERACompiler.Utilities;
+using ERACompiler.Utilities.Errors;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace ERACompiler.Modules
 {
@@ -138,16 +141,20 @@ namespace ERACompiler.Modules
                         {
                             string id = node.Children[0].CrspToken.Value;
                             annotatedNode = new AASTNode(node, type) { Parent = parent };
+
+                            // Expression (if any)
+                            if (node.Children.Count > 1)
+                            {
+                                annotatedNode.Value = ComputeExpression(node.Children[1], parent);
+                            }
+
                             Context prntCtx = FindContext(annotatedNode);
-                            prntCtx.AddVar(annotatedNode, id);
-                            
-                            // ### Expression ? ###
-                        
+                            prntCtx.AddVar(annotatedNode, id);                            
                         }
                         else
                         {                            
                             string id = node.Children[0].Children[0].CrspToken.Value; // Goes to the ArrayDeclaration node
-                            int size = ComputeExpression(node.Children[0].Children[1]);
+                            int size = ComputeExpression(node.Children[0].Children[1], parent);
                             annotatedNode = new AASTNode(node, new ArrayType(type, size)) { Parent = parent };
                             Context prntCtx = FindContext(annotatedNode);
                             prntCtx.AddVar(annotatedNode, id);
@@ -157,7 +164,7 @@ namespace ERACompiler.Modules
                 case ASTNode.ASTNodeType.CONST_DEFINITION:
                     {
                         string id = node.Children[0].CrspToken.Value;
-                        annotatedNode = new AASTNode(node, new VarType(VarType.VarTypeType.CONSTANT)) { Parent = parent };
+                        annotatedNode = new AASTNode(node, new VarType(VarType.VarTypeType.CONSTANT)) { Parent = parent, Value = ComputeExpression(node.Children[1], parent) };                        
                         Context prntCtx = FindContext(annotatedNode);
                         prntCtx.AddVar(annotatedNode, id);
                         break;
@@ -208,8 +215,175 @@ namespace ERACompiler.Modules
             }
         }
     
-        private int ComputeExpression(ASTNode expression)
+        private int ComputeExpression(ASTNode expression, AASTNode parent)
         {
+            int result;
+
+            // Special case for one-element expressions
+            if (expression.Children.Count == 1)
+            {
+                return GetOperand(expression.Children[0], parent);
+            }
+
+            // Multiplication and binary operations have the highest priority
+            for (int i = 0; i < expression.Children.Count; i++)
+            {
+                if (expression.Children[i].NodeType == ASTNode.ASTNodeType.OPERATOR)
+                {
+                    if (expression.Children[i].CrspToken.Value.Equals("*") ||
+                        expression.Children[i].CrspToken.Value.Equals("&") ||
+                        expression.Children[i].CrspToken.Value.Equals("|") ||
+                        expression.Children[i].CrspToken.Value.Equals("^") ||
+                        expression.Children[i].CrspToken.Value.Equals("?"))
+                    {
+                        int op1 = GetOperand(expression.Children[i - 1], parent); // Get first operand value
+                        int op2 = GetOperand(expression.Children[i + 1], parent); // Get second operand value
+                        int interRes = 0; // Intermediate result
+
+                        switch (expression.Children[i].CrspToken.Value)
+                        {
+                            case "*":
+                                {
+                                    interRes = op1 * op2;
+                                    break;
+                                }
+                            case "&":
+                                {
+                                    interRes = op1 & op2;
+                                    break;
+                                }
+                            case "|":
+                                {
+                                    interRes = op1 | op2;
+                                    break;
+                                }
+                            case "^":
+                                {
+                                    interRes = op1 ^ op2;
+                                    break;
+                                }
+                            case "?":
+                                {
+                                    interRes = op1 > op2 ? 1 : op1 < op2 ? 2 : 4;
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+
+                        expression.Children.RemoveRange(i - 1, 3);
+                        expression.Children.Insert(
+                            i - 1,
+                            new ASTNode(expression, new List<ASTNode>(), new Token(TokenType.NUMBER, interRes.ToString(), new TokenPosition(-1, -1)), ASTNode.ASTNodeType.LITERAL)
+                            );
+                        i = 0; // Start again
+                    }
+                }
+            }
+
+            for (int i = 0; i < expression.Children.Count; i++)
+            {
+                if (expression.Children[i].NodeType == ASTNode.ASTNodeType.OPERATOR)
+                {
+                    if (expression.Children[i].CrspToken.Value.Equals("+") ||
+                        expression.Children[i].CrspToken.Value.Equals("-") ||
+                        expression.Children[i].CrspToken.Value.Equals("=") ||
+                        expression.Children[i].CrspToken.Value.Equals("/=") ||
+                        expression.Children[i].CrspToken.Value.Equals("<") ||
+                        expression.Children[i].CrspToken.Value.Equals(">"))
+                    {
+                        int op1 = GetOperand(expression.Children[i - 1], parent); // Get first operand value
+                        int op2 = GetOperand(expression.Children[i + 1], parent); // Get second operand value
+                        int interRes = 0; // Intermediate result
+
+                        switch (expression.Children[i].CrspToken.Value)
+                        {
+                            case "+":
+                                {
+                                    interRes = op1 + op2;
+                                    break;
+                                }
+                            case "-":
+                                {
+                                    interRes = op1 - op2;
+                                    break;
+                                }
+                            case "=":
+                                {
+                                    interRes = op1 == op2 ? 1 : 0;
+                                    break;
+                                }
+                            case "/=":
+                                {
+                                    interRes = op1 != op2 ? 1 : 0;
+                                    break;
+                                }
+                            case "<":
+                                {
+                                    interRes = op1 < op2 ? 1 : 0;
+                                    break;
+                                }
+                            case ">":
+                                {
+                                    interRes = op1 > op2 ? 1 : 0;
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+
+                        expression.Children.RemoveRange(i - 1, 3);
+                        expression.Children.Insert(
+                            i - 1,
+                            new ASTNode(expression, new List<ASTNode>(), new Token(TokenType.NUMBER, interRes.ToString(), new TokenPosition(-1, -1)), ASTNode.ASTNodeType.LITERAL)
+                            );
+                        i = 0; // Start again
+                    }
+                }
+            }
+
+            if (expression.Children.Count == 1)
+            {
+                result = int.Parse(expression.Children[0].CrspToken.Value);
+            }
+            else
+            {
+                Logger.LogError(new SemanticsError(
+                    "Incorrect expression at (" + expression.Parent.CrspToken.Position.Line + ", " + expression.Parent.CrspToken.Position.Character + ")!!!"
+                    ));
+                return -1;
+            }
+
+            return result;
+        }
+
+        private int GetOperand(ASTNode op, AASTNode parent)
+        {
+            // Special case for intermediate calculations
+            if (op.NodeType == ASTNode.ASTNodeType.LITERAL)
+            {
+                return int.Parse(op.CrspToken.Value);
+            }
+
+            if (op.Children[0].NodeType == ASTNode.ASTNodeType.RECEIVER)
+            {
+                if (op.Children[0].Children[0].NodeType == ASTNode.ASTNodeType.IDENTIFIER)
+                {
+                    return FindContext(parent).GetVarValue(op.Children[0].Children[0]);
+                }
+            }
+
+            if (op.Children[0].NodeType == ASTNode.ASTNodeType.LITERAL)
+            {
+                return int.Parse(op.Children[0].CrspToken.Value);
+            }
+
+            // ### TODO : Reference
+
             return 0;
         }
     }

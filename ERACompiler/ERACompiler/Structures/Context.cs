@@ -43,7 +43,7 @@ namespace ERACompiler.Structures
         /// </summary>
         /// <param name="identifier">The identifier AAST node that refers to the variable.</param>
         /// <returns>Returns AAST node of the variable with the given identifier.</returns>
-        public AASTNode? GetVarValue(AASTNode identifier)
+        public int GetVarValue(ASTNode identifier)
         {
             AASTNode? var = LocateVar(identifier.CrspToken.Value);
 
@@ -53,11 +53,11 @@ namespace ERACompiler.Structures
                 Logger.LogError(new SemanticsError(
                     "Reference to the undeclared variable at (" + pos.Line + ", " + pos.Character + ")!!!"
                     ));
-                return null;
+                return -1;
             }
             else
             {
-                return var;
+                return var.Value;
             }
         }
 

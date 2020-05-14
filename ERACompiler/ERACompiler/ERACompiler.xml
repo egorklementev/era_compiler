@@ -140,6 +140,11 @@
             Annotated AST node. It contains additional information about node's type and context.
             </summary>
         </member>
+        <member name="P:ERACompiler.Structures.AASTNode.Value">
+            <summary>
+            Represents local value of the variable (if the node represents value reference, for example)
+            </summary>
+        </member>
         <member name="P:ERACompiler.Structures.AASTNode.Parent">
             <summary>
             Parent node of the node.
@@ -240,7 +245,7 @@
             <param name="name">The name of the context (may not be uniqie).</param>
             <param name="parent">Parent context (may be null).</param>
         </member>
-        <member name="M:ERACompiler.Structures.Context.GetVarValue(ERACompiler.Structures.AASTNode)">
+        <member name="M:ERACompiler.Structures.Context.GetVarValue(ERACompiler.Structures.ASTNode)">
             <summary>
             Searches for the variable and tries to return the AAST node corresponding to it. If there is no such variable, raises error.
             </summary>

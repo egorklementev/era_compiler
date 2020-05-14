@@ -97,7 +97,8 @@ namespace ERACompiler.Modules
                     }
                     if (isLDA)
                     {
-                        // ### TODO ###
+                        asc.Append(GetLDA(node));
+                        asc.Remove(asc.Length - 1, 1);
                     }
                     else
                     {
@@ -117,6 +118,23 @@ namespace ERACompiler.Modules
             }
 
             asc.Append(";\r\n");
+
+            return asc.ToString();
+        }
+
+        private string GetLDA(AASTNode ldaNode)
+        {
+            StringBuilder asc = new StringBuilder();
+
+            if (ldaNode.CrspToken.Type != TokenType.NO_TOKEN)
+            {
+                asc.Append(ldaNode.CrspToken.Value).Append(" ");
+            }
+
+            foreach (AASTNode child in ldaNode.Children)
+            {
+                asc.Append(GetLDA(child));
+            }
 
             return asc.ToString();
         }
