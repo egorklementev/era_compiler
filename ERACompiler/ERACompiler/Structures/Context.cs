@@ -129,7 +129,9 @@ namespace ERACompiler.Structures
                 sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
                     .Append("\"var_type\": \"").Append(var.Type.ToString()).Append("\",\r\n");
                 sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
-                    .Append("\"var_name\": \"").Append(varName).Append("\"\r\n");
+                    .Append("\"var_name\": \"").Append(varName).Append("\",\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
+                    .Append("\"var_value\": \"").Append(var.Value.ToString()).Append("\"\r\n");
 
                 sb.Append(string.Concat(Enumerable.Repeat("\t", level + 3)))
                     .Append("},");

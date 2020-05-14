@@ -3,7 +3,6 @@ using ERACompiler.Structures.Types;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace ERACompiler.Modules
 {
@@ -164,9 +163,19 @@ namespace ERACompiler.Modules
                 case ASTNode.ASTNodeType.CONST_DEFINITION:
                     {
                         string id = node.Children[0].CrspToken.Value;
-                        annotatedNode = new AASTNode(node, new VarType(VarType.VarTypeType.CONSTANT)) { Parent = parent, Value = ComputeExpression(node.Children[1], parent) };                        
+                        annotatedNode = new AASTNode(node, new VarType(VarType.VarTypeType.CONSTANT)) { Parent = parent, Value = ComputeExpression(node.Children[1], parent) };
                         Context prntCtx = FindContext(annotatedNode);
                         prntCtx.AddVar(annotatedNode, id);
+                        break;
+                    }
+                case ASTNode.ASTNodeType.ASSEMBLER_STATEMENT:
+                    {
+                        if (node.Children.Count > 2 && node.Children[2].NodeType == ASTNode.ASTNodeType.EXPRESSION)
+                        {
+                            ComputeExpression(node.Children[2], parent);
+                        }
+
+                        annotatedNode = new AASTNode(node, new VarType(VarType.VarTypeType.NO_TYPE)) { Parent = parent };
                         break;
                     }
                 default:

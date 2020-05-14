@@ -18,9 +18,10 @@ There are several arguments available:
 * `-h`  :  see help
 * `-s {filename}`  :  specify source files to be compiled
 * `-o {filename}`  :  specify output files  
+* `-d {paths}`  :  specify folders with the code to be compiled (cannot be used with `-o` parameter)
 * `--lexis`  :  perform tokenization only  
 * `--syntax`  :  perform tokenization and AST assembling
-* `--semantic`  :  perform tokenization, AST assembling, and AAST assembling
+* `--semantics`  :  perform tokenization, AST assembling, and AAST assembling
 * `--flog`  :  log errors and exceptions to the file  
   
 Examples of commands:  
