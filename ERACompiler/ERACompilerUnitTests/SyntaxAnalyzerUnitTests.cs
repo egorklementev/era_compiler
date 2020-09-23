@@ -25,7 +25,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void RoutineRuleTests()
         {
-            int i = 1;
+            int i = 7;
             while (File.Exists("tests/syntax_analyzer/routine_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -85,7 +85,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void PragmaRuleTests()
         {
-            int i = 1;
+            int i = 2;
             while (File.Exists("tests/syntax_analyzer/pragma_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -100,7 +100,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void VariableDeclarationRuleTests()
         {
-            int i = 1;
+            int i = 4;
             while (File.Exists("tests/syntax_analyzer/variable_declaration_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -115,7 +115,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void AssemblyStatementRuleTests()
         {
-            int i = 1;
+            int i = 9;
             while (File.Exists("tests/syntax_analyzer/assembly_statement_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -130,7 +130,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void ExpressionRuleTests()
         {
-            int i = 1;
+            int i = 7;
             while (File.Exists("tests/syntax_analyzer/expression_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -145,7 +145,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void AssignmentRuleTests()
         {
-            int i = 1;
+            int i = 3;
             while (File.Exists("tests/syntax_analyzer/assignment_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -175,7 +175,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void CallRuleTests()
         {
-            int i = 1;
+            int i = 2;
             while (File.Exists("tests/syntax_analyzer/call_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -205,7 +205,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void LoopRuleTests()
         {
-            int i = 1;
+            int i = 4;
             while (File.Exists("tests/syntax_analyzer/loop_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
@@ -250,7 +250,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void ComplexTests()
         {
-            int i = 1;
+            int i = 2;
             while (File.Exists("tests/syntax_analyzer/complex_" + i + ".era"))
             {
                 Compiler c = new Compiler();
