@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ERACompiler.Structures;
+using ERACompiler.Structures.Rules;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
 
@@ -19,6 +20,31 @@ namespace ERACompiler.Modules
         public SyntaxAnalyzer()
         {
             emptyToken = new Token(TokenType.NO_TOKEN, "No token", new TokenPosition(-1, -1));
+
+            // --- --- ---
+            //
+            // --- --- ---
+
+            var exampleCode = new List<Token>() { 
+                new Token(TokenType.KEYWORD, "break", new TokenPosition(0, 0)), 
+                new Token(TokenType.DELIMITER, ";", new TokenPosition(0, 5)) 
+            };
+
+            SyntaxRule breakRule = new SyntaxRule();
+
+            breakRule.SetType(SyntaxRule.SyntaxRuleType.COMPOUND)
+                .AddTerminalRule(new Token(
+                    TokenType.KEYWORD,
+                    "break",
+                    new TokenPosition(0, 0)
+                    ))
+                .AddTerminalRule(new Token(
+                    TokenType.DELIMITER,
+                    ";",
+                    new TokenPosition(0, 0)
+                    ));
+
+            Console.WriteLine("SYNTAX: " + breakRule.Verify(exampleCode).ToString());
         }
 
         /// <summary>
@@ -127,7 +153,7 @@ namespace ERACompiler.Modules
                     if (current < 0)
                     {
                         Logger.LogError(new SyntaxError(
-                            "Missing opening statement for \"" + t.Value + "\" at (" + t.Position.Line.ToString() + ", " + t.Position.Character.ToString() + ")!!!"
+                            "Missing opening statement for \"" + t.Value + "\" at (" + t.Position.Line.ToString() + ", " + t.Position.Char.ToString() + ")!!!"
                             ));
                     }
                 }
@@ -205,7 +231,7 @@ namespace ERACompiler.Modules
                         if (current > 0 || end_i == -1)
                         {
                             Logger.LogError(new SyntaxError(
-                                "No 'end' statement for the 'code' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                "No 'end' statement for the 'code' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                 ));
                         }
 
@@ -228,7 +254,7 @@ namespace ERACompiler.Modules
                         if (tokens[1].Type != TokenType.IDENTIFIER)
                         {
                             Logger.LogError(new SyntaxError(
-                                "Missing identifier for 'data' block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                "Missing identifier for 'data' block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                 ));
                         }
 
@@ -250,7 +276,7 @@ namespace ERACompiler.Modules
                             if (tokens[i].Type != TokenType.NUMBER && !tokens[i].Value.Equals(","))
                             {
                                 Logger.LogError(new SyntaxError(
-                                    "Unknown symbols at 'data' block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                    "Unknown symbols at 'data' block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                     ));
                             }
                             i++;
@@ -305,7 +331,7 @@ namespace ERACompiler.Modules
                         if (current > 0 || end_i == -1)
                         {
                             Logger.LogError(new SyntaxError(
-                                "No 'end' statement for the 'module' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                "No 'end' statement for the 'module' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                 ));
                         }
 
@@ -405,7 +431,7 @@ namespace ERACompiler.Modules
                                 if (i == tokens.Count - 1)
                                 {
                                     Logger.LogError(new SyntaxError(
-                                        "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                        "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                         ));
                                 }
                                 i++;
@@ -425,7 +451,7 @@ namespace ERACompiler.Modules
                                     if (i == tokens.Count - 1)
                                     {
                                         Logger.LogError(new SyntaxError(
-                                            "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                            "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                             ));
                                     }
                                     i++;
@@ -491,7 +517,7 @@ namespace ERACompiler.Modules
                             if (end == tokens.Count)
                             {
                                 Logger.LogError(new SyntaxError(
-                                    "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                    "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                 ));
                             }
 
@@ -519,7 +545,7 @@ namespace ERACompiler.Modules
                     default:
                         {
                             Logger.LogError(new SyntaxError(
-                                "Unexpected token at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                "Unexpected token at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                 ));
                             break;
                         }
@@ -572,13 +598,13 @@ namespace ERACompiler.Modules
                     else if (isInterfaceRoutine && tokens.Count > 0)
                     {
                         Logger.LogError(new SyntaxError(
-                            "Routines with attribute 'start' may not have a routine body! At (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")"
+                            "Routines with attribute 'start' may not have a routine body! At (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")"
                             ));
                     }
                     else if (!isInterfaceRoutine && tokens.Count == 0)
                     {
                         Logger.LogError(new SyntaxError(
-                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Character + ")"
+                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Char + ")"
                             ));
                     }
                 }    
@@ -586,7 +612,7 @@ namespace ERACompiler.Modules
             else if (!isInterfaceRoutine)
             {
                 Logger.LogError(new SyntaxError(
-                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Character + ")"
+                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Char + ")"
                             ));
             }
 
@@ -663,7 +689,7 @@ namespace ERACompiler.Modules
                                 if (i == tokens.Count - 1)
                                 {
                                     Logger.LogError(new SyntaxError(
-                                        "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                        "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                         ));
                                 }
                                 i++;
@@ -698,7 +724,7 @@ namespace ERACompiler.Modules
                 if (tokens.Count < 2 || tokens[1].Type != TokenType.IDENTIFIER)
                 {
                     Logger.LogError(new SyntaxError(
-                        "Missing constant definition at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                        "Missing constant definition at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                         ));
                 }
 
@@ -715,7 +741,7 @@ namespace ERACompiler.Modules
                 if (tokens.Count < 2 || tokens[1].Type != TokenType.IDENTIFIER)
                 {
                     Logger.LogError(new SyntaxError(
-                        "Missing variable definition at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                        "Missing variable definition at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                         ));
                 }
 
@@ -751,7 +777,7 @@ namespace ERACompiler.Modules
             if (tokens[0].Type != TokenType.IDENTIFIER)
             {
                 Logger.LogError(new SyntaxError(
-                        "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                        "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                         ));
             }
 
@@ -807,7 +833,7 @@ namespace ERACompiler.Modules
             if (tokens[0].Type != TokenType.IDENTIFIER)
             {
                 Logger.LogError(new SyntaxError(
-                        "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                        "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                         ));
             }
 
@@ -818,7 +844,7 @@ namespace ERACompiler.Modules
             if (!tokens[1].Value.Equals("="))
             {
                 Logger.LogError(new SyntaxError(
-                        "Missing '=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                        "Missing '=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                         ));
             }
 
@@ -871,7 +897,7 @@ namespace ERACompiler.Modules
             if (token.Type != TokenType.OPERATOR)
             {
                 Logger.LogError(new SyntaxError(
-                        "Missing operator at (" + token.Position.Line + ", " + token.Position.Character + ")!!!"
+                        "Missing operator at (" + token.Position.Line + ", " + token.Position.Char + ")!!!"
                         ));
             }
 
@@ -901,7 +927,7 @@ namespace ERACompiler.Modules
                 default:
                     {
                         Logger.LogError(new SyntaxError(
-                            "Unknown operator at (" + token.Position.Line + ", " + token.Position.Character + ")!!!"
+                            "Unknown operator at (" + token.Position.Line + ", " + token.Position.Char + ")!!!"
                             ));
                         return null;
                     }
@@ -933,7 +959,7 @@ namespace ERACompiler.Modules
                 default:
                     {
                         Logger.LogError(new SyntaxError(
-                            "Syntax error at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                            "Syntax error at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                             ));
                         return null;
                     }
@@ -974,7 +1000,7 @@ namespace ERACompiler.Modules
                 default:
                     {
                         Logger.LogError(new SyntaxError(
-                            "Syntax error at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                            "Syntax error at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                             ));
                         return null;
                     }
@@ -986,7 +1012,7 @@ namespace ERACompiler.Modules
             if (tokens.Count != 2 || tokens[0].Type != TokenType.OPERATOR || tokens[1].Type != TokenType.IDENTIFIER)
             {
                 Logger.LogError(new SyntaxError(
-                    "Incorrect reference at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Incorrect reference at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
@@ -1001,21 +1027,21 @@ namespace ERACompiler.Modules
             if (tokens.Count < 4)
             {
                 Logger.LogError(new SyntaxError(
-                    "Incorrect array access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Incorrect array access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
             if (tokens[0].Type != TokenType.IDENTIFIER)
             {
                 Logger.LogError(new SyntaxError(
-                    "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
             if (!tokens[1].Value.Equals("["))
             {
                 Logger.LogError(new SyntaxError(
-                    "Missing '[' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Missing '[' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
@@ -1031,7 +1057,7 @@ namespace ERACompiler.Modules
             if (tokens.Count % 2 != 1)
             {
                 Logger.LogError(new SyntaxError(
-                    "Incorrect structure access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Incorrect structure access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
@@ -1096,7 +1122,7 @@ namespace ERACompiler.Modules
             else
             {
                 Logger.LogError(new SyntaxError(
-                    "Unexpected ',' at (" + tokens[tokens.Count - 1].Position.Line + ", " + tokens[tokens.Count - 1].Position.Character + ")!!!"
+                    "Unexpected ',' at (" + tokens[tokens.Count - 1].Position.Line + ", " + tokens[tokens.Count - 1].Position.Char + ")!!!"
                     ));
             }
 
@@ -1159,7 +1185,7 @@ namespace ERACompiler.Modules
                                 else
                                 {
                                     Logger.LogError(new SyntaxError(
-                                        "Incorrect format at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!! Only 8, 16, or 32 allowed."
+                                        "Incorrect format at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!! Only 8, 16, or 32 allowed."
                                         ));
                                 }
 
@@ -1171,7 +1197,7 @@ namespace ERACompiler.Modules
                             if (tokens.Count != 4)
                             {
                                 Logger.LogError(new SyntaxError(
-                                    "Incorrect register assignment at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                    "Incorrect register assignment at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                     ));
                             }
 
@@ -1185,7 +1211,7 @@ namespace ERACompiler.Modules
                     default:
                         {
                             Logger.LogError(new SyntaxError(
-                                        "Syntax error in register block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                        "Syntax error in register block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                         ));
                             return null;
                         }
@@ -1237,7 +1263,7 @@ namespace ERACompiler.Modules
                         else
                         {
                             Logger.LogError(new SyntaxError(
-                                "Unknown statement at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                "Unknown statement at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                 ));
                         }
 
@@ -1272,7 +1298,7 @@ namespace ERACompiler.Modules
                             default:
                                 {
                                     Logger.LogError(new SyntaxError(
-                                        "Unexpected keyword at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                                        "Unexpected keyword at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                                         ));
                                     break;
                                 }
@@ -1300,7 +1326,7 @@ namespace ERACompiler.Modules
                 default:
                     {
                         Logger.LogError(new SyntaxError(
-                            "Unexpected token type at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                            "Unexpected token type at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                             ));
                         break;
                     }
@@ -1318,7 +1344,7 @@ namespace ERACompiler.Modules
             if (i >= tokens.Count)
             {
                 Logger.LogError(new SyntaxError(
-                    "Missing ':=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Missing ':=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
             asgmntNode.Children.Add(GetPrimary(tokens.GetRange(0, i), asgmntNode));
@@ -1336,7 +1362,7 @@ namespace ERACompiler.Modules
             if (i >= tokens.Count)
             {
                 Logger.LogError(new SyntaxError(
-                    "Missing ':=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Missing ':=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
@@ -1376,7 +1402,7 @@ namespace ERACompiler.Modules
             if (i >= tokens.Count)
             {
                 Logger.LogError(new SyntaxError(
-                    "Missing 'do' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                    "Missing 'do' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                     ));
             }
 
@@ -1526,7 +1552,7 @@ namespace ERACompiler.Modules
                 default:
                     {
                         Logger.LogError(new SyntaxError(
-                            "Missing loop keyword at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Character + ")!!!"
+                            "Missing loop keyword at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
                             ));
                         break;
                     }

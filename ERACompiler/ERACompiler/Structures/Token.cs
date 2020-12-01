@@ -85,17 +85,17 @@ namespace ERACompiler.Structures
     public class TokenPosition
     {
         public int Line { get; }       // # of the line
-        public int Character { get; }  // # of the char
+        public int Char { get; }  // # of the char
 
         public TokenPosition(int line, int charachter)
         {
             Line = line;
-            Character = charachter;
+            Char = charachter;
         }
 
         public override string ToString()
         {
-            return "Line: " + Line + ", Char: " + Character;
+            return "Line: " + Line + ", Char: " + Char;
         }
     }
 }

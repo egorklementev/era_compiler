@@ -362,7 +362,7 @@ namespace ERACompiler.Modules
             else
             {
                 Logger.LogError(new SemanticsError(
-                    "Incorrect expression at (" + expression.Parent.CrspToken.Position.Line + ", " + expression.Parent.CrspToken.Position.Character + ")!!!"
+                    "Incorrect expression at (" + expression.Parent.CrspToken.Position.Line + ", " + expression.Parent.CrspToken.Position.Char + ")!!!"
                     ));
                 return -1;
             }

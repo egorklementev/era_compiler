@@ -51,7 +51,7 @@ namespace ERACompiler.Structures
             {
                 TokenPosition pos = identifier.CrspToken.Position;
                 Logger.LogError(new SemanticsError(
-                    "Reference to the undeclared variable at (" + pos.Line + ", " + pos.Character + ")!!!"
+                    "Reference to the undeclared variable at (" + pos.Line + ", " + pos.Char + ")!!!"
                     ));
                 return -1;
             }
@@ -79,8 +79,8 @@ namespace ERACompiler.Structures
                 TokenPosition pos = st[identifier].Children[0].CrspToken.Position;
                 TokenPosition dPos = variable.CrspToken.Position;
                 Logger.LogError(new SemanticsError(
-                    "The name " + identifier + " is already declared at (" + pos.Line + ", " + pos.Character + ")!!!\r\n" +
-                    "The duplicate is at (" + dPos.Line + ", " + dPos.Character + ")."
+                    "The name " + identifier + " is already declared at (" + pos.Line + ", " + pos.Char + ")!!!\r\n" +
+                    "The duplicate is at (" + dPos.Line + ", " + dPos.Char + ")."
                     ));
             }
         }

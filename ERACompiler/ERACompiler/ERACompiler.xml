@@ -266,6 +266,19 @@
             <param name="identifier">Identifier of the variable to be found.</param>
             <returns>Null if there is no such variable in this context, AAST node with the variable if it exists.</returns>
         </member>
+        <member name="T:ERACompiler.Structures.Rules.SyntaxRule">
+            <summary>
+            Represents a single syntax rule presented in the ERA language.
+            Implements Builder pattern.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.SetType(ERACompiler.Structures.Rules.SyntaxRule.SyntaxRuleType)">
+            <summary>
+            Makes this rule terminal.
+            It means 'rules' contains only one Terminal object
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ERACompiler.Structures.Token">
             <summary>
             Represents a token which is used by Syntax Analyzer.

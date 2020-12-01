@@ -18,7 +18,7 @@
 * **ConstDefinition** : Identifier `:=` Expression
 ---
 * **Routine** : `routine` Identifier [ Parameters ] [ `:` Type ] RoutineBody 
-* **Parameters** : `(` Parameter { `,` Parameter } `)`
+* **Parameters** : `(` [ Parameter { `,` Parameter } ] `)`
 * **Parameter** : Type Identifier
 * **RoutineBody** : `do` { VarDeclaration | Statement } `end`
 * **Statement** : AssemblyBlock | ExtensionStatement
