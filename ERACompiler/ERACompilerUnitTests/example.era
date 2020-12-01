@@ -1,0 +1,121 @@
+// Program
+// Annotations
+pragma
+	// PragmaDeclaration
+	some_option1("some_flag1")
+	some_option2()
+end
+
+
+//Data
+data data_block
+	3
+	14
+	15
+end
+
+
+// Module
+module example_module
+
+	// VarDeclaration
+	// Variable
+	// Type
+	int var1; 
+	structure_in_module var2;
+	// ArrayDeclaration
+	int[] var3[5];
+	int@ var4;
+	// VarDefinition
+	int var5 := 0;
+	int@ var6 := <-var1;
+	// Constant
+	const var7 := 0, var8 := 0;
+
+	
+	// Routine, Parameters, Parameter
+	routine routine_in_module (int param1, byte@ param2, short[] param3) : short
+		// RoutineBody
+		// AssemblyBlock, AssemblyStatement
+		asm
+			skip
+			stop
+			format(32)
+			R0 := ->R1
+			->R2 := R3
+			R4 := R5
+			R6 := 0
+			R7 += R8
+			R9 -= R10
+			R11 >>= R12
+			R13 <<= R14
+			R15 |= R16
+			R17 &= R18
+			R19 ^= R20
+			R21 <= R22
+			R23 >= R24
+			R25 ?= R26
+			if R27 goto R28
+		end
+
+		// ExtensionStatement
+		// Loop, LoopBody
+		// For
+		for i from 0 to 10 step 1 loop
+			param1 := param1 + 1;
+		end
+		
+		// While, Break
+		while 1 loop
+			break;
+		end
+		
+		// Assignment
+		param1 := param1 + 1;
+		
+		// Swap
+		int temp := 0;
+		temp <=> param1;
+		
+		// If
+		if temp > param1 do
+			param1 := temp;
+		else
+			temp := param1;
+		end
+
+		// Call
+		example_routine1(<-param1)
+
+		// Expressions
+		int var := param3[5] - 20 + param1 * 3;
+		->var := ->param2;
+		param2 := <-var;
+		->param2 := ->50;
+		example_structure s;
+		s.var1 := 2;
+
+		// Return
+		return 0;
+	end
+
+	struct structure_in_module
+	end
+
+end
+
+
+// Code
+code
+	int var1;
+end
+
+
+// Struct
+struct example_structure
+	int var1;
+end
+
+
+routine example_routine1 (int@ param1)
+end

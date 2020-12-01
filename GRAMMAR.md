@@ -1,63 +1,58 @@
 # ERA COMPILER GRAMMAR
-Represents the grammar for the ERA system-level programming language.
+#### Represents the grammar for the ERA system-level programming language.
   
-* **Program** : {Annotation | Data | Module | Code | Structure | Routine}
-* **Annotation** : `pragma` PragmaDeclaration {`,` PragmaDeclaration} `;`
-* **Data** : `data` Identifier [Literal {`,` Literal}] `end`
-* **Module** : `module` Identifier {VarDeclaration | Routine | Structure} `end`
-* **Code** : `code` {VarDeclaration | Statement} `end`
+* **Program** : { Annotations | Data | Module | Code | Structure | Routine }
+* **Annotations** : `pragma` [ PragmaDeclaration { PragmaDeclaration } ] `end`
+* **Data** : `data` Identifier [ Literal { Literal } ] `end`
+* **Module** : `module` Identifier { VarDeclaration | Routine | Structure } `end`
+* **Code** : `code` { VarDeclaration | Statement } `end`
 * **Structure** : `struct` Identifier { VarDeclaration } `end`
 ---
-* **PragmaDeclaration** : Identifier `(` [ Text ] `)`
+* **PragmaDeclaration** : Identifier `(` [ `"` Text `"` ] `)`
 * **VarDeclaration** : Variable | Constant
 * **Variable** : Type VarDefinition { `,` VarDefinition } `;`
-* **Type** : `int` | `short` | `byte` | Identifier
-* **VarDefinition** : Identifier [ `:=` Expression ] | ArrayDeclaration
+* **Type** : `int` | `short` | `byte` | Identifier [ `[]` | `@` ]
+* **VarDefinition** : ( Identifier [ `:=` Expression ] ) | ArrayDeclaration
 * **ArrayDeclaration** : Identifier `[` Expression `]`
 * **Constant** : `const` ConstDefinition { `,` ConstDefinition } `;`
-* **ConstDefinition** : Identifier `=` Expression
+* **ConstDefinition** : Identifier `:=` Expression
 ---
-* **Routine** : [ Attribute ] `routine` Identifier [ Parameters ] [ Results ] ( `;` | RoutineBody )
-* **Attribute** : `start` | `entry`
+* **Routine** : `routine` Identifier [ Parameters ] [ `:` Type ] RoutineBody 
 * **Parameters** : `(` Parameter { `,` Parameter } `)`
-* **Parameter** : Type Identifier | Register
-* **Results** : `:` Register { `,` Register }
+* **Parameter** : Type Identifier
 * **RoutineBody** : `do` { VarDeclaration | Statement } `end`
-* **Statement** : [ Label ] ( AssemblyBlock | ExtensionStatement )
-* **Label** : `<` Identifier `>`
+* **Statement** : AssemblyBlock | ExtensionStatement
 ---
-* **AssemblyBlock**: `asm`  
-&emsp;( AssemblyStatement `;`  
-&emsp;| AssemblyStatement { `,` AssemblyStatement } `end` )
+* **AssemblyBlock**: `asm` [ AssemblyStatement { AssemblyStatement } ] `end`   
 * **AssemblyStatement**  
 &emsp;: `skip` // NOP  
 &emsp;| `stop` // STOP  
 &emsp;| `format` ( 8 | 16 | 32 ) // format of next command  
-&emsp;| Register `:=` `*`Register // Rj := \*Ri LD    
-&emsp;| `*`Register `:=` Register // \*Rj := Ri ST  
-&emsp;| Register `:=` Register // Rj := Ri MOV  
-&emsp;| Register `:=` Expression // Rj := Const LDC    
-&emsp;| Register `+=` Register // Rj += Ri ADD  
-&emsp;| Register `-=` Register // Rj -= Ri SUB  
-&emsp;| Register `>>=` Register // Rj >>= Ri ASR  
-&emsp;| Register `<<=` Register // Rj <<= Ri ASL  
-&emsp;| Register `|=` Register // Rj |= Ri OR  
-&emsp;| Register `&=` Register // Rj &= Ri AND  
-&emsp;| Register `^=` Register // Rj ^= Ri XOR  
-&emsp;| Register `<=` Register // Rj <= Ri LSL  
-&emsp;| Register `>=` Register // Rj >= Ri LSR  
-&emsp;| Register `?=` Register // Rj ?= Ri CND  
-&emsp;| `if` Register `goto` Register // if Ri goto Rj CBR
+&emsp;| Register `:=` `->` Register  
+&emsp;| `->` Register `:=` Register  
+&emsp;| Register `:=` Register  
+&emsp;| Register `:=` Expression  
+&emsp;| Register `+=` Register  
+&emsp;| Register `-=` Register  
+&emsp;| Register `>>=` Register  
+&emsp;| Register `<<=` Register  
+&emsp;| Register `|=` Register  
+&emsp;| Register `&=` Register  
+&emsp;| Register `^=` Register  
+&emsp;| Register `<=` Register  
+&emsp;| Register `>=` Register  
+&emsp;| Register `?=` Register  
+&emsp;| `if` Register `goto` Register  
 * **Register** : R0 | R1 | ... | R30 | R31
 ---
-* **ExtensionStatement** : Assignment | Swap | Call | If | Loop | Break | Goto
+* **ExtensionStatement** : Assignment | Swap | Call | If | Loop | Break | Goto | Return
 * **Loop** : For | While | LoopBody
 * **For** : `for` Identifier [ `from` Expression ] [ `to` Expression] [ `step` Expression ] LoopBody
 * **While** : `while` Expression LoopBody
 * **LoopBody** : `loop` BlockBody `end`
 * **BlockBody** : { Statement }
 * **Break** : `break` `;`
-* **Goto** : `goto` Identifier `;`
+* **Return** : `return` [ Expression `;` | Call ] | `;`
 * **Assignment** : Primary `:=` Expression `;`
 * **Swap** : Primary `<=>` Primary `;`
 ---
@@ -71,11 +66,11 @@ Represents the grammar for the ERA system-level programming language.
 * **Operand** : Receiver | Reference | Literal
 * **Primary** : Receiver | Dereference | ExplicitAddress
 * **Receiver** : Identifier | ArrayAccess | Register | StructAccess
-* **ArrayAccess** : Identifier`[`Expression`]`
-* **StructAccess** : Identifier`.`[Identifier | StructAccess]
-* **Reference** : `&` Identifier
-* **Dereference** : `*` ( Identifier | Register )
-* **ExplicitAddress** : `*` Literal
+* **ArrayAccess** : Identifier `[` Expression `]`
+* **StructAccess** : Identifier `.` [ Identifier | StructAccess ]
+* **Reference** : `<-` Identifier
+* **Dereference** : `->` ( Identifier | Register )
+* **ExplicitAddress** : `->` Literal
 ---
 * **Identifier** : *(_a-zA-Z0-9)+*
 * **Literal**: *(0-9)+*
