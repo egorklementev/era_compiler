@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ERACompiler.Utilities;
+using ERACompiler.Structures;
 using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Structures.Rules
@@ -8,22 +8,34 @@ namespace ERACompiler.Structures.Rules
     /// Represents a single syntax rule presented in the ERA language.
     /// Implements Builder pattern.
     /// </summary>
-    class SyntaxRule
+    public class SyntaxRule
     {
-        private SyntaxRule? parentRule = null;
-        private SyntaxRuleType type;
-        private List<SyntaxRule> rules;
+        private const bool FAILED = false;
+        private const bool SUCCESS = true;
 
+        private string ruleName;
+        private SyntaxRuleType type;
+        private readonly List<SyntaxRule> rules;
+        
+        // To store all possible syntax errors
+        private static readonly List<string> errorList = 
+            new List<string>();
+
+        /// <summary>
+        /// For getting the error token for debug needs
+        /// </summary>
         private static TokenPosition lastTokenPos = new TokenPosition(0, 0);
+        private readonly Token noToken = new Token(TokenType.NO_TOKEN, "no_token", new TokenPosition(0, 0));
 
         public SyntaxRule() 
         {
-            rules = new List<SyntaxRule>();
+            ruleName = "dummy rule";
+            rules = new List<SyntaxRule>();          
         }
-        
-        public SyntaxRule SetParentRule(SyntaxRule parentRule)
+
+        public SyntaxRule SetName(string name)
         {
-            this.parentRule = parentRule;
+            ruleName = name;
             return this;
         }
 
@@ -44,68 +56,216 @@ namespace ERACompiler.Structures.Rules
             return this;
         }
 
-        public SyntaxRule AddTerminalRule(Token token)
+        public SyntaxResponse Verify(List<Token> parentTokens, ASTNode parentNode)
         {
-            rules.Add(new Terminal(token));
-            return this;
-        }
-
-        public bool Verify(List<Token> tokens)
-        {
-            foreach (SyntaxRule s in rules)
+            // Copy tokens to overcome their removal at upper levels
+            List<Token> tokens = new List<Token>();
+            foreach (var token in parentTokens)
             {
-                switch (s.type)
-                {
-                    case SyntaxRuleType.TERMINAL:
-                        // If terminal, look at the first token and compare it with the rule token
-                        if (tokens.Count == 0)
+                tokens.Add(new Token(token));
+            }
+            switch (type)
+            {
+                case SyntaxRuleType.TERMINAL:
+                    Token expected = ((RuleTerminal)this).GetToken();
+                    if (tokens.Count == 0) 
+                    {
+                        LogSyntaxError();
+                        return new SyntaxResponse(FAILED, 0);
+                    }
+                    switch (expected.Type)
+                    {
+                        case TokenType.KEYWORD:
+                        case TokenType.OPERATOR:
+                        case TokenType.DELIMITER:
+                            lastTokenPos = tokens[0].Position;
+                            return new SyntaxResponse(
+                                expected.Value.Equals(tokens[0].Value),
+                                1,
+                                new ASTNode(parentNode, new List<ASTNode>(), tokens[0], expected.Type.ToString())
+                                );
+                        default:
+                            lastTokenPos = tokens[0].Position;
+                            return new SyntaxResponse(
+                                expected.Type == tokens[0].Type, 
+                                1,
+                                new ASTNode(parentNode, new List<ASTNode>(), tokens[0], expected.Type.ToString())
+                                );
+                    }
+                case SyntaxRuleType.SEQUENCE:
+                    int tokensConsumed = 0;
+                    ASTNode seqNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    foreach (var rule in rules)
+                    {
+                        SyntaxResponse response = rule.Verify(tokens, seqNode);
+                        if (response.Success)
                         {
-                            Logger.LogError(new SyntaxError(
-                                "Missing keyword or special symbol!\n" + 
-                                "\tAt (Line: " + lastTokenPos.Line.ToString() 
-                                + ", Char: " + lastTokenPos.Char.ToString() + ")."
-                                ));
-                            return false;
+                            tokensConsumed += response.TokensConsumed;
+                            tokens.RemoveRange(0, response.TokensConsumed);
+                            seqNode.Children.Add(response.AstNode);
                         }
                         else
                         {
-                            lastTokenPos = tokens[0].Position;
-                            if (!((Terminal) s).GetToken().Value.Equals(tokens[0].Value))
+                            return new SyntaxResponse(FAILED, 0);
+                        }
+                    }
+                    errorList.Clear();
+                    return new SyntaxResponse(SUCCESS, tokensConsumed, seqNode);
+                case SyntaxRuleType.ZERO_OR_ONE:
+                    int zooNum = 0;
+                    int zooTokensConsumed = 0;
+                    ASTNode zooNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    while (true)
+                    {
+                        bool toBreak = false;
+                        foreach (var rule in rules)
+                        {
+                            SyntaxResponse response = rule.Verify(tokens, zooNode);
+                            if (response.Success)
                             {
-                                Logger.LogError(new SyntaxError(
-                                    "Unexpected keyword or special symbol!\n" +
-                                    "\tAt (Line: " + lastTokenPos.Line.ToString()
-                                    + ", Char: " + lastTokenPos.Char.ToString() + ")."
-                                    ));
-                                return false;
+                                zooTokensConsumed += response.TokensConsumed;
+                                tokens.RemoveRange(0, response.TokensConsumed);
+                                zooNode.Children.Add(response.AstNode);
+                            }
+                            else
+                            {
+                                toBreak = true;
+                                break;
                             }
                         }
-
-                        // If everything is alright, delete token from the list
-                        tokens.RemoveAt(0);
-                        break;
-                    case SyntaxRuleType.ZERO_OR_ONE:
-                        return false;
-                    case SyntaxRuleType.ZERO_OR_MORE:
-                        return false;
-                    case SyntaxRuleType.EXACTLY_ONE:
-                        return false;
-                    case SyntaxRuleType.OR:
-                        return false;
-                    default:
-                        return false;
-                }
+                        if (toBreak) break;
+                        zooNum++;
+                    }
+                    return new SyntaxResponse(zooNum < 2, zooTokensConsumed, zooNode);
+                case SyntaxRuleType.ZERO_OR_MORE:
+                    int zomNum = 0;
+                    int zomTokensConsumed = 0;
+                    ASTNode zomNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    while (true)
+                    {
+                        bool toBreak = false;
+                        foreach (var rule in rules)
+                        {
+                            SyntaxResponse response = rule.Verify(tokens, zomNode);
+                            if (response.Success)
+                            {
+                                zomTokensConsumed += response.TokensConsumed;
+                                tokens.RemoveRange(0, response.TokensConsumed);
+                                zomNode.Children.Add(response.AstNode);
+                            }
+                            else
+                            {
+                                toBreak = true;
+                                break;
+                            }
+                        }
+                        if (toBreak) break;
+                        zomNum++;
+                    }
+                    return new SyntaxResponse(zomNum >= 0, zomTokensConsumed, zomNode);
+                case SyntaxRuleType.ONE_OR_MORE:
+                    int oomNum = 0;
+                    int oomTokensConsumed = 0;
+                    ASTNode oomNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    while (true)
+                    {
+                        bool toBreak = false;
+                        foreach (var rule in rules)
+                        {
+                            SyntaxResponse response = rule.Verify(tokens, oomNode);
+                            if (response.Success)
+                            {
+                                oomTokensConsumed += response.TokensConsumed;
+                                tokens.RemoveRange(0, response.TokensConsumed);
+                                oomNode.Children.Add(response.AstNode);
+                            }
+                            else
+                            {
+                                toBreak = true;
+                                break;
+                            }
+                        }
+                        if (toBreak) break;
+                        oomNum++;
+                    }
+                    if (tokens.Count > 0)
+                    {
+                        return new SyntaxResponse(FAILED, 0);
+                    }
+                    else
+                    {
+                        return new SyntaxResponse(oomNum >= 1, oomTokensConsumed, oomNode);
+                    }
+                case SyntaxRuleType.OR:
+                    ASTNode orNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    foreach (var rule in rules)
+                    {
+                        SyntaxResponse response = rule.Verify(tokens, orNode);
+                        if (response.Success)
+                        {
+                            orNode.Children.Add(response.AstNode);
+                            return new SyntaxResponse(SUCCESS, response.TokensConsumed, orNode);
+                        }
+                    }
+                    LogSyntaxError();
+                    return new SyntaxResponse(FAILED, 0);
+                default:
+                    break;
             }
-            return true;
+            LogSyntaxError();
+            return new SyntaxResponse(FAILED, 0);
+        }
+
+
+        private void LogSyntaxError(string errorDescription = "")
+        {
+            errorList.Add(
+                "\tAt (Line: " + lastTokenPos.Line.ToString() + ", Char: " +
+                lastTokenPos.Char.ToString() + ").  " +
+                "Error at \"" + ruleName + "\".\n" + errorDescription
+                );
+        }
+
+        /// <summary>
+        /// Used for communication with the parent rules.
+        /// </summary>
+        public class SyntaxResponse
+        {
+            private bool success = false;
+            private int tokensConsumed = 0;
+            private ASTNode ast_node;
+
+            public SyntaxResponse(bool success, int tokensConsumed, ASTNode astNode = null)
+            {
+                Success = success;
+                TokensConsumed = tokensConsumed;
+                AstNode = astNode;
+            }
+
+            public bool Success { get => success; set => success = value; }
+            public int TokensConsumed { get => tokensConsumed; set => tokensConsumed = value; }
+
+            public ASTNode AstNode { get => ast_node; set => ast_node = value; }
+        }
+
+        public SyntaxError GetErrors()
+        {
+            string errorMsg = "";
+            errorList.Reverse();
+            foreach (var err in errorList)
+            {
+                errorMsg += err;
+            }
+            return new SyntaxError(errorMsg);
         }
 
         public enum SyntaxRuleType
         {
             TERMINAL,
-            COMPOUND,
+            SEQUENCE,
             ZERO_OR_ONE,
-            ZERO_OR_MORE,
-            EXACTLY_ONE,
+            ONE_OR_MORE,           
+            ZERO_OR_MORE,           
             OR
         }
 

@@ -33,6 +33,21 @@ namespace ERACompiler.Structures
             Position = position;
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other">Token to copy from</param>
+        public Token(Token other)
+        {
+            Type = other.Type;
+            Value = other.Value;
+            Position = new TokenPosition(other.Position.Line, other.Position.Char);
+        }
+
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>A string representation of a token</returns>
         public override string ToString()
         {
             // To print newline symbols conveniently.

@@ -45,11 +45,11 @@ namespace ERACompiler.Structures
         /// <returns>Returns AAST node of the variable with the given identifier.</returns>
         public int GetVarValue(ASTNode identifier)
         {
-            AASTNode? var = LocateVar(identifier.CrspToken.Value);
+            AASTNode? var = LocateVar(identifier.Token.Value);
 
             if (var == null)
             {
-                TokenPosition pos = identifier.CrspToken.Position;
+                TokenPosition pos = identifier.Token.Position;
                 Logger.LogError(new SemanticsError(
                     "Reference to the undeclared variable at (" + pos.Line + ", " + pos.Char + ")!!!"
                     ));
@@ -76,8 +76,8 @@ namespace ERACompiler.Structures
             }
             else
             {
-                TokenPosition pos = st[identifier].Children[0].CrspToken.Position;
-                TokenPosition dPos = variable.CrspToken.Position;
+                TokenPosition pos = st[identifier].Children[0].Token.Position;
+                TokenPosition dPos = variable.Token.Position;
                 Logger.LogError(new SemanticsError(
                     "The name " + identifier + " is already declared at (" + pos.Line + ", " + pos.Char + ")!!!\r\n" +
                     "The duplicate is at (" + dPos.Line + ", " + dPos.Char + ")."

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ERACompiler.Structures;
 using ERACompiler.Structures.Rules;
 using ERACompiler.Utilities;
-using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Modules
 {
@@ -12,1771 +10,850 @@ namespace ERACompiler.Modules
     /// </summary>
     public class SyntaxAnalyzer
     {
-        private readonly Token emptyToken; // Used for generalization purposes
+        private readonly SyntaxRule programRule; // The main rule of the syntax
 
         /// <summary>
         /// Used for initialization of some variables.
         /// </summary>
         public SyntaxAnalyzer()
         {
-            emptyToken = new Token(TokenType.NO_TOKEN, "No token", new TokenPosition(-1, -1));
-
-            // --- --- ---
-            //
-            // --- --- ---
-
-            var exampleCode = new List<Token>() { 
-                new Token(TokenType.KEYWORD, "break", new TokenPosition(0, 0)), 
-                new Token(TokenType.DELIMITER, ";", new TokenPosition(0, 5)) 
-            };
-
-            SyntaxRule breakRule = new SyntaxRule();
-
-            breakRule.SetType(SyntaxRule.SyntaxRuleType.COMPOUND)
-                .AddTerminalRule(new Token(
-                    TokenType.KEYWORD,
-                    "break",
-                    new TokenPosition(0, 0)
-                    ))
-                .AddTerminalRule(new Token(
-                    TokenType.DELIMITER,
-                    ";",
-                    new TokenPosition(0, 0)
-                    ));
-
-            Console.WriteLine("SYNTAX: " + breakRule.Verify(exampleCode).ToString());
-        }
-
-        /// <summary>
-        /// Main function of the class. It checks the structure of the token list for syntax errors and if it 
-        /// is correct, returns the root node of the constructed Abstract Syntax Tree.
-        /// </summary>
-        /// <param name="tokens">The list of tokens from Lexical Analyzer.</param>
-        /// <returns>Constructed Abstract Syntax Tree.</returns>
-        public ASTNode BuildAST(List<Token> tokens)
-        {
-            // Remove unnecessary whitespaces
-            tokens = RemoveWhitespaces(tokens);
-
-            // If something wrong, compilation stops
-            CheckBrackets(tokens);
-
-            ASTNode root = new ASTNode(null, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.PROGRAM); // The root node of the tree
-
-            try
-            {
-                bool codeBlockFound = false;
-                while (HasNextUnit(tokens))
-                {
-                    root.Children.Add(GetNextUnit(tokens, root));
-                    if (root.Children[^1].NodeType == ASTNode.ASTNodeType.CODE)
-                    {
-                        if (codeBlockFound)
-                        {
-                            Logger.LogError(new SyntaxError(
-                                "Multiple 'code' block found, only a single block allowed!!!"
-                                ));
-                        }
-                        else
-                        {
-                            codeBlockFound = true;
-                        }
-                    }
-                }
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Logger.LogError(new SyntaxError("Unknown syntax error found!!!"));
-                throw;
-            }
-
-            if (tokens.Count > 0)
-            {
-                Logger.LogError(new SyntaxError("Unknown units are found!!!"));
-                
-            }
-
-            // When no units available - there is nothing to be compiled
-            if (root.Children.Count == 0)
-            {
-                Logger.LogError(new SyntaxError("No units in the program!!!"));
-            }
-
-            return root;
-        }
-
-        private List<Token> RemoveWhitespaces(List<Token> tokens)
-        {
-            List<Token> newTokens = new List<Token>();
-            List<int> toBeSaved = new List<int>();
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                if (
-                    tokens[i].Type == TokenType.WHITESPACE && 
-                    i > 0 && 
-                    tokens[i - 1].Type == TokenType.OPERATOR && 
-                    (tokens[i - 1].Value.Equals("*") || tokens[i - 1].Value.Equals("&"))
-                    )                    
-                {
-                    toBeSaved.Add(i);
-                }
-            }
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                if (tokens[i].Type != TokenType.WHITESPACE || toBeSaved.Contains(i))
-                {
-                    newTokens.Add(tokens[i]);
-                }
-            }
-
-            return newTokens;
-        }
-
-        private void CheckBrackets(List<Token> tokens)
-        {
-            List<string> opening = new List<string>() { "[", "(" };
-            List<string> closing = new List<string>() { "]", ")" };
-
-            for (int i = 0; i < opening.Count; i++)
-            {
-                int current = 0;
-                foreach (Token t in tokens)
-                {
-                    if (t.Value.Equals(opening[i]))
-                    {
-                        current++;
-                    }
-                    if (t.Value.Equals(closing[i]))
-                    {
-                        current--;
-                    }
-                    if (current < 0)
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Missing opening statement for \"" + t.Value + "\" at (" + t.Position.Line.ToString() + ", " + t.Position.Char.ToString() + ")!!!"
-                            ));
-                    }
-                }
-                if (current > 0)
-                {
-                    Logger.LogError(new SyntaxError("Missing close statement for some \"" + opening[i] + "\" token!!!"));
-                }
-            }
-        }
-
-        private bool HasNextUnit(List<Token> tokens)
-        {
-            if (tokens.Count == 0)
-            {
-                return false;
-            }
-            return 
-                tokens[0].Value.Equals("code") || 
-                tokens[0].Value.Equals("data") ||
-                tokens[0].Value.Equals("pragma") || 
-                tokens[0].Value.Equals("module") ||
-                tokens[0].Value.Equals("routine") ||
-                tokens[0].Value.Equals("start") ||
-                tokens[0].Value.Equals("entry") ||
-                tokens[0].Value.Equals("struct");
-        }
-        
-        private ASTNode GetNextUnit(List<Token> tokens, ASTNode parent) // Annotation | Data | Module | Routine | Code
-        {
-            // Make a decision about what rule to follow
-            switch (tokens[0].Value)
-            {
-                case "code":
-                    {
-                        // Decide whether 'code' has corresponding 'end' and locate it
-                        int end_i = -1;
-                        int current = 1;
-                        for (int i = 0; i < tokens.Count; i++)
-                        {
-                            // 'asm' keyword special case
-                            if (tokens[i].Value.Equals("asm"))
-                            {
-                                int j = i;
-                                while (true)
-                                {
-                                    if (tokens[j].Value.Equals("end") || tokens[j].Value.Equals(";"))
-                                    {
-                                        i = j + 1;
-                                        break;
-                                    }
-                                    j++;
-                                }
-                                if (i >= tokens.Count)
-                                {
-                                    break;
-                                }
-                            }
-                            if (
-                                tokens[i].Value.Equals("loop") ||
-                                tokens[i].Value.Equals("do")
-                                )
-                            {
-                                current++;
-                            }
-                            if (tokens[i].Value.Equals("end"))
-                            {
-                                current--;
-                            }
-                            if (current == 0)
-                            {
-                                end_i = i;
-                                break;
-                            }
-                        }
-                        if (current > 0 || end_i == -1)
-                        {
-                            Logger.LogError(new SyntaxError(
-                                "No 'end' statement for the 'code' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                ));
-                        }
-
-                        // Pass only the 'code' related part of the source code down                        
-                        ASTNode codeNode = GetCode(tokens.GetRange(1, end_i - 1), parent);
-                        tokens.RemoveRange(0, end_i + 1);
-
-                        return codeNode;
-                    }
-                case "data":
-                    {
-                        ASTNode dataNode = new ASTNode(
-                            parent,
-                            new List<ASTNode>(),
-                            tokens[0],
-                            ASTNode.ASTNodeType.DATA
-                            );
-
-                        // Check for identifier
-                        if (tokens[1].Type != TokenType.IDENTIFIER)
-                        {
-                            Logger.LogError(new SyntaxError(
-                                "Missing identifier for 'data' block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                ));
-                        }
-
-                        // Data identifier
-                        dataNode.Children.Add(new ASTNode(dataNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-
-                        // Check if 'data' block is correct and collect all literals
-                        int i = 2;
-                        while (true)
-                        {
-                            if (tokens[i].Value.Equals("end"))
-                            {
-                                break;
-                            }
-                            if (tokens[i].Type == TokenType.NUMBER)
-                            {
-                                dataNode.Children.Add(new ASTNode(dataNode, new List<ASTNode>(), tokens[i], ASTNode.ASTNodeType.LITERAL));
-                            }
-                            if (tokens[i].Type != TokenType.NUMBER && !tokens[i].Value.Equals(","))
-                            {
-                                Logger.LogError(new SyntaxError(
-                                    "Unknown symbols at 'data' block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                    ));
-                            }
-                            i++;
-                        }
-                        tokens.RemoveRange(0, i + 1);
-
-                        return dataNode;
-                    }
-                case "module":
-                    {
-                        // Decide whether 'module' has corresponding 'end' and locate it
-                        int end_i = -1;
-                        int current = 1;
-                        for (int i = 0; i < tokens.Count; i++)
-                        {
-                            // 'asm' keyword special case
-                            if (tokens[i].Value.Equals("asm"))
-                            {
-                                int j = i;
-                                while (true)
-                                {
-                                    if (tokens[j].Value.Equals("end") || tokens[j].Value.Equals(";"))
-                                    {
-                                        i = j;
-                                        break;
-                                    }
-                                    j++;
-                                }
-                                if (i >= tokens.Count)
-                                {
-                                    break;
-                                }
-                            }
-                            if (
-                                tokens[i].Value.Equals("loop") ||
-                                tokens[i].Value.Equals("do") || 
-                                tokens[i].Value.Equals("struct")
-                                )
-                            {
-                                current++;
-                            }
-                            if (tokens[i].Value.Equals("end"))
-                            {
-                                current--;
-                            }
-                            if (current == 0)
-                            {
-                                end_i = i;
-                                break;
-                            }
-                        }
-                        if (current > 0 || end_i == -1)
-                        {
-                            Logger.LogError(new SyntaxError(
-                                "No 'end' statement for the 'module' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                ));
-                        }
-
-                        // Pass only the 'code' related part of the source code down                        
-                        ASTNode moduleNode = GetModule(tokens.GetRange(1, end_i - 1), parent);
-                        tokens.RemoveRange(0, end_i + 1);
-
-                        return moduleNode;
-                    }
-                case "start":
-                case "entry":
-                case "routine":
-                    {
-                        int end_i = LocateRoutineEnd(tokens);
-                        ASTNode routineNode = GetRoutine(tokens.GetRange(0, end_i), parent);
-                        tokens.RemoveRange(0, end_i + 1); // Including 'end'
-                        return routineNode;
-                    }
-                case "pragma":
-                    {
-                        ASTNode annotationNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ANNOTATION);
-
-                        int end = 0;
-                        int lastComma = 0;
-                        while (!tokens[end].Value.Equals(";"))
-                        {
-                            if (tokens[end].Value.Equals(","))
-                            {
-                                annotationNode.Children.Add(GetPragmaDeclaration(tokens.GetRange(lastComma + 1, end - lastComma - 1), annotationNode));
-                                lastComma = end;                                
-                            }
-                            end++;
-                        }
-                        annotationNode.Children.Add(GetPragmaDeclaration(tokens.GetRange(lastComma + 1, end - lastComma - 1), annotationNode));
-                        tokens.RemoveRange(0, end + 1);
-
-                        return annotationNode;
-                    }
-                case "struct":
-                    {
-                        int end = 0;
-                        while (!tokens[end].Value.Equals("end")) { end++; }
-                        ASTNode structNode = GetStruct(tokens.GetRange(1, end - 1), parent);
-                        tokens.RemoveRange(0, end + 1);
-
-                        return structNode;
-                    }
-                default:
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Bad source code structure!!! No known units found!"
-                            ));
-                        return null;
-                    }
-            }
-        }
-        
-        private ASTNode GetPragmaDeclaration(List<Token> tokens, ASTNode parent) // Identifier ( [ Text ] )
-        {
-            ASTNode prgmDeclNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.PRAGMA_DECLARATION);
-
-            if (tokens.Count == 3)
-            {
-                prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-            }
-            else
-            {
-                prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-                int i = 2;
-                while (!tokens[i].Value.Equals(")")) {
-                    prgmDeclNode.Children.Add(new ASTNode(prgmDeclNode, new List<ASTNode>(), tokens[i], ASTNode.ASTNodeType.TEXT)); // Whatever the token is, we add it as text
-                    i++;
-                }
-
-            }
-
-            return prgmDeclNode;
-        }
-
-        private ASTNode GetCode(List<Token> tokens, ASTNode parent) // code { VarDeclaration | Statement } end
-        {
-            ASTNode codeNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.CODE);
-
-            while(tokens.Count > 0)
-            {
-                switch (tokens[0].Value)
-                {
-                    case "int":
-                    case "byte":
-                    case "short":
-                    case "const":
-                        {
-                            // Locate the end of the variable declaration
-                            int i = 1;
-                            while (!tokens[i].Value.Equals(";"))
-                            {
-                                if (i == tokens.Count - 1)
-                                {
-                                    Logger.LogError(new SyntaxError(
-                                        "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                        ));
-                                }
-                                i++;
-                            }
-
-                            codeNode.Children.Add(GetVarDeclaration(tokens.GetRange(0, i), codeNode));
-                            tokens.RemoveRange(0, i + 1); // Including ';'
-                            break;
-                        }
-                    default:
-                        {                   
-                            if (tokens[0].Type == TokenType.IDENTIFIER && tokens[1].Type == TokenType.IDENTIFIER) // VarDeclaration with a user-defined type
-                            {
-                                int i = 1;
-                                while (!tokens[i].Value.Equals(";"))
-                                {
-                                    if (i == tokens.Count - 1)
-                                    {
-                                        Logger.LogError(new SyntaxError(
-                                            "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                            ));
-                                    }
-                                    i++;
-                                }
-
-                                codeNode.Children.Add(GetVarDeclaration(tokens.GetRange(0, i), codeNode));
-                                tokens.RemoveRange(0, i + 1); // Including ';'
-                            }
-                            else
-                            {
-                                int end_i = LocateStatementEnd(tokens); // Locate the end of the statement
-                                codeNode.Children.Add(GetStatement(tokens.GetRange(0, end_i), codeNode));
-                                tokens.RemoveRange(0, end_i + 1); // Including ';' or 'end'
-                            }
-                            
-                            break;
-                        }
-                }
-            }
-
-            return codeNode;
-        }
-
-        private ASTNode GetStruct(List<Token> tokens, ASTNode parent) // struct Identifier { VarDeclaration } end
-        {
-            ASTNode structNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.STRUCTURE);
-            structNode.Children.Add(new ASTNode(structNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-            tokens.RemoveAt(0);
-
-            int i = 0;
-            int lastSemicolon = -1;
-            while (i < tokens.Count)
-            {
-                if (tokens[i].Value.Equals(";"))
-                {
-                    structNode.Children.Add(GetVarDeclaration(tokens.GetRange(lastSemicolon + 1, i - lastSemicolon - 1), structNode));
-                    lastSemicolon = i;
-                }
-                i++;
-            }
-
-            return structNode;
-        }
-
-        private ASTNode GetModule(List<Token> tokens, ASTNode parent) // module Identifier { VarDeclaration | Routine | Structure } end
-        {
-            ASTNode moduleNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.MODULE);
-            moduleNode.Children.Add(new ASTNode(moduleNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-            tokens.RemoveAt(0);
-
-            while(tokens.Count > 0)
-            {
-                switch(tokens[0].Value)
-                {
-                    case "int":
-                    case "byte":
-                    case "short":
-                    case "const": // VarDeclaration
-                        {
-                            // Locate the end of the declaration
-                            int end = 0;
-                            while (end < tokens.Count && !tokens[end].Value.Equals(";")) { end++; }
-                            if (end == tokens.Count)
-                            {
-                                Logger.LogError(new SyntaxError(
-                                    "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                ));
-                            }
-
-                            moduleNode.Children.Add(GetVarDeclaration(tokens.GetRange(0, end), moduleNode));
-                            tokens.RemoveRange(0, end + 1);
-                            break;
-                        }
-                    case "entry":
-                    case "start":
-                    case "routine": // Routine
-                        {
-                            int end_i = LocateRoutineEnd(tokens); // Locate the end of the routine
-                            moduleNode.Children.Add(GetRoutine(tokens.GetRange(0, end_i), moduleNode));
-                            tokens.RemoveRange(0, end_i + 1);
-                            break;
-                         }
-                    case "struct": // Structure
-                        {
-                            int end_i = 0; // Locate the end of the structure
-                            while (!tokens[end_i].Value.Equals("end")) { end_i++; }
-                            moduleNode.Children.Add(GetStruct(tokens.GetRange(1, end_i), moduleNode));
-                            tokens.RemoveRange(0, end_i + 1);
-                            break;
-                        }
-                    default:
-                        {
-                            Logger.LogError(new SyntaxError(
-                                "Unexpected token at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                ));
-                            break;
-                        }
-                }
-            }
-
-            return moduleNode;
-        }
-
-        private ASTNode GetRoutine(List<Token> tokens, ASTNode parent) // [ Attribute ] routine Identifier [ Parameters ] [ Results ] ( ; | RoutineBody )
-        {
-            ASTNode routineNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ROUTINE);
-            bool isInterfaceRoutine = false;
-            Token errorAnchor = tokens[0];
-
-            if (!tokens[0].Value.Equals("routine")) // 'entry' / 'start'
-            {
-                routineNode.Children.Add(new ASTNode(routineNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ATTRIBUTE));
-                if (tokens[0].Value.Equals("start")) isInterfaceRoutine = true;
-                tokens.RemoveAt(0);
-            }
-
-            routineNode.Children.Add(new ASTNode(routineNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-            tokens.RemoveRange(0, 2);
-
-            if (tokens.Count > 0)
-            {
-                if (tokens[0].Value.Equals("(")) // Has parameters
-                {
-                    int paramEndIndex = 0;
-                    while (!tokens[++paramEndIndex].Value.Equals(")")) ;
-                    routineNode.Children.Add(GetParameters(tokens.GetRange(1, paramEndIndex - 1), routineNode));
-                    tokens.RemoveRange(0, paramEndIndex + 1);
-                }
-
-                if (tokens.Count > 0)
-                {
-                    if (tokens[0].Value.Equals(":")) // Has results
-                    {
-                        int resultsEndIndex = 0;
-                        while (resultsEndIndex < tokens.Count && !tokens[resultsEndIndex].Value.Equals(";") && !tokens[resultsEndIndex].Value.Equals("do")) { resultsEndIndex++; }
-                        routineNode.Children.Add(GetResults(tokens.GetRange(1, resultsEndIndex - 1), routineNode));
-                        tokens.RemoveRange(0, resultsEndIndex);
-                    }
-
-                    if (!isInterfaceRoutine && tokens.Count > 0) // Has 'do' 'end' block
-                    {
-                        routineNode.Children.Add(GetRoutineBody(tokens.GetRange(1, tokens.Count - 1), routineNode));                        
-                    }
-                    else if (isInterfaceRoutine && tokens.Count > 0)
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Routines with attribute 'start' may not have a routine body! At (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")"
-                            ));
-                    }
-                    else if (!isInterfaceRoutine && tokens.Count == 0)
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Char + ")"
-                            ));
-                    }
-                }    
-            }
-            else if (!isInterfaceRoutine)
-            {
-                Logger.LogError(new SyntaxError(
-                            "Routines without any attribute or with attribute 'entry' should have a routine body! At (" + errorAnchor.Position.Line + ", " + errorAnchor.Position.Char + ")"
-                            ));
-            }
-
-            return routineNode;
-        }
-
-        private ASTNode GetParameters(List<Token> tokens, ASTNode parent) // ( Parameter { , Parameter } )
-        {
-            ASTNode paramsNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.PARAMETERS);
-
-            int lastCommaIndex = -1;
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                if (tokens[i].Value.Equals(","))
-                {
-                    paramsNode.Children.Add(GetParameter(tokens.GetRange(lastCommaIndex + 1, i - lastCommaIndex - 1), paramsNode));
-                    lastCommaIndex = i;
-                }
-            }
-            paramsNode.Children.Add(GetParameter(tokens.GetRange(lastCommaIndex + 1, tokens.Count - lastCommaIndex - 1), paramsNode));
-
-            return paramsNode;
-        }
-
-        private ASTNode GetParameter(List<Token> tokens, ASTNode parent) // Type Identifier | Register
-        {
-            ASTNode paramNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.PARAMETER);
-
-            if (tokens[0].Type == TokenType.REGISTER)
-            {
-                paramNode.Children.Add(new ASTNode(paramNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER));
-            }
-            else
-            {
-                paramNode.Children.Add(new ASTNode(paramNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.TYPE));
-                paramNode.Children.Add(new ASTNode(paramNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-            }
-
-            return paramNode;
-        }
-
-        private ASTNode GetResults(List<Token> tokens, ASTNode parent) // : Register { , Register }
-        {
-            ASTNode resultsNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.RESULTS);
-
-            foreach (Token t in tokens)
-            {
-                if (t.Type == TokenType.REGISTER)
-                {
-                    resultsNode.Children.Add(new ASTNode(resultsNode, new List<ASTNode>(), t, ASTNode.ASTNodeType.REGISTER));
-                }
-            }
-
-            return resultsNode;
-        }
-
-        private ASTNode GetRoutineBody(List<Token> tokens, ASTNode parent) // do { VarDeclaration | Statement } end
-        {
-            ASTNode routineBodyNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ROUTINE_BODY);
-
-            while (tokens.Count > 0)
-            {
-                switch (tokens[0].Value)
-                {
-                    case "int":
-                    case "byte":
-                    case "short":
-                    case "const":
-                        {
-                            // Locate the end of the variable declaration
-                            int i = 1;
-                            while (!tokens[i].Value.Equals(";"))
-                            {
-                                if (i == tokens.Count - 1)
-                                {
-                                    Logger.LogError(new SyntaxError(
-                                        "Missing ';' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                        ));
-                                }
-                                i++;
-                            }
-
-                            routineBodyNode.Children.Add(GetVarDeclaration(tokens.GetRange(0, i), routineBodyNode));
-                            tokens.RemoveRange(0, i + 1); // Including ';'
-                            break;
-                        }
-                    default:
-                        {
-                            int end_i = LocateStatementEnd(tokens); // Locate the end of the statement
-                            routineBodyNode.Children.Add(GetStatement(tokens.GetRange(0, end_i), routineBodyNode));
-                            tokens.RemoveRange(0, end_i + 1); // Including ';' or 'end'
-                            break;
-                        }
-                }
-            }
-
-            return routineBodyNode;
-        }
-
-        private ASTNode GetVarDeclaration(List<Token> tokens, ASTNode parent) // Variable | Constant
-        {
-            ASTNode varDeclNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.VARIABLE_DECLARATION);
-
-            if (tokens[0].Value.Equals("const"))
-            {
-                ASTNode constantNode = new ASTNode(varDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.CONSTANT);
-                varDeclNode.Children.Add(constantNode);
-
-                if (tokens.Count < 2 || tokens[1].Type != TokenType.IDENTIFIER)
-                {
-                    Logger.LogError(new SyntaxError(
-                        "Missing constant definition at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                        ));
-                }
-
-                constantNode.Children.AddRange(GetConstDefinitions(tokens.GetRange(1, tokens.Count - 1), constantNode));
-            }
-            else
-            {
-                ASTNode variableNode = new ASTNode(varDeclNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.VARIABLE);
-                varDeclNode.Children.Add(variableNode);
-
-                ASTNode typeNode = new ASTNode(variableNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.TYPE);
-                variableNode.Children.Add(typeNode);
-
-                if (tokens.Count < 2 || tokens[1].Type != TokenType.IDENTIFIER)
-                {
-                    Logger.LogError(new SyntaxError(
-                        "Missing variable definition at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                        ));
-                }
-
-                variableNode.Children.AddRange(GetVarDefinitions(tokens.GetRange(1, tokens.Count - 1), variableNode));
-            }
-
-            return varDeclNode;
-        }
-        
-        private List<ASTNode> GetVarDefinitions(List<Token> tokens, ASTNode parent) // VarDefinition {, VarDefinition}
-        {
-            List<ASTNode> lst = new List<ASTNode>();
-
-            List<Token> tokensToPass = new List<Token>();
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                if (tokens[i].Value.Equals(","))
-                {
-                    lst.Add(GetVarDefinition(tokensToPass, parent));
-                    tokensToPass.Clear();
-                }
-                else
-                {
-                    tokensToPass.Add(tokens[i]);
-                }
-            }
-            lst.Add(GetVarDefinition(tokensToPass, parent));
-
-            return lst;
-        }        
-        private ASTNode GetVarDefinition(List<Token> tokens, ASTNode parent) // Identifier [ := Expression ] | Identifier [ Expression ]
-        {
-            if (tokens[0].Type != TokenType.IDENTIFIER)
-            {
-                Logger.LogError(new SyntaxError(
-                        "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                        ));
-            }
-
-            ASTNode varDefNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.VARIABLE_DEFINITION);            
-
-            if (tokens.Count < 2) // If no definition
-            {
-                varDefNode.Children.Add(new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-                return varDefNode;
-            }
-            else
-            {
-                if (tokens[1].Type == TokenType.DELIMITER) // Identifier [ Expression ]
-                {
-                    ASTNode arrayDeclNode = new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ARRAY_DECLARATION);
-                    arrayDeclNode.Children.Add(new ASTNode(arrayDeclNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-                    arrayDeclNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), arrayDeclNode)); // Pass just expression tokens
-                    varDefNode.Children.Add(arrayDeclNode);
-                }
-                else // Identifier [ := Expression ]
-                {
-                    varDefNode.Children.Add(new ASTNode(varDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-                    varDefNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 2), varDefNode)); // Pass just expression tokens
-                }
-
-                return varDefNode;
-            }
-        }
-        
-        private List<ASTNode> GetConstDefinitions(List<Token> tokens, ASTNode parent) // ConstDefinition {, ConstDefinition}
-        {
-            List<ASTNode> lst = new List<ASTNode>();
-
-            List<Token> tokensToPass = new List<Token>();
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                if (tokens[i].Value.Equals(","))
-                {
-                    lst.Add(GetConstDefinition(tokensToPass, parent));
-                    tokensToPass.Clear();
-                }
-                else
-                {
-                    tokensToPass.Add(tokens[i]);
-                }
-            }
-            lst.Add(GetConstDefinition(tokensToPass, parent));
-
-            return lst;
-        }        
-        private ASTNode GetConstDefinition(List<Token> tokens, ASTNode parent) // Identifier = Expression
-        {
-            if (tokens[0].Type != TokenType.IDENTIFIER)
-            {
-                Logger.LogError(new SyntaxError(
-                        "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                        ));
-            }
-
-            ASTNode constDefNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.CONST_DEFINITION);
-            ASTNode id = new ASTNode(constDefNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER);
-            constDefNode.Children.Add(id);
-
-            if (!tokens[1].Value.Equals("="))
-            {
-                Logger.LogError(new SyntaxError(
-                        "Missing '=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                        ));
-            }
-
-            constDefNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 2), constDefNode));
-
-            return constDefNode;
-        }
-        
-        private ASTNode GetExpression(List<Token> tokens, ASTNode parent) // Operand [ Operator Operand ]
-        {
-            ASTNode expNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.EXPRESSION);
-
-            List<Token> temp = new List<Token>();
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                if (tokens[i].Type != TokenType.OPERATOR)
-                {
-                    if (tokens[i].Type != TokenType.WHITESPACE)
-                        temp.Add(tokens[i]);
-                }
-                else
-                {
-                    if ((tokens[i].Value.Equals("&") || tokens[i].Value.Equals("*")) && tokens[i + 1].Type != TokenType.WHITESPACE) // Reference special case
-                    {
-                        expNode.Children.Add(GetOperand(tokens.GetRange(i, 2), expNode));
-                        i++;
-                    }
-                    else
-                    {
-                        if (temp.Count > 0)
-                        {
-                            expNode.Children.Add(GetOperand(temp, expNode));
-                            temp.Clear();
-                        }
-                        expNode.Children.Add(GetOperator(tokens[i], expNode));                        
-                    }
-                }
-            }
-            if (temp.Count > 0)
-            {
-                expNode.Children.Add(GetOperand(temp, expNode));
-                temp.Clear();
-            }
-
-            return expNode;
-        }
-
-        private ASTNode GetOperator(Token token, ASTNode parent) // + | - | * | & | | | ^ | ? | CompOperator
-        {
-            if (token.Type != TokenType.OPERATOR)
-            {
-                Logger.LogError(new SyntaxError(
-                        "Missing operator at (" + token.Position.Line + ", " + token.Position.Char + ")!!!"
-                        ));
-            }
-
-            switch (token.Value)
-            {
-                case "+":
-                case "-":
-                case "*":
-                case "&":
-                case "|":
-                case "^":
-                case "?":
-                    {
-                        return new ASTNode(parent, new List<ASTNode>(), token, ASTNode.ASTNodeType.OPERATOR);                        
-                    }
-                case "=":
-                case "/=":
-                case "<":
-                case ">":
-                case "<=":
-                case ">=":
-                    {
-                        ASTNode op = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.OPERATOR);
-                        op.Children.Add(new ASTNode(op, new List<ASTNode>(), token, ASTNode.ASTNodeType.COMPARISON_OPERATOR));
-                        return op;
-                    }
-                default:
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Unknown operator at (" + token.Position.Line + ", " + token.Position.Char + ")!!!"
-                            ));
-                        return null;
-                    }
-            }
-        }
-
-        private ASTNode GetOperand(List<Token> tokens, ASTNode parent) // Receiver | Reference | Literal
-        {
-            ASTNode opNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.OPERAND);
-
-            switch(tokens[0].Type)
-            {
-                case TokenType.OPERATOR: // Reference
-                    {
-                        opNode.Children.Add(GetReference(tokens, opNode));
-                        return opNode;
-                    }
-                case TokenType.NUMBER: // Literal
-                    {
-                        opNode.Children.Add(new ASTNode(opNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.LITERAL));
-                        return opNode;
-                    }
-                case TokenType.IDENTIFIER: // Receiver
-                case TokenType.REGISTER:
-                    {
-                        opNode.Children.Add(GetReceiver(tokens, opNode));
-                        return opNode;
-                    }
-                default:
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Syntax error at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                            ));
-                        return null;
-                    }
-            }
-        }
-
-        private ASTNode GetReceiver(List<Token> tokens, ASTNode parent) // Identifier | ArrayAccess | Register | StructAccess
-        {
-            ASTNode recNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.RECEIVER);
-
-            switch (tokens[0].Type)
-            {
-                case TokenType.IDENTIFIER: // Identifier | ArrayAccess | StructAccess
-                    {
-                        if (tokens.Count > 1)
-                        {
-                            if (tokens[1].Value.Equals("["))
-                            {
-                                recNode.Children.Add(GetArrayAccess(tokens, recNode));
-                            }
-                            else
-                            {
-                                recNode.Children.Add(GetStructAccess(tokens, recNode));
-                            }
-                        }
-                        else
-                        {
-                            recNode.Children.Add(new ASTNode(recNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-                        }
-
-                        return recNode;
-                    }
-                case TokenType.REGISTER: // Register
-                    {                        
-                        recNode.Children.Add(new ASTNode(recNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER));
-                        return recNode;
-                    }
-                default:
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Syntax error at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                            ));
-                        return null;
-                    }
-            }
-        }
-
-        private ASTNode GetReference(List<Token> tokens, ASTNode parent) // & Identifier
-        {
-            if (tokens.Count != 2 || tokens[0].Type != TokenType.OPERATOR || tokens[1].Type != TokenType.IDENTIFIER)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Incorrect reference at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            ASTNode refNode = new ASTNode(parent, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REFERENCE);
-            refNode.Children.Add(new ASTNode(refNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-
-            return refNode;
-        }
-
-        private ASTNode GetArrayAccess(List<Token> tokens, ASTNode parent) // Identifier '[' Expression ']'
-        {
-            if (tokens.Count < 4)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Incorrect array access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            if (tokens[0].Type != TokenType.IDENTIFIER)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Missing identifier at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            if (!tokens[1].Value.Equals("["))
-            {
-                Logger.LogError(new SyntaxError(
-                    "Missing '[' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            ASTNode arrAccessNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ARRAY_ELEMENT);
-            arrAccessNode.Children.Add(new ASTNode(arrAccessNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.IDENTIFIER));
-            arrAccessNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 3), arrAccessNode));
-
-            return arrAccessNode;
-        }
-
-        private ASTNode GetStructAccess(List<Token> tokens, ASTNode parent) // Identifier '.' [ Identifier | StructAccess ]
-        {
-            if (tokens.Count % 2 != 1)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Incorrect structure access at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            ASTNode structAccessNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.STRUCTURE_ACCESS);
-            foreach (Token t in tokens)
-            {
-                if (t.Type == TokenType.IDENTIFIER)
-                {
-                    structAccessNode.Children.Add(new ASTNode(structAccessNode, new List<ASTNode>(), t, ASTNode.ASTNodeType.IDENTIFIER));
-                }
-            }
-
-            return structAccessNode;
-        }
-
-        private ASTNode GetStatement(List<Token> tokens, ASTNode parent) // [ Label ] ( AssemblyBlock | ExtensionStatement ) 
-        {
-            ASTNode stmntNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.STATEMENT);
-
-            if (tokens[0].Value.Equals("<")) // With label
-            {
-                ASTNode label = new ASTNode(stmntNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LABEL);
-                label.Children.Add(new ASTNode(label, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-                stmntNode.Children.Add(label);
-                tokens.RemoveRange(0, 3); // Remove '<' ID '>' tokens
-            }
-
-            if (tokens[0].Value.Equals("asm"))
-            {
-                stmntNode.Children.Add(GetAssemblyBlock(tokens, stmntNode));
-            }
-            else
-            {
-                stmntNode.Children.Add(GetExtensionStatement(tokens, stmntNode));
-            }
-
-            return stmntNode;
-        }
-
-        private ASTNode GetAssemblyBlock(List<Token> tokens, ASTNode parent) // asm ( AssemblyStatement; | AssemblyStatement {, AssemblyStatement} end)
-        {
-            ASTNode asmBlockNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ASSEMBLER_BLOCK);
-
-            List<Token> temp = new List<Token>();
-            for (int i = 1; i < tokens.Count; i++)
-            {
-                if (tokens[i].Value.Equals(","))
-                {
-                    asmBlockNode.Children.Add(GetAssemblyStatement(temp, asmBlockNode));
-                    temp.Clear();
-                }
-                else
-                {
-                    temp.Add(tokens[i]);
-                }
-            }
-            if (temp.Count > 0)
-            {
-                asmBlockNode.Children.Add(GetAssemblyStatement(temp, asmBlockNode));
-                temp.Clear();
-            }
-            else
-            {
-                Logger.LogError(new SyntaxError(
-                    "Unexpected ',' at (" + tokens[tokens.Count - 1].Position.Line + ", " + tokens[tokens.Count - 1].Position.Char + ")!!!"
-                    ));
-            }
-
-            return asmBlockNode;
-        }
-
-        private ASTNode GetAssemblyStatement(List<Token> tokens, ASTNode parent) // Huge rule
-        {
-            ASTNode asStmntNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ASSEMBLER_STATEMENT);
-
-            if (tokens.Count > 1)
-            {
-                switch (tokens[0].Type)
-                {
-                    case TokenType.REGISTER: // Basic register operation
-                        {
-                            if (tokens.Count == 3 && tokens[2].Type == TokenType.REGISTER) // The rest of the rules
-                            {
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER)); // Register 1
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.OPERATOR)); // := / += / ...
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.REGISTER)); // Register 2
-
-                                return asStmntNode;
-                            }
-                            else if (tokens.Count > 3 && tokens[2].Value.Equals("*")) // Register := *Register
-                            {
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER)); // Register 1
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.OPERATOR)); // :=
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.OPERATOR)); // *
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[3], ASTNode.ASTNodeType.REGISTER)); // Register 2
-
-                                return asStmntNode;
-                            }
-                            else
-                            {
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.REGISTER)); // Register 1
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.OPERATOR)); // :=
-                                asStmntNode.Children.Add(GetExpression(tokens.GetRange(2, tokens.Count - 2), asStmntNode)); // Expression
-
-                                return asStmntNode;
-                            }
-                        }
-                    case TokenType.KEYWORD: // format ( 8 | 16 | 32 ) or if Register goto Register
-                        {
-                            if (tokens[0].Value.Equals("if"))
-                            {
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REGISTER)); // Register 1
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.OPERATOR)); // goto
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[3], ASTNode.ASTNodeType.REGISTER)); // Register 2
-
-                                return asStmntNode;
-                            }
-                            else
-                            {
-                                asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.OPERATOR)); // format
-                                if (tokens[2].Value.Equals("8") || tokens[2].Value.Equals("16") || tokens[2].Value.Equals("32"))
-                                {
-                                    asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.LITERAL)); // number
-                                }
-                                else
-                                {
-                                    Logger.LogError(new SyntaxError(
-                                        "Incorrect format at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!! Only 8, 16, or 32 allowed."
-                                        ));
-                                }
-
-                                return asStmntNode;
-                            }
-                        }
-                    case TokenType.OPERATOR: // *Register := Register
-                        {
-                            if (tokens.Count != 4)
-                            {
-                                Logger.LogError(new SyntaxError(
-                                    "Incorrect register assignment at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                    ));
-                            }
-
-                            asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.OPERATOR)); // *
-                            asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REGISTER)); // Register 1
-                            asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[2], ASTNode.ASTNodeType.OPERATOR)); // :=
-                            asStmntNode.Children.Add(new ASTNode(asStmntNode, new List<ASTNode>(), tokens[3], ASTNode.ASTNodeType.REGISTER)); // Register 2
-
-                            return asStmntNode;
-                        }
-                    default:
-                        {
-                            Logger.LogError(new SyntaxError(
-                                        "Syntax error in register block at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                        ));
-                            return null;
-                        }
-                }
-            }
-            else // 'skip' or 'stop'
-            {
-                return new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.ASSEMBLER_STATEMENT);
-            }
-        }
-
-        private ASTNode GetExtensionStatement(List<Token> tokens, ASTNode parent) // Assignment | Swap | Call | If | Loop | Break | Goto
-        {
-            ASTNode extStmntNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.EXTENSION_STATEMENT);
-
-            switch (tokens[0].Type)
-            {
-                case TokenType.IDENTIFIER: // Call | Assignment | Swap
-                    {
-                        // locate '(' or ':=' or '<=>'
-                        bool openBracketFound = false;
-                        bool closeBracketFound = false;
-                        for (int i = 0; i < tokens.Count; i++)
-                        {
-                            if (tokens[i].Value.Equals(":="))
-                            {
-                                extStmntNode.Children.Add(GetAssignment(tokens, extStmntNode));
-                                return extStmntNode;
-                            }
-                            if (tokens[i].Value.Equals("<=>"))
-                            {
-                                extStmntNode.Children.Add(GetSwap(tokens, extStmntNode));
-                                return extStmntNode;
-                            }
-                            if (tokens[i].Value.Equals("("))
-                            {
-                                openBracketFound = true;
-                            }
-                            if (tokens[i].Value.Equals(")"))
-                            {
-                                closeBracketFound = true;
-                            }
-                        }
-
-                        if (openBracketFound && closeBracketFound)
-                        {
-                            extStmntNode.Children.Add(GetCall(tokens, extStmntNode));
-                        }
-                        else
-                        {
-                            Logger.LogError(new SyntaxError(
-                                "Unknown statement at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                ));
-                        }
-
-                        break;
-                    }
-                case TokenType.KEYWORD: // If | Loop | Break | Goto
-                    {
-                        switch (tokens[0].Value)
-                        {
-                            case "if":
-                                {
-                                    extStmntNode.Children.Add(GetIf(tokens, extStmntNode));
-                                    break;
-                                }
-                            case "for":
-                            case "while":
-                            case "loop":
-                                {
-                                    extStmntNode.Children.Add(GetLoop(tokens, extStmntNode));
-                                    break;
-                                }                           
-                            case "break":
-                                {
-                                    extStmntNode.Children.Add(GetBreak(tokens, extStmntNode));
-                                    break;
-                                }
-                            case "goto":
-                                {
-                                    extStmntNode.Children.Add(GetGoto(tokens, extStmntNode));
-                                    break;
-                                }
-                            default:
-                                {
-                                    Logger.LogError(new SyntaxError(
-                                        "Unexpected keyword at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                                        ));
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-                case TokenType.OPERATOR: // Assignment | Swap
-                case TokenType.REGISTER:
-                    {
-                        for (int i = 0; i < tokens.Count; i++)
-                        {
-                            if (tokens[i].Value.Equals(":="))
-                            {
-                                extStmntNode.Children.Add(GetAssignment(tokens, extStmntNode));
-                                break;
-                            }
-                            if (tokens[i].Value.Equals("<=>"))
-                            {
-                                extStmntNode.Children.Add(GetSwap(tokens, extStmntNode));
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Unexpected token type at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                            ));
-                        break;
-                    }
-            }
-
-            return extStmntNode;
-        }
-
-        private ASTNode GetAssignment(List<Token> tokens, ASTNode parent) // Primary := Expression ;
-        {
-            ASTNode asgmntNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.ASSIGNMENT);
-
-            int i = 0;
-            while (i < tokens.Count && !tokens[++i].Value.Equals(":="));
-            if (i >= tokens.Count)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Missing ':=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-            asgmntNode.Children.Add(GetPrimary(tokens.GetRange(0, i), asgmntNode));
-            asgmntNode.Children.Add(GetExpression(tokens.GetRange(i + 1, tokens.Count - i - 1), asgmntNode));
-
-            return asgmntNode;
-        }
-
-        private ASTNode GetSwap(List<Token> tokens, ASTNode parent) // Primary <=> Primary ;
-        {
-            ASTNode swapNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.SWAP);
-
-            int i = 0;
-            while (i < tokens.Count && !tokens[++i].Value.Equals("<=>"));
-            if (i >= tokens.Count)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Missing ':=' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            swapNode.Children.Add(GetPrimary(tokens.GetRange(0, i), swapNode));
-            swapNode.Children.Add(GetPrimary(tokens.GetRange(i + 1, tokens.Count - i - 1), swapNode));
-
-            return swapNode;
-        }
-
-        private ASTNode GetCall(List<Token> tokens, ASTNode parent) // [ Identifier. ] Identifier CallArgs ;
-        {
-            ASTNode callNode = new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.CALL);
-
-            int idNum = 1;
-            foreach (Token t in tokens)
-            {
-                if (t.Value.Equals("(")) break; // When reached arguments list
-                if (t.Value.Equals(".")) idNum++;
-            }
-
-            for (int i = 0; i < idNum; i++)
-            {
-                callNode.Children.Add(new ASTNode(callNode, new List<ASTNode>(), tokens[i * 2], ASTNode.ASTNodeType.IDENTIFIER));
-            }
-
-            callNode.Children.Add(GetCallArgs(tokens.GetRange((idNum - 1) * 2 + 1, tokens.Count - ((idNum - 1) * 2 + 1)), callNode));
-
-            return callNode;
-        }
-
-        private ASTNode GetIf(List<Token> tokens, ASTNode parent) // if Expression do BlockBody ( end | else BlockBody end )
-        {
-            ASTNode ifNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.IF);
-
-            int i = 0; // index of 'do'
-            while (i < tokens.Count && !tokens[++i].Value.Equals("do")) ;
-            if (i >= tokens.Count)
-            {
-                Logger.LogError(new SyntaxError(
-                    "Missing 'do' at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                    ));
-            }
-
-            ifNode.Children.Add(GetExpression(tokens.GetRange(1, i - 1), ifNode));
-
-            // Locate 'else' if any
-            bool hasElse = false;
-            int j; // index of 'else' if any
-            for (j = i; j < tokens.Count; j++)
-            {
-                if (tokens[j].Value.Equals("else"))
-                {
-                    hasElse = true;
-                    break;
-                }
-            }
-
-            if (hasElse)
-            {
-                ifNode.Children.Add(GetBlockBody(tokens.GetRange(i + 1, j - i - 1), ifNode));
-                ifNode.Children.Add(GetBlockBody(tokens.GetRange(j + 1, tokens.Count - j - 1), ifNode));
-            }
-            else
-            {
-                ifNode.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), ifNode));
-            }
-
-            return ifNode;
-        }
-
-        private ASTNode GetLoop(List<Token> tokens, ASTNode parent) // For | While | LoopBody
-        {
-            ASTNode loopNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP);
-
-            switch (tokens[0].Value)
-            {
-                case "for": // for Identifier [ from Expression ] [ to Expression] [ step Expression ] LoopBody
-                    {
-                        ASTNode forNode = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.FOR);
-                        loopNode.Children.Add(forNode);
-
-                        // Locate possible keywords
-                        bool hasFrom = false;
-                        bool hasTo = false;
-                        bool hasStep = false;
-
-                        foreach (Token t in tokens)
-                        {
-                            if (t.Value.Equals("from")) hasFrom = true;
-                            if (t.Value.Equals("to")) hasTo = true;
-                            if (t.Value.Equals("step")) hasStep = true;
-                            if (t.Value.Equals("loop")) break; // When reached loop
-                        }
-
-                        forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-
-                        if (hasFrom)
-                        {
-                            // Locate 'from' and 'to'/'step'/'loop'
-                            int fromIndex = 0;
-                            while (fromIndex < tokens.Count && !tokens[++fromIndex].Value.Equals("from")) ;
-                            forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[fromIndex], ASTNode.ASTNodeType.OPERATOR)); // To distinguish expressions
-
-                            if (hasTo)
-                            {
-                                int toIndex = fromIndex;
-                                while (toIndex < tokens.Count && !tokens[++toIndex].Value.Equals("to")) ;
-                                forNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, toIndex - fromIndex - 1), forNode));
-                            }
-                            else if (hasStep)
-                            {
-                                int stepIndex = fromIndex;
-                                while (stepIndex < tokens.Count && !tokens[++stepIndex].Value.Equals("step")) ;
-                                forNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, stepIndex - fromIndex - 1), forNode));
-                            }
-                            else
-                            {
-                                int loopIndex = fromIndex;
-                                while (loopIndex < tokens.Count && !tokens[++loopIndex].Value.Equals("loop")) ;
-                                forNode.Children.Add(GetExpression(tokens.GetRange(fromIndex + 1, loopIndex - fromIndex - 1), forNode));
-                            }
-                        }
-                        if (hasTo)
-                        {
-                            // Locate 'to' and 'step'/'loop'
-                            int toIndex = 0;
-                            while (toIndex < tokens.Count && !tokens[++toIndex].Value.Equals("to")) ;
-                            forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[toIndex], ASTNode.ASTNodeType.OPERATOR)); // To distinguish expressions
-
-                            if (hasStep)
-                            {
-                                int stepIndex = toIndex;
-                                while (stepIndex < tokens.Count && !tokens[++stepIndex].Value.Equals("step")) ;
-                                forNode.Children.Add(GetExpression(tokens.GetRange(toIndex + 1, stepIndex - toIndex - 1), forNode));
-                            }
-                            else
-                            {
-                                int loopIndex = toIndex;
-                                while (loopIndex < tokens.Count && !tokens[++loopIndex].Value.Equals("loop")) ;
-                                forNode.Children.Add(GetExpression(tokens.GetRange(toIndex + 1, loopIndex - toIndex - 1), forNode));
-                            }
-                        }
-                        if (hasStep)
-                        {
-                            // Locate 'step' and 'loop'
-                            int stepIndex = 0;
-                            while (stepIndex < tokens.Count && !tokens[++stepIndex].Value.Equals("step")) ;
-                            forNode.Children.Add(new ASTNode(forNode, new List<ASTNode>(), tokens[stepIndex], ASTNode.ASTNodeType.OPERATOR)); // To distinguish expressions
-
-                            int loopIndex = stepIndex;
-                            while (loopIndex < tokens.Count && !tokens[++loopIndex].Value.Equals("loop")) ;
-                            forNode.Children.Add(GetExpression(tokens.GetRange(stepIndex + 1, loopIndex - stepIndex - 1), forNode));
-                        }
-
-                        int i = 0;
-                        while (i < tokens.Count && !tokens[++i].Value.Equals("loop")) ;
-
-                        ASTNode loopBody = new ASTNode(forNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
-                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), loopBody));
-                        forNode.Children.Add(loopBody);
-
-                        break;
-                    }
-                case "while": // while Expression LoopBody
-                    {
-                        int i = 0;
-                        while (i < tokens.Count && !tokens[++i].Value.Equals("loop")) ;
-
-                        ASTNode whileNode = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.WHILE);
-                        loopNode.Children.Add(whileNode);
-
-                        whileNode.Children.Add(GetExpression(tokens.GetRange(1, i - 1), whileNode));
-
-                        ASTNode loopBody = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
-                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(i + 1, tokens.Count - i - 1), loopBody));
-                        loopNode.Children.Add(loopBody);
-
-                        break;
-                    }
-                case "loop": // loop BlockBody end
-                    {
-                        ASTNode loopBody = new ASTNode(loopNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.LOOP_BODY);
-                        loopBody.Children.Add(GetBlockBody(tokens.GetRange(1, tokens.Count - 1), loopBody));
-                        loopNode.Children.Add(loopBody);
-                        break;
-                    }
-                default:
-                    {
-                        Logger.LogError(new SyntaxError(
-                            "Missing loop keyword at (" + tokens[0].Position.Line + ", " + tokens[0].Position.Char + ")!!!"
-                            ));
-                        break;
-                    }
-            }
-
-            return loopNode;
-        }
-
-        private ASTNode GetBreak(List<Token> tokens, ASTNode parent) // break ;
-        {
-            return new ASTNode(parent, new List<ASTNode>(), tokens[0], ASTNode.ASTNodeType.BREAK);
-        }
-
-        private ASTNode GetGoto(List<Token> tokens, ASTNode parent) // goto Identifier ;
-        {
-            ASTNode gotoNode = new ASTNode(parent, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.GOTO);
-            gotoNode.Children.Add(new ASTNode(gotoNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-            return gotoNode;
-        }
-
-        private ASTNode GetPrimary(List<Token> tokens, ASTNode parent) // Receiver | Dereference | ExplicitAddress
-        {
-            ASTNode primaryNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.PRIMARY);
-
-            if (tokens[0].Value.Equals("*")) // Dereference | ExplicitAddress
-            {
-                if (tokens[1].Type == TokenType.NUMBER) // ExplicitAddress
-                {
-                    ASTNode expAddrNode = new ASTNode(primaryNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.EXPLICIT_ADDRESS);
-                    expAddrNode.Children.Add(new ASTNode(expAddrNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.LITERAL));
-                    primaryNode.Children.Add(expAddrNode);
-                }
-                else // Dereference
-                {
-                    if (tokens[1].Type == TokenType.REGISTER)
-                    {
-                        ASTNode derefNode = new ASTNode(primaryNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.DEREFERENCE);
-                        derefNode.Children.Add(new ASTNode(derefNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.REGISTER));
-                        primaryNode.Children.Add(derefNode);
-                    }
-                    else
-                    {
-                        ASTNode derefNode = new ASTNode(primaryNode, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.DEREFERENCE);
-                        derefNode.Children.Add(new ASTNode(derefNode, new List<ASTNode>(), tokens[1], ASTNode.ASTNodeType.IDENTIFIER));
-                        primaryNode.Children.Add(derefNode);
-                    }
-                }
-            }
-            else // Receiver
-            {
-                primaryNode.Children.Add(GetReceiver(tokens, primaryNode));
-            }
-
-            return primaryNode;
-        }
-
-        private ASTNode GetCallArgs(List<Token> tokens, ASTNode parent) // ( [ Expression { , Expression } ] )
-        {
-            ASTNode callArgsNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.CALL_ARGUMENTS);
-
-            if (tokens.Count == 2) // No args
-            {
-                return callArgsNode;
-            }
-            else
-            {
-                int lastComma = 0;
-                for (int i = 0; i < tokens.Count; i++)
-                {
-                    if (tokens[i].Value.Equals(","))
-                    {
-                        callArgsNode.Children.Add(GetExpression(tokens.GetRange(lastComma + 1, i - lastComma - 1), callArgsNode));
-                        lastComma = i;
-                    }
-                }
-                callArgsNode.Children.Add(GetExpression(tokens.GetRange(lastComma + 1, tokens.Count - lastComma - 2), callArgsNode));
-            }
-
-            return callArgsNode;
-        }
-
-        private ASTNode GetBlockBody(List<Token> tokens, ASTNode parent) // { Statement }
-        {
-            ASTNode blockBodyNode = new ASTNode(parent, new List<ASTNode>(), emptyToken, ASTNode.ASTNodeType.BLOCK_BODY);
-
-            while (tokens.Count > 0)
-            {
-                int end_i = LocateStatementEnd(tokens); // Locate the end of the routine
-                blockBodyNode.Children.Add(GetStatement(tokens.GetRange(0, end_i), blockBodyNode));
-                tokens.RemoveRange(0, end_i + 1); // Including ';' or 'end'
-            }
-
-            return blockBodyNode;
-        }
-
-        /// <summary>
-        /// Locates an index of the ending token of the statement
-        /// </summary>
-        /// <param name="tokens">Token list that starts with statement.</param>
-        /// <returns>Returns an index of the ending token of the statement</returns>
-        private int LocateStatementEnd(List<Token> tokens)
-        {
-            int end;
-
-            switch (tokens[0].Value)
-            {
-                case "asm":
-                    {
-                        end = 0;
-                        while (!tokens[end].Value.Equals(";") && !tokens[end].Value.Equals("end")) { end++; }
-                        return end;
-                    }
-                case "<":
-                    {
-                        return LocateStatementEnd(tokens.GetRange(3, tokens.Count - 3)) + 3;
-                    }
-                case "break":
-                    {
-                        return 1; // break ;
-                    }
-                case "goto":
-                    {
-                        return 2; // goto Identifier ;
-                    }
-                case "if":                
-                case "loop":               
-                    {
-                        end = 0;
-                        int current = 1;
-                        while (current > 0)
-                        {
-                            end++;
-                            if (tokens[end].Value.Equals("asm"))
-                            {
-                                while (!tokens[end].Value.Equals(";") && !tokens[end].Value.Equals("end")) { end++; }
-                                end++;
-                            }
-                            if (tokens[end].Value.Equals("end"))
-                            {
-                                current--;
-                            }
-                            if (
-                                tokens[end].Value.Equals("if") ||
-                                tokens[end].Value.Equals("loop")
-                                )
-                            {
-                                current++;
-                            }                            
-                        }
-                        return end;
-                    }
-                case "for":
-                case "while":
-                    {
-                        end = 0;
-                        while (!tokens[end].Value.Equals("loop")) { end++; } // Go to the 'loop'
-
-                        int current = 1;
-                        while (current > 0 && end < tokens.Count)
-                        {
-                            end++;
-                            if (tokens[end].Value.Equals("asm"))
-                            {
-                                while (!tokens[end].Value.Equals(";") && !tokens[end].Value.Equals("end")) { end++; }
-                                end++;
-                            }
-                            if (tokens[end].Value.Equals("end"))
-                            {
-                                current--;
-                            }
-                            if (
-                                tokens[end].Value.Equals("if") ||
-                                tokens[end].Value.Equals("loop")
-                                )
-                            {
-                                current++;
-                            }
-                        }
-                        return end;
-                    }
-                default:
-                    {
-                        end = 0;
-                        while (!tokens[end].Value.Equals(";")) { end++; }
-                        return end;
-                    }
-            }
-        }
-
-        /// <summary>
-        /// Locates an index of the ending token of the routine
-        /// </summary>
-        /// <param name="tokens">Token list that starts with routine.</param>
-        /// <returns>Returns an index of the ending token of the routine</returns>
-        private int LocateRoutineEnd(List<Token> tokens)
-        {
-            int end = 0;
-
-            while (!tokens[end].Value.Equals(";") && !tokens[end].Value.Equals("do")) { end++; }
-            if (tokens[end].Value.Equals(";")) return end;
+            Token tAsm = new Token(TokenType.KEYWORD, "asm", new TokenPosition(0, 0));
+            Token tBreak = new Token(TokenType.KEYWORD, "break", new TokenPosition(0, 0));
+            Token tByte = new Token(TokenType.KEYWORD, "byte", new TokenPosition(0, 0));
+            Token tCode = new Token(TokenType.KEYWORD, "code", new TokenPosition(0, 0));
+            Token tConst = new Token(TokenType.KEYWORD, "const", new TokenPosition(0, 0));
+            Token tData = new Token(TokenType.KEYWORD, "data", new TokenPosition(0, 0));
+            Token tDo = new Token(TokenType.KEYWORD, "do", new TokenPosition(0, 0));
+            Token tElse = new Token(TokenType.KEYWORD, "else", new TokenPosition(0, 0));
+            Token tEnd = new Token(TokenType.KEYWORD, "end", new TokenPosition(0, 0));
+            Token tFor = new Token(TokenType.KEYWORD, "for", new TokenPosition(0, 0));
+            Token tFormat = new Token(TokenType.KEYWORD, "format", new TokenPosition(0, 0));
+            Token tFrom = new Token(TokenType.KEYWORD, "from", new TokenPosition(0, 0));
+            Token tGoto = new Token(TokenType.KEYWORD, "goto", new TokenPosition(0, 0));
+            Token tIf = new Token(TokenType.KEYWORD, "if", new TokenPosition(0, 0));
+            Token tInt = new Token(TokenType.KEYWORD, "int", new TokenPosition(0, 0));
+            Token tLoop = new Token(TokenType.KEYWORD, "loop", new TokenPosition(0, 0));
+            Token tModule = new Token(TokenType.KEYWORD, "module", new TokenPosition(0, 0));
+            Token tPragma = new Token(TokenType.KEYWORD, "pragma", new TokenPosition(0, 0));
+            Token tReturn = new Token(TokenType.KEYWORD, "return", new TokenPosition(0, 0));
+            Token tRoutine = new Token(TokenType.KEYWORD, "routine", new TokenPosition(0, 0));
+            Token tShort = new Token(TokenType.KEYWORD, "short", new TokenPosition(0, 0));
+            Token tSkip = new Token(TokenType.KEYWORD, "skip", new TokenPosition(0, 0));
+            Token tStep = new Token(TokenType.KEYWORD, "step", new TokenPosition(0, 0));
+            Token tStop = new Token(TokenType.KEYWORD, "stop", new TokenPosition(0, 0));
+            Token tStruct = new Token(TokenType.KEYWORD, "struct", new TokenPosition(0, 0));
+            Token tTo = new Token(TokenType.KEYWORD, "to", new TokenPosition(0, 0));
+            Token tWhile = new Token(TokenType.KEYWORD, "while", new TokenPosition(0, 0));
+
+            Token tIdentifier = new Token(TokenType.IDENTIFIER, "SOME_IDENTIFIER", new TokenPosition(0, 0));
+            Token tLiteral = new Token(TokenType.NUMBER, "SOME_LITERAL", new TokenPosition(0, 0));
+            Token tRegister = new Token(TokenType.REGISTER, "SOME_REGISTER", new TokenPosition(0, 0));
+
+            Token tAt = new Token(TokenType.DELIMITER, "@", new TokenPosition(0, 0));
+            Token tColon = new Token(TokenType.DELIMITER, ":", new TokenPosition(0, 0));
+            Token tComma = new Token(TokenType.DELIMITER, ",", new TokenPosition(0, 0));
+            Token tDot = new Token(TokenType.DELIMITER, ".", new TokenPosition(0, 0));
+            Token tLeftBracket = new Token(TokenType.DELIMITER, "[", new TokenPosition(0, 0));
+            Token tLeftParen = new Token(TokenType.DELIMITER, "(", new TokenPosition(0, 0));
+            Token tRightBracket = new Token(TokenType.DELIMITER, "]", new TokenPosition(0, 0));
+            Token tRightParen = new Token(TokenType.DELIMITER, ")", new TokenPosition(0, 0));
+            Token tSemicolon = new Token(TokenType.DELIMITER, ";", new TokenPosition(0, 0));
+            Token tQuote = new Token(TokenType.DELIMITER, "\"", new TokenPosition(0, 0));
+
+            Token tAnd = new Token(TokenType.OPERATOR, "&", new TokenPosition(0, 0));
+            Token tAndEquals = new Token(TokenType.OPERATOR, "&=", new TokenPosition(0, 0));
+            Token tAsr = new Token(TokenType.OPERATOR, ">>=", new TokenPosition(0, 0));
+            Token tAsl = new Token(TokenType.OPERATOR, "<<=", new TokenPosition(0, 0));
+            Token tAssign = new Token(TokenType.OPERATOR, ":=", new TokenPosition(0, 0));
+            Token tCnd = new Token(TokenType.OPERATOR, "?", new TokenPosition(0, 0));
+            Token tCndEquals = new Token(TokenType.OPERATOR, "?=", new TokenPosition(0, 0));
+            Token tEquals = new Token(TokenType.OPERATOR, "=", new TokenPosition(0, 0));
+            Token tGreater = new Token(TokenType.OPERATOR, ">", new TokenPosition(0, 0));
+            Token tLess = new Token(TokenType.OPERATOR, "<", new TokenPosition(0, 0));
+            Token tLsl = new Token(TokenType.OPERATOR, "<=", new TokenPosition(0, 0));
+            Token tLsr = new Token(TokenType.OPERATOR, ">=", new TokenPosition(0, 0));
+            Token tMinus = new Token(TokenType.OPERATOR, "-", new TokenPosition(0, 0));
+            Token tMinusEquals = new Token(TokenType.OPERATOR, "-=", new TokenPosition(0, 0));
+            Token tMult = new Token(TokenType.OPERATOR, "*", new TokenPosition(0, 0));
+            Token tNotEquals = new Token(TokenType.OPERATOR, "/=", new TokenPosition(0, 0));
+            Token tOr = new Token(TokenType.OPERATOR, "|", new TokenPosition(0, 0));
+            Token tOrEquals = new Token(TokenType.OPERATOR, "|=", new TokenPosition(0, 0));
+            Token tPlus = new Token(TokenType.OPERATOR, "+", new TokenPosition(0, 0));
+            Token tPlusEquals = new Token(TokenType.OPERATOR, "+=", new TokenPosition(0, 0));
+            Token tSwap = new Token(TokenType.OPERATOR, "<=>", new TokenPosition(0, 0));
+            Token tTakeAddr = new Token(TokenType.OPERATOR, "<-", new TokenPosition(0, 0));
+            Token tTakeVal = new Token(TokenType.OPERATOR, "->", new TokenPosition(0, 0));
+            Token tXor = new Token(TokenType.OPERATOR, "^", new TokenPosition(0, 0));
+            Token tXorEquals = new Token(TokenType.OPERATOR, "^=", new TokenPosition(0, 0));
+
+            RuleTerminal kAsmRule = new RuleTerminal(tAsm);
+            RuleTerminal kBreakRule = new RuleTerminal(tBreak);
+            RuleTerminal kByteRule = new RuleTerminal(tByte);
+            RuleTerminal kCodeRule = new RuleTerminal(tCode);
+            RuleTerminal kConstRule = new RuleTerminal(tConst);
+            RuleTerminal kDataRule = new RuleTerminal(tData);
+            RuleTerminal kDoRule = new RuleTerminal(tDo);
+            RuleTerminal kElseRule = new RuleTerminal(tElse);
+            RuleTerminal kEndRule = new RuleTerminal(tEnd);
+            RuleTerminal kForRule = new RuleTerminal(tFor);
+            RuleTerminal kFormatRule = new RuleTerminal(tFormat);
+            RuleTerminal kFromRule = new RuleTerminal(tFrom);
+            RuleTerminal kGotoRule = new RuleTerminal(tGoto);
+            RuleTerminal kIfRule = new RuleTerminal(tIf);
+            RuleTerminal kIntRule = new RuleTerminal(tInt);
+            RuleTerminal kLoopRule = new RuleTerminal(tLoop);
+            RuleTerminal kModuleRule = new RuleTerminal(tModule);
+            RuleTerminal kPragmaRule = new RuleTerminal(tPragma);
+            RuleTerminal kReturnRule = new RuleTerminal(tReturn);
+            RuleTerminal kRoutineRule = new RuleTerminal(tRoutine);
+            RuleTerminal kShortRule = new RuleTerminal(tShort);
+            RuleTerminal kSkipRule = new RuleTerminal(tSkip);
+            RuleTerminal kStepRule = new RuleTerminal(tStep);
+            RuleTerminal kStopRule = new RuleTerminal(tStop);
+            RuleTerminal kStructRule = new RuleTerminal(tStruct);
+            RuleTerminal kToRule = new RuleTerminal(tTo);
+            RuleTerminal kWhileRule = new RuleTerminal(tWhile);
+
+            RuleTerminal identifierRule = new RuleTerminal(tIdentifier);
+            RuleTerminal literalRule = new RuleTerminal(tLiteral);
+            RuleTerminal registerRule = new RuleTerminal(tRegister);
+
+            RuleTerminal atRule = new RuleTerminal(tAt);
+            RuleTerminal colonRule = new RuleTerminal(tColon);
+            RuleTerminal commaRule = new RuleTerminal(tComma);
+            RuleTerminal dotRule = new RuleTerminal(tDot);
+            RuleTerminal leftBracketRule = new RuleTerminal(tLeftBracket);
+            RuleTerminal leftParenRule = new RuleTerminal(tLeftParen);
+            RuleTerminal rightBracketRule = new RuleTerminal(tRightBracket);
+            RuleTerminal rightParenRule = new RuleTerminal(tRightParen);
+            RuleTerminal semicolonRule = new RuleTerminal(tSemicolon);
+            RuleTerminal quoteRule = new RuleTerminal(tQuote);
+
+            RuleTerminal opAndRule = new RuleTerminal(tAnd);
+            RuleTerminal opAndEqualsRule = new RuleTerminal(tAndEquals);
+            RuleTerminal opAslRule = new RuleTerminal(tAsl);
+            RuleTerminal opAsrRule = new RuleTerminal(tAsr);
+            RuleTerminal opAssignRule = new RuleTerminal(tAssign);
+            RuleTerminal opCndRule = new RuleTerminal(tCnd);
+            RuleTerminal opCndEqualsRule = new RuleTerminal(tCndEquals);
+            RuleTerminal opEqualsRule = new RuleTerminal(tEquals);
+            RuleTerminal opGreaterRule = new RuleTerminal(tGreater);
+            RuleTerminal opLessRule = new RuleTerminal(tLess);
+            RuleTerminal opLslRule = new RuleTerminal(tLsl);
+            RuleTerminal opLsrRule = new RuleTerminal(tLsr);
+            RuleTerminal opMinusRule = new RuleTerminal(tMinus);
+            RuleTerminal opMinusEqualsRule = new RuleTerminal(tMinusEquals);
+            RuleTerminal opMultRule = new RuleTerminal(tMult);
+            RuleTerminal opNotEqualsRule = new RuleTerminal(tNotEquals);
+            RuleTerminal opOrRule = new RuleTerminal(tOr);
+            RuleTerminal opOrEqualsRule = new RuleTerminal(tOrEquals);
+            RuleTerminal opPlusRule = new RuleTerminal(tPlus);
+            RuleTerminal opPlusEqualsRule = new RuleTerminal(tPlusEquals);
+            RuleTerminal opSwapRule = new RuleTerminal(tSwap);
+            RuleTerminal opTakeAddrRule = new RuleTerminal(tTakeAddr);
+            RuleTerminal opTakeValRule = new RuleTerminal(tTakeVal);
+            RuleTerminal opXorRule = new RuleTerminal(tXor);
+            RuleTerminal opXorEqualsRule = new RuleTerminal(tXorEquals);
+
+            SyntaxRule operatorRule = new SyntaxRule()
+                .SetName("Operator")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(opPlusRule)
+                .AddRule(opMinusRule)
+                .AddRule(opMultRule)
+                .AddRule(opAndRule)
+                .AddRule(opOrRule)
+                .AddRule(opXorRule)
+                .AddRule(opCndRule)
+                .AddRule(opEqualsRule)
+                .AddRule(opNotEqualsRule)
+                .AddRule(opGreaterRule)
+                .AddRule(opLessRule);
+
+            SyntaxRule referenceRule = new SyntaxRule()
+                .SetName("Reference")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(opTakeAddrRule)
+                .AddRule(identifierRule);
+
+            SyntaxRule primaryRule = new SyntaxRule()
+                .SetName("Primary")
+                .SetType(SyntaxRule.SyntaxRuleType.OR);
+            // other rules are added after 'Expression' rule
+
+            SyntaxRule explicitAddrRule = new SyntaxRule()
+                .SetName("Explicit address")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(opTakeValRule)
+                .AddRule(literalRule);
+
+            SyntaxRule dereferenceRule = new SyntaxRule()
+                .SetName("Dereference")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(opTakeValRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Identifier | Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .AddRule(identifierRule)
+                    .AddRule(registerRule)
+                );
+
+            SyntaxRule operandRule = new SyntaxRule()
+                .SetName("Operand")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(primaryRule)
+                .AddRule(dereferenceRule)
+                .AddRule(referenceRule)
+                .AddRule(explicitAddrRule)
+                .AddRule(literalRule);
+
+            SyntaxRule expressionRule = new SyntaxRule()
+                .SetName("Expression")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(operandRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ Operator Operand }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(operatorRule)
+                    .AddRule(operandRule)
+                );
+
+            primaryRule
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Identifier { '.' Identifier } [ '[' Expression ']' ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(identifierRule)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("{ '.' Identifier }")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                        .AddRule(dotRule)
+                        .AddRule(identifierRule)
+                        )
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("[ '[' Expression ']' ]")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                        .AddRule(leftBracketRule)
+                        .AddRule(expressionRule)
+                        .AddRule(rightBracketRule)
+                        )
+                )
+                .AddRule(registerRule);
+
+            SyntaxRule typeRule = new SyntaxRule()
+                .SetName("Type")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("int | byte | short | SOME_IDENTIFIER")
+                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .AddRule(kIntRule)
+                    .AddRule(kShortRule)
+                    .AddRule(kByteRule)
+                    .AddRule(identifierRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ [] | @ ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("[] | @")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(atRule)
+                        .AddRule(
+                            new SyntaxRule()
+                            .SetName("[]")
+                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                            .AddRule(leftBracketRule)
+                            .AddRule(rightBracketRule)
+                            )
+                        )
+                );
+
+            SyntaxRule constDefinitionRule = new SyntaxRule()
+                .SetName("Constant definition")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(identifierRule)
+                .AddRule(opAssignRule)
+                .AddRule(expressionRule)
+                ;
+
+            SyntaxRule constantRule = new SyntaxRule()
+                .SetName("Constant")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kConstRule)
+                .AddRule(typeRule)
+                .AddRule(constDefinitionRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Constant definitions")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(commaRule)
+                    .AddRule(constDefinitionRule)
+                )
+                .AddRule(semicolonRule);
+
+            SyntaxRule varDefinitionRule = new SyntaxRule()
+                .SetName("Variable definition")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(identifierRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ ( := Expression ) | ( '[' Expression ']' ) ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("( := Expression ) | ( '[' Expression ']' )")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(
+                            new SyntaxRule()
+                            .SetName(":= Expression")
+                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                            .AddRule(opAssignRule)
+                            .AddRule(expressionRule)
+                            )
+                        .AddRule(
+                            new SyntaxRule()
+                            .SetName("'[' Expression ']'")
+                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                            .AddRule(leftBracketRule)
+                            .AddRule(expressionRule)
+                            .AddRule(rightBracketRule)
+                            )
+                        )
+                );
+
+            SyntaxRule variableRule = new SyntaxRule()
+                .SetName("Variable")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(typeRule)
+                .AddRule(varDefinitionRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Variable definitions")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(commaRule)
+                    .AddRule(varDefinitionRule)
+                )
+                .AddRule(semicolonRule);
+
+            SyntaxRule varDeclarationRule = new SyntaxRule()
+                .SetName("Variable declaration")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(variableRule)
+                .AddRule(constantRule);
+
+            SyntaxRule assemblyStatementRule = new SyntaxRule()
+                .SetName("Assembly statement")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(kSkipRule)
+                .AddRule(kStopRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("format ( 8 | 16 | 32 )")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(kFormatRule)
+                    .AddRule(literalRule) // The actual check of a number is done in the SemanticsAnalyzer
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Register := -> Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAssignRule)
+                    .AddRule(opTakeValRule)
+                    .AddRule(registerRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("-> Register := Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(opTakeValRule)
+                    .AddRule(registerRule)
+                    .AddRule(opAssignRule)
+                    .AddRule(registerRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Register := Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAssignRule)
+                    .AddRule(registerRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Register := Expression")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAssignRule)
+                    .AddRule(expressionRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register += Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opPlusEqualsRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register -= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opMinusEqualsRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register >>= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAsrRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register <<= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAslRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register |= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opOrEqualsRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register &= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAndEqualsRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register ^= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opXorEqualsRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register >= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opLsrRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register <= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opLslRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("Register ?= Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opCndEqualsRule)
+                    .AddRule(registerRule)
+                ).AddRule(
+                    new SyntaxRule()
+                    .SetName("if Register goto Register")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(kIfRule)
+                    .AddRule(registerRule)
+                    .AddRule(kGotoRule)
+                    .AddRule(registerRule)
+                );
+
+            SyntaxRule assemblyBlockRule = new SyntaxRule()
+                .SetName("Assembly block")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kAsmRule)
+                .AddRule(assemblyStatementRule)
+                .AddRule(semicolonRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ AssemblyStatement ; }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(assemblyStatementRule)
+                    .AddRule(semicolonRule)
+                )
+                .AddRule(kEndRule);
             
-            int current = 1;
-            while (current > 0)
-            {
-                end++;
-                if (tokens[end].Value.Equals("asm"))
-                {
-                    while (!tokens[end].Value.Equals(";") && !tokens[end].Value.Equals("end")) { end++; }
-                    end++;
-                }
-                if (tokens[end].Value.Equals("end"))
-                {
-                    current--;
-                }
-                if (
-                    tokens[end].Value.Equals("if") ||
-                    tokens[end].Value.Equals("loop")
+            SyntaxRule receiverRule = new SyntaxRule()
+                .SetName("Receiver")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(primaryRule)
+                .AddRule(dereferenceRule)
+                .AddRule(explicitAddrRule);
+
+            SyntaxRule assignmentRule = new SyntaxRule()
+                .SetName("Assignment")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(receiverRule)
+                .AddRule(opAssignRule)
+                .AddRule(expressionRule)
+                .AddRule(semicolonRule);
+
+            SyntaxRule swapRule = new SyntaxRule()
+                .SetName("Swap")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(receiverRule)
+                .AddRule(opSwapRule)
+                .AddRule(receiverRule)
+                .AddRule(semicolonRule);
+
+            SyntaxRule callArgsRule = new SyntaxRule()
+                .SetName("Call arguments")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(leftParenRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ Expression { , Expression } ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(expressionRule)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("{ , Expression }")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                        .AddRule(commaRule)
+                        .AddRule(expressionRule)
+                        )
+                )
+                .AddRule(rightParenRule);
+
+            SyntaxRule callRule = new SyntaxRule()
+                .SetName("Call")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(identifierRule)
+                .AddRule(callArgsRule)
+                .AddRule(semicolonRule);
+
+            SyntaxRule blockBodyRule = new SyntaxRule()
+                .SetName("Block body")
+                .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                ;
+            // other rulesadded after 'Statement' rule
+
+            SyntaxRule ifRule = new SyntaxRule()
+                .SetName("If")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kIfRule)
+                .AddRule(expressionRule)
+                .AddRule(kDoRule)
+                .AddRule(blockBodyRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("end | else BlockBody end")
+                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .AddRule(kEndRule)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("else BlockBody end")
+                        .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                        .AddRule(kElseRule)
+                        .AddRule(blockBodyRule)
+                        .AddRule(kEndRule)
+                        )
+                );
+
+            SyntaxRule loopBodyRule = new SyntaxRule()
+                .SetName("Loob body")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kLoopRule)
+                .AddRule(blockBodyRule)
+                .AddRule(kEndRule);
+
+            SyntaxRule whileRule = new SyntaxRule()
+                .SetName("While")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kWhileRule)
+                .AddRule(expressionRule)
+                .AddRule(loopBodyRule);
+
+            SyntaxRule forRule = new SyntaxRule()
+                .SetName("For")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kForRule)
+                .AddRule(identifierRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ from Expression ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(kFromRule)
+                    .AddRule(expressionRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ to Expression ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(kToRule)
+                    .AddRule(expressionRule)
                     )
-                {
-                    current++;
-                }
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ step Expression ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(kStepRule)
+                    .AddRule(expressionRule)
+                )
+                .AddRule(loopBodyRule);
+
+            SyntaxRule loopRule = new SyntaxRule()
+                .SetName("Loop")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(forRule)
+                .AddRule(whileRule)
+                .AddRule(loopBodyRule);
+
+            SyntaxRule breakRule = new SyntaxRule()
+                .SetName("Break")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kBreakRule)
+                .AddRule(semicolonRule);
+
+            SyntaxRule returnRule = new SyntaxRule()
+                .SetName("Return")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kReturnRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("( Expression ; | Call ) | ; ")
+                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("Expression ; | Call")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(
+                            new SyntaxRule()
+                            .SetName("Expression ;")
+                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                            .AddRule(expressionRule)
+                            .AddRule(semicolonRule)
+                            )
+                        .AddRule(callRule)
+                        )
+                    .AddRule(semicolonRule)
+                );
+
+            SyntaxRule extensionStatementRule = new SyntaxRule()
+                .SetName("Extension statement")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(assignmentRule)
+                .AddRule(swapRule)
+                .AddRule(callRule)
+                .AddRule(ifRule)
+                .AddRule(loopRule)
+                .AddRule(breakRule)
+                .AddRule(returnRule);
+
+            SyntaxRule statementRule = new SyntaxRule()
+                .SetName("Statement")
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
+                .AddRule(assemblyBlockRule)
+                .AddRule(extensionStatementRule);
+
+            blockBodyRule
+                .AddRule(statementRule);
+
+            SyntaxRule routineBodyRule = new SyntaxRule()
+                .SetName("Routine body")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kDoRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ VarDeclaration | Statement }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("VarDeclaration | Statement")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(varDeclarationRule)
+                        .AddRule(statementRule)
+                        )
+                )
+                .AddRule(kEndRule);
+
+            SyntaxRule parameterRule = new SyntaxRule()
+                .SetName("Parameter")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(typeRule)
+                .AddRule(identifierRule);
+
+            SyntaxRule parametersRule = new SyntaxRule()
+                .SetName("Parameters")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(leftParenRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ Parameter { , Parameter } ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(parameterRule)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("{ , Parameter }")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                        .AddRule(commaRule)
+                        .AddRule(parameterRule)
+                        )
+                )
+                .AddRule(rightParenRule);
+
+            SyntaxRule routineRule = new SyntaxRule()
+                .SetName("Routine")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kRoutineRule)
+                .AddRule(identifierRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ Parameters ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(parametersRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                        .SetName("[ : Type ]")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                        .AddRule(colonRule)
+                        .AddRule(typeRule)
+                )
+                .AddRule(routineBodyRule);
+
+            SyntaxRule structureRule = new SyntaxRule()
+                .SetName("Structure")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kStructRule)
+                .AddRule(identifierRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ Variable declarations }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(varDeclarationRule)
+                )
+                .AddRule(kEndRule);
+
+            SyntaxRule moduleRule = new SyntaxRule()
+                .SetName("Module")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kModuleRule)
+                .AddRule(identifierRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Module statements")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("Some module statement")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(varDeclarationRule)
+                        .AddRule(routineRule)
+                        .AddRule(structureRule)
+                        )
+                    )
+                .AddRule(kEndRule);
+
+            SyntaxRule dataRule = new SyntaxRule()
+                .SetName("Data")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kDataRule)
+                .AddRule(identifierRule)
+                .AddRule(literalRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Data literals")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(literalRule)
+                )
+                .AddRule(kEndRule);
+
+            SyntaxRule pragmaDeclRule = new SyntaxRule()
+                .SetName("Pragma declaration")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(identifierRule)
+                .AddRule(leftParenRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Pragma parameter")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(quoteRule)
+                    .AddRule(identifierRule)
+                    .AddRule(quoteRule)
+                )
+                .AddRule(rightParenRule);
+
+            SyntaxRule annotationsRule = new SyntaxRule()
+                .SetName("Annotations")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kPragmaRule)
+                .AddRule(pragmaDeclRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Pragma declarations")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(pragmaDeclRule)
+                )
+                .AddRule(kEndRule);
+
+            SyntaxRule codeRule = new SyntaxRule()
+                .SetName("Code")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kCodeRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ VarDeclaration | Statement }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("VarDeclaration | Statement")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(varDeclarationRule)
+                        .AddRule(statementRule)
+                        )
+                )
+                .AddRule(kEndRule);
+
+            programRule = new SyntaxRule()
+                .SetName("Program")
+                .SetType(SyntaxRule.SyntaxRuleType.ONE_OR_MORE)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Some unit")
+                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .AddRule(annotationsRule)
+                    .AddRule(dataRule)
+                    .AddRule(moduleRule)
+                    .AddRule(codeRule)
+                    .AddRule(structureRule)
+                    .AddRule(routineRule)
+                    );
+        }
+
+        /// <summary>
+        /// Validates the syntax correctness of the token stream.
+        /// </summary>
+        /// <param name="tokens">Token stream.</param>
+        public SyntaxRule.SyntaxResponse CheckSyntax(List<Token> tokens)
+        {
+            tokens.RemoveAll(token => token.Type == TokenType.WHITESPACE);
+            ASTNode root = new ASTNode
+                (null, 
+                new List<ASTNode>(), 
+                new Token (TokenType.NO_TOKEN, "no_token", new TokenPosition(0, 0)), 
+                "root");
+            SyntaxRule.SyntaxResponse sr = programRule.Verify(tokens, root);
+            if (!sr.Success)
+            {
+                Logger.LogError(programRule.GetErrors());
             }
- 
-            return end;
+            return sr;
         }
     }
 }

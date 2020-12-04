@@ -32,26 +32,11 @@ namespace ERACompiler.Modules
         {
             StringBuilder asc = new StringBuilder();
 
-            // Construct code corresponding to the node itself
-            switch(node.NodeType)
-            {
-                case ASTNode.ASTNodeType.ASSEMBLER_BLOCK:
-                    {
-                        asc.Append(ConstructAssemblerBlock(node));
-                        break;
-                    }                
-                default:
-                    {
-                        break;
-                    }
-            }
-
-
             // Construct code corresponding to nodes' children
-            foreach (AASTNode child in node.Children)
+            /*foreach (AASTNode child in node.Children)
             {
                 asc.Append(ConstructCode(child));
-            }
+            }*/
 
             return asc.ToString();
         }
@@ -75,14 +60,14 @@ namespace ERACompiler.Modules
 
             if (node.Children.Count == 0) // Skip or Stop
             {
-                asc.Append(node.CrspToken.Value);
+                asc.Append(node.Token.Value);
             }
             else
             {
                 // Special case for "format" statements
-                if (node.Children[0].CrspToken.Value.Equals("format"))
+                if (node.Children[0].Token.Value.Equals("format"))
                 {
-                    asc.Append("format(").Append(node.Children[1].CrspToken.Value).Append(")");
+                    asc.Append("format(").Append(node.Children[1].Token.Value).Append(")");
                 }
                 else
                 {
@@ -104,10 +89,10 @@ namespace ERACompiler.Modules
                     {
                         foreach (AASTNode child in node.Children)
                         {
-                            asc.Append(child.CrspToken.Value).Append(" ");
+                            asc.Append(child.Token.Value).Append(" ");
 
                             // Special case for "RN := *RN;" type of statements
-                            if (child.CrspToken.Value.Equals("*"))
+                            if (child.Token.Value.Equals("*"))
                             {
                                 asc.Remove(asc.Length - 1, 1);
                             }
@@ -126,9 +111,9 @@ namespace ERACompiler.Modules
         {
             StringBuilder asc = new StringBuilder();
 
-            if (ldaNode.CrspToken.Type != TokenType.NO_TOKEN)
+            if (ldaNode.Token.Type != TokenType.NO_TOKEN)
             {
-                asc.Append(ldaNode.CrspToken.Value).Append(" ");
+                asc.Append(ldaNode.Token.Value).Append(" ");
             }
 
             foreach (AASTNode child in ldaNode.Children)
