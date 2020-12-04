@@ -33,8 +33,10 @@ namespace ERACompiler
         {
             NativeMethods.AllocConsole();
 
+            //args = new string[] { "-s", "example.era" };
+            //args = new string[] { "-s", "example.era", "--syntax" };
             //args = new string[] { "-s", "debug" };
-            //args = new string[] { "-s", "debug", "--semantics" };
+            //args = new string[] { "-s", "debug", "--syntax" };
 
             // Logging
             new Logger(true);

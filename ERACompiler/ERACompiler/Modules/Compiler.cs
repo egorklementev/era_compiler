@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Collections.Generic;
 using ERACompiler.Structures;
+using ERACompiler.Structures.Rules;
 
 namespace ERACompiler.Modules
 {
@@ -11,7 +12,7 @@ namespace ERACompiler.Modules
     {
         private readonly LexicalAnalyzer lexis;         // Used to retrieve tokens from the source code.
         private readonly SyntaxAnalyzer syntax;         // Used to build AST.
-        private readonly SemanticsAnalyzer semantics;    // Used to check semantics of AST and more.
+        private readonly SemanticsAnalyzer semantics;   // Used to check semantics of AST and more.
         private readonly Generator generator;           // Used to generate assembly code given AAST.
 
         /// <summary>
@@ -51,7 +52,8 @@ namespace ERACompiler.Modules
                 case CompilationMode.SYNTAX:
                     {
                         List<Token> lst = lexis.GetTokenList(sourceCode);
-                        ASTNode ast = syntax.BuildAST(lst);
+                        SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
+                        ASTNode ast = synResp.AstNode;
                         return ast.ToString();
                     }
 
@@ -60,7 +62,8 @@ namespace ERACompiler.Modules
                 case CompilationMode.SEMANTICS:
                     {
                         List<Token> lst = lexis.GetTokenList(sourceCode);
-                        ASTNode ast = syntax.BuildAST(lst);
+                        SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
+                        ASTNode ast = synResp.AstNode;
                         AASTNode aast = semantics.BuildAAST(ast);
                         return aast.ToString();
                     }
@@ -70,7 +73,8 @@ namespace ERACompiler.Modules
                 case CompilationMode.GENERATION:
                     {
                         List<Token> lst = lexis.GetTokenList(sourceCode);
-                        ASTNode ast = syntax.BuildAST(lst);
+                        SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
+                        ASTNode ast = synResp.AstNode;
                         AASTNode aast = semantics.BuildAAST(ast);                        
                         return generator.GetAssemblyCode(aast);
                     }

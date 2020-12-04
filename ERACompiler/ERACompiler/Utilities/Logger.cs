@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Utilities
@@ -67,8 +68,8 @@ namespace ERACompiler.Utilities
         /// <summary>
         /// Logs the compilation error to the specified log file and exits the program exection.
         /// </summary>
-        /// <param name="er">Error to be logged.</param>
-        public static void LogError(CompilationError er)
+        /// <param name="err">Error to be logged.</param>
+        public static void LogError(CompilationError err)
         {
             if (isLoggingEnabled)
             {
@@ -76,15 +77,56 @@ namespace ERACompiler.Utilities
                 {
                     case 0:
                         {
-                            File.AppendAllText(logFilePath, er.ToString() + "\r\n\r\n");
+                            File.AppendAllText(logFilePath, err.ToString() + "\r\n\r\n");
                             break;
                         }
                     case 1:
                         {
-                            Console.WriteLine(er.ToString() + "\r\n\r\n");
+                            Console.WriteLine(err.ToString() + "\r\n\r\n");
                             break;
                         }
                 }
+            }
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// Logs the compilation errors to the specified log file and exits the program exection.
+        /// </summary>
+        /// <param name="errList">Error list to be logged.</param>
+        public static void LogErrors(List<CompilationError> errList)
+        {
+            foreach (var err in errList)
+            {
+                if (isLoggingEnabled)
+                {
+                    switch (LoggingMode)
+                    {
+                        case 0:
+                            {
+                                File.AppendAllText(logFilePath, err.ToString() + "\r\n");
+                                break;
+                            }
+                        case 1:
+                            {
+                                Console.WriteLine(err.ToString() + "\r\n");
+                                break;
+                            }
+                    }
+                }
+            }
+            switch (LoggingMode)
+            {
+                case 0:
+                    {
+                        File.AppendAllText(logFilePath, "\r\n");
+                        break;
+                    }
+                case 1:
+                    {
+                        Console.WriteLine("\r\n");
+                        break;
+                    }
             }
             Environment.Exit(0);
         }

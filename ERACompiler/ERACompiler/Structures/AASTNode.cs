@@ -52,7 +52,7 @@ namespace ERACompiler.Structures
         /// </summary>
         /// <param name="node">AST node to be annotated.</param>
         /// <param name="type">The type of AAST.</param>
-        public AASTNode(ASTNode node, VarType type) : base(null, null, node.CrspToken, node.NodeType)
+        public AASTNode(ASTNode node, VarType type) : base(null, null, node.Token, node.NodeType)
         {
             Type = type;
             Children = new List<AASTNode>();
@@ -85,7 +85,7 @@ namespace ERACompiler.Structures
             }
             
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");
+                .Append("\"token\": ").Append("\"" + Token.Value + "\"").Append(",\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"children\": [");
 

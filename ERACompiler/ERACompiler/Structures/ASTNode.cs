@@ -20,11 +20,11 @@ namespace ERACompiler.Structures
         /// <summary>
         /// The token of the source code that corresponds to this node.
         /// </summary>
-        public Token CrspToken { get; }
+        public Token Token { get; }
         /// <summary>
         /// Represents the type of an AST entry.
         /// </summary>
-        public ASTNodeType NodeType { get; }
+        public string NodeType { get; }
 
         /// <summary>
         /// How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
@@ -38,11 +38,11 @@ namespace ERACompiler.Structures
         /// <param name="children">Ref to the list of AST children nodes.</param>
         /// <param name="token">Corresponding token from the lexical analyzer.</param>
         /// <param name="type">The type of the AST node (basically syntax rule).</param>
-        public ASTNode(ASTNode? parent, List<ASTNode>? children, Token token, ASTNodeType type)
+        public ASTNode(ASTNode? parent, List<ASTNode> children, Token token, string type)
         {
             Parent = parent;
             Children = children;
-            CrspToken = token;
+            Token = token;
             NodeType = type;
 
             if (parent != null) 
@@ -56,15 +56,14 @@ namespace ERACompiler.Structures
         public override string ToString()
         {
             // Json format
-
             StringBuilder sb = new StringBuilder();
 
             sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
                 .Append("{\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"node_type\": ").Append("\"" + NodeType.ToString() + "\"").Append(",\r\n");            
+                .Append("\"node_type\": ").Append("\"" + NodeType + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"token\": ").Append("\"" + CrspToken.Value + "\"").Append(",\r\n");            
+                .Append("\"token\": ").Append("\"" + Token.Value + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"children\": [");            
 
@@ -90,68 +89,6 @@ namespace ERACompiler.Structures
             return sb.ToString();
         }
 
-        /// <summary>
-        /// The type of the AST node.
-        /// </summary>
-        public enum ASTNodeType
-        {
-            PROGRAM,
-            UNIT,
-            ANNOTATION,            
-            CODE,
-            DATA,
-            MODULE,
-            ROUTINE,
-            PRAGMA_DECLARATION,
-            VARIABLE,
-            VARIABLE_DECLARATION,
-            CONSTANT,
-            STATEMENT,
-            IDENTIFIER,
-            LITERAL,
-            DECLARATION,
-            TYPE,
-            VARIABLE_DEFINITION,
-            EXPRESSION,
-            CONST_DEFINITION,
-            LABEL,
-            ASSEMBLER_BLOCK,
-            ASSEMBLER_STATEMENT,
-            EXTENSION_STATEMENT,
-            DIRECTIVE,
-            ATTRIBUTE,
-            PARAMETERS,
-            RESULTS,
-            ROUTINE_BODY,
-            PARAMETER,
-            REGISTER,
-            PRIMARY,
-            VARIABLE_REFERENCE,
-            REFERENCE,
-            DEREFERENCE,
-            ARRAY_ELEMENT,
-            EXPLICIT_ADDRESS,
-            OPERAND,
-            OPERATOR,
-            COMPARISON_OPERATOR,
-            RECEIVER,
-            ASSIGNMENT,
-            CALL,
-            CALL_ARGUMENTS,
-            IF,
-            WHILE,
-            FOR,
-            BREAK,
-            SWAP,
-            GOTO,
-            LOOP,
-            LOOP_BODY,
-            ARRAY_DECLARATION,
-            TEXT,
-            STRUCTURE,
-            STRUCTURE_ACCESS,
-            BLOCK_BODY
-        }
 
     }
 }

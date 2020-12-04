@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ERACompiler.Structures;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
@@ -307,7 +306,9 @@ namespace ERACompiler.Modules
                 "<=",
                 ">=",
                 "?=",
-                "<=>"
+                "<=>",
+                "<-",
+                "->"
             };
         }
         private List<string> RegistersInitialization()
@@ -331,7 +332,9 @@ namespace ERACompiler.Modules
                 ")",
                 "[",
                 "]",
-                "//"
+                "\"",
+                "//",
+                "@"
             };
         }
         private List<string> WhitespacesInitialization()
