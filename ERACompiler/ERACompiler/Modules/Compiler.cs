@@ -32,7 +32,7 @@ namespace ERACompiler.Modules
         ///<returns>
         /// A string with the compiled source code. It is ready to be written to the file.
         ///</returns>
-        public string Compile(string sourceCode, CompilationMode mode)
+        public byte[] Compile(string sourceCode, CompilationMode mode)
         {
             switch (mode)
             {
@@ -44,7 +44,7 @@ namespace ERACompiler.Modules
                         StringBuilder sb = new StringBuilder();
                         foreach (Token t in lst)
                             sb.Append(t.ToString()).Append("\r\n");
-                        return sb.ToString();
+                        return Encoding.ASCII.GetBytes(sb.ToString());
                     }
 
                 // Lexical and Syntax Analyzers.
@@ -54,7 +54,7 @@ namespace ERACompiler.Modules
                         List<Token> lst = lexis.GetTokenList(sourceCode);
                         SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
                         ASTNode ast = synResp.AstNode;
-                        return ast.ToString();
+                        return Encoding.ASCII.GetBytes(ast.ToString());
                     }
 
                 // Lexical, Syntax, and Semantic Analyzers.
@@ -65,7 +65,7 @@ namespace ERACompiler.Modules
                         SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
                         ASTNode ast = synResp.AstNode;
                         AASTNode aast = semantics.BuildAAST(ast);
-                        return aast.ToString();
+                        return Encoding.ASCII.GetBytes(aast.ToString());
                     }
 
                 // Full compilation.
@@ -80,7 +80,7 @@ namespace ERACompiler.Modules
                     }
 
                 default:
-                    return "";
+                    return new byte[] { 0x00 };
             }
         }
 
@@ -89,7 +89,7 @@ namespace ERACompiler.Modules
         /// </summary>
         /// <param name="sourceCode">A source code from a file.</param>
         /// <returns>Generated string of assembly commands.</returns>
-        public string Compile(string sourceCode)
+        public byte[] Compile(string sourceCode)
         {
             return Compile(sourceCode, CompilationMode.GENERATION);
         }

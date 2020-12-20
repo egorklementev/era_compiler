@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ERACompiler.Structures;
 using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Structures.Rules
@@ -16,8 +15,10 @@ namespace ERACompiler.Structures.Rules
         private string ruleName;
         private SyntaxRuleType type;
         private readonly List<SyntaxRule> rules;
-        
-        // To store all possible syntax errors
+
+        /// <summary>
+        /// To store all possible syntax errors
+        /// </summary>
         private static readonly List<string> errorList = 
             new List<string>();
 
@@ -27,12 +28,20 @@ namespace ERACompiler.Structures.Rules
         private static TokenPosition lastTokenPos = new TokenPosition(0, 0);
         private readonly Token noToken = new Token(TokenType.NO_TOKEN, "no_token", new TokenPosition(0, 0));
 
+        /// <summary>
+        /// Constructor. Sets default rule name and initializes new rule list.
+        /// </summary>
         public SyntaxRule() 
         {
             ruleName = "dummy rule";
             rules = new List<SyntaxRule>();          
         }
 
+        /// <summary>
+        /// Sets a name for a rule. Used when printing the AST or AAST.
+        /// </summary>
+        /// <param name="name">A new name for a rule.</param>
+        /// <returns>The object itself.</returns>
         public SyntaxRule SetName(string name)
         {
             ruleName = name;
@@ -40,22 +49,37 @@ namespace ERACompiler.Structures.Rules
         }
 
         /// <summary>
-        /// Makes this rule terminal.
-        /// It means 'rules' contains only one Terminal object
+        /// Sets the type of a rule (e.g. OR, ONE_OR_MANY, etc.) 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The object itself.</returns>
         public SyntaxRule SetType(SyntaxRuleType type)
         {
             this.type = type;
             return this;
         }
 
+        /// <summary>
+        /// Adds a rule to the rule's children.
+        /// How these children are processed depends on parent type.
+        /// </summary>
+        /// <param name="rule">A rule to add.</param>
+        /// <returns>The object itself.</returns>
         public SyntaxRule AddRule(SyntaxRule rule)
         {
             rules.Add(rule);
             return this;
         }
 
+        /// <summary>
+        /// Main function of this class. Given a list of tokens and parent AST node it returns
+        /// a SyntaxResponse instance which contains information about success of failure of syntax
+        /// checking, the number of tokens consumed (in the best case scenario should be equal to the 
+        /// number of tokens received), and the parent AST node (that was given) filled with appropriate 
+        /// AST children nodes according to this rule.
+        /// </summary>
+        /// <param name="parentTokens"></param>
+        /// <param name="parentNode"></param>
+        /// <returns></returns>
         public SyntaxResponse Verify(List<Token> parentTokens, ASTNode parentNode)
         {
             // Copy tokens to overcome their removal at upper levels
@@ -64,8 +88,11 @@ namespace ERACompiler.Structures.Rules
             {
                 tokens.Add(new Token(token));
             }
+
+            // Process according to the rule type
             switch (type)
             {
+                // If terminal - just check token type and, if necessary, token value
                 case SyntaxRuleType.TERMINAL:
                     Token expected = ((RuleTerminal)this).GetToken();
                     if (tokens.Count == 0) 
@@ -92,6 +119,8 @@ namespace ERACompiler.Structures.Rules
                                 new ASTNode(parentNode, new List<ASTNode>(), tokens[0], expected.Type.ToString())
                                 );
                     }
+
+                // If sequence - all children rules should be satisfied by tokens in sequential order
                 case SyntaxRuleType.SEQUENCE:
                     int tokensConsumed = 0;
                     ASTNode seqNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
@@ -111,6 +140,8 @@ namespace ERACompiler.Structures.Rules
                     }
                     errorList.Clear();
                     return new SyntaxResponse(SUCCESS, tokensConsumed, seqNode);
+
+                // If zero or one - all children rules should be satisfied by tokens zero or exactly one time (sequentilly)
                 case SyntaxRuleType.ZERO_OR_ONE:
                     int zooNum = 0;
                     int zooTokensConsumed = 0;
@@ -137,6 +168,8 @@ namespace ERACompiler.Structures.Rules
                         zooNum++;
                     }
                     return new SyntaxResponse(zooNum < 2, zooTokensConsumed, zooNode);
+
+                // If zero or more - all children rules should be satisfied by tokens zero or more times (sequentially)
                 case SyntaxRuleType.ZERO_OR_MORE:
                     int zomNum = 0;
                     int zomTokensConsumed = 0;
@@ -163,6 +196,10 @@ namespace ERACompiler.Structures.Rules
                         zomNum++;
                     }
                     return new SyntaxResponse(zomNum >= 0, zomTokensConsumed, zomNode);
+
+                // If one or more - all children rules should be satisfied by tokens one or more times (sequentially).
+                // Used for main (Program) rule only, where we have a set of Units and we do not want empty file to be
+                // valid.
                 case SyntaxRuleType.ONE_OR_MORE:
                     int oomNum = 0;
                     int oomTokensConsumed = 0;
@@ -196,6 +233,8 @@ namespace ERACompiler.Structures.Rules
                     {
                         return new SyntaxResponse(oomNum >= 1, oomTokensConsumed, oomNode);
                     }
+
+                // If or - one or more child rules should be satisfied by the tokens. Rule order does not matter.
                 case SyntaxRuleType.OR:
                     ASTNode orNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
                     foreach (var rule in rules)
@@ -216,7 +255,6 @@ namespace ERACompiler.Structures.Rules
             return new SyntaxResponse(FAILED, 0);
         }
 
-
         private void LogSyntaxError(string errorDescription = "")
         {
             errorList.Add(
@@ -233,9 +271,15 @@ namespace ERACompiler.Structures.Rules
         {
             private bool success = false;
             private int tokensConsumed = 0;
-            private ASTNode ast_node;
+            private ASTNode? ast_node;
 
-            public SyntaxResponse(bool success, int tokensConsumed, ASTNode astNode = null)
+            /// <summary>
+            /// Constructor. Sets success or failure, consumed token number, and oprionally ast node to return.
+            /// </summary>
+            /// <param name="success">Success or failure of rule checking</param>
+            /// <param name="tokensConsumed">How many tokens were consumed</param>
+            /// <param name="astNode">The AST node to return</param>
+            public SyntaxResponse(bool success, int tokensConsumed, ASTNode? astNode = null)
             {
                 Success = success;
                 TokensConsumed = tokensConsumed;

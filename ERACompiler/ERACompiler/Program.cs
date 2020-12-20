@@ -64,7 +64,7 @@ namespace ERACompiler
                     string sourceCode = File.ReadAllText(sourceFilenames[i]);
 
                     // Create instance of the era compiler and get the compiled code                    
-                    string compiledCode = new Compiler().Compile(sourceCode, cmode); // New everytime to refresh all the nodes (may be optimized obviously)
+                    byte[] compiledCode = new Compiler().Compile(sourceCode, cmode); // New everytime to refresh all the nodes (may be optimized obviously)
 
                     // Create a new file with the compiled code
                     if (i >= outputFilenames.Count)
@@ -82,8 +82,8 @@ namespace ERACompiler
                         }
                         outputFilenames.Add(defaultFilename);
                     }
-                    File.WriteAllText(outputFilenames[i], compiledCode);
 
+                    File.WriteAllBytes(outputFilenames[i], compiledCode);                                    
                     Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
                     //Console.ReadLine();
                 }

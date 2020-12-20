@@ -17,6 +17,9 @@ namespace ERACompiler.Modules
         /// </summary>
         public SyntaxAnalyzer()
         {
+            // All the tokens that can appear in the program
+
+            // Keywords
             Token tAsm = new Token(TokenType.KEYWORD, "asm", new TokenPosition(0, 0));
             Token tBreak = new Token(TokenType.KEYWORD, "break", new TokenPosition(0, 0));
             Token tByte = new Token(TokenType.KEYWORD, "byte", new TokenPosition(0, 0));
@@ -45,10 +48,13 @@ namespace ERACompiler.Modules
             Token tTo = new Token(TokenType.KEYWORD, "to", new TokenPosition(0, 0));
             Token tWhile = new Token(TokenType.KEYWORD, "while", new TokenPosition(0, 0));
 
+
+            // Itentifiers / Literals / Registers
             Token tIdentifier = new Token(TokenType.IDENTIFIER, "SOME_IDENTIFIER", new TokenPosition(0, 0));
             Token tLiteral = new Token(TokenType.NUMBER, "SOME_LITERAL", new TokenPosition(0, 0));
             Token tRegister = new Token(TokenType.REGISTER, "SOME_REGISTER", new TokenPosition(0, 0));
 
+            // Delimiters
             Token tAt = new Token(TokenType.DELIMITER, "@", new TokenPosition(0, 0));
             Token tColon = new Token(TokenType.DELIMITER, ":", new TokenPosition(0, 0));
             Token tComma = new Token(TokenType.DELIMITER, ",", new TokenPosition(0, 0));
@@ -60,6 +66,7 @@ namespace ERACompiler.Modules
             Token tSemicolon = new Token(TokenType.DELIMITER, ";", new TokenPosition(0, 0));
             Token tQuote = new Token(TokenType.DELIMITER, "\"", new TokenPosition(0, 0));
 
+            // Operators
             Token tAnd = new Token(TokenType.OPERATOR, "&", new TokenPosition(0, 0));
             Token tAndEquals = new Token(TokenType.OPERATOR, "&=", new TokenPosition(0, 0));
             Token tAsr = new Token(TokenType.OPERATOR, ">>=", new TokenPosition(0, 0));
@@ -86,6 +93,7 @@ namespace ERACompiler.Modules
             Token tXor = new Token(TokenType.OPERATOR, "^", new TokenPosition(0, 0));
             Token tXorEquals = new Token(TokenType.OPERATOR, "^=", new TokenPosition(0, 0));
 
+            // All terminal syntax rules of the language
             RuleTerminal kAsmRule = new RuleTerminal(tAsm);
             RuleTerminal kBreakRule = new RuleTerminal(tBreak);
             RuleTerminal kByteRule = new RuleTerminal(tByte);
@@ -155,6 +163,8 @@ namespace ERACompiler.Modules
             RuleTerminal opXorRule = new RuleTerminal(tXor);
             RuleTerminal opXorEqualsRule = new RuleTerminal(tXorEquals);
 
+
+            // All syntax rules of the language
             SyntaxRule operatorRule = new SyntaxRule()
                 .SetName("Operator")
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
@@ -837,9 +847,11 @@ namespace ERACompiler.Modules
         }
 
         /// <summary>
-        /// Validates the syntax correctness of the token stream.
+        /// Validates the syntax correctness of the token stream
+        /// and returns the AST root node if success.
         /// </summary>
-        /// <param name="tokens">Token stream.</param>
+        /// <param name="tokens">Tokens of a whole program to be validated.</param>
+        /// <returns>A syntax responce instance which contains the AST root node.</returns>
         public SyntaxRule.SyntaxResponse CheckSyntax(List<Token> tokens)
         {
             tokens.RemoveAll(token => token.Type == TokenType.WHITESPACE);

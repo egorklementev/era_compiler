@@ -1,5 +1,4 @@
 ﻿using ERACompiler.Structures;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace ERACompiler.Modules
@@ -23,105 +22,16 @@ namespace ERACompiler.Modules
         /// </summary>
         /// <param name="root">The root node of the AAST.</param>
         /// <returns>A string containing assembly code build using AAST.</returns>
-        public string GetAssemblyCode(AASTNode root)
+        public byte[] GetAssemblyCode(AASTNode root)
         {
             return ConstructCode(root);
         }
 
-        private string ConstructCode(AASTNode node)
+        private byte[] ConstructCode(AASTNode node)
         {
             StringBuilder asc = new StringBuilder();
 
-            // Construct code corresponding to nodes' children
-            /*foreach (AASTNode child in node.Children)
-            {
-                asc.Append(ConstructCode(child));
-            }*/
-
-            return asc.ToString();
-        }
-
-        private string ConstructAssemblerBlock(AASTNode node)
-        {
-            StringBuilder asc = new StringBuilder();
-
-            // Construct code from children
-            foreach (AASTNode stmnt in node.Children)
-            {
-                asc.Append(ConstructAssemblerStatement(stmnt));
-            }
-
-            return asc.ToString();
-        }
-
-        private string ConstructAssemblerStatement(AASTNode node)
-        {
-            StringBuilder asc = new StringBuilder();
-
-            if (node.Children.Count == 0) // Skip or Stop
-            {
-                asc.Append(node.Token.Value);
-            }
-            else
-            {
-                // Special case for "format" statements
-                if (node.Children[0].Token.Value.Equals("format"))
-                {
-                    asc.Append("format(").Append(node.Children[1].Token.Value).Append(")");
-                }
-                else
-                {
-                    bool isLDA = false;
-                    foreach (AASTNode child in node.Children)
-                    {
-                        if (child.Children.Count > 0)
-                        {
-                            isLDA = true;
-                            break;
-                        }
-                    }
-                    if (isLDA)
-                    {
-                        asc.Append(GetLDA(node));
-                        asc.Remove(asc.Length - 1, 1);
-                    }
-                    else
-                    {
-                        foreach (AASTNode child in node.Children)
-                        {
-                            asc.Append(child.Token.Value).Append(" ");
-
-                            // Special case for "RN := *RN;" type of statements
-                            if (child.Token.Value.Equals("*"))
-                            {
-                                asc.Remove(asc.Length - 1, 1);
-                            }
-                        }
-                        asc.Remove(asc.Length - 1, 1);
-                    }
-                }
-            }
-
-            asc.Append(";\r\n");
-
-            return asc.ToString();
-        }
-
-        private string GetLDA(AASTNode ldaNode)
-        {
-            StringBuilder asc = new StringBuilder();
-
-            if (ldaNode.Token.Type != TokenType.NO_TOKEN)
-            {
-                asc.Append(ldaNode.Token.Value).Append(" ");
-            }
-
-            foreach (AASTNode child in ldaNode.Children)
-            {
-                asc.Append(GetLDA(child));
-            }
-
-            return asc.ToString();
+            return Encoding.ASCII.GetBytes(asc.ToString());
         }
 
     }
