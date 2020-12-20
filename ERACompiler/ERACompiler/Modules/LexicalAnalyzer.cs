@@ -314,10 +314,14 @@ namespace ERACompiler.Modules
         private List<string> RegistersInitialization()
         {
             List<string> registers = new List<string>();
-            for (int i = 0; i < 32; i++)
+            for (int i = 0; i < 28; i++)
             {
                 registers.Add("R" + i.ToString());
             }
+            registers.Add("FP");
+            registers.Add("SP");
+            registers.Add("SB");
+            registers.Add("PC");
             return registers;
         }
         private List<string> DelimitersInitialization()
