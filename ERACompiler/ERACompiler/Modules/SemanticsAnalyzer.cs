@@ -65,10 +65,25 @@ namespace ERACompiler.Modules
         private AASTNode AnnotateAnnotations(ASTNode node, AASTNode parent)
         {
             AASTNode anns = new AASTNode(node, parent, no_type);
-
-
-
+            // Annotate the first child
+            anns.Children.Add(AnnotatePragmaDecl(node.Children[1], anns));
+            // Repeat for the rest
+            foreach (ASTNode child in node.Children[2].Children) 
+            {
+                anns.Children.Add(AnnotatePragmaDecl(child, anns));
+            }
             return anns;
+        }
+
+        private ASTNode AnnotatePragmaDecl(ASTNode node, AASTNode parent)
+        {
+            AASTNode pragmaDecl = new AASTNode(node, parent, no_type);
+            pragmaDecl.Children.Add(AnnotateNode(node.Children[0], pragmaDecl)); // Identifier
+            if (node.Children[2].Children.Count > 0)
+            {
+                pragmaDecl.Children.Add(AnnotateNode(node.Children[2].Children[1], pragmaDecl)); // Possible text (identifier actually)
+            }
+            return pragmaDecl;
         }
 
         private AASTNode AnnotatePrimaryFirstChild(ASTNode node, AASTNode parent)
