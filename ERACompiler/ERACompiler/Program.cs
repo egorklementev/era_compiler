@@ -28,6 +28,7 @@ namespace ERACompiler
         private static List<string> sourceFilenames; // File/Files to be compiled
         private static List<string> outputFilenames; // File/Files for compiled code
         private static Compiler.CompilationMode cmode = Compiler.CompilationMode.GENERATION;
+        private static bool forceFolderCreation = false;
 
         static void Main(string[] args)
         {
@@ -35,8 +36,9 @@ namespace ERACompiler
 
             //args = new string[] { "-s", "example.era" };
             //args = new string[] { "-s", "example.era", "--syntax" };
-            //args = new string[] { "-s", "debug" };
-            //args = new string[] { "-s", "debug", "--syntax" };
+            //args = new string[] { "-s", "debug.era" };
+            //args = new string[] { "-s", "debug.era", "--syntax" };
+            //args = new string[] { "-s", "debug.era", "--semantics" };
 
             // Logging
             new Logger(true);
@@ -80,12 +82,42 @@ namespace ERACompiler
                         {
                             defaultFilename = "compiled_" + defaultFilename;
                         }
+                        int dot = defaultFilename.LastIndexOf('.');
+                        defaultFilename = defaultFilename.Remove(dot); // Remove .* and add .bin
+                        defaultFilename += ".bin";
+
                         outputFilenames.Add(defaultFilename);
                     }
 
-                    File.WriteAllBytes(outputFilenames[i], compiledCode);                                    
-                    Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
-                    //Console.ReadLine();
+                    
+                    if (outputFilenames[i].Contains("/") || outputFilenames[i].Contains("\\"))
+                    {
+                        // Check if directory exists
+                        string folder = outputFilenames[i].Remove(outputFilenames[i].LastIndexOfAny(new char[] { '\\', '/' }));
+                        if (Directory.Exists(folder))
+                        {
+                            File.WriteAllBytes(outputFilenames[i], compiledCode);
+                            Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                        }
+                        else
+                        {
+                            if (forceFolderCreation)
+                            {
+                                Directory.CreateDirectory(folder);
+                                File.WriteAllBytes(outputFilenames[i], compiledCode);
+                                Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Folder \"" + folder + "\" does not exists!!!");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(outputFilenames[i], compiledCode);
+                        Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                    }
                 }
             }
             catch (IOException ex)
@@ -163,6 +195,11 @@ namespace ERACompiler
                                 i--;
                                 break;
                             }
+                        case "-p":
+                            {
+                                forceFolderCreation = true;
+                                break;
+                            }
                         case "-h":
                             {
                                 Console.Error.WriteLine(
@@ -173,6 +210,7 @@ namespace ERACompiler
                                     "  '-s' {filepath}  :  specify input file to be compiled\r\n" +
                                     "  '-d' {path}  :  specify the folders with files to be compiled\r\n" +
                                     "  '-o' {filepath}  :  specify output file for compiled source code\r\n" +
+                                    "  '-p'  :  force to create folders if they do not exist\r\n" +
                                     "  '--lexis'  :  compile in lexis mode (separate into tokens only)\r\n" +
                                     "  '--syntax'  :  compile in syntax mode (build AST only)\r\n" +
                                     "  '--semantics'  :  compile in semantic mode (build AAST only)\r\n" +

@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace ERACompiler.Structures.Types
+﻿namespace ERACompiler.Structures.Types
 {
     public class StructType : VarType
     {
         public string TypeName { get; set; }
 
-        public StructType(string typeName) : base(VarTypeType.STRUCTURE)
+        public StructType(string typeName) : base(ERAType.STRUCTURE)
         {
             TypeName = typeName;
         }

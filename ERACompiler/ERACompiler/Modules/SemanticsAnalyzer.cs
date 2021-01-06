@@ -2,15 +2,585 @@
 using ERACompiler.Structures.Types;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
+using System;
 using System.Collections.Generic;
 
 namespace ERACompiler.Modules
 {
     class SemanticsAnalyzer
     {
+        private readonly VarType no_type = new VarType(VarType.ERAType.NO_TYPE); // Placeholder
+
         public AASTNode BuildAAST(ASTNode ASTRoot)
         {
-            return new AASTNode(ASTRoot, new VarType(VarType.VarTypeType.NO_TYPE)); //AnnotateNode(ASTRoot, null);
+            AASTNode program = AnnotateNode(ASTRoot, null);
+            if (!program.Context.IsVarDeclared(new Token(TokenType.KEYWORD, "code", new TokenPosition(0, 0))))
+            {
+                Logger.LogError(new SemanticError(
+                    "No \"code\" block found in the program!!!"
+                    ));
+            }
+            return program;
+        }
+
+        private AASTNode AnnotateNode(ASTNode node, AASTNode parent)
+        {
+            switch (node.ASTType)
+            {
+                case "Program":
+                    return AnnotateProgram(node, parent);
+                case "Annotations":
+                    return AnnotateAnnotations(node, parent);
+                case "Expression":
+                    return AnnotateExpr(node, parent);
+                case "NUMBER":
+                    return AnnotateLiteral(node, parent);
+                case "OPERATOR":
+                case "REGISTER":
+                case "DELIMITER":
+                case "IDENTIFIER":
+                    return new AASTNode(node, parent, no_type);
+                case "Identifier { '.' Identifier } [ '[' Expression ']' ]":
+                    return AnnotatePrimaryFirstChild(node, parent);
+                case "Operand":
+                case "Primary":
+                case "Operator":
+                case "Some unit":
+                case "Some module statement":
+                case "VarDeclaration | Statement":
+                    return AnnotateNode(node.Children[0], parent);
+                case "( Expression )":
+                    return AnnotateNode(node.Children[1], parent);
+                case "Variable declaration":
+                    return AnnotateVarDeclaration(node, parent);
+                case "Code":
+                    return AnnotateCodeBlock(node, parent);
+                case "Module":
+                    return AnnotateModule(node, parent);
+                default:
+                    return new AASTNode(node, null, no_type);
+            }
+        }
+
+        private AASTNode AnnotateAnnotations(ASTNode node, AASTNode parent)
+        {
+            AASTNode anns = new AASTNode(node, parent, no_type);
+
+
+
+            return anns;
+        }
+
+        private AASTNode AnnotatePrimaryFirstChild(ASTNode node, AASTNode parent)
+        {
+            AASTNode somePrim = new AASTNode(node, parent, no_type);
+            Context ctx = FindParentContext(parent);
+
+            // Identifier
+            somePrim.Children.Add(AnnotateNode(node.Children[0], somePrim));
+            ASTNode idLink = node.Children[0];
+
+            // { '.' Identifier }
+            if (node.Children[1].Children.Count > 0)
+            {
+                foreach (ASTNode child in node.Children[1].Children)
+                {
+                    if (!ctx.IsVarStruct(idLink.Token))
+                    {
+                        Logger.LogError(new SemanticError(
+                            "Trying to access non-struct variable via \'.\' notation!!!\r\n" +
+                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() + 
+                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                            ));
+                    }
+                    if (child.ASTType.Equals("IDENTIFIER"))
+                        idLink = child;
+                    somePrim.Children.Add(AnnotateNode(child, somePrim));
+                }
+            }
+
+            // [ '[' Expression ']' ]
+            if (node.Children[2].Children.Count > 0)
+            {
+                // If expression is constant we can check for array boundaries
+                if (IsExprConstant(node.Children[2].Children[1], ctx))
+                {
+                    int index = CalculateConstExpr(node.Children[2].Children[1], ctx);
+                    int arrSize = ctx.GetArrSize(idLink);
+                    if (index < 0) Logger.LogError(new SemanticError(
+                        "Negative array index!!!\r\n" +
+                        "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                        ));
+                    // If we know the size of the array already (arrSize != 0 indicates this)
+                    if (arrSize != 0 && index >= arrSize) Logger.LogError(new SemanticError(
+                        "Accessing element with index higher than array the size!!!\r\n" +
+                        "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                        ));
+                }
+                somePrim.Children.Add(AnnotateExpr(node.Children[2].Children[1], somePrim));
+            }
+
+            return somePrim;
+        }
+
+        private AASTNode AnnotateLiteral(ASTNode node, AASTNode parent)
+        {
+            AASTNode literal = new AASTNode(node, parent, no_type)
+            {
+                AASTValue = int.Parse(node.Children[1].Token.Value) * (node.Children[0].Children.Count > 0 ? -1 : 1)
+            };
+            return literal;
+        }
+
+        private AASTNode AnnotateModule(ASTNode node, AASTNode parent)
+        {
+            Context ctx = FindParentContext(parent);
+            AASTNode module = new AASTNode(node, parent, new VarType(VarType.ERAType.MODULE));
+            module.Context = new Context("module_" + node.Children[1].Token.Value, ctx);
+            foreach (ASTNode child in node.Children[2].Children)
+            {
+                module.Children.Add(AnnotateNode(child, module));
+            }
+            ctx.AddVar(module, node.Children[1].Token.Value);
+            return module;
+        }
+
+        private AASTNode AnnotateVarDeclaration(ASTNode node, AASTNode parent)
+        {
+            VarType type = IdentifyType(node.Children[0], node.Children[1].Children[0].ASTType.Equals("Constant"));
+            if (node.Children[1].Children[0].ASTType.Equals("Array")) 
+                type = new ArrayType(type);            
+            AASTNode varDecl = new AASTNode(node, parent, no_type);
+            varDecl.Children.AddRange(IdentifyVarDecl(node.Children[1].Children[0], varDecl, type));
+            return varDecl;
+        }
+        private List<AASTNode> IdentifyVarDecl(ASTNode node, AASTNode parent, VarType type)
+        {
+            List<AASTNode> lst = new List<AASTNode>();
+            Context ctx = FindParentContext(parent);
+
+            switch (node.ASTType)
+            {
+                case "Variable":
+                    {
+                        // VarDefinition { , VarDefinition } ;
+                        AASTNode firstDef = new AASTNode(node.Children[0], parent, type);
+                        lst.Add(firstDef);
+                        ctx.AddVar(firstDef, node.Children[0].Children[0].Token.Value); // VarDef's identifier
+                                                                                        // Check expr if exists
+                        if (node.Children[0].Children[1].Children.Count > 0)
+                        {
+                            CheckExprVariables(
+                                node.Children[0].Children[1] // [ := Expression ]
+                                .Children[0]                 // := Expression sequence
+                                .Children[1],                // Expression
+                                ctx);
+                            AASTNode firstExpr = AnnotateNode(node.Children[0].Children[1].Children[0].Children[1], firstDef);
+                            firstDef.Children.Add(firstExpr);
+                        }
+                        // Repeat for { , VarDefinition }
+                        foreach (ASTNode varDef in node.Children[1].Children)
+                        {
+                            if (varDef.ASTType.Equals("Variable definition")) // Skip comma rule
+                            {
+                                AASTNode def = new AASTNode(varDef, parent, type);
+                                lst.Add(def);
+                                ctx.AddVar(def, varDef.Children[0].Token.Value); // VarDef's identifier
+                                if (varDef.Children[1].Children.Count > 0)
+                                {
+                                    CheckExprVariables(
+                                        varDef.Children[1] // [ := Expression ]
+                                        .Children[0]       // := Expression sequence
+                                        .Children[1],      // Expression
+                                        ctx);
+                                    AASTNode expr = AnnotateNode(varDef.Children[1].Children[0].Children[1], def);
+                                    def.Children.Add(expr);
+                                }
+                            }
+                        }
+                        break;
+                    }
+
+                case "Constant":
+                    {
+                        // 'const' ConstDefinition { , ConstDefinition } ;                        
+                        AASTNode firstDef = new AASTNode(node.Children[1], parent, type);
+                        lst.Add(firstDef);
+                        ctx.AddVar(firstDef, node.Children[1].Children[0].Token.Value); // ConstDef's identifier
+
+                        CheckExprVariables(node.Children[1].Children[2], ctx); // Expression of ConstDef
+                        if (!IsExprConstant(node.Children[1].Children[2], ctx))
+                        {
+                            Logger.LogError(new SemanticError(
+                                "Expression for a constant definition is not constant!!!\r\n" +
+                                "\t At (Line: " + node.Children[1].Children[2].Token.Position.Line.ToString() +
+                                ", Char: " + node.Children[1].Children[2].Token.Position.Char.ToString() + ")."
+                                ));
+                        }
+                        firstDef.AASTValue = CalculateConstExpr(node.Children[1].Children[2], ctx);
+                        // Repeat for { , ConstDefinition }
+                        foreach (ASTNode varDef in node.Children[2].Children)
+                        {
+                            if (varDef.ASTType.Equals("Constant definition")) // Skip comma rule
+                            {
+                                AASTNode def = new AASTNode(varDef, parent, type);
+                                lst.Add(def);
+                                ctx.AddVar(def, varDef.Children[0].Token.Value); // ConstDef's identifier
+
+                                CheckExprVariables(varDef.Children[2], ctx); // Expression of ConstDef
+                                if (!IsExprConstant(varDef.Children[2], ctx))
+                                {
+                                    Logger.LogError(new SemanticError(
+                                        "Expression for a constant definition is not constant!!!\r\n" +
+                                        "\t At (Line: " + varDef.Children[2].Token.Position.Line.ToString() +
+                                        ", Char: " + varDef.Children[2].Token.Position.Char.ToString() + ")."
+                                        ));
+                                }
+                                def.AASTValue = CalculateConstExpr(varDef.Children[2], ctx);
+                            }
+                        }
+                        break;
+                    }
+
+                case "Array": 
+                    {
+                        // '[' ']' ArrDefinition { , ArrDefinition } ;
+                        AASTNode firstDef = new AASTNode(node.Children[2], parent, type);
+                        lst.Add(firstDef);
+                        ctx.AddVar(firstDef, node.Children[2].Children[0].Token.Value); // ArrDef's identifier
+
+                        CheckExprVariables(node.Children[2].Children[2], ctx); // Expression of ArrDefinition
+                        if (IsExprConstant(node.Children[2].Children[2], ctx))
+                        {
+                            int arrSize = CalculateConstExpr(node.Children[2].Children[2], ctx);
+                            if (arrSize <= 0) Logger.LogError(new SemanticError(
+                                "Incorrect array size!!!\r\n" +
+                                "\t At (Line: " + node.Children[2].Children[2].Token.Position.Line.ToString() +
+                                    ", Char: " + node.Children[2].Children[2].Token.Position.Char.ToString() + ")."
+                                ));
+                            ((ArrayType)type).Size = arrSize;
+                        }
+                        else
+                        {
+                            // If size is not constant, just pass the expression
+                            firstDef.Children.Add(AnnotateExpr(node.Children[2].Children[2], firstDef));
+                        }
+                        // Repeat for { , ArrDefinition }
+                        foreach (ASTNode arrDef in node.Children[3].Children)
+                        {
+                            ArrayType arrType = new ArrayType(((ArrayType)type).ElementType); // Each array can have it's own size
+                            if (arrDef.ASTType.Equals("Array definition")) // Skip comma rule
+                            {
+                                AASTNode def = new AASTNode(arrDef, parent, arrType);
+                                lst.Add(def);
+                                ctx.AddVar(def, arrDef.Children[0].Token.Value); // ArrDef's identifier
+
+                                CheckExprVariables(arrDef.Children[2], ctx); // Expression of ArrDefinition
+                                if (IsExprConstant(arrDef.Children[2], ctx))
+                                {
+                                    int _arrSize = CalculateConstExpr(arrDef.Children[2], ctx);
+                                    if (_arrSize <= 0) Logger.LogError(new SemanticError(
+                                        "Incorrect array size!!!\r\n" +
+                                        "\t At (Line: " + arrDef.Children[2].Token.Position.Line.ToString() +
+                                            ", Char: " + arrDef.Children[2].Token.Position.Char.ToString() + ")."
+                                        ));
+                                    arrType.Size = _arrSize;
+                                }
+                                else
+                                {
+                                    // If size is not constant, just pass the expression
+                                    def.Children.Add(AnnotateExpr(arrDef.Children[2], def));
+                                }
+                            }
+                        }
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            return lst;
+        }
+
+        private AASTNode AnnotateExpr(ASTNode node, AASTNode parent) 
+        {
+            AASTNode expr = new AASTNode(node, parent, no_type);
+            expr.Children.Add(AnnotateNode(node.Children[0], expr));            
+            foreach (ASTNode child in node.Children[1].Children)
+            {
+                expr.Children.Add(AnnotateNode(child, expr));
+            }
+            return expr;
+        }
+
+        private AASTNode AnnotateCodeBlock(ASTNode node, AASTNode parent)
+        {
+            AASTNode code = new AASTNode(node, parent, new VarType(VarType.ERAType.MODULE))
+            {
+                Context = new Context("Code", FindParentContext(parent))
+            };
+
+            foreach (ASTNode child in node.Children[1].Children)
+            {
+                code.Children.Add(AnnotateNode(child, code));
+            }
+
+            FindParentContext(parent).AddVar(code, "code");
+
+            return code;
+        }
+
+        private AASTNode AnnotateProgram(ASTNode node, AASTNode parent)
+        {
+            AASTNode program = new AASTNode(node, parent, no_type)
+            {
+                Context = new Context("Program", null)
+            };
+
+            foreach (ASTNode child in node.Children)
+            {
+                program.Children.Add(AnnotateNode(child, program));
+            }
+
+            return program;
+        }
+
+
+        /// <summary>
+        /// Calculates a numerical value of a given constant expression
+        /// </summary>
+        /// <param name="node">Expected ASTType - Expression</param>
+        /// <param name="ctx">Current context</param>
+        /// <returns>Calculated value of an expression</returns>
+        private int CalculateConstExpr(ASTNode node, Context ctx)
+        {
+            int firstOpValue = GetOperandValue(node.Children[0], ctx);
+            if (node.Children[1].Children.Count > 0)
+            {
+                int finalOpValue = firstOpValue;
+                //int lastOp = -1; // 0: +, 1: -, 2: *, 3: &, 4: |, 5: ^, 6: ?, 7: =, 8: /=, 9: <, 10: >.
+                for (int i = 0; i < node.Children[1].Children.Count; i += 2)
+                {
+                    switch (node.Children[1].Children[i].Token.Value)
+                    {
+                        case "+":
+                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx);
+                            break;
+                        case "-":
+                            finalOpValue -= GetOperandValue(node.Children[1].Children[i + 1], ctx);
+                            break;
+                        case "*":
+                            finalOpValue *= GetOperandValue(node.Children[1].Children[i + 1], ctx);
+                            break;
+                        case "&":
+                            finalOpValue &= GetOperandValue(node.Children[1].Children[i + 1], ctx);
+                            break;
+                        case "|":
+                            finalOpValue |= GetOperandValue(node.Children[1].Children[i + 1], ctx);
+                            break;
+                        case "^":
+                            finalOpValue ^= GetOperandValue(node.Children[1].Children[i + 1], ctx);
+                            break;
+                        case "?":
+                            finalOpValue = GetOperandValue(node.Children[1].Children[i + 1], ctx); // TODO: fix somehow
+                            break;
+                        case "=":
+                            finalOpValue = GetOperandValue(node.Children[1].Children[i + 1], ctx) == finalOpValue ? 1 : 0;
+                            break;
+                        case "/=":
+                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx) != finalOpValue ? 1 : 0;
+                            break;
+                        case ">":
+                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx) < finalOpValue ? 1 : 0;
+                            break;
+                        case "<":
+                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx) > finalOpValue ? 1 : 0;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return finalOpValue;
+            }
+            else
+            {
+                return firstOpValue;
+            }
+            
+        }
+        /// <summary>
+        /// Returns a value of a single operand.
+        /// </summary>
+        /// <param name="node">Expected ASTType - Operand</param>
+        /// <param name="ctx">Current context</param>
+        /// <returns>The value of an operand.</returns>
+        private int GetOperandValue(ASTNode node, Context ctx)
+        {
+            return node.Children[0].ASTType switch
+            {
+                "( Expression )" => CalculateConstExpr(node.Children[0].Children[1], ctx),
+                "Primary" => ctx.GetConsValue(node.Children[0].Children[0].Token),// Identifier
+                "NUMBER" => int.Parse(node.Children[0].Children[1].Token.Value) * (node.Children[0].Children[0].Children.Count > 0 ? -1 : 1),
+                _ => -1,
+            };
+        }
+        /// <summary>
+        /// Checks whether expression variables are declared in current context.
+        /// </summary>
+        /// <param name="node">Expected ASTType - Expression</param>
+        /// <param name="ctx">Current context</param>
+        private void CheckExprVariables(ASTNode node, Context ctx)
+        {
+            // Perform DFS. If any identifier is unknown - raise a semantic error.
+            if (node.ASTType.Equals("IDENTIFIER"))
+            {
+                if (!ctx.IsVarDeclared(node.Token)) Logger.LogError(new SemanticError(
+                    "A variable with name \"" + node.Token.Value + "\" has been never declared in this context!!!\r\n" +
+                    "\tAt (Line: " + node.Token.Position.Line.ToString() + ", Char: " + node.Token.Position.Char.ToString() + ")."
+                    ));
+            }
+            foreach (ASTNode child in node.Children)
+            {
+                CheckExprVariables(child, ctx);
+            }
+        }
+        /// <summary>
+        /// Checks whether an expression is constant.
+        /// </summary>
+        /// <param name="node">Expected ASTType - Expression</param>
+        /// <param name="ctx">Current context</param>
+        /// <returns>True if constant, false otherwise</returns>
+        private bool IsExprConstant(ASTNode node, Context ctx)
+        {
+            // Check first Operand
+            if (!IsOperandConstant(node.Children[0], ctx)) return false;
+            
+            // Check { Operator Operand }
+            foreach (ASTNode child in node.Children[1].Children)
+            {
+                if (child.ASTType.Equals("Operand") && !IsOperandConstant(child, ctx)) return false;
+            }
+
+            return true;
+        }
+        private bool IsOperandConstant(ASTNode node, Context ctx)
+        {
+            string type = node.Children[0].ASTType; // The child of Operand
+            
+            if (type.Equals("Explicit address") || type.Equals("Dereference") || type.Equals("Reference"))
+            {
+                return false;
+            }
+
+            if (type.Equals("( Expression )")) return IsExprConstant(node.Children[0].Children[1], ctx);
+
+            // Check whether primary is constant
+            if (type.Equals("Primary"))
+            {
+                ASTNode prim = node.Children[0];
+
+                if (prim.Children[0] // OR rule of Primary
+                    .Children[0].ASTType.Equals("REGISTER"))
+                {
+                    return false;
+                }
+                else
+                {
+                    if (prim.Children[0] // Sequence of OR rule
+                        .Children[1].Children.Count > 0)
+                    {
+                        return false;
+                    }
+                    if (prim.Children[0] // Sequence of OR rule
+                        .Children[2].Children.Count > 0)
+                    {
+                        return false;
+                    }
+                    if (
+                        !ctx.IsVarConstant(
+                            prim.Children[0]   // Sequence of OR rule
+                            .Children[0].Token // First Identifier
+                            ) 
+                        )
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private VarType IdentifyType(ASTNode node, bool isConst = false)
+        {
+            VarType vt;
+            
+            if (node.Children[0].ASTType.Equals("IDENTIFIER"))
+            {
+                vt = new StructType(node.Children[0].Token.Value);
+            }
+            else
+            {
+                if (isConst)
+                {
+                    if (node.Children[0].Children[1].Children.Count == 0)
+                    {
+                        vt = node.Children[0].Children[0].Children[0].Token.Value switch
+                        {
+                            "int" => new VarType(VarType.ERAType.CONST_INT),
+                            "byte" => new VarType(VarType.ERAType.CONST_BYTE),
+                            "short" => new VarType(VarType.ERAType.CONST_SHORT),
+                            _ => new VarType(VarType.ERAType.NO_TYPE),
+                        };
+                    }
+                    else
+                    {
+                        vt = node.Children[0].Children[0].Children[0].Token.Value switch
+                        {
+                            "int" => new VarType(VarType.ERAType.CONST_INT_ADDR),
+                            "byte" => new VarType(VarType.ERAType.CONST_BYTE_ADDR),
+                            "short" => new VarType(VarType.ERAType.CONST_SHORT_ADDR),
+                            _ => new VarType(VarType.ERAType.NO_TYPE),
+                        };
+                    }
+                }
+                else
+                {
+                    if (node.Children[0].Children[1].Children.Count == 0)
+                    {
+                        vt = node.Children[0].Children[0].Children[0].Token.Value switch
+                        {
+                            "int" => new VarType(VarType.ERAType.INT),
+                            "byte" => new VarType(VarType.ERAType.BYTE),
+                            "short" => new VarType(VarType.ERAType.SHORT),
+                            _ => new VarType(VarType.ERAType.NO_TYPE),
+                        };
+                    }
+                    else
+                    {
+                        vt = node.Children[0].Children[0].Children[0].Token.Value switch
+                        {
+                            "int" => new VarType(VarType.ERAType.INT_ADDR),
+                            "byte" => new VarType(VarType.ERAType.BYTE_ADDR),
+                            "short" => new VarType(VarType.ERAType.SHORT_ADDR),
+                            _ => new VarType(VarType.ERAType.NO_TYPE),
+                        };
+                    }
+                }
+            }
+            return vt;           
+        }
+        private Context FindParentContext(AASTNode parent)
+        {
+            while (true)
+            {
+                if (parent == null) break;
+                if (parent.Context != null) return parent.Context;
+                parent = (AASTNode)parent.Parent;
+            }
+            return null;
         }
     }
 }

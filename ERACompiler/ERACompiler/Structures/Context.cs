@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
+using ERACompiler.Structures.Types;
 using System.Linq;
-using System.Collections;
+using System;
 
 namespace ERACompiler.Structures
 {
@@ -16,7 +17,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// Used in ToString()
         /// </summary>
-        public int level { get; set; }
+        public int Level { get; set; }
 
         private readonly Dictionary<string, AASTNode> st; // Symbol Table
         private readonly Context? parent;
@@ -39,29 +40,6 @@ namespace ERACompiler.Structures
         }
 
         /// <summary>
-        /// Searches for the variable and tries to return the AAST node corresponding to it. If there is no such variable, raises error.
-        /// </summary>
-        /// <param name="identifier">The identifier AAST node that refers to the variable.</param>
-        /// <returns>Returns AAST node of the variable with the given identifier.</returns>
-        public int GetVarValue(ASTNode identifier)
-        {
-            AASTNode? var = LocateVar(identifier.Token.Value);
-
-            if (var == null)
-            {
-                TokenPosition pos = identifier.Token.Position;
-                Logger.LogError(new SemanticsError(
-                    "Reference to the undeclared variable at (" + pos.Line + ", " + pos.Char + ")!!!"
-                    ));
-                return -1;
-            }
-            else
-            {
-                return var.Value;
-            }
-        }
-
-        /// <summary>
         /// Tries to add a new variable to the context. Raises error if the variable already exists.
         /// </summary>
         /// <param name="variable">The variable node.</param>
@@ -76,13 +54,79 @@ namespace ERACompiler.Structures
             }
             else
             {
-                TokenPosition pos = st[identifier].Children[0].Token.Position;
+                TokenPosition pos = st[identifier].Token.Position;
                 TokenPosition dPos = variable.Token.Position;
-                Logger.LogError(new SemanticsError(
-                    "The name " + identifier + " is already declared at (" + pos.Line + ", " + pos.Char + ")!!!\r\n" +
-                    "The duplicate is at (" + dPos.Line + ", " + dPos.Char + ")."
+                Logger.LogError(new SemanticError(
+                    "A variable with name \"" + identifier + "\" is already declared!!!\r\n" +
+                    "\tAt (Line: " + pos.Line + ", Char: " + pos.Char + ").\r\n" +
+                    "\tAt (Line: " + dPos.Line + ", Char: " + dPos.Char + ") - duplicate."
                     ));
             }
+        }
+
+        /// <summary>
+        /// Returns a value of a constant variable. Used for compile-time constant expression calculation and for retrieving intial values.
+        /// </summary>
+        /// <param name="identifier">The variable name.</param>
+        /// <returns>Value of a constant variable.</returns>
+        public int GetConsValue(Token identifier)
+        {
+            AASTNode? var = LocateVar(identifier.Value);
+
+            if (var == null)
+            {
+                Logger.LogError(new SemanticError(
+                    "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
+                    "\tAt (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
+                    ));
+                return -1;
+            }
+            else
+            {
+                return var.AASTValue;
+            }
+        }
+
+        public bool IsVarStruct(Token token)
+        {
+            return LocateVar(token.Value).AASTType.IsStruct();
+        }
+
+        /// <summary>
+        /// Checks if a variable with given name is constant
+        /// </summary>
+        /// <param name="identifier">A variable to check</param>
+        /// <returns>True if var is constant, false otherwise</returns>
+        public bool IsVarConstant(Token identifier)
+        {
+            AASTNode? var = LocateVar(identifier.Value);
+            if (var == null)
+            {
+                Logger.LogError(new SemanticError(
+                    "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
+                    "\tAt (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
+                    ));
+                return false;
+            }
+            else
+            {
+                return var.AASTType.IsConst();
+            }
+        }
+
+        public int GetArrSize(ASTNode idLink)
+        {
+            return ((ArrayType) LocateVar(idLink.Token.Value).AASTType).Size;
+        }
+
+        /// <summary>
+        /// Checks if a variable with given identifier exists in current context
+        /// </summary>
+        /// <param name="identifier">The name of a variable.</param>
+        /// <returns>True if it exists, false otherwise</returns>
+        public bool IsVarDeclared(Token identifier)
+        {
+            return LocateVar(identifier.Value) != null;
         }
 
         /// <summary>
@@ -109,13 +153,13 @@ namespace ERACompiler.Structures
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 1)))
                 .Append("{\r\n");
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 2)))
+            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 2)))
                 .Append("\"name\": \"").Append(Name).Append("\",\r\n");
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 2)))
+            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 2)))
                 .Append("\"symbol_table\": [");
 
             foreach (KeyValuePair<string, AASTNode> pair in st)
@@ -123,29 +167,29 @@ namespace ERACompiler.Structures
                 string varName = pair.Key;
                 AASTNode var = pair.Value;
 
-                sb.Append("\r\n").Append(string.Concat(Enumerable.Repeat("\t", level + 3)))
+                sb.Append("\r\n").Append(string.Concat(Enumerable.Repeat("\t", Level + 3)))
                     .Append("{\r\n");
 
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
-                    .Append("\"var_type\": \"").Append(var.Type.ToString()).Append("\",\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
+                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 4)))
+                    .Append("\"var_type\": \"").Append(var.AASTType.ToString()).Append("\",\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 4)))
                     .Append("\"var_name\": \"").Append(varName).Append("\",\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 4)))
-                    .Append("\"var_value\": \"").Append(var.Value.ToString()).Append("\"\r\n");
+                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 4)))
+                    .Append("\"var_value\": \"").Append(var.AASTValue.ToString()).Append("\"\r\n");
 
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 3)))
+                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 3)))
                     .Append("},");
             }
 
             if (st.Count > 0)
             {
                 sb.Remove(sb.Length - 1, 1).Append("\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 2)));
+                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 2)));
             }
 
             sb.Append("]\r\n");
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 1)))
                 .Append("}");
 
             return sb.ToString();

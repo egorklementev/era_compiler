@@ -24,7 +24,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// Represents the type of an AST entry.
         /// </summary>
-        public string NodeType { get; }
+        public string ASTType { get; }
 
         /// <summary>
         /// How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
@@ -43,7 +43,7 @@ namespace ERACompiler.Structures
             Parent = parent;
             Children = children;
             Token = token;
-            NodeType = type;
+            ASTType = type;
 
             if (parent != null) 
                 level = parent.level + 2;                      
@@ -61,7 +61,7 @@ namespace ERACompiler.Structures
             sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
                 .Append("{\r\n");
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"node_type\": ").Append("\"" + NodeType + "\"").Append(",\r\n");            
+                .Append("\"node_type\": ").Append("\"" + ASTType + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
                 .Append("\"token\": ").Append("\"" + Token.Value + "\"").Append(",\r\n");            
             sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
@@ -88,7 +88,6 @@ namespace ERACompiler.Structures
 
             return sb.ToString();
         }
-
 
     }
 }

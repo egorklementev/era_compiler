@@ -9,12 +9,14 @@
 * **Structure** : `struct` Identifier { VarDeclaration } `end`
 ---
 * **PragmaDeclaration** : Identifier `(` [ `"` Text `"` ] `)`
-* **VarDeclaration** : Variable | Constant
-* **Variable** : Type VarDefinition { `,` VarDefinition } `;`
-* **Type** : `int` | `short` | `byte` | Identifier [ `[]` | `@` ]
-* **VarDefinition** : Identifier [ ( `:=` Expression ) | ( `[` Expression `]` ) ]
-* **Constant** : `const` Type ConstDefinition { `,` ConstDefinition } `;`
+* **VarDeclaration** : Type ( Variable | Array | Constant )
+* **Variable** : VarDefinition { `,` VarDefinition } `;`
+* **Constant** : `const` ConstDefinition { `,` ConstDefinition } `;`
+* **Array** : `[]` ArrDefinition { `,` ArrDefinition } `;`
+* **VarDefinition** : Identifier [ `:=` Expression ]
 * **ConstDefinition** : Identifier `:=` Expression
+* **ArrDefinition** : Identifier `[` Expression `]`
+* **Type** : ( `int` | `short` | `byte` [ `@` ] ) | Identifier 
 ---
 * **Routine** : `routine` Identifier [ Parameters ] [ `:` Type ] RoutineBody 
 * **Parameters** : `(` [ Parameter { `,` Parameter } ] `)`
@@ -60,9 +62,8 @@
 * **CallArgs** : `(` [ Expression { , Expression } ] `)`
 ---
 * **Expression** : Operand { Operator Operand }
-* **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | CompOperator
-* **CompOperator** : `=` | `/=` | `<` | `>`
-* **Operand** : Primary | Dereference | Reference | Literal | ExplicitAddress
+* **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | `=` | `/=` | `<` | `>`
+* **Operand** : Primary | Dereference | Reference | Literal | ExplicitAddress | `(` Expression `)`
 * **Receiver** : Primary | Dereference | ExplicitAddress
 * **Primary** : ( Identifier { `.` Identifier } [ `[` Expression `]` ] ) | Register
 * **Reference** : `<-` Identifier
@@ -70,6 +71,6 @@
 * **ExplicitAddress** : `->` Literal
 ---
 * **Identifier** : *(_a-zA-Z0-9)+*
-* **Literal**: *(0-9)+*
+* **Literal**: [ `-` ] *(0-9)+*
 * **Text**: *(\\,\\.\\-_a-zA-Z0-9)+*
 ---

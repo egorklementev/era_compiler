@@ -123,7 +123,12 @@ namespace ERACompiler.Structures.Rules
                 // If sequence - all children rules should be satisfied by tokens in sequential order
                 case SyntaxRuleType.SEQUENCE:
                     int tokensConsumed = 0;
-                    ASTNode seqNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    ASTNode seqNode = new ASTNode(
+                        parentNode, 
+                        new List<ASTNode>(), 
+                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        ruleName
+                        );
                     foreach (var rule in rules)
                     {
                         SyntaxResponse response = rule.Verify(tokens, seqNode);
@@ -145,7 +150,12 @@ namespace ERACompiler.Structures.Rules
                 case SyntaxRuleType.ZERO_OR_ONE:
                     int zooNum = 0;
                     int zooTokensConsumed = 0;
-                    ASTNode zooNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    ASTNode zooNode = new ASTNode(
+                        parentNode, 
+                        new List<ASTNode>(), 
+                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        ruleName
+                        );
                     while (true)
                     {
                         bool toBreak = false;
@@ -173,7 +183,12 @@ namespace ERACompiler.Structures.Rules
                 case SyntaxRuleType.ZERO_OR_MORE:
                     int zomNum = 0;
                     int zomTokensConsumed = 0;
-                    ASTNode zomNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    ASTNode zomNode = new ASTNode(
+                        parentNode, 
+                        new List<ASTNode>(), 
+                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        ruleName
+                        );
                     while (true)
                     {
                         bool toBreak = false;
@@ -203,7 +218,12 @@ namespace ERACompiler.Structures.Rules
                 case SyntaxRuleType.ONE_OR_MORE:
                     int oomNum = 0;
                     int oomTokensConsumed = 0;
-                    ASTNode oomNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    ASTNode oomNode = new ASTNode(
+                        parentNode, 
+                        new List<ASTNode>(),
+                        tokens.Count > 0 ? tokens[0] : noToken,
+                        ruleName
+                        );
                     while (true)
                     {
                         bool toBreak = false;
@@ -236,7 +256,12 @@ namespace ERACompiler.Structures.Rules
 
                 // If or - one or more child rules should be satisfied by the tokens. Rule order does not matter.
                 case SyntaxRuleType.OR:
-                    ASTNode orNode = new ASTNode(parentNode, new List<ASTNode>(), noToken, ruleName);
+                    ASTNode orNode = new ASTNode(
+                        parentNode, 
+                        new List<ASTNode>(), 
+                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        ruleName
+                        );
                     foreach (var rule in rules)
                     {
                         SyntaxResponse response = rule.Verify(tokens, orNode);
