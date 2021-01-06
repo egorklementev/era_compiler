@@ -33,6 +33,8 @@ namespace ERACompiler.Modules
                     return AnnotateAnnotations(node, parent);
                 case "Data":
                     return AnnotateData(node, parent);
+                case "Structure":
+                    return AnnotateStruct(node, parent);
                 case "Expression":
                     return AnnotateExpr(node, parent);
                 case "NUMBER":
@@ -62,6 +64,20 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateStruct(ASTNode node, AASTNode parent)
+        {
+            string structName = node.Children[1].Token.Value;
+            AASTNode structure = new AASTNode(node, parent, new StructType(structName));
+            Context ctx = FindParentContext(parent);
+            ctx.AddVar(structure, structName);
+            structure.Context = new Context(structName, ctx);
+            foreach (ASTNode child in node.Children[2].Children)
+            {
+                structure.Children.Add(AnnotateNode(child, structure));
+            }
+            return structure;
         }
 
         private AASTNode AnnotateData(ASTNode node, AASTNode parent)
