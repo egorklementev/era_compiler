@@ -31,6 +31,8 @@ namespace ERACompiler.Modules
                     return AnnotateProgram(node, parent);
                 case "Annotations":
                     return AnnotateAnnotations(node, parent);
+                case "Data":
+                    return AnnotateData(node, parent);
                 case "Expression":
                     return AnnotateExpr(node, parent);
                 case "NUMBER":
@@ -60,6 +62,20 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateData(ASTNode node, AASTNode parent)
+        {
+            Context ctx = FindParentContext(parent);
+            AASTNode data = new AASTNode(node, parent, new VarType(VarType.ERAType.DATA));
+            data.Children.Add(AnnotateNode(node.Children[1], data)); // Identifier
+            data.Children.Add(AnnotateLiteral(node.Children[2], data)); // The first literal
+            foreach (ASTNode child in node.Children[3].Children)
+            {
+                data.Children.Add(AnnotateLiteral(child, data)); // The rest of literals
+            }
+            ctx.AddVar(data, node.Children[1].Token.Value);
+            return data;
         }
 
         private AASTNode AnnotateAnnotations(ASTNode node, AASTNode parent)
