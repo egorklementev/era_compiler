@@ -79,7 +79,7 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticsAnalyzer.CalculateConstExpr(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CalculateConstExpr(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Calculates a numerical value of a given constant expression
             </summary>
@@ -87,7 +87,7 @@
             <param name="ctx">Current context</param>
             <returns>Calculated value of an expression</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticsAnalyzer.GetOperandValue(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.GetOperandValue(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Returns a value of a single operand.
             </summary>
@@ -95,14 +95,14 @@
             <param name="ctx">Current context</param>
             <returns>The value of an operand.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticsAnalyzer.CheckExprVariables(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CheckExprVariables(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Checks whether expression variables are declared in current context.
             </summary>
             <param name="node">Expected ASTType - Expression</param>
             <param name="ctx">Current context</param>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticsAnalyzer.IsExprConstant(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.IsExprConstant(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Checks whether an expression is constant.
             </summary>

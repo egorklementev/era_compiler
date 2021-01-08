@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ERACompiler.Modules
 {
-    class SemanticsAnalyzer
+    class SemanticAnalyzer
     {
         private readonly VarType no_type = new VarType(VarType.ERAType.NO_TYPE); // Placeholder
 
@@ -35,6 +35,10 @@ namespace ERACompiler.Modules
                     return AnnotateData(node, parent);
                 case "Structure":
                     return AnnotateStruct(node, parent);
+                case "Routine":
+                    return AnnotateRoutine(node, parent);
+                case "Routine body":
+                    return AnnotateRoutineBody(node, parent);
                 case "Expression":
                     return AnnotateExpr(node, parent);
                 case "NUMBER":
@@ -64,6 +68,70 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateRoutineBody(ASTNode node, AASTNode parent)
+        {
+            AASTNode body = new AASTNode(node, parent, no_type);
+            foreach(ASTNode child in node.Children[1].Children)
+            {
+                body.Children.Add(AnnotateNode(child, body));
+            }
+            return body;
+        }
+
+        private AASTNode AnnotateRoutine(ASTNode node, AASTNode parent)
+        {
+            string routineName = node.Children[1].Token.Value;
+            Context ctx = FindParentContext(parent);
+            List<VarType> paramTypes = new List<VarType>();
+            VarType returnType = no_type; // Default value
+            // Determine parameter types and return type
+            if (node.Children[3].Children.Count > 0)
+            {
+                paramTypes.AddRange(RetrieveParamTypes(node.Children[3].Children[0])); // Parameters
+            }
+            if (node.Children[5].Children.Count > 0)
+            {
+                returnType = IdentifyType(node.Children[5].Children[1]);
+            }
+            AASTNode routine = new AASTNode(node, parent, new RoutineType(paramTypes, returnType));
+            ctx.AddVar(routine, routineName);
+            routine.Context = new Context(routineName, ctx);
+            // Add params to the context
+            AASTNode firstParam = new AASTNode(node.Children[3].Children[0].Children[0], routine, paramTypes[0]);
+            routine.Context.AddVar(firstParam, node.Children[3].Children[0].Children[0].Children[1].Token.Value);
+            int i = 1;
+            foreach (ASTNode child in node.Children[3].Children[0].Children[1].Children)
+            {
+                if (child.ASTType.Equals("Parameter")) // Skip comma rule
+                {
+                    AASTNode param = new AASTNode(child, routine, paramTypes[i]);
+                    routine.Context.AddVar(param, child.Children[1].Token.Value);
+                    i++;
+                }
+            }
+            // Annotate routine body
+            routine.Children.Add(AnnotateNode(node.Children[6], routine));
+            return routine;
+        }
+
+        private List<VarType> RetrieveParamTypes(ASTNode node)
+        {
+            List<VarType> lst = new List<VarType>
+            {
+                // First child
+                IdentifyType(node.Children[0].Children[0])
+            };
+            // The rest of them
+            foreach (ASTNode child in node.Children[1].Children)
+            {
+                if (child.ASTType.Equals("Parameter")) // Skip comma rule
+                {
+                    lst.Add(IdentifyType(child.Children[0]));
+                }
+            }
+            return lst;
         }
 
         private AASTNode AnnotateStruct(ASTNode node, AASTNode parent)

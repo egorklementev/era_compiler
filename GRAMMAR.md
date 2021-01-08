@@ -18,8 +18,8 @@
 * **ArrDefinition** : Identifier `[` Expression `]`
 * **Type** : ( `int` | `short` | `byte` [ `@` ] ) | Identifier 
 ---
-* **Routine** : `routine` Identifier [ Parameters ] [ `:` Type ] RoutineBody 
-* **Parameters** : `(` [ Parameter { `,` Parameter } ] `)`
+* **Routine** : `routine` Identifier `(` [ Parameters ] `)` [ `:` Type ] RoutineBody 
+* **Parameters** : Parameter { `,` Parameter }
 * **Parameter** : Type Identifier
 * **RoutineBody** : `do` { VarDeclaration | Statement } `end`
 * **Statement** : AssemblyBlock | ExtensionStatement

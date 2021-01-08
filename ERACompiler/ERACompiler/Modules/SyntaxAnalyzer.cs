@@ -735,34 +735,29 @@ namespace ERACompiler.Modules
 
             SyntaxRule parametersRule = new SyntaxRule()
                 .SetName("Parameters")
-                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                .AddRule(leftParenRule)
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)                                
+                .AddRule(parameterRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("[ Parameter { , Parameter } ]")
-                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .SetName("{ , Parameter }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(commaRule)
                     .AddRule(parameterRule)
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("{ , Parameter }")
-                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
-                        .AddRule(commaRule)
-                        .AddRule(parameterRule)
-                        )
-                )
-                .AddRule(rightParenRule);
+                    );
 
             SyntaxRule routineRule = new SyntaxRule()
                 .SetName("Routine")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kRoutineRule)
                 .AddRule(identifierRule)
+                .AddRule(leftParenRule)
                 .AddRule(
                     new SyntaxRule()
                     .SetName("[ Parameters ]")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                     .AddRule(parametersRule)
                 )
+                .AddRule(rightParenRule)
                 .AddRule(
                     new SyntaxRule()
                         .SetName("[ : Type ]")
