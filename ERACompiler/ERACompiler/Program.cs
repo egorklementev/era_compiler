@@ -68,10 +68,11 @@ namespace ERACompiler
                     currentFile = sourceFilenames[i];
 
                     // Loading of sample code
-                    string sourceCode = File.ReadAllText(sourceFilenames[i]);                    
+                    string sourceCode = File.ReadAllText(sourceFilenames[i]);
 
-                    // Create instance of the era compiler and get the compiled code                    
-                    byte[] compiledCode = new Compiler().Compile(sourceCode, cmode); // New everytime to refresh all the nodes (may be optimized obviously)
+                    // Create instance of the era compiler and get the compiled code 
+                    // It is fresh everytime to refresh all the nodes (may be optimized obviously)
+                    byte[] compiledCode = new Compiler().Compile(sourceCode, cmode);
 
                     // Create a new file with the compiled code
                     if (i >= outputFilenames.Count)

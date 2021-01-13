@@ -43,24 +43,14 @@ namespace ERACompiler.Modules
                     return AnnotateAssemblyBlock(node, parent);
                 case "Expression":
                     return AnnotateExpr(node, parent);
+                case "Assignment":
+                    return AnnotateAssignment(node, parent);
+                case "Call arguments":
+                    return AnnotateCallArgs(node, parent);
                 case "NUMBER":
                     return AnnotateLiteral(node, parent);
-                case "KEYWORD":
-                case "OPERATOR":
-                case "REGISTER":
-                case "DELIMITER":
-                case "IDENTIFIER":
-                    return new AASTNode(node, parent, no_type);
                 case "Identifier { '.' Identifier } [ '[' Expression ']' ]":
-                    return AnnotatePrimaryFirstChild(node, parent);
-                case "Operand":
-                case "Primary":
-                case "Operator":
-                case "Statement":
-                case "Some unit":
-                case "Some module statement":
-                case "VarDeclaration | Statement":
-                    return AnnotateNode(node.Children[0], parent);
+                    return AnnotatePrimaryFirstOption(node, parent);
                 case "( Expression )":
                     return AnnotateNode(node.Children[1], parent);
                 case "Variable declaration":
@@ -69,9 +59,113 @@ namespace ERACompiler.Modules
                     return AnnotateCodeBlock(node, parent);
                 case "Module":
                     return AnnotateModule(node, parent);
+                case "Call":
+                    return AnnotateCall(node, parent);
+                case "Swap":
+                    return AnnotateSwap(node, parent);
+                case "KEYWORD":
+                case "OPERATOR":
+                case "REGISTER":
+                case "DELIMITER":
+                case "IDENTIFIER":
+                    return new AASTNode(node, parent, no_type);
+                case "Operand":
+                case "Primary":
+                case "Operator":
+                case "Receiver":
+                case "Statement":
+                case "Some unit":
+                case "Extension statement":
+                case "Some module statement":
+                case "Identifier | Register":
+                case "VarDeclaration | Statement":
+                    return AnnotateNode(node.Children[0], parent);
+                case "Reference":
+                case "Dereference":
+                case "Explicit address":
+                    return AnnotatePASS(node, parent);
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateSwap(ASTNode node, AASTNode parent)
+        {
+            CheckVariablesForExistance(node, FindParentContext(parent));
+            AASTNode swap = new AASTNode(node, parent, no_type);
+            // TODO: perform type check
+            foreach (ASTNode child in node.Children)
+            {
+                swap.Children.Add(AnnotateNode(child, swap));
+            }
+            return swap;
+        }
+
+        private AASTNode AnnotateCall(ASTNode node, AASTNode parent)
+        {
+            Context ctx = FindParentContext(parent);
+            CheckVariablesForExistance(node, ctx);
+            AASTNode call = new AASTNode(node, parent, no_type);
+            call.Children.Add(AnnotateNode(node.Children[0], call));
+            call.Children.Add(AnnotateNode(node.Children[1], call));
+            // We need to check the number of arguments (TODO and their types) since they should be in accordance with the routine definition
+            int paramNum = ctx.GetRoutineParamNum(node.Children[0].Token);
+            if (call.Children[1].Children.Count != paramNum)
+            {
+                Logger.LogError(new SemanticError(
+                    "Incorrect number of arguments when calling routine \"" + node.Children[0].Token.Value + "\"!!!\r\n" +
+                    "Expected: " + paramNum.ToString() + ", received: " + call.Children[1].Children.Count.ToString() + ".\r\n" +
+                    "  At (Line: " + node.Children[1].Token.Position.Line.ToString() + 
+                    ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
+                    ));
+            }
+            // TODO: type checking...
+            return call;
+        }
+
+        private AASTNode AnnotateCallArgs(ASTNode node, AASTNode parent)
+        {
+            Context ctx = FindParentContext(parent);
+            AASTNode callArgs = new AASTNode(node, parent, no_type);
+            CheckVariablesForExistance(node, ctx);
+            if (node.Children[1].Children.Count > 0) // If some arguments exist
+            {
+                // First expression
+                callArgs.Children.Add(AnnotateExpr(node.Children[1].Children[0], callArgs));
+                // The rest of expressions if any
+                if (node.Children[1].Children[1].Children.Count > 0)
+                {
+                    foreach (ASTNode child in node.Children[1].Children[1].Children)
+                    {
+                        if (child.ASTType.Equals("Expression")) // Skip comma
+                        {
+                            callArgs.Children.Add(AnnotateExpr(child, callArgs));
+                        }
+                    }
+                }
+            }
+            return callArgs;
+        }
+
+        private AASTNode AnnotatePASS(ASTNode node, AASTNode parent)
+        {
+            CheckVariablesForExistance(node, FindParentContext(parent));
+            AASTNode nodeToPass = new AASTNode(node, parent, no_type);
+            foreach (ASTNode child in node.Children)
+            {
+                nodeToPass.Children.Add(AnnotateNode(child, nodeToPass));
+            }
+            return nodeToPass;
+        }
+
+        private AASTNode AnnotateAssignment(ASTNode node, AASTNode parent)
+        {
+            AASTNode asgnmt = new AASTNode(node, parent, no_type);
+            CheckVariablesForExistance(node, FindParentContext(parent));
+            // TODO: check for type accordance
+            asgnmt.Children.Add(AnnotateNode(node.Children[0], asgnmt)); // Receiver
+            asgnmt.Children.Add(AnnotateExpr(node.Children[2], asgnmt)); // Expression
+            return asgnmt;
         }
 
         private AASTNode AnnotateAssemblyBlock(ASTNode node, AASTNode parent)
@@ -230,10 +324,12 @@ namespace ERACompiler.Modules
             return pragmaDecl;
         }
 
-        private AASTNode AnnotatePrimaryFirstChild(ASTNode node, AASTNode parent)
+        private AASTNode AnnotatePrimaryFirstOption(ASTNode node, AASTNode parent)
         {
             AASTNode somePrim = new AASTNode(node, parent, no_type);
             Context ctx = FindParentContext(parent);
+
+            CheckVariablesForExistance(node, ctx);
 
             // Identifier
             somePrim.Children.Add(AnnotateNode(node.Children[0], somePrim));
@@ -265,7 +361,7 @@ namespace ERACompiler.Modules
                 if (IsExprConstant(node.Children[2].Children[1], ctx))
                 {
                     int index = CalculateConstExpr(node.Children[2].Children[1], ctx);
-                    int arrSize = ctx.GetArrSize(idLink);
+                    int arrSize = ctx.GetArrSize(idLink.Token);
                     if (index < 0) Logger.LogError(new SemanticError(
                         "Negative array index!!!\r\n" +
                         "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
@@ -331,7 +427,7 @@ namespace ERACompiler.Modules
                                                                                         // Check expr if exists
                         if (node.Children[0].Children[1].Children.Count > 0)
                         {
-                            CheckExprVariables(
+                            CheckVariablesForExistance(
                                 node.Children[0].Children[1] // [ := Expression ]
                                 .Children[0]                 // := Expression sequence
                                 .Children[1],                // Expression
@@ -349,7 +445,7 @@ namespace ERACompiler.Modules
                                 ctx.AddVar(def, varDef.Children[0].Token.Value); // VarDef's identifier
                                 if (varDef.Children[1].Children.Count > 0)
                                 {
-                                    CheckExprVariables(
+                                    CheckVariablesForExistance(
                                         varDef.Children[1] // [ := Expression ]
                                         .Children[0]       // := Expression sequence
                                         .Children[1],      // Expression
@@ -369,7 +465,7 @@ namespace ERACompiler.Modules
                         lst.Add(firstDef);
                         ctx.AddVar(firstDef, node.Children[1].Children[0].Token.Value); // ConstDef's identifier
 
-                        CheckExprVariables(node.Children[1].Children[2], ctx); // Expression of ConstDef
+                        CheckVariablesForExistance(node.Children[1].Children[2], ctx); // Expression of ConstDef
                         if (!IsExprConstant(node.Children[1].Children[2], ctx))
                         {
                             Logger.LogError(new SemanticError(
@@ -388,7 +484,7 @@ namespace ERACompiler.Modules
                                 lst.Add(def);
                                 ctx.AddVar(def, varDef.Children[0].Token.Value); // ConstDef's identifier
 
-                                CheckExprVariables(varDef.Children[2], ctx); // Expression of ConstDef
+                                CheckVariablesForExistance(varDef.Children[2], ctx); // Expression of ConstDef
                                 if (!IsExprConstant(varDef.Children[2], ctx))
                                 {
                                     Logger.LogError(new SemanticError(
@@ -410,7 +506,7 @@ namespace ERACompiler.Modules
                         lst.Add(firstDef);
                         ctx.AddVar(firstDef, node.Children[2].Children[0].Token.Value); // ArrDef's identifier
 
-                        CheckExprVariables(node.Children[2].Children[2], ctx); // Expression of ArrDefinition
+                        CheckVariablesForExistance(node.Children[2].Children[2], ctx); // Expression of ArrDefinition
                         if (IsExprConstant(node.Children[2].Children[2], ctx))
                         {
                             int arrSize = CalculateConstExpr(node.Children[2].Children[2], ctx);
@@ -436,7 +532,7 @@ namespace ERACompiler.Modules
                                 lst.Add(def);
                                 ctx.AddVar(def, arrDef.Children[0].Token.Value); // ArrDef's identifier
 
-                                CheckExprVariables(arrDef.Children[2], ctx); // Expression of ArrDefinition
+                                CheckVariablesForExistance(arrDef.Children[2], ctx); // Expression of ArrDefinition
                                 if (IsExprConstant(arrDef.Children[2], ctx))
                                 {
                                     int _arrSize = CalculateConstExpr(arrDef.Children[2], ctx);
@@ -569,6 +665,7 @@ namespace ERACompiler.Modules
             }
             
         }
+        
         /// <summary>
         /// Returns a value of a single operand.
         /// </summary>
@@ -585,12 +682,13 @@ namespace ERACompiler.Modules
                 _ => -1,
             };
         }
+        
         /// <summary>
         /// Checks whether expression variables are declared in current context.
         /// </summary>
         /// <param name="node">Expected ASTType - Expression</param>
         /// <param name="ctx">Current context</param>
-        private void CheckExprVariables(ASTNode node, Context ctx)
+        private void CheckVariablesForExistance(ASTNode node, Context ctx)
         {
             // Perform DFS. If any identifier is unknown - raise a semantic error.
             if (node.ASTType.Equals("IDENTIFIER"))
@@ -602,9 +700,10 @@ namespace ERACompiler.Modules
             }
             foreach (ASTNode child in node.Children)
             {
-                CheckExprVariables(child, ctx);
+                CheckVariablesForExistance(child, ctx);
             }
         }
+       
         /// <summary>
         /// Checks whether an expression is constant.
         /// </summary>

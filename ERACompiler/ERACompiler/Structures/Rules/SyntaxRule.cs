@@ -283,7 +283,7 @@ namespace ERACompiler.Structures.Rules
         private void LogSyntaxError(string errorDescription = "")
         {
             errorList.Add(
-                "\tAt (Line: " + lastTokenPos.Line.ToString() + ", Char: " +
+                "  At (Line: " + lastTokenPos.Line.ToString() + ", Char: " +
                 lastTokenPos.Char.ToString() + ").  " +
                 "Error at \"" + ruleName + "\".\n" + errorDescription
                 );

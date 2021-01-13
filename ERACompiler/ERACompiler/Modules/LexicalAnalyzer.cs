@@ -15,7 +15,8 @@ namespace ERACompiler.Modules
         private int lineNumber; // Used for token position
 
         // Lists that contain terminals
-        private readonly List<string> registers;
+        private readonly List<string> registers; // Used separately since registers are initially identified as 
+                                                 // identifiers and then are converted to registers
         private readonly List<List<string>> allLists;
 
         public LexicalAnalyzer()

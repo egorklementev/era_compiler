@@ -114,9 +114,14 @@ namespace ERACompiler.Structures
             }
         }
 
-        public int GetArrSize(ASTNode idLink)
+        public int GetRoutineParamNum(Token identifier)
         {
-            return ((ArrayType) LocateVar(idLink.Token.Value).AASTType).Size;
+            return ((RoutineType)LocateVar(identifier.Value).AASTType).ParamTypes.Count;
+        }
+
+        public int GetArrSize(Token identifier)
+        {
+            return ((ArrayType) LocateVar(identifier.Value).AASTType).Size;
         }
 
         /// <summary>

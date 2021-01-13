@@ -95,7 +95,7 @@
             <param name="ctx">Current context</param>
             <returns>The value of an operand.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CheckExprVariables(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CheckVariablesForExistance(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Checks whether expression variables are declared in current context.
             </summary>
