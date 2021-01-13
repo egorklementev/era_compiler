@@ -30,6 +30,8 @@ namespace ERACompiler
         private static Compiler.CompilationMode cmode = Compiler.CompilationMode.GENERATION;
         private static bool forceFolderCreation = false;
 
+        public static string currentFile = "none";
+
         static void Main(string[] args)
         {
             NativeMethods.AllocConsole();
@@ -37,6 +39,7 @@ namespace ERACompiler
             //args = new string[] { "-s", "example.era" };
             //args = new string[] { "-s", "example.era", "--syntax" };
             //args = new string[] { "-s", "debug.era" };
+            //args = new string[] { "-s", "debug.era", "--lexis" };
             //args = new string[] { "-s", "debug.era", "--syntax" };
             //args = new string[] { "-s", "debug.era", "--semantics" };
 
@@ -62,8 +65,10 @@ namespace ERACompiler
             {
                 for (int i = 0; i < sourceFilenames.Count; i++)
                 {
+                    currentFile = sourceFilenames[i];
+
                     // Loading of sample code
-                    string sourceCode = File.ReadAllText(sourceFilenames[i]);
+                    string sourceCode = File.ReadAllText(sourceFilenames[i]);                    
 
                     // Create instance of the era compiler and get the compiled code                    
                     byte[] compiledCode = new Compiler().Compile(sourceCode, cmode); // New everytime to refresh all the nodes (may be optimized obviously)

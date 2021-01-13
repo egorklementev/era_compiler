@@ -19,8 +19,9 @@ namespace ERACompiler.Structures.Types
         {
             StringBuilder sb = new StringBuilder();
             foreach (VarType v in ParamTypes) sb.Append(v.ToString()).Append(", ");
-            sb.Remove(sb.Length - 2, 2);
-            return "Routine with return type \"" + ReturnType.ToString() + "\", Parameters: (" + sb.ToString() + ")";
+            if (sb.Length > 2) 
+                sb.Remove(sb.Length - 2, 2);
+            return ReturnType.ToString() + " routine, (" + sb.ToString() + ")";
         }
     }
 }

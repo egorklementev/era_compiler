@@ -586,7 +586,7 @@ namespace ERACompiler.Modules
                 .SetName("Block body")
                 .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
                 ;
-            // other rulesadded after 'Statement' rule
+            // other rules added after 'Statement' rule
 
             SyntaxRule ifRule = new SyntaxRule()
                 .SetName("If")
@@ -611,7 +611,7 @@ namespace ERACompiler.Modules
                 );
 
             SyntaxRule loopBodyRule = new SyntaxRule()
-                .SetName("Loob body")
+                .SetName("Loop body")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kLoopRule)
                 .AddRule(blockBodyRule)

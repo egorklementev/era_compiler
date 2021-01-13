@@ -39,10 +39,13 @@ namespace ERACompiler.Modules
                     return AnnotateRoutine(node, parent);
                 case "Routine body":
                     return AnnotateRoutineBody(node, parent);
+                case "Assembly block":
+                    return AnnotateAssemblyBlock(node, parent);
                 case "Expression":
                     return AnnotateExpr(node, parent);
                 case "NUMBER":
                     return AnnotateLiteral(node, parent);
+                case "KEYWORD":
                 case "OPERATOR":
                 case "REGISTER":
                 case "DELIMITER":
@@ -53,6 +56,7 @@ namespace ERACompiler.Modules
                 case "Operand":
                 case "Primary":
                 case "Operator":
+                case "Statement":
                 case "Some unit":
                 case "Some module statement":
                 case "VarDeclaration | Statement":
@@ -68,6 +72,43 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateAssemblyBlock(ASTNode node, AASTNode parent)
+        {
+            AASTNode asmBlock = new AASTNode(node, parent, no_type);
+            asmBlock.Children.Add(AnnotateAssemblyStatement(node.Children[1].Children[0], asmBlock)); // First child
+            foreach (ASTNode child in node.Children[3].Children)
+            {
+                // Something wrong here...
+                if (child.ASTType.Equals("Assembly statement"))
+                {
+                    asmBlock.Children.Add(AnnotateAssemblyStatement(child.Children[0], asmBlock));
+                }
+            }
+            return asmBlock;
+        }
+
+        private AASTNode AnnotateAssemblyStatement(ASTNode node, AASTNode parent)
+        {
+            AASTNode asmStmnt = new AASTNode(node, parent, no_type);
+            if (node.ASTType.Equals("format ( 8 | 16 | 32 )"))                
+            {
+                int frmt = int.Parse(node.Children[1].Token.Value);
+                if (!(frmt == 8 || frmt == 16 || frmt == 32))
+                {
+                    Logger.LogError(new SemanticError(
+                        "Incorrect format at assembly block!!!\r\n" +
+                        "  At (Line: " + node.Children[1].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
+                        ));
+                }                
+            }
+            foreach (ASTNode child in node.Children)
+            {
+                asmStmnt.Children.Add(AnnotateNode(child, asmStmnt)); // Just pass everything down
+            }
+            return asmStmnt;
         }
 
         private AASTNode AnnotateRoutineBody(ASTNode node, AASTNode parent)
@@ -98,19 +139,22 @@ namespace ERACompiler.Modules
             AASTNode routine = new AASTNode(node, parent, new RoutineType(paramTypes, returnType));
             ctx.AddVar(routine, routineName);
             routine.Context = new Context(routineName, ctx);
-            // Add params to the context
-            AASTNode firstParam = new AASTNode(node.Children[3].Children[0].Children[0], routine, paramTypes[0]);
-            routine.Context.AddVar(firstParam, node.Children[3].Children[0].Children[0].Children[1].Token.Value);
-            int i = 1;
-            foreach (ASTNode child in node.Children[3].Children[0].Children[1].Children)
+            // Add params to the context if any
+            if (node.Children[3].Children.Count > 0)
             {
-                if (child.ASTType.Equals("Parameter")) // Skip comma rule
+                AASTNode firstParam = new AASTNode(node.Children[3].Children[0].Children[0], routine, paramTypes[0]);
+                routine.Context.AddVar(firstParam, node.Children[3].Children[0].Children[0].Children[1].Token.Value);
+                int i = 1;
+                foreach (ASTNode child in node.Children[3].Children[0].Children[1].Children)
                 {
-                    AASTNode param = new AASTNode(child, routine, paramTypes[i]);
-                    routine.Context.AddVar(param, child.Children[1].Token.Value);
-                    i++;
+                    if (child.ASTType.Equals("Parameter")) // Skip comma rule
+                    {
+                        AASTNode param = new AASTNode(child, routine, paramTypes[i]);
+                        routine.Context.AddVar(param, child.Children[1].Token.Value);
+                        i++;
+                    }
                 }
-            }
+            }            
             // Annotate routine body
             routine.Children.Add(AnnotateNode(node.Children[6], routine));
             return routine;
