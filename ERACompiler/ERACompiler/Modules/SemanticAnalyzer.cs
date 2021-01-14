@@ -68,12 +68,19 @@ namespace ERACompiler.Modules
                     return AnnotateIf(node, parent);
                 case "Block body":
                     return AnnotateBlockBody(node, parent);
+                case "For":
+                    return AnnotateFor(node, parent);
+                case "While":
+                    return AnnotateWhile(node, parent);
+                case "Loop body":
+                    return AnnotateLoopBody(node, parent);
                 case "KEYWORD":
                 case "OPERATOR":
                 case "REGISTER":
                 case "DELIMITER":
                 case "IDENTIFIER":
                     return new AASTNode(node, parent, no_type);
+                case "Loop":
                 case "Operand":
                 case "Primary":
                 case "Operator":
@@ -92,6 +99,45 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateLoopBody(ASTNode node, AASTNode parent)
+        {
+            AASTNode loop = new AASTNode(node, parent, no_type);
+            loop.Children.Add(AnnotateNode(node.Children[1], loop));
+            return loop;
+        }
+
+        private AASTNode AnnotateWhile(ASTNode node, AASTNode parent)
+        {
+            AASTNode whileNode = new AASTNode(node, parent, no_type);
+            CheckVariablesForExistance(node.Children[1], FindParentContext(parent));
+            whileNode.Children.Add(AnnotateExpr(node.Children[1], whileNode));
+            whileNode.Children.Add(AnnotateNode(node.Children[2], whileNode));
+            return whileNode;
+        }
+
+        private AASTNode AnnotateFor(ASTNode node, AASTNode parent)
+        {
+            AASTNode forNode = new AASTNode(node, parent, no_type);
+            forNode.Children.Add(AnnotateNode(node.Children[1], forNode));
+            // If from expression exists
+            if (node.Children[2].Children.Count > 0)
+            {
+                forNode.Children.Add(AnnotateExpr(node.Children[2].Children[1], forNode));
+            }
+            // If to expression exists
+            if (node.Children[3].Children.Count > 0)
+            {
+                forNode.Children.Add(AnnotateExpr(node.Children[3].Children[1], forNode));
+            }
+            // If step expression exists
+            if (node.Children[4].Children.Count > 0)
+            {
+                forNode.Children.Add(AnnotateExpr(node.Children[4].Children[1], forNode));
+            }
+            forNode.Children.Add(AnnotateNode(node.Children[5], forNode)); // Loop body
+            return forNode;
         }
 
         private AASTNode AnnotateIf(ASTNode node, AASTNode parent)
