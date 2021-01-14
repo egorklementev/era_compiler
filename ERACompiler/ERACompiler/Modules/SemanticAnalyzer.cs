@@ -10,6 +10,7 @@ namespace ERACompiler.Modules
     class SemanticAnalyzer
     {
         private readonly VarType no_type = new VarType(VarType.ERAType.NO_TYPE); // Placeholder
+        private int blockBodyCounter = 0;
 
         public AASTNode BuildAAST(ASTNode ASTRoot)
         {
@@ -63,6 +64,10 @@ namespace ERACompiler.Modules
                     return AnnotateCall(node, parent);
                 case "Swap":
                     return AnnotateSwap(node, parent);
+                case "If":
+                    return AnnotateIf(node, parent);
+                case "Block body":
+                    return AnnotateBlockBody(node, parent);
                 case "KEYWORD":
                 case "OPERATOR":
                 case "REGISTER":
@@ -87,6 +92,33 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateIf(ASTNode node, AASTNode parent)
+        {
+            AASTNode ifNode = new AASTNode(node, parent, no_type);
+            CheckVariablesForExistance(node.Children[1], FindParentContext(parent));
+            ifNode.Children.Add(AnnotateExpr(node.Children[1], ifNode));
+            ifNode.Children.Add(AnnotateBlockBody(node.Children[3], ifNode)); // If true
+            // Annotate else block if any
+            if (node.Children[4].Children[0].Children.Count > 0)
+            {
+                ifNode.Children.Add(AnnotateBlockBody(node.Children[4].Children[0].Children[1], ifNode));
+            }
+            return ifNode;
+        }
+
+        private AASTNode AnnotateBlockBody(ASTNode node, AASTNode parent)
+        {
+            AASTNode bb = new AASTNode(node, parent, no_type)
+            {
+                Context = new Context("BlockBody_" + (++blockBodyCounter).ToString(), FindParentContext(parent))
+            };
+            foreach (ASTNode child in node.Children)
+            {
+                bb.Children.Add(AnnotateNode(child, bb));
+            }
+            return bb;
         }
 
         private AASTNode AnnotateSwap(ASTNode node, AASTNode parent)

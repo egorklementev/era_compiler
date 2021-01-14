@@ -698,7 +698,8 @@ namespace ERACompiler.Modules
                 .AddRule(ifRule)
                 .AddRule(loopRule)
                 .AddRule(breakRule)
-                .AddRule(returnRule);
+                .AddRule(returnRule)
+                .AddRule(varDeclarationRule);
 
             SyntaxRule statementRule = new SyntaxRule()
                 .SetName("Statement")

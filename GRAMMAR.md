@@ -46,7 +46,7 @@
 &emsp;| `if` Register `goto` Register  
 * **Register** : R0 | R1 | ... | R30 | R31
 ---
-* **ExtensionStatement** : Assignment | Swap | Call | If | Loop | Break | Return
+* **ExtensionStatement** : Assignment | Swap | Call | If | Loop | Break | Return | VarDeclaration
 * **Loop** : For | While | LoopBody
 * **For** : `for` Identifier [ `from` Expression ] [ `to` Expression] [ `step` Expression ] LoopBody
 * **While** : `while` Expression LoopBody
