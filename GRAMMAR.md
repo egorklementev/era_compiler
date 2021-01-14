@@ -21,7 +21,7 @@
 * **Routine** : `routine` Identifier `(` [ Parameters ] `)` [ `:` Type ] RoutineBody 
 * **Parameters** : Parameter { `,` Parameter }
 * **Parameter** : Type Identifier
-* **RoutineBody** : `do` { VarDeclaration | Statement } `end`
+* **RoutineBody** : `do` { Statement } `end`
 * **Statement** : AssemblyBlock | ExtensionStatement
 ---
 * **AssemblyBlock**: `asm` AssemblyStatement `;` { AssemblyStatement `;` } `end`   

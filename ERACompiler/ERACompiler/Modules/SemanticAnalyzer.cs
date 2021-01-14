@@ -74,6 +74,10 @@ namespace ERACompiler.Modules
                     return AnnotateWhile(node, parent);
                 case "Loop body":
                     return AnnotateLoopBody(node, parent);
+                case "Break":
+                    return AnnotateBreak(node, parent);
+                case "Return":
+                    return AnnotateReturn(node, parent);
                 case "KEYWORD":
                 case "OPERATOR":
                 case "REGISTER":
@@ -99,6 +103,57 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateReturn(ASTNode node, AASTNode parent)
+        {
+            AASTNode returnNode = new AASTNode(node, parent, no_type);
+            // Check if "return" is in right place - inside the routine body
+            ASTNode? parentCopy = returnNode.Parent;
+            while (parentCopy != null)
+            {
+                if (parentCopy.ASTType.Equals("Routine body"))
+                {
+                    // Perform the rest of checks
+                    if (node.Children[1].Children[0].Children.Count > 0) // If it has something to return
+                    {
+                        if (node.Children[1].Children[0].Children[0].ASTType.Equals("Call"))
+                        {
+                            returnNode.Children.Add(AnnotateCall(node.Children[1].Children[0].Children[0], returnNode));
+                        }
+                        else
+                        {
+                            returnNode.Children.Add(AnnotateExpr(node.Children[1].Children[0].Children[0].Children[0], returnNode));
+                        }
+                    }
+                    return returnNode;
+                }
+                parentCopy = parentCopy.Parent;
+            }
+            Logger.LogError(new SemanticError(
+                "Return is not in place!!!\r\n" +
+                "  At (Line: " + node.Children[0].Token.Position.Line.ToString() + ", " +
+                "Char: " + node.Children[0].Token.Position.Char.ToString() + ")."
+                ));
+            return new AASTNode(node, null, no_type);
+        }
+
+        private AASTNode AnnotateBreak(ASTNode node, AASTNode parent)
+        {
+            AASTNode breakNode = new AASTNode(node, parent, no_type);
+            // Check if "break" is in the right place - inside the loop body
+            ASTNode? parentCopy = breakNode.Parent;
+            while (parentCopy != null)
+            {
+                if (parentCopy.ASTType.Equals("Loop body")) return breakNode;
+                parentCopy = parentCopy.Parent;
+            }
+            Logger.LogError(new SemanticError(
+                "Break is not in place!!!\r\n" +
+                "  At (Line: " + node.Children[0].Token.Position.Line.ToString() + ", " +
+                "Char: " + node.Children[0].Token.Position.Char.ToString() + ")."
+                ));
+            return new AASTNode(node, null, no_type);
         }
 
         private AASTNode AnnotateLoopBody(ASTNode node, AASTNode parent)

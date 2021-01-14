@@ -716,15 +716,9 @@ namespace ERACompiler.Modules
                 .AddRule(kDoRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("{ VarDeclaration | Statement }")
+                    .SetName("{ Statement }")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("VarDeclaration | Statement")
-                        .SetType(SyntaxRule.SyntaxRuleType.OR)
-                        .AddRule(varDeclarationRule)
-                        .AddRule(statementRule)
-                        )
+                    .AddRule(statementRule)                
                 )
                 .AddRule(kEndRule);
 
