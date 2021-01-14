@@ -77,12 +77,12 @@ namespace ERACompiler.Utilities
                 {
                     case 0:
                         {
-                            File.AppendAllText(logFilePath, err.ToString() + "\r\n\r\n");
+                            File.AppendAllText(logFilePath, "\r\nIn file \"\r\n" + Program.currentFile + "\":\r\n" + err.ToString() + "\r\n");
                             break;
                         }
                     case 1:
                         {
-                            Console.WriteLine(err.ToString() + "\r\n\r\n");
+                            Console.WriteLine("\r\nIn file \"" + Program.currentFile + "\":\r\n" + err.ToString() + "\r\n");
                             break;
                         }
                 }
@@ -104,29 +104,16 @@ namespace ERACompiler.Utilities
                     {
                         case 0:
                             {
-                                File.AppendAllText(logFilePath, err.ToString() + "\r\n");
+                                File.AppendAllText(logFilePath, "\r\nIn file \"" + Program.currentFile + "\":\r\n" + err.ToString() + "\r\n");
                                 break;
                             }
                         case 1:
                             {
-                                Console.WriteLine(err.ToString() + "\r\n");
+                                Console.WriteLine("\r\nIn file \"" + Program.currentFile + "\":\r\n" + err.ToString() + "\r\n");
                                 break;
                             }
                     }
                 }
-            }
-            switch (LoggingMode)
-            {
-                case 0:
-                    {
-                        File.AppendAllText(logFilePath, "\r\n");
-                        break;
-                    }
-                case 1:
-                    {
-                        Console.WriteLine("\r\n");
-                        break;
-                    }
             }
             Environment.Exit(0);
         }

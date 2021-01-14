@@ -1,20 +1,39 @@
-﻿namespace ERACompiler.Structures.Types
+﻿using System;
+
+namespace ERACompiler.Structures.Types
 {
     public class VarType
     {
-        public VarTypeType Type { get; set; }
-        
-        public VarType(VarTypeType type)
+        public ERAType Type { get; set; }
+
+        public VarType(ERAType type)
         {
             Type = type;
         }
 
-        public enum VarTypeType
+        public bool IsStruct()
         {
-            INTEGER,
+            return Type == ERAType.STRUCTURE;
+        }
+        public bool IsConst()
+        {
+            return Type >= ERAType.CONST_INT && Type <= ERAType.CONST_BYTE_ADDR;
+        }
+
+        public enum ERAType
+        {
+            INT,
             SHORT,
             BYTE,
-            CONSTANT,
+            INT_ADDR,
+            SHORT_ADDR,
+            BYTE_ADDR,
+            CONST_INT,
+            CONST_SHORT,
+            CONST_BYTE,
+            CONST_INT_ADDR,
+            CONST_SHORT_ADDR,
+            CONST_BYTE_ADDR,
             STRUCTURE,
             ROUTINE,
             MODULE,

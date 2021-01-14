@@ -10,7 +10,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// A type that token prepresents.
         /// </summary>
-        public TokenType Type { get; }
+        public TokenType Type { get; set; }
         /// <summary>
         /// A token value. For example, identifier name "arg1", or number 528.
         /// </summary>
@@ -85,10 +85,10 @@ namespace ERACompiler.Structures
     public enum TokenType
     {
         KEYWORD,
-        OPERATOR,
-        REGISTER,
+        OPERATOR,        
         DELIMITER,
         WHITESPACE,
+        REGISTER,
         IDENTIFIER,        
         NUMBER,
         NO_TOKEN

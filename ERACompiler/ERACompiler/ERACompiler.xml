@@ -40,18 +40,6 @@
             Generates the actual assembly code
             </summary>
         </member>
-        <member name="M:ERACompiler.Modules.Generator.#ctor">
-            <summary>
-            Generator constructor
-            </summary>
-        </member>
-        <member name="M:ERACompiler.Modules.Generator.GetAssemblyCode(ERACompiler.Structures.AASTNode)">
-            <summary>
-            Constructs actual assembly code from the annotated AST.
-            </summary>
-            <param name="root">The root node of the AAST.</param>
-            <returns>A string containing assembly code build using AAST.</returns>
-        </member>
         <member name="T:ERACompiler.Modules.LexicalAnalyzer">
             <summary>
             Contains functionality for conversion of source code of the program to the list of tokens.
@@ -91,6 +79,37 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CalculateConstExpr(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+            <summary>
+            Calculates a numerical value of a given constant expression
+            </summary>
+            <param name="node">Expected ASTType - Expression</param>
+            <param name="ctx">Current context</param>
+            <returns>Calculated value of an expression</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.GetOperandValue(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+            <summary>
+            Returns a value of a single operand.
+            </summary>
+            <param name="node">Expected ASTType - Operand</param>
+            <param name="ctx">Current context</param>
+            <returns>The value of an operand.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CheckVariablesForExistance(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+            <summary>
+            Checks whether expression variables are declared in current context.
+            </summary>
+            <param name="node">Expected ASTType - Expression</param>
+            <param name="ctx">Current context</param>
+        </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.IsExprConstant(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+            <summary>
+            Checks whether an expression is constant.
+            </summary>
+            <param name="node">Expected ASTType - Expression</param>
+            <param name="ctx">Current context</param>
+            <returns>True if constant, false otherwise</returns>
+        </member>
         <member name="T:ERACompiler.Modules.SyntaxAnalyzer">
             <summary>
             The purpose of this class it to check the code for syntax errors and build Abstract Syntax Tree that can be used by Semantic Analyzer.
@@ -103,9 +122,11 @@
         </member>
         <member name="M:ERACompiler.Modules.SyntaxAnalyzer.CheckSyntax(System.Collections.Generic.List{ERACompiler.Structures.Token})">
             <summary>
-            Validates the syntax correctness of the token stream.
+            Validates the syntax correctness of the token stream
+            and returns the AST root node if success.
             </summary>
-            <param name="tokens">Token stream.</param>
+            <param name="tokens">Tokens of a whole program to be validated.</param>
+            <returns>A syntax responce instance which contains the AST root node.</returns>
         </member>
         <member name="T:ERACompiler.Program">
             <summary>
@@ -117,37 +138,21 @@
             Annotated AST node. It contains additional information about node's type and context.
             </summary>
         </member>
-        <member name="P:ERACompiler.Structures.AASTNode.Value">
-            <summary>
-            Represents local value of the variable (if the node represents value reference, for example)
-            </summary>
-        </member>
-        <member name="P:ERACompiler.Structures.AASTNode.Parent">
-            <summary>
-            Parent node of the node.
-            </summary>
-        </member>
-        <member name="P:ERACompiler.Structures.AASTNode.Children">
-            <summary>
-            Children nodes of this AAST node.
-            </summary>
-        </member>
-        <member name="P:ERACompiler.Structures.AASTNode.Type">
+        <member name="P:ERACompiler.Structures.AASTNode.AASTType">
             <summary>
             integer, array of 30 bytes, structure A, etc.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.AASTValue">
+            <summary>
+            Used to store values of constant variables. Used for compile-time 
+            constant expression calculations and for storing initial values.
             </summary>
         </member>
         <member name="P:ERACompiler.Structures.AASTNode.Context">
             <summary>
             The context that this node owns.
             </summary>
-        </member>
-        <member name="M:ERACompiler.Structures.AASTNode.#ctor(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Types.VarType)">
-            <summary>
-            Creates AAST without context in it.
-            </summary>
-            <param name="node">AST node to be annotated.</param>
-            <param name="type">The type of AAST.</param>
         </member>
         <member name="T:ERACompiler.Structures.ASTNode">
             <summary>
@@ -169,7 +174,7 @@
             The token of the source code that corresponds to this node.
             </summary>
         </member>
-        <member name="P:ERACompiler.Structures.ASTNode.NodeType">
+        <member name="P:ERACompiler.Structures.ASTNode.ASTType">
             <summary>
             Represents the type of an AST entry.
             </summary>
@@ -200,7 +205,7 @@
             Used to check declaration issues and variable resolution.
             </summary>
         </member>
-        <member name="P:ERACompiler.Structures.Context.level">
+        <member name="P:ERACompiler.Structures.Context.Level">
             <summary>
             Used in ToString()
             </summary>
@@ -217,19 +222,33 @@
             <param name="name">The name of the context (may not be uniqie).</param>
             <param name="parent">Parent context (may be null).</param>
         </member>
-        <member name="M:ERACompiler.Structures.Context.GetVarValue(ERACompiler.Structures.ASTNode)">
-            <summary>
-            Searches for the variable and tries to return the AAST node corresponding to it. If there is no such variable, raises error.
-            </summary>
-            <param name="identifier">The identifier AAST node that refers to the variable.</param>
-            <returns>Returns AAST node of the variable with the given identifier.</returns>
-        </member>
         <member name="M:ERACompiler.Structures.Context.AddVar(ERACompiler.Structures.AASTNode,System.String)">
             <summary>
             Tries to add a new variable to the context. Raises error if the variable already exists.
             </summary>
             <param name="variable">The variable node.</param>
             <param name="identifier">The name of the variable node.</param>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.GetConsValue(ERACompiler.Structures.Token)">
+            <summary>
+            Returns a value of a constant variable. Used for compile-time constant expression calculation and for retrieving intial values.
+            </summary>
+            <param name="identifier">The variable name.</param>
+            <returns>Value of a constant variable.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.IsVarConstant(ERACompiler.Structures.Token)">
+            <summary>
+            Checks if a variable with given name is constant
+            </summary>
+            <param name="identifier">A variable to check</param>
+            <returns>True if var is constant, false otherwise</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.IsVarDeclared(ERACompiler.Structures.Token)">
+            <summary>
+            Checks if a variable with given identifier exists in current context
+            </summary>
+            <param name="identifier">The name of a variable.</param>
+            <returns>True if it exists, false otherwise</returns>
         </member>
         <member name="M:ERACompiler.Structures.Context.LocateVar(System.String)">
             <summary>
@@ -244,22 +263,66 @@
             Implements Builder pattern.
             </summary>
         </member>
+        <member name="F:ERACompiler.Structures.Rules.SyntaxRule.errorList">
+            <summary>
+            To store all possible syntax errors
+            </summary>
+        </member>
         <member name="F:ERACompiler.Structures.Rules.SyntaxRule.lastTokenPos">
             <summary>
             For getting the error token for debug needs
             </summary>
         </member>
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.#ctor">
+            <summary>
+            Constructor. Sets default rule name and initializes new rule list.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.SetName(System.String)">
+            <summary>
+            Sets a name for a rule. Used when printing the AST or AAST.
+            </summary>
+            <param name="name">A new name for a rule.</param>
+            <returns>The object itself.</returns>
+        </member>
         <member name="M:ERACompiler.Structures.Rules.SyntaxRule.SetType(ERACompiler.Structures.Rules.SyntaxRule.SyntaxRuleType)">
             <summary>
-            Makes this rule terminal.
-            It means 'rules' contains only one Terminal object
+            Sets the type of a rule (e.g. OR, ONE_OR_MANY, etc.) 
             </summary>
+            <returns>The object itself.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.AddRule(ERACompiler.Structures.Rules.SyntaxRule)">
+            <summary>
+            Adds a rule to the rule's children.
+            How these children are processed depends on parent type.
+            </summary>
+            <param name="rule">A rule to add.</param>
+            <returns>The object itself.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.Verify(System.Collections.Generic.List{ERACompiler.Structures.Token},ERACompiler.Structures.ASTNode)">
+            <summary>
+            Main function of this class. Given a list of tokens and parent AST node it returns
+            a SyntaxResponse instance which contains information about success of failure of syntax
+            checking, the number of tokens consumed (in the best case scenario should be equal to the 
+            number of tokens received), and the parent AST node (that was given) filled with appropriate 
+            AST children nodes according to this rule.
+            </summary>
+            <param name="parentTokens"></param>
+            <param name="parentNode"></param>
             <returns></returns>
         </member>
         <member name="T:ERACompiler.Structures.Rules.SyntaxRule.SyntaxResponse">
             <summary>
             Used for communication with the parent rules.
             </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.SyntaxResponse.#ctor(System.Boolean,System.Int32,ERACompiler.Structures.ASTNode)">
+            <summary>
+            Constructor. Sets success or failure, consumed token number, and oprionally ast node to return.
+            </summary>
+            <param name="success">Success or failure of rule checking</param>
+            <param name="tokensConsumed">How many tokens were consumed</param>
+            <param name="astNode">The AST node to return</param>
         </member>
         <member name="T:ERACompiler.Structures.Token">
             <summary>

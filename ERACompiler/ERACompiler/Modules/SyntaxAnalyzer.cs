@@ -123,7 +123,7 @@ namespace ERACompiler.Modules
             RuleTerminal kWhileRule = new RuleTerminal(tWhile);
 
             RuleTerminal identifierRule = new RuleTerminal(tIdentifier);
-            RuleTerminal literalRule = new RuleTerminal(tLiteral);
+            RuleTerminal numberRule = new RuleTerminal(tLiteral);
             RuleTerminal registerRule = new RuleTerminal(tRegister);
 
             RuleTerminal atRule = new RuleTerminal(tAt);
@@ -165,6 +165,17 @@ namespace ERACompiler.Modules
 
 
             // All syntax rules of the language
+            SyntaxRule literalRule = new SyntaxRule()
+                .SetName("NUMBER")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ - ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(opMinusRule)
+                )
+                .AddRule(numberRule);
+            
             SyntaxRule operatorRule = new SyntaxRule()
                 .SetName("Operator")
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
@@ -217,6 +228,7 @@ namespace ERACompiler.Modules
                 .AddRule(referenceRule)
                 .AddRule(explicitAddrRule)
                 .AddRule(literalRule);
+            // other rules are added after 'Expression' rule
 
             SyntaxRule expressionRule = new SyntaxRule()
                 .SetName("Expression")
@@ -254,36 +266,66 @@ namespace ERACompiler.Modules
                 )
                 .AddRule(registerRule);
 
-            SyntaxRule typeRule = new SyntaxRule()
+            operandRule
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("( Expression )")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(leftParenRule)
+                    .AddRule(expressionRule)
+                    .AddRule(rightParenRule)
+                );
+
+            SyntaxRule typeRule = 
+                new SyntaxRule()
                 .SetName("Type")
-                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .SetType(SyntaxRule.SyntaxRuleType.OR)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("int | byte | short | SOME_IDENTIFIER")
-                    .SetType(SyntaxRule.SyntaxRuleType.OR)
-                    .AddRule(kIntRule)
-                    .AddRule(kShortRule)
-                    .AddRule(kByteRule)
-                    .AddRule(identifierRule)
-                )
-                .AddRule(
-                    new SyntaxRule()
-                    .SetName("[ [] | @ ]")
-                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .SetName("int | byte | short [ @ ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                     .AddRule(
                         new SyntaxRule()
-                        .SetName("[] | @")
+                        .SetName("int | byte | short")
                         .SetType(SyntaxRule.SyntaxRuleType.OR)
-                        .AddRule(atRule)
-                        .AddRule(
-                            new SyntaxRule()
-                            .SetName("[]")
-                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                            .AddRule(leftBracketRule)
-                            .AddRule(rightBracketRule)
-                            )
+                        .AddRule(kIntRule)
+                        .AddRule(kShortRule)
+                        .AddRule(kByteRule)
                         )
-                );
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("[ @ ]")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                        .AddRule(atRule)
+                        )
+                    )
+                .AddRule(identifierRule)
+                ;
+
+            SyntaxRule arrDefinitionRule = new SyntaxRule()
+                .SetName("Array definition")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(identifierRule)
+                .AddRule(leftBracketRule)
+                .AddRule(expressionRule)
+                .AddRule(rightBracketRule)
+                ;
+
+            SyntaxRule arrayRule = new SyntaxRule()
+                .SetName("Array")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(leftBracketRule)
+                .AddRule(rightBracketRule)
+                .AddRule(arrDefinitionRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ , ArrDefinition }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(commaRule)
+                    .AddRule(arrDefinitionRule)
+                )
+                .AddRule(semicolonRule)
+                ;
 
             SyntaxRule constDefinitionRule = new SyntaxRule()
                 .SetName("Constant definition")
@@ -297,11 +339,10 @@ namespace ERACompiler.Modules
                 .SetName("Constant")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kConstRule)
-                .AddRule(typeRule)
                 .AddRule(constDefinitionRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("Constant definitions")
+                    .SetName("{ , ConstDefinition }")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
                     .AddRule(commaRule)
                     .AddRule(constDefinitionRule)
@@ -314,38 +355,24 @@ namespace ERACompiler.Modules
                 .AddRule(identifierRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("[ ( := Expression ) | ( '[' Expression ']' ) ]")
+                    .SetName("[ := Expression ]")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                     .AddRule(
                         new SyntaxRule()
-                        .SetName("( := Expression ) | ( '[' Expression ']' )")
-                        .SetType(SyntaxRule.SyntaxRuleType.OR)
-                        .AddRule(
-                            new SyntaxRule()
                             .SetName(":= Expression")
                             .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                             .AddRule(opAssignRule)
                             .AddRule(expressionRule)
-                            )
-                        .AddRule(
-                            new SyntaxRule()
-                            .SetName("'[' Expression ']'")
-                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                            .AddRule(leftBracketRule)
-                            .AddRule(expressionRule)
-                            .AddRule(rightBracketRule)
-                            )
                         )
                 );
 
             SyntaxRule variableRule = new SyntaxRule()
                 .SetName("Variable")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                .AddRule(typeRule)
                 .AddRule(varDefinitionRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("Variable definitions")
+                    .SetName("{ , VarDefinition }")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
                     .AddRule(commaRule)
                     .AddRule(varDefinitionRule)
@@ -354,9 +381,17 @@ namespace ERACompiler.Modules
 
             SyntaxRule varDeclarationRule = new SyntaxRule()
                 .SetName("Variable declaration")
-                .SetType(SyntaxRule.SyntaxRuleType.OR)
-                .AddRule(variableRule)
-                .AddRule(constantRule);
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(typeRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Variable | Array | Constant")
+                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .AddRule(variableRule)
+                    .AddRule(arrayRule)
+                    .AddRule(constantRule)
+                )
+                ;
 
             SyntaxRule assemblyStatementRule = new SyntaxRule()
                 .SetName("Assembly statement")
@@ -551,7 +586,7 @@ namespace ERACompiler.Modules
                 .SetName("Block body")
                 .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
                 ;
-            // other rulesadded after 'Statement' rule
+            // other rules added after 'Statement' rule
 
             SyntaxRule ifRule = new SyntaxRule()
                 .SetName("If")
@@ -576,7 +611,7 @@ namespace ERACompiler.Modules
                 );
 
             SyntaxRule loopBodyRule = new SyntaxRule()
-                .SetName("Loob body")
+                .SetName("Loop body")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kLoopRule)
                 .AddRule(blockBodyRule)
@@ -663,7 +698,8 @@ namespace ERACompiler.Modules
                 .AddRule(ifRule)
                 .AddRule(loopRule)
                 .AddRule(breakRule)
-                .AddRule(returnRule);
+                .AddRule(returnRule)
+                .AddRule(varDeclarationRule);
 
             SyntaxRule statementRule = new SyntaxRule()
                 .SetName("Statement")
@@ -680,15 +716,9 @@ namespace ERACompiler.Modules
                 .AddRule(kDoRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("{ VarDeclaration | Statement }")
+                    .SetName("{ Statement }")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("VarDeclaration | Statement")
-                        .SetType(SyntaxRule.SyntaxRuleType.OR)
-                        .AddRule(varDeclarationRule)
-                        .AddRule(statementRule)
-                        )
+                    .AddRule(statementRule)                
                 )
                 .AddRule(kEndRule);
 
@@ -700,34 +730,29 @@ namespace ERACompiler.Modules
 
             SyntaxRule parametersRule = new SyntaxRule()
                 .SetName("Parameters")
-                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                .AddRule(leftParenRule)
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)                                
+                .AddRule(parameterRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("[ Parameter { , Parameter } ]")
-                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .SetName("{ , Parameter }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(commaRule)
                     .AddRule(parameterRule)
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("{ , Parameter }")
-                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
-                        .AddRule(commaRule)
-                        .AddRule(parameterRule)
-                        )
-                )
-                .AddRule(rightParenRule);
+                    );
 
             SyntaxRule routineRule = new SyntaxRule()
                 .SetName("Routine")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kRoutineRule)
                 .AddRule(identifierRule)
+                .AddRule(leftParenRule)
                 .AddRule(
                     new SyntaxRule()
                     .SetName("[ Parameters ]")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                     .AddRule(parametersRule)
                 )
+                .AddRule(rightParenRule)
                 .AddRule(
                     new SyntaxRule()
                         .SetName("[ : Type ]")

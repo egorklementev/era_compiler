@@ -15,6 +15,8 @@ namespace ERACompiler.Modules
         private int lineNumber; // Used for token position
 
         // Lists that contain terminals
+        private readonly List<string> registers; // Used separately since registers are initially identified as 
+                                                 // identifiers and then are converted to registers
         private readonly List<List<string>> allLists;
 
         public LexicalAnalyzer()
@@ -23,16 +25,15 @@ namespace ERACompiler.Modules
             lineChar = 1;
             lineNumber = 1;
 
+            registers = RegistersInitialization();
             List<string> keywords = KeywordsInitialization();
             List<string> operators = OperatorsInitialization();
-            List<string> registers = RegistersInitialization();
             List<string> delimiters = DelimitersInitialization();
             List<string> whitespaces = WhitespacesInitialization();
 
             allLists = new List<List<string>>() {
                 keywords,
                 operators,
-                registers,
                 delimiters,
                 whitespaces
             };
@@ -51,6 +52,8 @@ namespace ERACompiler.Modules
             {
                 Logger.LogError(new LexicalError("The source code length should be at least more than two characters!!!"));
             }
+
+            sourceCode = sourceCode.ToLower();
 
             remembered = sourceCode[0] + ""; // Will start traversal from the second character
 
@@ -122,7 +125,7 @@ namespace ERACompiler.Modules
                 }
             
                 // Combine identifier/register/keyword/number tokens into a single token if any
-                if (list[i].Type == TokenType.IDENTIFIER || list[i].Type == TokenType.KEYWORD || list[i].Type == TokenType.REGISTER)
+                if (list[i].Type == TokenType.IDENTIFIER || list[i].Type == TokenType.KEYWORD)
                 {
                     int j = i;
                     TokenPosition pos = list[j].Position;
@@ -132,15 +135,26 @@ namespace ERACompiler.Modules
                     while (j < list.Count && 
                         (list[j].Type == TokenType.NUMBER || 
                         list[j].Type == TokenType.IDENTIFIER || 
-                        list[j].Type == TokenType.KEYWORD || 
-                        list[j].Type == TokenType.REGISTER))
+                        list[j].Type == TokenType.KEYWORD))
                     {
                         value += list[j].Value;
                         n++;
                         j++;
                     }
                     list.RemoveRange(i, n);
-                    list.Insert(i, new Token(n > 1 ? TokenType.IDENTIFIER : savedType, value, pos));
+
+                    // Special case for registers
+                    bool regFound = false;
+                    foreach (string reg in registers)
+                    {
+                        if (value.Equals(reg))
+                        {
+                            regFound = true;
+                            savedType = TokenType.REGISTER;
+                        }
+                    }
+                    
+                    list.Insert(i, new Token(n > 1 && !regFound ? TokenType.IDENTIFIER : savedType, value, pos));
                 }
 
                 // Special case for numbers
@@ -206,9 +220,9 @@ namespace ERACompiler.Modules
                 }
             }
 
-            // If it is number or identifier
+            // If it is number or identifier or register
             char fc = remembered[0];
-            if ((fc >= 'a' && fc <= 'z') || (fc >= 'A' && fc <= 'Z') || (fc == '_'))
+            if ((fc >= 'a' && fc <= 'z') || (fc == '_'))
             {
                 return new Token(TokenType.IDENTIFIER, remembered, pos);
             }
@@ -316,12 +330,12 @@ namespace ERACompiler.Modules
             List<string> registers = new List<string>();
             for (int i = 0; i < 28; i++)
             {
-                registers.Add("R" + i.ToString());
+                registers.Add("r" + i.ToString());
             }
-            registers.Add("FP");
-            registers.Add("SP");
-            registers.Add("SB");
-            registers.Add("PC");
+            registers.Add("fp");
+            registers.Add("sp");
+            registers.Add("sb");
+            registers.Add("pc");
             return registers;
         }
         private List<string> DelimitersInitialization()
