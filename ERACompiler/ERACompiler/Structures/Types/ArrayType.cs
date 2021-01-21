@@ -13,7 +13,7 @@
 
         public override string ToString()
         {
-            return "Array of type \"" + ElementType.ToString() + "\" of size " + Size.ToString();
+            return "Array of type " + ElementType.ToString() + " of size " + Size.ToString();
         }
     }
 }

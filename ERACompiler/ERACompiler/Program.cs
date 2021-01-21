@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using ERACompiler.Modules;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
+using System.Diagnostics;
 
 /// <summary>
 /// Used for console allocation.
@@ -41,7 +42,7 @@ namespace ERACompiler
             //args = new string[] { "-s", "debug.era" };
             //args = new string[] { "-s", "debug.era", "--lexis" };
             //args = new string[] { "-s", "debug.era", "--syntax" };
-            //args = new string[] { "-s", "debug.era", "--semantics" };
+            args = new string[] { "-s", "debug.era", "--semantics" };
 
             // Logging
             new Logger(true);
@@ -70,9 +71,18 @@ namespace ERACompiler
                     // Loading of sample code
                     string sourceCode = File.ReadAllText(sourceFilenames[i]);
 
+                    // For time tracking
+                    Stopwatch stopWatch = new Stopwatch();
+
                     // Create instance of the era compiler and get the compiled code 
-                    // It is fresh everytime to refresh all the nodes (may be optimized obviously)
+                    // It is fresh everytime to refresh all the nodes (may be optimized obviously)                    
+                    stopWatch.Start();
                     byte[] compiledCode = new Compiler().Compile(sourceCode, cmode);
+                    stopWatch.Stop();
+
+                    TimeSpan ts = stopWatch.Elapsed;
+                    string elapsedTime = string.Format("{0:00}m {1:00}.{2:00}s",
+                    ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
                     // Create a new file with the compiled code
                     if (i >= outputFilenames.Count)
@@ -103,7 +113,7 @@ namespace ERACompiler
                         if (Directory.Exists(folder))
                         {
                             File.WriteAllBytes(outputFilenames[i], compiledCode);
-                            Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                            Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled (" + elapsedTime + ").");
                         }
                         else
                         {
@@ -111,7 +121,7 @@ namespace ERACompiler
                             {
                                 Directory.CreateDirectory(folder);
                                 File.WriteAllBytes(outputFilenames[i], compiledCode);
-                                Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                                Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled (" + elapsedTime + ").");
                             }
                             else
                             {
@@ -122,7 +132,7 @@ namespace ERACompiler
                     else
                     {
                         File.WriteAllBytes(outputFilenames[i], compiledCode);
-                        Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                        Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled (" + elapsedTime + ").");
                     }
                 }
             }

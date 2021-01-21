@@ -199,8 +199,8 @@ namespace ERACompiler.Modules
 
             SyntaxRule primaryRule = new SyntaxRule()
                 .SetName("Primary")
-                .SetType(SyntaxRule.SyntaxRuleType.OR);
-            // other rules are added after 'Expression' rule
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE);
+            // other rules are added after 'Call args' rule
 
             SyntaxRule explicitAddrRule = new SyntaxRule()
                 .SetName("Explicit address")
@@ -226,7 +226,8 @@ namespace ERACompiler.Modules
                 .AddRule(primaryRule)
                 .AddRule(dereferenceRule)
                 .AddRule(referenceRule)
-                .AddRule(explicitAddrRule)
+                .AddRule(explicitAddrRule)                
+                .AddRule(registerRule)                
                 .AddRule(literalRule);
             // other rules are added after 'Expression' rule
 
@@ -242,29 +243,12 @@ namespace ERACompiler.Modules
                     .AddRule(operandRule)
                 );
 
-            primaryRule
-                .AddRule(
-                    new SyntaxRule()
-                    .SetName("Identifier { '.' Identifier } [ '[' Expression ']' ]")
-                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                    .AddRule(identifierRule)
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("{ '.' Identifier }")
-                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
-                        .AddRule(dotRule)
-                        .AddRule(identifierRule)
-                        )
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("[ '[' Expression ']' ]")
-                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
-                        .AddRule(leftBracketRule)
-                        .AddRule(expressionRule)
-                        .AddRule(rightBracketRule)
-                        )
-                )
-                .AddRule(registerRule);
+            SyntaxRule arrayAccessRule = new SyntaxRule()
+                .SetName("'[' Expression ']'")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(leftBracketRule)
+                .AddRule(expressionRule)
+                .AddRule(rightBracketRule);
 
             operandRule
                 .AddRule(
@@ -538,6 +522,7 @@ namespace ERACompiler.Modules
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
                 .AddRule(primaryRule)
                 .AddRule(dereferenceRule)
+                .AddRule(registerRule)
                 .AddRule(explicitAddrRule);
 
             SyntaxRule assignmentRule = new SyntaxRule()
@@ -579,8 +564,29 @@ namespace ERACompiler.Modules
                 .SetName("Call")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(identifierRule)
-                .AddRule(callArgsRule)
-                .AddRule(semicolonRule);
+                .AddRule(callArgsRule);
+
+            primaryRule
+                .AddRule(identifierRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("{ '.' Identifier }")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
+                    .AddRule(dotRule)
+                    .AddRule(identifierRule)
+                    )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ ArrayAccess | CallArgs ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(
+                        new SyntaxRule()
+                        .SetName("ArrayAccess | CallArgs")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(arrayAccessRule)
+                        .AddRule(callArgsRule)
+                        )
+                    );
 
             SyntaxRule blockBodyRule = new SyntaxRule()
                 .SetName("Block body")
@@ -671,20 +677,19 @@ namespace ERACompiler.Modules
                 .AddRule(kReturnRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("( Expression ; | Call ) | ; ")
-                    .SetType(SyntaxRule.SyntaxRuleType.OR)
+                    .SetName("[ ( Expression | Call ) ] ; ")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                     .AddRule(
                         new SyntaxRule()
-                        .SetName("Expression ; | Call")
-                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .SetName("[ Expression | Call ]")
+                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                         .AddRule(
                             new SyntaxRule()
-                            .SetName("Expression ;")
-                            .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                            .SetName("Expression | Call")
+                            .SetType(SyntaxRule.SyntaxRuleType.OR)
                             .AddRule(expressionRule)
-                            .AddRule(semicolonRule)
+                            .AddRule(callRule)
                             )
-                        .AddRule(callRule)
                         )
                     .AddRule(semicolonRule)
                 );
@@ -694,7 +699,13 @@ namespace ERACompiler.Modules
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
                 .AddRule(assignmentRule)
                 .AddRule(swapRule)
-                .AddRule(callRule)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Call ;")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(callRule)
+                    .AddRule(semicolonRule)
+                )
                 .AddRule(ifRule)
                 .AddRule(loopRule)
                 .AddRule(breakRule)

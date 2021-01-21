@@ -123,7 +123,7 @@ namespace ERACompiler.Modules
                         list.Insert(i, new Token(TokenType.OPERATOR, ":=", pos));
                     }
                 }
-            
+
                 // Combine identifier/register/keyword/number tokens into a single token if any
                 if (list[i].Type == TokenType.IDENTIFIER || list[i].Type == TokenType.KEYWORD)
                 {
@@ -173,6 +173,12 @@ namespace ERACompiler.Modules
                     }
                     list.RemoveRange(i, n);
                     list.Insert(i, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
+                }
+
+                // Special case for '/=' operator
+                if (list[i].Type == TokenType.OPERATOR && list[i].Value.Equals("/="))
+                {
+                    list.RemoveAt(i + 1);
                 }
             }
 
@@ -269,6 +275,7 @@ namespace ERACompiler.Modules
                 "data",
                 "code",
                 "routine",
+                "return",
                 "start",
                 "entry",
                 "if",

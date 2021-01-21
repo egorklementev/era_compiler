@@ -46,26 +46,27 @@
 &emsp;| `if` Register `goto` Register  
 * **Register** : R0 | R1 | ... | R30 | R31
 ---
-* **ExtensionStatement** : Assignment | Swap | Call | If | Loop | Break | Return | VarDeclaration
+* **ExtensionStatement** : Assignment | Swap | ( Call `;` ) | If | Loop | Break | Return | VarDeclaration
 * **Loop** : For | While | LoopBody
 * **For** : `for` Identifier [ `from` Expression ] [ `to` Expression] [ `step` Expression ] LoopBody
 * **While** : `while` Expression LoopBody
 * **LoopBody** : `loop` BlockBody `end`
 * **BlockBody** : { Statement }
 * **Break** : `break` `;`
-* **Return** : `return` ( ( Expression `;` | Call ) | `;` )
+* **Return** : `return` [ ( Expression | Call ) ] `;`
 * **Assignment** : Receiver `:=` Expression `;`
 * **Swap** : Reveiver `<=>` Receiver `;`
 ---
 * **If** : `if` Expression `do` BlockBody ( `end` | `else` BlockBody `end` )
-* **Call** : Identifier CallArgs `;`
+* **Call** : Identifier CallArgs
 * **CallArgs** : `(` [ Expression { , Expression } ] `)`
 ---
 * **Expression** : Operand { Operator Operand }
 * **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | `=` | `/=` | `<` | `>`
-* **Operand** : Primary | Dereference | Reference | Literal | ExplicitAddress | `(` Expression `)`
-* **Receiver** : Primary | Dereference | ExplicitAddress
-* **Primary** : ( Identifier { `.` Identifier } [ `[` Expression `]` ] ) | Register
+* **Operand** : Primary | Register | Dereference | Reference | Literal | ExplicitAddress | `(` Expression `)`
+* **Receiver** : Primary | Dereference | ExplicitAddress | Register
+* **Primary** : Identifier { `.` Identifier } [ ArrayAccess | CallArgs ]
+* **ArrayAccess** : `[` Expression `]`
 * **Reference** : `<-` Identifier
 * **Dereference** : `->` ( Identifier | Register )
 * **ExplicitAddress** : `->` Literal

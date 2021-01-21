@@ -11,6 +11,7 @@ namespace ERACompiler.Modules
     {
         private readonly VarType no_type = new VarType(VarType.ERAType.NO_TYPE); // Placeholder
         private int blockBodyCounter = 0;
+        private AASTNode varToAddToCtx = null;
 
         public AASTNode BuildAAST(ASTNode ASTRoot)
         {
@@ -50,8 +51,8 @@ namespace ERACompiler.Modules
                     return AnnotateCallArgs(node, parent);
                 case "NUMBER":
                     return AnnotateLiteral(node, parent);
-                case "Identifier { '.' Identifier } [ '[' Expression ']' ]":
-                    return AnnotatePrimaryFirstOption(node, parent);
+                case "Primary":
+                    return AnnotatePrimary(node, parent);
                 case "( Expression )":
                     return AnnotateNode(node.Children[1], parent);
                 case "Variable declaration":
@@ -85,8 +86,8 @@ namespace ERACompiler.Modules
                 case "IDENTIFIER":
                     return new AASTNode(node, parent, no_type);
                 case "Loop":
+                case "Call ;":
                 case "Operand":
-                case "Primary":
                 case "Operator":
                 case "Receiver":
                 case "Statement":
@@ -176,17 +177,18 @@ namespace ERACompiler.Modules
         {
             AASTNode forNode = new AASTNode(node, parent, no_type);
             forNode.Children.Add(AnnotateNode(node.Children[1], forNode));
-            // If from expression exists
+            varToAddToCtx = (AASTNode) forNode.Children[0];
+            // If 'from' expression exists
             if (node.Children[2].Children.Count > 0)
             {
                 forNode.Children.Add(AnnotateExpr(node.Children[2].Children[1], forNode));
             }
-            // If to expression exists
+            // If 'to' expression exists
             if (node.Children[3].Children.Count > 0)
             {
                 forNode.Children.Add(AnnotateExpr(node.Children[3].Children[1], forNode));
             }
-            // If step expression exists
+            // If 'step' expression exists
             if (node.Children[4].Children.Count > 0)
             {
                 forNode.Children.Add(AnnotateExpr(node.Children[4].Children[1], forNode));
@@ -215,6 +217,11 @@ namespace ERACompiler.Modules
             {
                 Context = new Context("BlockBody_" + (++blockBodyCounter).ToString(), FindParentContext(parent))
             };
+            if (varToAddToCtx != null)
+            {
+                bb.Context.AddVar(varToAddToCtx, varToAddToCtx.Token.Value);
+                varToAddToCtx = null;
+            }
             foreach (ASTNode child in node.Children)
             {
                 bb.Children.Add(AnnotateNode(child, bb));
@@ -471,7 +478,7 @@ namespace ERACompiler.Modules
             return pragmaDecl;
         }
 
-        private AASTNode AnnotatePrimaryFirstOption(ASTNode node, AASTNode parent)
+        private AASTNode AnnotatePrimary(ASTNode node, AASTNode parent)
         {
             AASTNode somePrim = new AASTNode(node, parent, no_type);
             Context ctx = FindParentContext(parent);
@@ -501,27 +508,34 @@ namespace ERACompiler.Modules
                 }
             }
 
-            // [ '[' Expression ']' ]
+            // [ ArrayAccess | CallArgs ]
             if (node.Children[2].Children.Count > 0)
             {
-                // If expression is constant we can check for array boundaries
-                if (IsExprConstant(node.Children[2].Children[1], ctx))
+                if (node.Children[2].Children[0].Children[0].ASTType.Equals("Call arguments"))
                 {
-                    int index = CalculateConstExpr(node.Children[2].Children[1], ctx);
-                    int arrSize = ctx.GetArrSize(idLink.Token);
-                    if (index < 0) Logger.LogError(new SemanticError(
-                        "Negative array index!!!\r\n" +
-                        "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
-                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
-                        ));
-                    // If we know the size of the array already (arrSize != 0 indicates this)
-                    if (arrSize != 0 && index >= arrSize) Logger.LogError(new SemanticError(
-                        "Accessing element with index higher than array the size!!!\r\n" +
-                        "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
-                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
-                        ));
+                    somePrim.Children.Add(AnnotateCallArgs(node.Children[2].Children[0].Children[0], somePrim));
                 }
-                somePrim.Children.Add(AnnotateExpr(node.Children[2].Children[1], somePrim));
+                else
+                {
+                    // If expression is constant we can check for array boundaries (TODO: array size can be non-constant. Need to be fixed.)
+                    if (IsExprConstant(node.Children[2].Children[0].Children[0].Children[1], ctx))
+                    {
+                        int index = CalculateConstExpr(node.Children[2].Children[0].Children[0].Children[1], ctx);
+                        int arrSize = ctx.GetArrSize(idLink.Token);
+                        if (index < 0) Logger.LogError(new SemanticError(
+                            "Negative array index!!!\r\n" +
+                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                                ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                            ));
+                        // If we know the size of the array already (arrSize != 0 indicates this)
+                        if (arrSize != 0 && index >= arrSize) Logger.LogError(new SemanticError(
+                            "Accessing element with index higher than array the size!!!\r\n" +
+                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                                ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                            ));
+                    }
+                    somePrim.Children.Add(AnnotateExpr(node.Children[2].Children[0].Children[0].Children[1], somePrim));
+                }
             }
 
             return somePrim;
@@ -963,34 +977,11 @@ namespace ERACompiler.Modules
             // Check whether primary is constant
             if (type.Equals("Primary"))
             {
-                ASTNode prim = node.Children[0];
-
-                if (prim.Children[0] // OR rule of Primary
-                    .Children[0].ASTType.Equals("REGISTER"))
+                if (node.Children[0].Children[1].Children.Count > 0) return false; // { . Identitfier }
+                if (node.Children[0].Children[2].Children.Count > 0) return false; // [ ArrayAccess | CallArgs ]
+                if (!ctx.IsVarConstant(node.Children[0].Children[0].Token)) // Just check the first operand
                 {
                     return false;
-                }
-                else
-                {
-                    if (prim.Children[0] // Sequence of OR rule
-                        .Children[1].Children.Count > 0)
-                    {
-                        return false;
-                    }
-                    if (prim.Children[0] // Sequence of OR rule
-                        .Children[2].Children.Count > 0)
-                    {
-                        return false;
-                    }
-                    if (
-                        !ctx.IsVarConstant(
-                            prim.Children[0]   // Sequence of OR rule
-                            .Children[0].Token // First Identifier
-                            ) 
-                        )
-                    {
-                        return false;
-                    }
                 }
             }
 
