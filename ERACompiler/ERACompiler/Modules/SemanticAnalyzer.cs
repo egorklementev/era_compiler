@@ -331,6 +331,20 @@ namespace ERACompiler.Modules
                         ));
                 }                
             }
+            if (node.ASTType.Equals("Register := Expression"))
+            {
+                // Check if expression is constant
+                Context ctx = FindParentContext(parent);
+                CheckVariablesForExistance(node.Children[2], ctx);
+                if (!IsExprConstant(node.Children[2], ctx))
+                {
+                    Logger.LogError(new SemanticError(
+                        "This expression should be constant (refer to the documentation)!!!\r\n" +
+                        "  At (Line: " + node.Children[2].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[2].Token.Position.Char.ToString() + ")."
+                        ));
+                }
+            }
             foreach (ASTNode child in node.Children)
             {
                 asmStmnt.Children.Add(AnnotateNode(child, asmStmnt)); // Just pass everything down
@@ -744,57 +758,136 @@ namespace ERACompiler.Modules
         /// <returns>Calculated value of an expression</returns>
         private int CalculateConstExpr(ASTNode node, Context ctx)
         {
-            int firstOpValue = GetOperandValue(node.Children[0], ctx);
+            // Construct a list of operands and operators
+            List<int> operands = new List<int>();
+            List<string> operators = new List<string>();
+
+            operands.Add(GetOperandValue(node.Children[0], ctx));
             if (node.Children[1].Children.Count > 0)
             {
-                int finalOpValue = firstOpValue;
-                //int lastOp = -1; // 0: +, 1: -, 2: *, 3: &, 4: |, 5: ^, 6: ?, 7: =, 8: /=, 9: <, 10: >.
                 for (int i = 0; i < node.Children[1].Children.Count; i += 2)
                 {
-                    switch (node.Children[1].Children[i].Token.Value)
+                    operators.Add(node.Children[1].Children[i].Token.Value);
+                    operands.Add(GetOperandValue(node.Children[1].Children[i + 1], ctx));
+                }
+
+                // Execute higher order operators (*) 
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals("*"))
                     {
-                        case "+":
-                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx);
-                            break;
-                        case "-":
-                            finalOpValue -= GetOperandValue(node.Children[1].Children[i + 1], ctx);
-                            break;
-                        case "*":
-                            finalOpValue *= GetOperandValue(node.Children[1].Children[i + 1], ctx);
-                            break;
-                        case "&":
-                            finalOpValue &= GetOperandValue(node.Children[1].Children[i + 1], ctx);
-                            break;
-                        case "|":
-                            finalOpValue |= GetOperandValue(node.Children[1].Children[i + 1], ctx);
-                            break;
-                        case "^":
-                            finalOpValue ^= GetOperandValue(node.Children[1].Children[i + 1], ctx);
-                            break;
-                        case "?":
-                            finalOpValue = GetOperandValue(node.Children[1].Children[i + 1], ctx); // TODO: fix somehow
-                            break;
-                        case "=":
-                            finalOpValue = GetOperandValue(node.Children[1].Children[i + 1], ctx) == finalOpValue ? 1 : 0;
-                            break;
-                        case "/=":
-                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx) != finalOpValue ? 1 : 0;
-                            break;
-                        case ">":
-                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx) < finalOpValue ? 1 : 0;
-                            break;
-                        case "<":
-                            finalOpValue += GetOperandValue(node.Children[1].Children[i + 1], ctx) > finalOpValue ? 1 : 0;
-                            break;
-                        default:
-                            break;
+                        operators.RemoveAt(i);
+                        int res = operands[i] * operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
                     }
                 }
-                return finalOpValue;
+
+                // Execute higher order operators (+, -) 
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals("+"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] + operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                    else if (operators[i].Equals("-"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] - operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                }
+
+                // Execute lower order operators (<, >, =, /=) 
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals(">"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] > operands[i + 1] ? 1 : 0;
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                    else if (operators[i].Equals("<"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] < operands[i + 1] ? 1 : 0;
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                    else if (operators[i].Equals("="))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] == operands[i + 1] ? 1 : 0;
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                    else if (operators[i].Equals("/="))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] != operands[i + 1] ? 1 : 0;
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                }
+
+                // Execute lower order operators (&) 
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals("&"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] & operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                }
+
+                // Execute lower order operators (^) 
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals("^"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] ^ operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                }
+
+                // Execute lower order operators (|) 
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals("|"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = operands[i] | operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                }
+
+                // Execute lower order operators (?) TODO: fix it
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    if (operators[i].Equals("&"))
+                    {
+                        operators.RemoveAt(i);
+                        int res = 0; //operands[i] & operands[i + 1];
+                        operands.RemoveRange(i, 2);
+                        operands.Insert(i, res);
+                    }
+                }
+
+                return operands[0];
             }
             else
             {
-                return firstOpValue;
+                return operands[0];
             }
             
         }
@@ -810,7 +903,7 @@ namespace ERACompiler.Modules
             return node.Children[0].ASTType switch
             {
                 "( Expression )" => CalculateConstExpr(node.Children[0].Children[1], ctx),
-                "Primary" => ctx.GetConsValue(node.Children[0].Children[0].Token),// Identifier
+                "Primary" => ctx.GetConsValue(node.Children[0].Children[0].Token), // Identifier
                 "NUMBER" => int.Parse(node.Children[0].Children[1].Token.Value) * (node.Children[0].Children[0].Children.Count > 0 ? -1 : 1),
                 _ => -1,
             };

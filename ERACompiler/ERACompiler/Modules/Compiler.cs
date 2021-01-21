@@ -12,7 +12,7 @@ namespace ERACompiler.Modules
     {
         private readonly LexicalAnalyzer lexis;         // Used to retrieve tokens from the source code.
         private readonly SyntaxAnalyzer syntax;         // Used to build AST.
-        private readonly SemanticAnalyzer semantics;   // Used to check semantics of AST and more.
+        private readonly SemanticAnalyzer semantics;    // Used to check semantics of AST and more.
         private readonly Generator generator;           // Used to generate assembly code given AAST.
 
         /// <summary>
