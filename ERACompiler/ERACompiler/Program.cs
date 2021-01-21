@@ -42,7 +42,9 @@ namespace ERACompiler
             //args = new string[] { "-s", "debug.era" };
             //args = new string[] { "-s", "debug.era", "--lexis" };
             //args = new string[] { "-s", "debug.era", "--syntax" };
-            args = new string[] { "-s", "debug.era", "--semantics" };
+            //args = new string[] { "-s", "debug.era", "--semantics" };
+            //args = new string[] { "-s", "fast_sort.era", "--lexis" };
+            //args = new string[] { "-s", "fast_sort_big.era", "--semantics" };
 
             // Logging
             new Logger(true);

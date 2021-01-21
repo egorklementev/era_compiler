@@ -101,7 +101,7 @@ namespace ERACompiler.Modules
 
             finalList = Analyze(finalList);
 
-            return finalList;
+            return new List<Token>(finalList);
         }
 
         /// <summary>
@@ -110,38 +110,51 @@ namespace ERACompiler.Modules
         /// <param name="list">List with tokens to be analyzed.</param>
         /// <returns>Compressed and improved token list.</returns>
         private List<Token> Analyze(List<Token> list)
-        {          
-            for (int i = 0; i < list.Count; i++)
+        {
+            LinkedList<Token> llist = new LinkedList<Token>(list);
+            var anchor = llist.First;
+
+            while(true)
             {
+                if (anchor == null) break;
+
+                Token ti = anchor.Value;                     
+
                 // Special case for ':=' operator.
-                if (i < list.Count - 1 && list[i].Type == TokenType.DELIMITER && list[i].Value.Equals(":"))
+                if (anchor.Next != null && ti.Type == TokenType.DELIMITER && ti.Value.Equals(":"))
                 {
-                    if (list[i + 1].Type == TokenType.OPERATOR && list[i + 1].Value.Equals("="))
+                    if (anchor.Next.Value.Type == TokenType.OPERATOR && anchor.Next.Value.Value.Equals("="))
                     {
-                        TokenPosition pos = list[i].Position;
-                        list.RemoveRange(i, 2);
-                        list.Insert(i, new Token(TokenType.OPERATOR, ":=", pos));
+                        TokenPosition pos = ti.Position;
+                        llist.AddAfter(anchor.Next, new Token(TokenType.OPERATOR, ":=", pos));
+                        var next_anchor = anchor.Next.Next;
+                        llist.Remove(anchor.Next);
+                        llist.Remove(anchor);
+                        anchor = next_anchor;
                     }
                 }
 
                 // Combine identifier/register/keyword/number tokens into a single token if any
-                if (list[i].Type == TokenType.IDENTIFIER || list[i].Type == TokenType.KEYWORD)
+                if (ti.Type == TokenType.IDENTIFIER || ti.Type == TokenType.KEYWORD)
                 {
-                    int j = i;
-                    TokenPosition pos = list[j].Position;
-                    TokenType savedType = list[j].Type;
+                    var ti_node_iter = anchor;
+                    TokenPosition pos = ti_node_iter.Value.Position;
+                    TokenType savedType = ti_node_iter.Value.Type;
                     int n = 0;
                     string value = "";
-                    while (j < list.Count && 
-                        (list[j].Type == TokenType.NUMBER || 
-                        list[j].Type == TokenType.IDENTIFIER || 
-                        list[j].Type == TokenType.KEYWORD))
+                    while (ti_node_iter != null &&
+                        (ti_node_iter.Value.Type == TokenType.NUMBER ||
+                        ti_node_iter.Value.Type == TokenType.IDENTIFIER ||
+                        ti_node_iter.Value.Type == TokenType.KEYWORD))
                     {
-                        value += list[j].Value;
+                        value += ti_node_iter.Value.Value;
                         n++;
-                        j++;
+                        ti_node_iter = ti_node_iter.Next;
                     }
-                    list.RemoveRange(i, n);
+                    for (int k = 0; k < n - 1; k++)
+                    {
+                        llist.Remove(anchor.Next);
+                    }
 
                     // Special case for registers
                     bool regFound = false;
@@ -153,36 +166,47 @@ namespace ERACompiler.Modules
                             savedType = TokenType.REGISTER;
                         }
                     }
-                    
-                    list.Insert(i, new Token(n > 1 && !regFound ? TokenType.IDENTIFIER : savedType, value, pos));
+
+                    llist.AddAfter(anchor, new Token(n > 1 && !regFound ? TokenType.IDENTIFIER : savedType, value, pos));
+                    var next_anchor = anchor.Next;
+                    llist.Remove(anchor);
+                    anchor = next_anchor;
                 }
 
                 // Special case for numbers
-                if (list[i].Type == TokenType.NUMBER)
+                if (ti.Type == TokenType.NUMBER)
                 {
-                    int j = i;
-                    TokenPosition pos = list[j].Position;
-                    TokenType savedType = list[j].Type;
+                    var ti_node_iter = anchor;
+                    TokenPosition pos = ti_node_iter.Value.Position;
+                    TokenType savedType = ti_node_iter.Value.Type;
                     int n = 0;
                     string value = "";
-                    while (j < list.Count && list[j].Type == TokenType.NUMBER)
+                    while (ti_node_iter != null && ti_node_iter.Value.Type == TokenType.NUMBER)
                     {
-                        value += list[j].Value;
+                        value += ti_node_iter.Value.Value;
                         n++;
-                        j++;
+                        ti_node_iter = ti_node_iter.Next;
                     }
-                    list.RemoveRange(i, n);
-                    list.Insert(i, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
+                    for (int k = 0; k < n - 1; k++)
+                    {
+                        llist.Remove(anchor.Next);
+                    }
+                    llist.AddAfter(anchor, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
+                    var next_anchor = anchor.Next;
+                    llist.Remove(anchor);
+                    anchor = next_anchor;
                 }
 
                 // Special case for '/=' operator
-                if (list[i].Type == TokenType.OPERATOR && list[i].Value.Equals("/="))
+                if (ti.Type == TokenType.OPERATOR && ti.Value.Equals("/="))
                 {
-                    list.RemoveAt(i + 1);
+                    llist.Remove(anchor.Next);
                 }
+
+                anchor = anchor.Next;
             }
 
-            return list;
+            return new List<Token>(llist);
         }
 
         /// <summary>

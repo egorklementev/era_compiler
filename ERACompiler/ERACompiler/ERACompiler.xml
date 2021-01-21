@@ -299,7 +299,7 @@
             <param name="rule">A rule to add.</param>
             <returns>The object itself.</returns>
         </member>
-        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.Verify(System.Collections.Generic.List{ERACompiler.Structures.Token},ERACompiler.Structures.ASTNode)">
+        <member name="M:ERACompiler.Structures.Rules.SyntaxRule.Verify(System.Collections.Generic.List{ERACompiler.Structures.Token},ERACompiler.Structures.ASTNode,System.Int32)">
             <summary>
             Main function of this class. Given a list of tokens and parent AST node it returns
             a SyntaxResponse instance which contains information about success of failure of syntax
@@ -307,8 +307,9 @@
             number of tokens received), and the parent AST node (that was given) filled with appropriate 
             AST children nodes according to this rule.
             </summary>
-            <param name="parentTokens"></param>
-            <param name="parentNode"></param>
+            <param name="tokens">The list of tokens.</param>
+            <param name="parentNode">Parent node (is needed to construct AST)</param>
+            <param name="tokenOffset">Offset in the token list to process tokens correctly (performance booster).</param>
             <returns></returns>
         </member>
         <member name="T:ERACompiler.Structures.Rules.SyntaxRule.SyntaxResponse">

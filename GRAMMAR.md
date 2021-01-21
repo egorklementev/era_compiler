@@ -59,7 +59,7 @@
 ---
 * **If** : `if` Expression `do` BlockBody ( `end` | `else` BlockBody `end` )
 * **Call** : Identifier CallArgs
-* **CallArgs** : `(` [ Expression { , Expression } ] `)`
+* **CallArgs** : `(` [ Expression { `,` Expression } ] `)`
 ---
 * **Expression** : Operand { Operator Operand }
 * **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | `=` | `/=` | `<` | `>`

@@ -15,9 +15,13 @@ namespace ERACompilerUnitTests
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/code_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_code_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_code_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -25,14 +29,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void RoutineRuleTests()
         {
-            int i = 7;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/routine_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/routine_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_routine_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_routine_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -45,9 +53,13 @@ namespace ERACompilerUnitTests
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/data_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_data_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_data_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -60,9 +72,13 @@ namespace ERACompilerUnitTests
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/module_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_module_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_module_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -75,9 +91,13 @@ namespace ERACompilerUnitTests
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/struct_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_struct_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_struct_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -85,14 +105,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void PragmaRuleTests()
         {
-            int i = 2;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/pragma_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/pragma_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_pragma_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_pragma_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -100,14 +124,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void VariableDeclarationRuleTests()
         {
-            int i = 4;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/variable_declaration_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/variable_declaration_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_variable_declaration_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_variable_declaration_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -115,14 +143,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void AssemblyStatementRuleTests()
         {
-            int i = 9;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/assembly_statement_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/assembly_statement_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_assembly_statement_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_assembly_statement_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -130,14 +162,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void ExpressionRuleTests()
         {
-            int i = 7;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/expression_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/expression_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_expression_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_expression_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -145,14 +181,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void AssignmentRuleTests()
         {
-            int i = 3;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/assignment_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/assignment_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_assignment_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_assignment_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -165,9 +205,13 @@ namespace ERACompilerUnitTests
             {                
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/swap_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_swap_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_swap_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -175,14 +219,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void CallRuleTests()
         {
-            int i = 2;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/call_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/call_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_call_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_call_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -195,9 +243,13 @@ namespace ERACompilerUnitTests
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/if_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_if_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_if_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -205,14 +257,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void LoopRuleTests()
         {
-            int i = 4;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/loop_rule_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/loop_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_loop_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_loop_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -225,24 +281,13 @@ namespace ERACompilerUnitTests
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/break_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_break_rule_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_break_rule_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
-                i++;
-            }
-        }
-
-        [TestMethod]
-        public void GotoRuleTests()
-        {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/goto_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/goto_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_goto_rule_" + i + ".era");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
@@ -250,14 +295,18 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void ComplexTests()
         {
-            int i = 2;
+            int i = 1;
             while (File.Exists("tests/syntax_analyzer/complex_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText("tests/syntax_analyzer/complex_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_complex_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_complex_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode, actualCode);
+                Assert.AreEqual(expectedCode.Length, actualCode.Length);
+                for (int j = 0; j < expectedCode.Length; j++)
+                {
+                    Assert.AreEqual(expectedCode[j], actualCode[j]);
+                }
                 i++;
             }
         }
