@@ -620,7 +620,14 @@ namespace ERACompiler.Modules
                 .SetName("Loop body")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kLoopRule)
-                .AddRule(blockBodyRule)
+                .AddRule(blockBodyRule);
+
+            SyntaxRule loopWhileRule = new SyntaxRule()
+                .SetName("Loop While")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(loopBodyRule)
+                .AddRule(kWhileRule)
+                .AddRule(expressionRule)
                 .AddRule(kEndRule);
 
             SyntaxRule whileRule = new SyntaxRule()
@@ -628,7 +635,8 @@ namespace ERACompiler.Modules
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(kWhileRule)
                 .AddRule(expressionRule)
-                .AddRule(loopBodyRule);
+                .AddRule(loopBodyRule)
+                .AddRule(kEndRule);
 
             SyntaxRule forRule = new SyntaxRule()
                 .SetName("For")
@@ -656,14 +664,15 @@ namespace ERACompiler.Modules
                     .AddRule(kStepRule)
                     .AddRule(expressionRule)
                 )
-                .AddRule(loopBodyRule);
+                .AddRule(loopBodyRule)
+                .AddRule(kEndRule);
 
             SyntaxRule loopRule = new SyntaxRule()
                 .SetName("Loop")
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
                 .AddRule(forRule)
                 .AddRule(whileRule)
-                .AddRule(loopBodyRule);
+                .AddRule(loopWhileRule);
 
             SyntaxRule breakRule = new SyntaxRule()
                 .SetName("Break")
@@ -712,11 +721,29 @@ namespace ERACompiler.Modules
                 .AddRule(returnRule)
                 .AddRule(varDeclarationRule);
 
+            SyntaxRule labelRule = new SyntaxRule()
+                .SetName("Label")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(opLessRule)
+                .AddRule(identifierRule)
+                .AddRule(opGreaterRule);
+
             SyntaxRule statementRule = new SyntaxRule()
                 .SetName("Statement")
-                .SetType(SyntaxRule.SyntaxRuleType.OR)
-                .AddRule(assemblyBlockRule)
-                .AddRule(extensionStatementRule);
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("[ Label ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(labelRule)
+                    )
+                .AddRule(
+                        new SyntaxRule()
+                        .SetName("Assembly Block | Extension Statement")
+                        .SetType(SyntaxRule.SyntaxRuleType.OR)
+                        .AddRule(assemblyBlockRule) 
+                        .AddRule(extensionStatementRule)
+                        );
 
             blockBodyRule
                 .AddRule(statementRule);
@@ -730,7 +757,7 @@ namespace ERACompiler.Modules
                     .SetName("{ Statement }")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
                     .AddRule(statementRule)                
-                )
+                    )
                 .AddRule(kEndRule);
 
             SyntaxRule parameterRule = new SyntaxRule()
@@ -762,15 +789,15 @@ namespace ERACompiler.Modules
                     .SetName("[ Parameters ]")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                     .AddRule(parametersRule)
-                )
+                    )
                 .AddRule(rightParenRule)
                 .AddRule(
                     new SyntaxRule()
-                        .SetName("[ : Type ]")
-                        .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
-                        .AddRule(colonRule)
-                        .AddRule(typeRule)
-                )
+                    .SetName("[ : Type ]")
+                    .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
+                    .AddRule(colonRule)
+                    .AddRule(typeRule)
+                    )
                 .AddRule(routineBodyRule);
 
             SyntaxRule structureRule = new SyntaxRule()

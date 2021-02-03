@@ -8,300 +8,118 @@ namespace ERACompilerUnitTests
     public class SyntaxAnalyzerUnitTests
     {
         [TestMethod]
+        public void LabelRuleTests()
+        {
+            CompileFiles("label");
+        }
+
+        [TestMethod]
         public void CodeRuleTests()
         {
-            int i = 1;
-            while(File.Exists("tests/syntax_analyzer/code_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/code_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_code_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("code");
         }
 
         [TestMethod]
         public void RoutineRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/routine_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/routine_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_routine_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("routine");
         }
 
         [TestMethod]
         public void DataRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/data_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/data_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_data_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("data");
         }
 
         [TestMethod]
         public void ModuleRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/module_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/module_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_module_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("module");
         }
 
         [TestMethod]
         public void StructRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/struct_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/struct_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_struct_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("struct");
         }
 
         [TestMethod]
         public void PragmaRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/pragma_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/pragma_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_pragma_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("pragma");
         }
 
         [TestMethod]
         public void VariableDeclarationRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/variable_declaration_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/variable_declaration_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_variable_declaration_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("variable_declaration");
         }
 
         [TestMethod]
         public void AssemblyStatementRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/assembly_statement_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/assembly_statement_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_assembly_statement_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("assembly_statement");
         }
 
         [TestMethod]
         public void ExpressionRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/expression_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/expression_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_expression_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("expression");
         }
 
         [TestMethod]
         public void AssignmentRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/assignment_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/assignment_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_assignment_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("assignment");
         }
 
         [TestMethod]
         public void SwapRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/swap_rule_" + i + ".era"))
-            {                
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/swap_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_swap_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("swap");
         }
 
         [TestMethod]
         public void CallRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/call_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/call_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_call_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("call");
         }
 
         [TestMethod]
         public void IfRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/if_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/if_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_if_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("if");
         }
 
         [TestMethod]
         public void LoopRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/loop_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/loop_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_loop_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("loop");
         }
 
         [TestMethod]
         public void BreakRuleTests()
         {
-            int i = 1;
-            while (File.Exists("tests/syntax_analyzer/break_rule_" + i + ".era"))
-            {
-                Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/break_rule_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_break_rule_" + i + ".bin");
-                byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
-                Assert.AreEqual(expectedCode.Length, actualCode.Length);
-                for (int j = 0; j < expectedCode.Length; j++)
-                {
-                    Assert.AreEqual(expectedCode[j], actualCode[j]);
-                }
-                i++;
-            }
+            CompileFiles("break");
         }
 
         [TestMethod]
         public void ComplexTests()
         {
+            CompileFiles("complex");
+        }
+
+        private void CompileFiles(string test_name)
+        {
             int i = 1;
-            while (File.Exists("tests/syntax_analyzer/complex_" + i + ".era"))
+            while (File.Exists("tests/syntax_analyzer/" + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/complex_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/compiled_complex_" + i + ".bin");
+                string sourceCode = File.ReadAllText("tests/syntax_analyzer/" + test_name + "_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/expected_compiled_" + test_name + "_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+                // Store the compiler output in a file
+                File.WriteAllBytes("tests/syntax_analyzer/actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
                 Assert.AreEqual(expectedCode.Length, actualCode.Length);
                 for (int j = 0; j < expectedCode.Length; j++)
                 {

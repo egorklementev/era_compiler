@@ -11,7 +11,7 @@ namespace ERACompiler.Modules
     {
         private readonly VarType no_type = new VarType(VarType.ERAType.NO_TYPE); // Placeholder
         private int blockBodyCounter = 0;
-        private AASTNode varToAddToCtx = null;
+        private AASTNode varToAddToCtx = null; // For for loops
 
         public AASTNode BuildAAST(ASTNode ASTRoot)
         {
@@ -73,12 +73,16 @@ namespace ERACompiler.Modules
                     return AnnotateFor(node, parent);
                 case "While":
                     return AnnotateWhile(node, parent);
+                case "Loop While":
+                    return AnnotateLoopWhile(node, parent);
                 case "Loop body":
                     return AnnotateLoopBody(node, parent);
                 case "Break":
                     return AnnotateBreak(node, parent);
                 case "Return":
                     return AnnotateReturn(node, parent);
+                case "Statement":
+                    return AnnotateStatement(node, parent);
                 case "KEYWORD":
                 case "OPERATOR":
                 case "REGISTER":
@@ -90,8 +94,8 @@ namespace ERACompiler.Modules
                 case "Operand":
                 case "Operator":
                 case "Receiver":
-                case "Statement":
                 case "Some unit":
+                case "LoopBody end":
                 case "Extension statement":
                 case "Some module statement":
                 case "Identifier | Register":
@@ -104,6 +108,45 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateLoopWhile(ASTNode node, AASTNode parent)
+        {
+            AASTNode loopWhileNode = new AASTNode(node, parent, no_type);
+            loopWhileNode.Children.Add(AnnotateNode(node.Children[0], loopWhileNode));
+            CheckVariablesForExistance(node.Children[2], FindParentContext(parent));
+            loopWhileNode.Children.Add(AnnotateExpr(node.Children[2], loopWhileNode));
+            return loopWhileNode;
+        }
+
+        private AASTNode AnnotateStatement(ASTNode node, AASTNode parent)
+        {
+            AASTNode stmnt = new AASTNode(node, parent, no_type);
+
+            // Label if any
+            if (node.Children[0].Children.Count > 0)
+            {
+                stmnt.Children.Add(AnnotateLabel(node.Children[0].Children[0], stmnt));
+            }
+
+            // The statement itself
+            stmnt.Children.Add(AnnotateNode(node.Children[1].Children[0], stmnt));
+
+            return stmnt;
+        }
+
+        private ASTNode AnnotateLabel(ASTNode node, AASTNode parent)
+        {
+            AASTNode label = new AASTNode(node, parent, new VarType(VarType.ERAType.LABEL));
+
+            // Add label to the context
+            Context ctx = FindParentContext(parent);
+            ctx.AddVar(label, node.Children[1].Token.Value);
+
+            // Put identifier
+            label.Children.Add(AnnotateNode(node.Children[1], label));
+
+            return label;
         }
 
         private AASTNode AnnotateReturn(ASTNode node, AASTNode parent)

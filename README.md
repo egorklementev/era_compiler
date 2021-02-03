@@ -15,13 +15,14 @@ File with code -> Lexical Analyzer ->
 Compiler works as console appilcation.  
 The main command is `ERACompiler`.  
 There are several arguments available:
-* `-h`  :  see help
-* `-s {filename}`  :  specify source files to be compiled
+* `-h`  :  see help  
+* `-s {filename}`  :  specify source files to be compiled  
 * `-o {filename}`  :  specify output files  
-* `-d {paths}`  :  specify folders with the code to be compiled (cannot be used with `-o` parameter)
+* `-d {paths}`  :  specify folders with the code to be compiled (cannot be used with `-o` parameter)  
+* `-p`  :  force to create folders if they do not exist  
 * `--lexis`  :  perform tokenization only  
-* `--syntax`  :  perform tokenization and AST assembling
-* `--semantics`  :  perform tokenization, AST assembling, and AAST assembling
+* `--syntax`  :  perform tokenization and AST assembling  
+* `--semantics`  :  perform tokenization, AST assembling, and AAST assembling  
 * `--flog`  :  log errors and exceptions to the file  
   
 Examples of commands:  

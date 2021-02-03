@@ -19,7 +19,43 @@ namespace ERACompiler.Modules
 
         public byte[] GetAssemblyCode(AASTNode root)
         {
-            return ConstructCode(root);
+            return new byte[] 
+            {
+                0x01,
+                0x00,
+
+                0x00, // Static data address
+                0x00,
+                0x00,
+                0x12,
+                
+                0x00, // Static data length
+                0x00,
+                0x00,
+                0x02,
+
+                0x00, // Code data address
+                0x00,
+                0x00,
+                0x16,
+
+                0x00, // Code data length
+                0x00,
+                0x00,
+                0x04,
+
+                0x00, // Static data itself
+                0x00,
+                0x00,
+                0xf0,
+
+                // Code data itself 
+                0xd0, 0x1e, // r0 := sb;
+                0xc8, 0x61, // r1 := 3;
+                0xd4, 0x20, // r0 += r1;
+                0xc4, 0x00  // r0 := ->r0;
+            };
+            //return ConstructCode(root);
         }
 
         private byte[] ConstructCode(AASTNode node, bool lookingForStatic = false)

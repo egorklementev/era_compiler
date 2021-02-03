@@ -22,7 +22,8 @@
 * **Parameters** : Parameter { `,` Parameter }
 * **Parameter** : Type Identifier
 * **RoutineBody** : `do` { Statement } `end`
-* **Statement** : AssemblyBlock | ExtensionStatement
+* **Statement** : [ Label ] ( AssemblyBlock | ExtensionStatement )
+* **Label** : `<` Identifier `>`
 ---
 * **AssemblyBlock**: `asm` AssemblyStatement `;` { AssemblyStatement `;` } `end`   
 * **AssemblyStatement**  
@@ -47,10 +48,11 @@
 * **Register** : R0 | R1 | ... | R30 | R31
 ---
 * **ExtensionStatement** : Assignment | Swap | ( Call `;` ) | If | Loop | Break | Return | VarDeclaration
-* **Loop** : For | While | LoopBody
-* **For** : `for` Identifier [ `from` Expression ] [ `to` Expression] [ `step` Expression ] LoopBody
-* **While** : `while` Expression LoopBody
-* **LoopBody** : `loop` BlockBody `end`
+* **Loop** : For | While | LoopWhile
+* **For** : `for` Identifier [ `from` Expression ] [ `to` Expression] [ `step` Expression ] LoopBody `end`
+* **While** : `while` Expression LoopBody `end`
+* **LoopWhile** : LoopBody `while` Expression `end`
+* **LoopBody** : `loop` BlockBody
 * **BlockBody** : { Statement }
 * **Break** : `break` `;`
 * **Return** : `return` [ ( Expression | Call ) ] `;`
