@@ -83,6 +83,8 @@ namespace ERACompiler.Modules
                     return AnnotateReturn(node, parent);
                 case "Statement":
                     return AnnotateStatement(node, parent);
+                case "Goto":
+                    return AnnotateGoto(node, parent);
                 case "KEYWORD":
                 case "OPERATOR":
                 case "REGISTER":
@@ -108,6 +110,14 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
+        }
+
+        private AASTNode AnnotateGoto(ASTNode node, AASTNode parent)
+        {
+            AASTNode gotoNode = new AASTNode(node, parent, no_type);
+            CheckVariablesForExistance(node, FindParentContext(parent));
+            gotoNode.Children.Add(AnnotateNode(node.Children[1], gotoNode));
+            return gotoNode;
         }
 
         private AASTNode AnnotateLoopWhile(ASTNode node, AASTNode parent)
@@ -392,6 +402,20 @@ namespace ERACompiler.Modules
                         "This expression should be constant (refer to the documentation)!!!\r\n" +
                         "  At (Line: " + node.Children[2].Token.Position.Line.ToString() +
                         ", Char: " + node.Children[2].Token.Position.Char.ToString() + ")."
+                        ));
+                }
+            }
+            else if (node.ASTType.Equals("Register := Register + Expression"))
+            {
+                // Check if expression is constant
+                Context ctx = FindParentContext(parent);
+                CheckVariablesForExistance(node.Children[4], ctx);
+                if (!IsExprConstant(node.Children[4], ctx))
+                {
+                    Logger.LogError(new SemanticError(
+                        "This expression should be constant (refer to the documentation)!!!\r\n" +
+                        "  At (Line: " + node.Children[4].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[4].Token.Position.Char.ToString() + ")."
                         ));
                 }
             }

@@ -191,16 +191,16 @@ namespace ERACompiler.Modules
                 .AddRule(opGreaterRule)
                 .AddRule(opLessRule);
 
-            SyntaxRule referenceRule = new SyntaxRule()
-                .SetName("Reference")
-                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                .AddRule(opTakeAddrRule)
-                .AddRule(identifierRule);
-
             SyntaxRule primaryRule = new SyntaxRule()
                 .SetName("Primary")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE);
             // other rules are added after 'Call args' rule
+
+            SyntaxRule referenceRule = new SyntaxRule()
+                .SetName("Reference")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(opTakeAddrRule)
+                .AddRule(primaryRule);
 
             SyntaxRule explicitAddrRule = new SyntaxRule()
                 .SetName("Explicit address")
@@ -388,6 +388,32 @@ namespace ERACompiler.Modules
                     .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                     .AddRule(kFormatRule)
                     .AddRule(literalRule) // The actual check of a number is done in the SemanticsAnalyzer
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("< Identifier >")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(opLessRule)
+                    .AddRule(identifierRule)
+                    .AddRule(opGreaterRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Register := Identifier")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAssignRule)
+                    .AddRule(identifierRule)
+                )
+                .AddRule(
+                    new SyntaxRule()
+                    .SetName("Register := Register + Expression")
+                    .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                    .AddRule(registerRule)
+                    .AddRule(opAssignRule)
+                    .AddRule(registerRule)
+                    .AddRule(opPlusRule)
+                    .AddRule(expressionRule)
                 )
                 .AddRule(
                     new SyntaxRule()
@@ -674,6 +700,13 @@ namespace ERACompiler.Modules
                 .AddRule(whileRule)
                 .AddRule(loopWhileRule);
 
+            SyntaxRule gotoRule = new SyntaxRule()
+                .SetName("Goto")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kGotoRule)
+                .AddRule(identifierRule)
+                .AddRule(semicolonRule);
+
             SyntaxRule breakRule = new SyntaxRule()
                 .SetName("Break")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
@@ -718,6 +751,7 @@ namespace ERACompiler.Modules
                 .AddRule(ifRule)
                 .AddRule(loopRule)
                 .AddRule(breakRule)
+                .AddRule(gotoRule)
                 .AddRule(returnRule)
                 .AddRule(varDeclarationRule);
 

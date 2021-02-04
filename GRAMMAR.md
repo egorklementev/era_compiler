@@ -29,11 +29,14 @@
 * **AssemblyStatement**  
 &emsp;: `skip` // NOP  
 &emsp;| `stop` // STOP  
+&emsp;| `<` Identifier `>` // Label  
 &emsp;| `format` ( 8 | 16 | 32 ) // format of next command  
 &emsp;| Register `:=` `->` Register  
 &emsp;| `->` Register `:=` Register  
 &emsp;| Register `:=` Register  
-&emsp;| Register `:=` Expression  
+&emsp;| Register `:=` Identifier // Label  
+&emsp;| Register `:=` Expression // Should be in range [0-31]  
+&emsp;| Register `:=` Register + Expression  
 &emsp;| Register `+=` Register  
 &emsp;| Register `-=` Register  
 &emsp;| Register `>>=` Register  

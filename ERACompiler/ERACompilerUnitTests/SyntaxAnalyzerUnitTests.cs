@@ -50,6 +50,12 @@ namespace ERACompilerUnitTests
         }
 
         [TestMethod]
+        public void GotoRuleTests()
+        {
+            CompileFiles("goto");
+        }
+
+        [TestMethod]
         public void VariableDeclarationRuleTests()
         {
             CompileFiles("variable_declaration");
