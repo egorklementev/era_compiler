@@ -46,62 +46,70 @@ namespace ERACompiler.Modules
         /// <returns>A list of tokens constructed from the source code.</returns>
         public List<Token> GetTokenList(string sourceCode)
         {
-            List<Token> finalList = new List<Token>();
-            
-            if (sourceCode.Length <= 2)
+            try
             {
-                Logger.LogError(new LexicalError("The source code length should be at least more than two characters!!!"));
-            }
+                List<Token> finalList = new List<Token>();
 
-            sourceCode = sourceCode.ToLower();
-
-            remembered = sourceCode[0] + ""; // Will start traversal from the second character
-
-            // Traversing through the characters of the source code
-            for (int i = 1; i < sourceCode.Length; i++)
-            {
-                char c = sourceCode[i]; // Current character
-
-                if (IsAbleToDetermineToken(c))
+                if (sourceCode.Length <= 2)
                 {
-                    Token t = DetermineToken(c);
+                    throw new LexicalErrorException("The source code length should be at least more than two characters!!!");
+                }
 
-                    // Determine line and character numbers
-                    if (t.Type == TokenType.WHITESPACE) { 
-                        if (t.Value == "\n" || t.Value == "\r\n")
+                sourceCode = sourceCode.ToLower();
+
+                remembered = sourceCode[0] + ""; // Will start traversal from the second character
+
+                // Traversing through the characters of the source code
+                for (int i = 1; i < sourceCode.Length; i++)
+                {
+                    char c = sourceCode[i]; // Current character
+
+                    if (IsAbleToDetermineToken(c))
+                    {
+                        Token t = DetermineToken(c);
+
+                        // Determine line and character numbers
+                        if (t.Type == TokenType.WHITESPACE)
+                        {
+                            if (t.Value == "\n" || t.Value == "\r\n")
+                            {
+                                lineChar = 0;
+                                lineNumber++;
+                            }
+                        }
+
+                        // Special case for comments
+                        if (t.Type == TokenType.DELIMITER && t.Value.Equals("//"))
                         {
                             lineChar = 0;
-                            lineNumber++;
+                            while (c != '\n' && i < sourceCode.Length)
+                            {
+                                c = sourceCode[i++];
+                            }
+                            i--;
+                            remembered = "\r\n";
                         }
-                    }
-
-                    // Special case for comments
-                    if (t.Type == TokenType.DELIMITER && t.Value.Equals("//"))
-                    {
-                        lineChar = 0;
-                        while (c != '\n' && i < sourceCode.Length)
+                        else
                         {
-                            c = sourceCode[i++];                            
+                            finalList.Add(t);
+                            remembered = c.ToString();
                         }
-                        i--;
-                        remembered = "\r\n";
                     }
                     else
                     {
-                        finalList.Add(t);
-                        remembered = c.ToString();
+                        remembered += c;
                     }
+                    lineChar++;
                 }
-                else
-                {
-                    remembered += c;                    
-                }
-                lineChar++;
+
+                finalList = Analyze(finalList);
+
+                return new List<Token>(finalList);
             }
-
-            finalList = Analyze(finalList);
-
-            return new List<Token>(finalList);
+            catch (System.NullReferenceException)
+            {
+                throw new LexicalErrorException("In file \"" + Program.currentFile + "\": input file malformed!");
+            }
         }
 
         /// <summary>

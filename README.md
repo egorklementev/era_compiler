@@ -20,10 +20,10 @@ There are several arguments available:
 * `-o {filename}`  :  specify output files  
 * `-d {paths}`  :  specify folders with the code to be compiled (cannot be used with `-o` parameter)  
 * `-p`  :  force to create folders if they do not exist  
-* `--lexis`  :  perform tokenization only  
-* `--syntax`  :  perform tokenization and AST assembling  
-* `--semantics`  :  perform tokenization, AST assembling, and AAST assembling  
-* `--flog`  :  log errors and exceptions to the file  
+* `--err`  :  display more detailed error messages  
+* `--lex`  :  perform tokenization only  
+* `--syn`  :  perform tokenization and AST assembling  
+* `--sem`  :  perform tokenization, AST assembling, and AAST assembling  
   
 Examples of commands:  
 `ERACompiler -h`  -  get help message  

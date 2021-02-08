@@ -72,8 +72,8 @@
 * **Receiver** : Primary | Dereference | ExplicitAddress | Register
 * **Primary** : Identifier { `.` Identifier } [ ArrayAccess | CallArgs ]
 * **ArrayAccess** : `[` Expression `]`
-* **Reference** : `<-` Identifier
-* **Dereference** : `->` ( Identifier | Register )
+* **Reference** : `<-` Primary
+* **Dereference** : `->` ( Primary | Register )
 * **ExplicitAddress** : `->` Literal
 ---
 * **Identifier** : *(_a-zA-Z0-9)+*

@@ -8,7 +8,7 @@ namespace ERACompilerUnitTests
     public class SemanticAnalyzerUnitTests
     {
         [TestMethod]
-        public void ComplexRuleTests()
+        public void ComplexTests()
         {
             CompileFiles("complex");
         }

@@ -95,11 +95,11 @@
             <param name="ctx">Current context</param>
             <returns>The value of an operand.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticAnalyzer.CheckVariablesForExistance(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.PostChecks(ERACompiler.Structures.AASTNode,ERACompiler.Structures.Context)">
             <summary>
-            Checks whether expression variables are declared in current context.
+            Performs additional checks after the AAST is constructed.
             </summary>
-            <param name="node">Expected ASTType - Expression</param>
+            <param name="node">Expected ASTType - Any node (preferrable Program)</param>
             <param name="ctx">Current context</param>
         </member>
         <member name="M:ERACompiler.Modules.SemanticAnalyzer.IsExprConstant(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
@@ -229,7 +229,7 @@
             <param name="variable">The variable node.</param>
             <param name="identifier">The name of the variable node.</param>
         </member>
-        <member name="M:ERACompiler.Structures.Context.GetConsValue(ERACompiler.Structures.Token)">
+        <member name="M:ERACompiler.Structures.Context.GetConstValue(ERACompiler.Structures.Token)">
             <summary>
             Returns a value of a constant variable. Used for compile-time constant expression calculation and for retrieving intial values.
             </summary>
@@ -376,57 +376,6 @@
         <member name="T:ERACompiler.Structures.TokenPosition">
             <summary>
             Position (in terms of line and characters on the line) of the token in the source code.
-            </summary>
-        </member>
-        <member name="T:ERACompiler.Utilities.Logger">
-            <summary>
-            Used to log the compilation process and display all the errors in compilation.
-            </summary>
-        </member>
-        <member name="P:ERACompiler.Utilities.Logger.LoggingMode">
-            <summary>
-            0 for file logging, 1 for console logging
-            </summary>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.#ctor(System.String,System.Boolean)">
-            <summary>
-            Constructor.
-            </summary>
-            <param name="path">Output file for logs.</param>
-            <param name="enableLogging">Whether or not to log anything.</param>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.#ctor(System.Boolean)">
-            <summary>
-            Constuctor without specification of the output file.
-            </summary>
-            <param name="enableLogging">Whether or not to log anything.</param>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.LogException(System.Exception)">
-            <summary>
-            Logs exception to the specified log file.
-            </summary>
-            <param name="ex">Exception to be logged.</param>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.LogError(ERACompiler.Utilities.Errors.CompilationError)">
-            <summary>
-            Logs the compilation error to the specified log file and exits the program exection.
-            </summary>
-            <param name="err">Error to be logged.</param>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.LogErrors(System.Collections.Generic.List{ERACompiler.Utilities.Errors.CompilationError})">
-            <summary>
-            Logs the compilation errors to the specified log file and exits the program exection.
-            </summary>
-            <param name="errList">Error list to be logged.</param>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.EnableLogging">
-            <summary>
-            Enables the Logger to log compilation process to the file.
-            </summary>
-        </member>
-        <member name="M:ERACompiler.Utilities.Logger.DisableLogging">
-            <summary>
-            Disables the Logger from logging compilation process to the file.
             </summary>
         </member>
         <member name="T:NativeMethods">

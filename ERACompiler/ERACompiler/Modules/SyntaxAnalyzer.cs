@@ -214,9 +214,9 @@ namespace ERACompiler.Modules
                 .AddRule(opTakeValRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("Identifier | Register")
+                    .SetName("Primary | Register")
                     .SetType(SyntaxRule.SyntaxRuleType.OR)
-                    .AddRule(identifierRule)
+                    .AddRule(primaryRule)
                     .AddRule(registerRule)
                 );
 
@@ -960,7 +960,7 @@ namespace ERACompiler.Modules
             SyntaxRule.SyntaxResponse sr = programRule.Verify(tokens, root);
             if (!sr.Success)
             {
-                Logger.LogError(programRule.GetErrors());
+                throw programRule.GetErrors();
             }
             return sr;
         }

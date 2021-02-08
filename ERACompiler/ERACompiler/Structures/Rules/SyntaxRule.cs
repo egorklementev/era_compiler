@@ -91,7 +91,7 @@ namespace ERACompiler.Structures.Rules
                     Token expected = ((RuleTerminal)this).GetToken();
                     if (tokens.Count <= tokenOffset) 
                     {
-                        LogSyntaxError();
+                        //LogSyntaxError();
                         return new SyntaxResponse(FAILED, 0);
                     }
                     switch (expected.Type)
@@ -134,6 +134,7 @@ namespace ERACompiler.Structures.Rules
                         }
                         else
                         {
+                            LogSyntaxError();
                             return new SyntaxResponse(FAILED, 0);
                         }
                     }
@@ -241,6 +242,7 @@ namespace ERACompiler.Structures.Rules
                     }
                     if (tokens.Count != oomTokensConsumed)
                     {
+                        //LogSyntaxError();
                         return new SyntaxResponse(FAILED, 0);
                     }
                     else
@@ -270,7 +272,7 @@ namespace ERACompiler.Structures.Rules
                 default:
                     break;
             }
-            LogSyntaxError();
+            //LogSyntaxError();
             return new SyntaxResponse(FAILED, 0);
         }
 
@@ -279,7 +281,7 @@ namespace ERACompiler.Structures.Rules
             errorList.Add(
                 "  At (Line: " + lastTokenPos.Line.ToString() + ", Char: " +
                 lastTokenPos.Char.ToString() + ").  " +
-                "Error at \"" + ruleName + "\".\n" + errorDescription
+                "Error at \"" + ruleName + "\"." + errorDescription
                 );
         }
 
@@ -311,15 +313,22 @@ namespace ERACompiler.Structures.Rules
             public ASTNode AstNode { get => ast_node; set => ast_node = value; }
         }
 
-        public SyntaxError GetErrors()
+        public SyntaxErrorException GetErrors()
         {
             string errorMsg = "";
-            errorList.Reverse();
-            foreach (var err in errorList)
+            if (Program.extendedErrorMessages)
             {
-                errorMsg += err;
+                errorList.Reverse();
+                foreach (var err in errorList)
+                {
+                    errorMsg += err;
+                }
             }
-            return new SyntaxError(errorMsg);
+            else
+            {
+                errorMsg += errorList[0];
+            }
+            return new SyntaxErrorException(errorMsg);
         }
 
         public enum SyntaxRuleType
