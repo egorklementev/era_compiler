@@ -56,11 +56,11 @@ namespace ERACompiler.Structures
             {
                 TokenPosition pos = st[identifier].Token.Position;
                 TokenPosition dPos = variable.Token.Position;
-                Logger.LogError(new SemanticError(
+                throw new SemanticErrorException(
                     "A variable with name \"" + identifier + "\" is already declared!!!\r\n" +
                     "\tAt (Line: " + pos.Line + ", Char: " + pos.Char + ").\r\n" +
                     "\tAt (Line: " + dPos.Line + ", Char: " + dPos.Char + ") - duplicate."
-                    ));
+                    );
             }
         }
 
@@ -69,17 +69,16 @@ namespace ERACompiler.Structures
         /// </summary>
         /// <param name="identifier">The variable name.</param>
         /// <returns>Value of a constant variable.</returns>
-        public int GetConsValue(Token identifier)
+        public int GetConstValue(Token identifier)
         {
             AASTNode? var = LocateVar(identifier.Value);
 
             if (var == null)
             {
-                Logger.LogError(new SemanticError(
+                throw new SemanticErrorException(
                     "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
                     "\tAt (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
-                    ));
-                return -1;
+                    );
             }
             else
             {
@@ -102,11 +101,10 @@ namespace ERACompiler.Structures
             AASTNode? var = LocateVar(identifier.Value);
             if (var == null)
             {
-                Logger.LogError(new SemanticError(
+                throw new SemanticErrorException(
                     "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
                     "\tAt (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
-                    ));
-                return false;
+                    );
             }
             else
             {

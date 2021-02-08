@@ -77,27 +77,21 @@ namespace ERACompiler.Structures.Rules
         /// number of tokens received), and the parent AST node (that was given) filled with appropriate 
         /// AST children nodes according to this rule.
         /// </summary>
-        /// <param name="parentTokens"></param>
-        /// <param name="parentNode"></param>
+        /// <param name="tokens">The list of tokens.</param>
+        /// <param name="parentNode">Parent node (is needed to construct AST)</param>
+        /// <param name="tokenOffset">Offset in the token list to process tokens correctly (performance booster).</param>
         /// <returns></returns>
-        public SyntaxResponse Verify(List<Token> parentTokens, ASTNode parentNode)
+        public SyntaxResponse Verify(List<Token> tokens, ASTNode parentNode, int tokenOffset = 0)
         {
-            // Copy tokens to overcome their removal at upper levels
-            List<Token> tokens = new List<Token>();
-            foreach (var token in parentTokens)
-            {
-                tokens.Add(new Token(token));
-            }
-
             // Process according to the rule type
             switch (type)
             {
                 // If terminal - just check token type and, if necessary, token value
                 case SyntaxRuleType.TERMINAL:
                     Token expected = ((RuleTerminal)this).GetToken();
-                    if (tokens.Count == 0) 
+                    if (tokens.Count <= tokenOffset) 
                     {
-                        LogSyntaxError();
+                        //LogSyntaxError();
                         return new SyntaxResponse(FAILED, 0);
                     }
                     switch (expected.Type)
@@ -105,18 +99,18 @@ namespace ERACompiler.Structures.Rules
                         case TokenType.KEYWORD:
                         case TokenType.OPERATOR:
                         case TokenType.DELIMITER:
-                            lastTokenPos = tokens[0].Position;
+                            lastTokenPos = tokens[tokenOffset].Position;
                             return new SyntaxResponse(
-                                expected.Value.Equals(tokens[0].Value),
+                                expected.Value.Equals(tokens[tokenOffset].Value),
                                 1,
-                                new ASTNode(parentNode, new List<ASTNode>(), tokens[0], expected.Type.ToString())
+                                new ASTNode(parentNode, new List<ASTNode>(), tokens[tokenOffset], expected.Type.ToString())
                                 );
                         default:
-                            lastTokenPos = tokens[0].Position;
+                            lastTokenPos = tokens[tokenOffset].Position;
                             return new SyntaxResponse(
-                                expected.Type == tokens[0].Type, 
+                                expected.Type == tokens[tokenOffset].Type, 
                                 1,
-                                new ASTNode(parentNode, new List<ASTNode>(), tokens[0], expected.Type.ToString())
+                                new ASTNode(parentNode, new List<ASTNode>(), tokens[tokenOffset], expected.Type.ToString())
                                 );
                     }
 
@@ -126,20 +120,21 @@ namespace ERACompiler.Structures.Rules
                     ASTNode seqNode = new ASTNode(
                         parentNode, 
                         new List<ASTNode>(), 
-                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        tokens.Count > tokenOffset ? tokens[tokenOffset] : noToken, 
                         ruleName
                         );
                     foreach (var rule in rules)
                     {
-                        SyntaxResponse response = rule.Verify(tokens, seqNode);
+                        SyntaxResponse response = rule.Verify(tokens, seqNode, tokenOffset + tokensConsumed);
                         if (response.Success)
                         {
                             tokensConsumed += response.TokensConsumed;
-                            tokens.RemoveRange(0, response.TokensConsumed);
+                            //tokens.RemoveRange(0, response.TokensConsumed);
                             seqNode.Children.Add(response.AstNode);
                         }
                         else
                         {
+                            LogSyntaxError();
                             return new SyntaxResponse(FAILED, 0);
                         }
                     }
@@ -153,7 +148,7 @@ namespace ERACompiler.Structures.Rules
                     ASTNode zooNode = new ASTNode(
                         parentNode, 
                         new List<ASTNode>(), 
-                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        tokens.Count > tokenOffset ? tokens[tokenOffset] : noToken, 
                         ruleName
                         );
                     while (true)
@@ -161,11 +156,11 @@ namespace ERACompiler.Structures.Rules
                         bool toBreak = false;
                         foreach (var rule in rules)
                         {
-                            SyntaxResponse response = rule.Verify(tokens, zooNode);
+                            SyntaxResponse response = rule.Verify(tokens, zooNode, tokenOffset + zooTokensConsumed);
                             if (response.Success)
                             {
                                 zooTokensConsumed += response.TokensConsumed;
-                                tokens.RemoveRange(0, response.TokensConsumed);
+                                //tokens.RemoveRange(0, response.TokensConsumed);
                                 zooNode.Children.Add(response.AstNode);
                             }
                             else
@@ -186,7 +181,7 @@ namespace ERACompiler.Structures.Rules
                     ASTNode zomNode = new ASTNode(
                         parentNode, 
                         new List<ASTNode>(), 
-                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        tokens.Count > tokenOffset ? tokens[tokenOffset] : noToken, 
                         ruleName
                         );
                     while (true)
@@ -194,11 +189,11 @@ namespace ERACompiler.Structures.Rules
                         bool toBreak = false;
                         foreach (var rule in rules)
                         {
-                            SyntaxResponse response = rule.Verify(tokens, zomNode);
+                            SyntaxResponse response = rule.Verify(tokens, zomNode, tokenOffset + zomTokensConsumed);
                             if (response.Success)
                             {
                                 zomTokensConsumed += response.TokensConsumed;
-                                tokens.RemoveRange(0, response.TokensConsumed);
+                                //tokens.RemoveRange(0, response.TokensConsumed);
                                 zomNode.Children.Add(response.AstNode);
                             }
                             else
@@ -221,7 +216,7 @@ namespace ERACompiler.Structures.Rules
                     ASTNode oomNode = new ASTNode(
                         parentNode, 
                         new List<ASTNode>(),
-                        tokens.Count > 0 ? tokens[0] : noToken,
+                        tokens.Count > tokenOffset ? tokens[tokenOffset] : noToken,
                         ruleName
                         );
                     while (true)
@@ -229,11 +224,11 @@ namespace ERACompiler.Structures.Rules
                         bool toBreak = false;
                         foreach (var rule in rules)
                         {
-                            SyntaxResponse response = rule.Verify(tokens, oomNode);
+                            SyntaxResponse response = rule.Verify(tokens, oomNode, tokenOffset + oomTokensConsumed);
                             if (response.Success)
                             {
-                                oomTokensConsumed += response.TokensConsumed;
-                                tokens.RemoveRange(0, response.TokensConsumed);
+                                oomTokensConsumed += response.TokensConsumed;                                
+                                //tokens.RemoveRange(0, response.TokensConsumed);
                                 oomNode.Children.Add(response.AstNode);
                             }
                             else
@@ -245,8 +240,9 @@ namespace ERACompiler.Structures.Rules
                         if (toBreak) break;
                         oomNum++;
                     }
-                    if (tokens.Count > 0)
+                    if (tokens.Count != oomTokensConsumed)
                     {
+                        //LogSyntaxError();
                         return new SyntaxResponse(FAILED, 0);
                     }
                     else
@@ -259,12 +255,12 @@ namespace ERACompiler.Structures.Rules
                     ASTNode orNode = new ASTNode(
                         parentNode, 
                         new List<ASTNode>(), 
-                        tokens.Count > 0 ? tokens[0] : noToken, 
+                        tokens.Count > tokenOffset ? tokens[tokenOffset] : noToken, 
                         ruleName
                         );
                     foreach (var rule in rules)
                     {
-                        SyntaxResponse response = rule.Verify(tokens, orNode);
+                        SyntaxResponse response = rule.Verify(tokens, orNode, tokenOffset);
                         if (response.Success)
                         {
                             orNode.Children.Add(response.AstNode);
@@ -276,7 +272,7 @@ namespace ERACompiler.Structures.Rules
                 default:
                     break;
             }
-            LogSyntaxError();
+            //LogSyntaxError();
             return new SyntaxResponse(FAILED, 0);
         }
 
@@ -285,7 +281,7 @@ namespace ERACompiler.Structures.Rules
             errorList.Add(
                 "  At (Line: " + lastTokenPos.Line.ToString() + ", Char: " +
                 lastTokenPos.Char.ToString() + ").  " +
-                "Error at \"" + ruleName + "\".\n" + errorDescription
+                "Error at \"" + ruleName + "\"." + errorDescription
                 );
         }
 
@@ -317,15 +313,22 @@ namespace ERACompiler.Structures.Rules
             public ASTNode AstNode { get => ast_node; set => ast_node = value; }
         }
 
-        public SyntaxError GetErrors()
+        public SyntaxErrorException GetErrors()
         {
             string errorMsg = "";
-            errorList.Reverse();
-            foreach (var err in errorList)
+            if (Program.extendedErrorMessages)
             {
-                errorMsg += err;
+                errorList.Reverse();
+                foreach (var err in errorList)
+                {
+                    errorMsg += err;
+                }
             }
-            return new SyntaxError(errorMsg);
+            else
+            {
+                errorMsg += errorList[0];
+            }
+            return new SyntaxErrorException(errorMsg);
         }
 
         public enum SyntaxRuleType

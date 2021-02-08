@@ -39,6 +39,7 @@ namespace ERACompiler.Structures.Types
             MODULE,
             DATA,
             ARRAY,
+            LABEL,
             NO_TYPE
         }
 

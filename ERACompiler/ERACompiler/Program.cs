@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using ERACompiler.Modules;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
+using System.Diagnostics;
 
 /// <summary>
 /// Used for console allocation.
@@ -31,6 +32,7 @@ namespace ERACompiler
         private static bool forceFolderCreation = false;
 
         public static string currentFile = "none";
+        public static bool extendedErrorMessages = false; // For syntax errors better display
 
         static void Main(string[] args)
         {
@@ -42,9 +44,8 @@ namespace ERACompiler
             //args = new string[] { "-s", "debug.era", "--lexis" };
             //args = new string[] { "-s", "debug.era", "--syntax" };
             //args = new string[] { "-s", "debug.era", "--semantics" };
-
-            // Logging
-            new Logger(true);
+            //args = new string[] { "-s", "fast_sort.era", "--lexis" };
+            //args = new string[] { "-s", "fast_sort_big.era", "--semantics" };
 
             bool error = true;
             try
@@ -61,18 +62,28 @@ namespace ERACompiler
                 return;
             }
 
-            try
+            for (int i = 0; i < sourceFilenames.Count; i++)
             {
-                for (int i = 0; i < sourceFilenames.Count; i++)
+                try
                 {
                     currentFile = sourceFilenames[i];
 
                     // Loading of sample code
                     string sourceCode = File.ReadAllText(sourceFilenames[i]);
 
+                    // For time tracking
+                    Stopwatch stopWatch = new Stopwatch();
+
                     // Create instance of the era compiler and get the compiled code 
-                    // It is fresh everytime to refresh all the nodes (may be optimized obviously)
-                    byte[] compiledCode = new Compiler().Compile(sourceCode, cmode);
+                    // It is fresh everytime to refresh all the nodes (may be optimized obviously)                    
+                    stopWatch.Start();
+                    byte[] compiledCode = new byte[0];
+                    compiledCode = new Compiler().Compile(sourceCode, cmode);
+                    stopWatch.Stop();
+
+                    TimeSpan ts = stopWatch.Elapsed;
+                    string elapsedTime = string.Format("{0:00}m {1:00}.{2:00}s",
+                    ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
                     // Create a new file with the compiled code
                     if (i >= outputFilenames.Count)
@@ -81,7 +92,7 @@ namespace ERACompiler
                         // If it is a path
                         if (defaultFilename.Contains("/") || defaultFilename.Contains("\\"))
                         {
-                            int j = defaultFilename.LastIndexOfAny(new char[] {'\\', '/'});
+                            int j = defaultFilename.LastIndexOfAny(new char[] { '\\', '/' });
                             defaultFilename = defaultFilename.Insert(j + 1, "compiled_");
                         }
                         else
@@ -95,7 +106,6 @@ namespace ERACompiler
                         outputFilenames.Add(defaultFilename);
                     }
 
-                    
                     if (outputFilenames[i].Contains("/") || outputFilenames[i].Contains("\\"))
                     {
                         // Check if directory exists
@@ -103,7 +113,7 @@ namespace ERACompiler
                         if (Directory.Exists(folder))
                         {
                             File.WriteAllBytes(outputFilenames[i], compiledCode);
-                            Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                            Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled (" + elapsedTime + ").");
                         }
                         else
                         {
@@ -111,7 +121,7 @@ namespace ERACompiler
                             {
                                 Directory.CreateDirectory(folder);
                                 File.WriteAllBytes(outputFilenames[i], compiledCode);
-                                Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                                Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled (" + elapsedTime + ").");
                             }
                             else
                             {
@@ -122,15 +132,20 @@ namespace ERACompiler
                     else
                     {
                         File.WriteAllBytes(outputFilenames[i], compiledCode);
-                        Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled.");
+                        Console.WriteLine("\"" + sourceFilenames[i] + "\" has been compiled (" + elapsedTime + ").");
                     }
                 }
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+                catch (CompilationErrorException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+            }            
 
             NativeMethods.FreeConsole();
         }
@@ -213,13 +228,14 @@ namespace ERACompiler
                                     "  INNOPOLIS UNIVERSITY\r\n" +
                                     "\r\n" +
                                     "  Possible arguments:\r\n" +
-                                    "  '-s' {filepath}  :  specify input file to be compiled\r\n" +
-                                    "  '-d' {path}  :  specify the folders with files to be compiled\r\n" +
-                                    "  '-o' {filepath}  :  specify output file for compiled source code\r\n" +
+                                    "  '-s' { filepath }  :  specify input file to be compiled\r\n" +
+                                    "  '-d' { path }  :  specify the folders with files to be compiled\r\n" +
+                                    "  '-o' { filepath }  :  specify output file for compiled source code\r\n" +
                                     "  '-p'  :  force to create folders if they do not exist\r\n" +
-                                    "  '--lexis'  :  compile in lexis mode (separate into tokens only)\r\n" +
-                                    "  '--syntax'  :  compile in syntax mode (build AST only)\r\n" +
-                                    "  '--semantics'  :  compile in semantic mode (build AAST only)\r\n" +
+                                    "  '--lex'  :  compile in lexis mode (separate into tokens only)\r\n" +
+                                    "  '--syn'  :  compile in syntax mode (build AST only)\r\n" +
+                                    "  '--sem'  :  compile in semantic mode (build AAST only)\r\n" +
+                                    "  '--err'  :  displays more detailed error messages\r\n" +
                                     "  '--flog'  :  put compilation logs into file\r\n" +
                                     "  '-h'  :  show manual\r\n" +
                                     "  Default source code file is 'code.era'.\r\n" +
@@ -227,30 +243,29 @@ namespace ERACompiler
                                     );
                                 break;
                             }
-                        case "--lexis":
+                        case "--lex":
                             {
                                 cmode = Compiler.CompilationMode.LEXIS;
                                 break;
                             }
-                        case "--syntax":
+                        case "--syn":
                             {
                                 cmode = Compiler.CompilationMode.SYNTAX;
                                 break;
                             }
-                        case "--semantics":
+                        case "--sem":
                             {
                                 cmode = Compiler.CompilationMode.SEMANTICS;
                                 break;
                             }
-                        case "--flog":
+                        case "--err":
                             {
-                                Logger.LoggingMode = 0;
+                                extendedErrorMessages = true;
                                 break;
                             }
                         default:
                             {
-                                Logger.LogError(new CompilationError("Unknown parameter\"" + args[i] +"\" !!!"));
-                                break;
+                                throw new CompilationErrorException("Unknown parameter\"" + args[i] +"\" !!!");                                
                             }
                     }
                 }

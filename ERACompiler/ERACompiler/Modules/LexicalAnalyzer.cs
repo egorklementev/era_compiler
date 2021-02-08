@@ -46,62 +46,70 @@ namespace ERACompiler.Modules
         /// <returns>A list of tokens constructed from the source code.</returns>
         public List<Token> GetTokenList(string sourceCode)
         {
-            List<Token> finalList = new List<Token>();
-            
-            if (sourceCode.Length <= 2)
+            try
             {
-                Logger.LogError(new LexicalError("The source code length should be at least more than two characters!!!"));
-            }
+                List<Token> finalList = new List<Token>();
 
-            sourceCode = sourceCode.ToLower();
-
-            remembered = sourceCode[0] + ""; // Will start traversal from the second character
-
-            // Traversing through the characters of the source code
-            for (int i = 1; i < sourceCode.Length; i++)
-            {
-                char c = sourceCode[i]; // Current character
-
-                if (IsAbleToDetermineToken(c))
+                if (sourceCode.Length <= 2)
                 {
-                    Token t = DetermineToken(c);
+                    throw new LexicalErrorException("The source code length should be at least more than two characters!!!");
+                }
 
-                    // Determine line and character numbers
-                    if (t.Type == TokenType.WHITESPACE) { 
-                        if (t.Value == "\n" || t.Value == "\r\n")
+                sourceCode = sourceCode.ToLower();
+
+                remembered = sourceCode[0] + ""; // Will start traversal from the second character
+
+                // Traversing through the characters of the source code
+                for (int i = 1; i < sourceCode.Length; i++)
+                {
+                    char c = sourceCode[i]; // Current character
+
+                    if (IsAbleToDetermineToken(c))
+                    {
+                        Token t = DetermineToken(c);
+
+                        // Determine line and character numbers
+                        if (t.Type == TokenType.WHITESPACE)
+                        {
+                            if (t.Value == "\n" || t.Value == "\r\n")
+                            {
+                                lineChar = 0;
+                                lineNumber++;
+                            }
+                        }
+
+                        // Special case for comments
+                        if (t.Type == TokenType.DELIMITER && t.Value.Equals("//"))
                         {
                             lineChar = 0;
-                            lineNumber++;
+                            while (c != '\n' && i < sourceCode.Length)
+                            {
+                                c = sourceCode[i++];
+                            }
+                            i--;
+                            remembered = "\r\n";
                         }
-                    }
-
-                    // Special case for comments
-                    if (t.Type == TokenType.DELIMITER && t.Value.Equals("//"))
-                    {
-                        lineChar = 0;
-                        while (c != '\n' && i < sourceCode.Length)
+                        else
                         {
-                            c = sourceCode[i++];                            
+                            finalList.Add(t);
+                            remembered = c.ToString();
                         }
-                        i--;
-                        remembered = "\r\n";
                     }
                     else
                     {
-                        finalList.Add(t);
-                        remembered = c.ToString();
+                        remembered += c;
                     }
+                    lineChar++;
                 }
-                else
-                {
-                    remembered += c;                    
-                }
-                lineChar++;
+
+                finalList = Analyze(finalList);
+
+                return new List<Token>(finalList);
             }
-
-            finalList = Analyze(finalList);
-
-            return finalList;
+            catch (System.NullReferenceException)
+            {
+                throw new LexicalErrorException("In file \"" + Program.currentFile + "\": input file malformed!");
+            }
         }
 
         /// <summary>
@@ -110,38 +118,51 @@ namespace ERACompiler.Modules
         /// <param name="list">List with tokens to be analyzed.</param>
         /// <returns>Compressed and improved token list.</returns>
         private List<Token> Analyze(List<Token> list)
-        {          
-            for (int i = 0; i < list.Count; i++)
+        {
+            LinkedList<Token> llist = new LinkedList<Token>(list);
+            var anchor = llist.First;
+
+            while(true)
             {
+                if (anchor == null) break;
+
+                Token ti = anchor.Value;                     
+
                 // Special case for ':=' operator.
-                if (i < list.Count - 1 && list[i].Type == TokenType.DELIMITER && list[i].Value.Equals(":"))
+                if (anchor.Next != null && ti.Type == TokenType.DELIMITER && ti.Value.Equals(":"))
                 {
-                    if (list[i + 1].Type == TokenType.OPERATOR && list[i + 1].Value.Equals("="))
+                    if (anchor.Next.Value.Type == TokenType.OPERATOR && anchor.Next.Value.Value.Equals("="))
                     {
-                        TokenPosition pos = list[i].Position;
-                        list.RemoveRange(i, 2);
-                        list.Insert(i, new Token(TokenType.OPERATOR, ":=", pos));
+                        TokenPosition pos = ti.Position;
+                        llist.AddAfter(anchor.Next, new Token(TokenType.OPERATOR, ":=", pos));
+                        var next_anchor = anchor.Next.Next;
+                        llist.Remove(anchor.Next);
+                        llist.Remove(anchor);
+                        anchor = next_anchor;
                     }
                 }
-            
+
                 // Combine identifier/register/keyword/number tokens into a single token if any
-                if (list[i].Type == TokenType.IDENTIFIER || list[i].Type == TokenType.KEYWORD)
+                if (ti.Type == TokenType.IDENTIFIER || ti.Type == TokenType.KEYWORD)
                 {
-                    int j = i;
-                    TokenPosition pos = list[j].Position;
-                    TokenType savedType = list[j].Type;
+                    var ti_node_iter = anchor;
+                    TokenPosition pos = ti_node_iter.Value.Position;
+                    TokenType savedType = ti_node_iter.Value.Type;
                     int n = 0;
                     string value = "";
-                    while (j < list.Count && 
-                        (list[j].Type == TokenType.NUMBER || 
-                        list[j].Type == TokenType.IDENTIFIER || 
-                        list[j].Type == TokenType.KEYWORD))
+                    while (ti_node_iter != null &&
+                        (ti_node_iter.Value.Type == TokenType.NUMBER ||
+                        ti_node_iter.Value.Type == TokenType.IDENTIFIER ||
+                        ti_node_iter.Value.Type == TokenType.KEYWORD))
                     {
-                        value += list[j].Value;
+                        value += ti_node_iter.Value.Value;
                         n++;
-                        j++;
+                        ti_node_iter = ti_node_iter.Next;
                     }
-                    list.RemoveRange(i, n);
+                    for (int k = 0; k < n - 1; k++)
+                    {
+                        llist.Remove(anchor.Next);
+                    }
 
                     // Special case for registers
                     bool regFound = false;
@@ -153,30 +174,47 @@ namespace ERACompiler.Modules
                             savedType = TokenType.REGISTER;
                         }
                     }
-                    
-                    list.Insert(i, new Token(n > 1 && !regFound ? TokenType.IDENTIFIER : savedType, value, pos));
+
+                    llist.AddAfter(anchor, new Token(n > 1 && !regFound ? TokenType.IDENTIFIER : savedType, value, pos));
+                    var next_anchor = anchor.Next;
+                    llist.Remove(anchor);
+                    anchor = next_anchor;
                 }
 
                 // Special case for numbers
-                if (list[i].Type == TokenType.NUMBER)
+                if (ti.Type == TokenType.NUMBER)
                 {
-                    int j = i;
-                    TokenPosition pos = list[j].Position;
-                    TokenType savedType = list[j].Type;
+                    var ti_node_iter = anchor;
+                    TokenPosition pos = ti_node_iter.Value.Position;
+                    TokenType savedType = ti_node_iter.Value.Type;
                     int n = 0;
                     string value = "";
-                    while (j < list.Count && list[j].Type == TokenType.NUMBER)
+                    while (ti_node_iter != null && ti_node_iter.Value.Type == TokenType.NUMBER)
                     {
-                        value += list[j].Value;
+                        value += ti_node_iter.Value.Value;
                         n++;
-                        j++;
+                        ti_node_iter = ti_node_iter.Next;
                     }
-                    list.RemoveRange(i, n);
-                    list.Insert(i, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
+                    for (int k = 0; k < n - 1; k++)
+                    {
+                        llist.Remove(anchor.Next);
+                    }
+                    llist.AddAfter(anchor, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
+                    var next_anchor = anchor.Next;
+                    llist.Remove(anchor);
+                    anchor = next_anchor;
                 }
+
+                // Special case for '/=' operator
+                if (ti.Type == TokenType.OPERATOR && ti.Value.Equals("/="))
+                {
+                    llist.Remove(anchor.Next);
+                }
+
+                anchor = anchor.Next;
             }
 
-            return list;
+            return new List<Token>(llist);
         }
 
         /// <summary>
@@ -269,6 +307,7 @@ namespace ERACompiler.Modules
                 "data",
                 "code",
                 "routine",
+                "return",
                 "start",
                 "entry",
                 "if",

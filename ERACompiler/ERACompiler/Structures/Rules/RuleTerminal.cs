@@ -8,7 +8,7 @@
         {
             this.token = token;
             SetType(SyntaxRuleType.TERMINAL);
-            SetName("Terminal: \"" + token.Value + "\"");
+            SetName("Terminal: " + token.Value);
         }
 
         public Token GetToken()
