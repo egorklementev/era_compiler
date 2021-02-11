@@ -1117,7 +1117,7 @@ namespace ERACompiler.Modules
         {
             string type = node.Children[0].ASTType; // The child of Operand
             
-            if (type.Equals("Explicit address") || type.Equals("Dereference")/* || type.Equals("Reference") */)
+            if (type.Equals("Explicit address") || type.Equals("Dereference") || type.Equals("Reference"))
             {
                 return false;
             }
