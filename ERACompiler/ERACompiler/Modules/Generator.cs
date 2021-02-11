@@ -1,5 +1,6 @@
 ﻿using ERACompiler.Structures;
 using System;
+using System.Linq;
 
 namespace ERACompiler.Modules
 {
@@ -169,10 +170,10 @@ namespace ERACompiler.Modules
             {
                 return reg switch
                 {
-                    "PC" => 0xFF,
-                    "SB" => 0xFE,
-                    "SP" => 0xFD,
-                    "FP" => 0xFC,
+                    "pc" => 0xFF,
+                    "sb" => 0xFE,
+                    "sp" => 0xFD,
+                    "fp" => 0xFC,
                     _ => 0x00,
                 };
             }
@@ -180,10 +181,7 @@ namespace ERACompiler.Modules
 
         private byte[] MergeByteArrays(byte[] arr1, byte[] arr2)
         {
-            byte[] res = new byte[arr1.Length + arr2.Length];
-            arr1.CopyTo(res, 0);
-            arr2.CopyTo(res, arr1.Length);
-            return res;
+            return arr1.Concat(arr2).ToArray(); // TODO: check different approaches for better performance
         }
 
     }

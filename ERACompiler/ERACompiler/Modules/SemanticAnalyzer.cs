@@ -102,7 +102,6 @@ namespace ERACompiler.Modules
                 case "Operator":
                 case "Receiver":
                 case "Some unit":
-                //case "LoopBody end":
                 case "Primary | Register":
                 case "Extension statement":
                 case "Some module statement":
@@ -591,7 +590,7 @@ namespace ERACompiler.Modules
                 }
                 else
                 {
-                    // If expression is constant we can check for array boundaries (TODO: array size can be non-constant. Need to be fixed.)
+                    // If expression is constant we can check for array boundaries
                     if (IsExprConstant(node.Children[2].Children[0].Children[0].Children[1], ctx))
                     {
                         int index = CalculateConstExpr(node.Children[2].Children[0].Children[0].Children[1], ctx);
@@ -848,7 +847,6 @@ namespace ERACompiler.Modules
                         child_expr.Children.Add(children[i + 1]);
                         children.RemoveRange(i - 1, 3);
                         children.Insert(i - 1, child_expr);
-                        // TODO: fix this shit
                         i--;                       
                     }
                 }
@@ -1059,6 +1057,8 @@ namespace ERACompiler.Modules
         /// <param name="ctx">Current context</param>
         private void PostChecks(AASTNode node, Context ctx)
         {
+            bool reverseChildrenTraversal = false;
+
             if (node.Context != null) ctx = node.Context;
 
             if (node.ASTType.Equals("IDENTIFIER") && !node.Parent.ASTType.Equals("Pragma declaration"))
@@ -1067,7 +1067,7 @@ namespace ERACompiler.Modules
                 {
                     ctx = ((AASTNode)node.Parent.Children[node.Parent.Children.Count - 1].Children[0]).Context;
                 }
-                if (!ctx.IsVarDeclared(node.Token)) 
+                if (!ctx.IsVarDeclared(node.Token))
                     throw new SemanticErrorException(
                     "A variable with name \"" + node.Token.Value + "\" has been never declared in this context!!!\r\n" +
                     "\tAt (Line: " + node.Token.Position.Line.ToString() + ", Char: " + node.Token.Position.Char.ToString() + ")."
@@ -1086,11 +1086,41 @@ namespace ERACompiler.Modules
                         );
                 }
             }
-
-
-            foreach (AASTNode child in node.Children)
+            else if (node.ASTType.Equals("Assignment") && node.Children[0].ASTType.Equals("Primary"))
             {
-                PostChecks(child, ctx);
+                reverseChildrenTraversal = true;
+            }
+            else if (node.ASTType.Equals("Primary"))
+            {
+                // Set the current version so that we can create live ranges later
+                // (TODO: Context descent, array access (?), call(?))
+                int curVersion = ctx.GetVersion(node.Children[0].Token);
+                ((AASTNode)node.Children[0]).Version = curVersion;
+            }
+
+            
+            if (reverseChildrenTraversal) // This is very contraversial, but we will try
+            {
+                for (int i = node.Children.Count - 1; i >= 0; i--)
+                {
+                    PostChecks((AASTNode)node.Children[i], ctx);
+                }
+            }
+            else
+            {
+                foreach (AASTNode child in node.Children)
+                {
+                    PostChecks(child, ctx);
+                }
+            }
+
+
+            if (node.ASTType.Equals("Assignment") && node.Children[0].ASTType.Equals("Primary"))
+            {
+                // Go to primary first identifier and increase its version
+                // (TODO: Context descent, array access (?), call(?))
+                int newVersion = ctx.UpdateVersion(node.Children[0].Children[0].Token);
+                ((AASTNode)node.Children[0].Children[0]).Version = newVersion;
             }
         }
        

@@ -149,6 +149,11 @@
             constant expression calculations and for storing initial values.
             </summary>
         </member>
+        <member name="P:ERACompiler.Structures.AASTNode.Version">
+            <summary>
+            Used for SSA
+            </summary>
+        </member>
         <member name="P:ERACompiler.Structures.AASTNode.Context">
             <summary>
             The context that this node owns.
@@ -249,6 +254,20 @@
             </summary>
             <param name="identifier">The name of a variable.</param>
             <returns>True if it exists, false otherwise</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.UpdateVersion(ERACompiler.Structures.Token)">
+            <summary>
+            Updates the version of a variable. For SSA needs.
+            </summary>
+            <param name="identifier">The identifier of a variable.</param>
+            <returns>Updated version.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.GetVersion(ERACompiler.Structures.Token)">
+            <summary>
+            For SSA needs.
+            </summary>
+            <param name="identifier">The identifier of a variable.</param>
+            <returns>Current variable version.</returns>
         </member>
         <member name="M:ERACompiler.Structures.Context.LocateVar(System.String)">
             <summary>

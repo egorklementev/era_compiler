@@ -23,6 +23,11 @@ namespace ERACompiler.Structures
         public int AASTValue { get; set; } = 0;
 
         /// <summary>
+        /// Used for SSA
+        /// </summary>
+        public int Version { get; set; } = 0;
+
+        /// <summary>
         /// The context that this node owns.
         /// </summary>
         public Context? Context { get; set; } = null;
@@ -38,26 +43,33 @@ namespace ERACompiler.Structures
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+            string tabs_lvl = string.Concat(Enumerable.Repeat("\t", level));
+            string tabs_lvl1 = tabs_lvl + "\t";
+
+            sb.Append(tabs_lvl)
                 .Append("{\r\n");
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("\"node_type\": ").Append("\"" + ASTType.ToString() + "\"").Append(",\r\n");
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
-                .Append("\"type\": ").Append("\"" + AASTType.ToString() + "\"").Append(",\r\n");
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            if (AASTType.Type != VarType.ERAType.NO_TYPE)
+                sb.Append(tabs_lvl1)
+                    .Append("\"var_type\": ").Append("\"" + AASTType.ToString() + "\"").Append(",\r\n");
+            sb.Append(tabs_lvl1)
                 .Append("\"value\": ").Append("\"" + AASTValue.ToString() + "\"").Append(",\r\n");
+            if (Version != 0)
+                sb.Append(tabs_lvl1)
+                    .Append("\"version\": ").Append("\"" + Version.ToString() + "\"").Append(",\r\n");
 
             if (Context != null)            
             {
                 Context.Level = level + 1; // To make the output correct
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                sb.Append(tabs_lvl1)
                     .Append("\"context\": ");
                 sb.Append("\r\n").Append(Context.ToString()).Append(",\r\n");             
             }
             
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("\"token\": ").Append("\"" + Token.Value + "\"").Append(",\r\n");
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("\"children\": [");
 
             if (Children.Count > 0)
@@ -68,7 +80,7 @@ namespace ERACompiler.Structures
                 }
                 sb.Remove(sb.Length - 1, 1); // Remove last ','
                 sb.Append("\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                sb.Append(tabs_lvl1)
                     .Append("]\r\n");
             }
             else
@@ -76,7 +88,7 @@ namespace ERACompiler.Structures
                 sb.Append("]\r\n");
             }
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+            sb.Append(tabs_lvl)
                 .Append('}');
 
             return sb.ToString();

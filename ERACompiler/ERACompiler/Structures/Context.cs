@@ -86,9 +86,9 @@ namespace ERACompiler.Structures
             }
         }
 
-        public bool IsVarStruct(Token token)
+        public bool IsVarStruct(Token identifier)
         {
-            return LocateVar(token.Value).AASTType.IsStruct();
+            return LocateVar(identifier.Value).AASTType.IsStruct();
         }
 
         /// <summary>
@@ -133,6 +133,27 @@ namespace ERACompiler.Structures
         }
 
         /// <summary>
+        /// Updates the version of a variable. For SSA needs.
+        /// </summary>
+        /// <param name="identifier">The identifier of a variable.</param>
+        /// <returns>Updated version.</returns>
+        public int UpdateVersion(Token identifier)
+        {
+            AASTNode varToUpdate = LocateVar(identifier.Value);            
+            return ++varToUpdate.Version;
+        }
+
+        /// <summary>
+        /// For SSA needs.
+        /// </summary>
+        /// <param name="identifier">The identifier of a variable.</param>
+        /// <returns>Current variable version.</returns>
+        public int GetVersion(Token identifier)
+        {
+            return LocateVar(identifier.Value).Version;
+        }
+
+        /// <summary>
         /// Searches for the variable recursively up in the context tree.
         /// </summary>
         /// <param name="identifier">Identifier of the variable to be found.</param>
@@ -156,13 +177,18 @@ namespace ERACompiler.Structures
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 1)))
+            string tabs_lvl1 = string.Concat(Enumerable.Repeat("\t", Level + 1));
+            string tabs_lvl2 = tabs_lvl1 + "\t";
+            string tabs_lvl3 = tabs_lvl2 + "\t";
+            string tabs_lvl4 = tabs_lvl3 + "\t";
+
+            sb.Append(tabs_lvl1)
                 .Append("{\r\n");
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 2)))
+            sb.Append(tabs_lvl2)
                 .Append("\"name\": \"").Append(Name).Append("\",\r\n");
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 2)))
+            sb.Append(tabs_lvl2)
                 .Append("\"symbol_table\": [");
 
             foreach (KeyValuePair<string, AASTNode> pair in st)
@@ -170,32 +196,36 @@ namespace ERACompiler.Structures
                 string varName = pair.Key;
                 AASTNode var = pair.Value;
 
-                sb.Append("\r\n").Append(string.Concat(Enumerable.Repeat("\t", Level + 3)))
+                sb.Append("\r\n").Append(tabs_lvl3)
                     .Append("{\r\n");
 
-                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 4)))
+                sb.Append(tabs_lvl4)
                     .Append("\"var_type\": \"").Append(var.AASTType.ToString()).Append("\",\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 4)))
+                sb.Append(tabs_lvl4)
                     .Append("\"var_name\": \"").Append(varName).Append("\",\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 4)))
+                sb.Append(tabs_lvl4)
+                    .Append("\"var_versions\": \"").Append(var.Version).Append("\",\r\n");
+                sb.Append(tabs_lvl4)
                     .Append("\"var_value\": \"").Append(var.AASTValue.ToString()).Append("\"\r\n");
 
-                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 3)))
+                sb.Append(tabs_lvl3)
                     .Append("},");
             }
 
             if (st.Count > 0)
             {
                 sb.Remove(sb.Length - 1, 1).Append("\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 2)));
+                sb.Append(tabs_lvl2);
             }
 
             sb.Append("]\r\n");
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", Level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("}");
 
             return sb.ToString();
         }
+
+        
     }
 }
