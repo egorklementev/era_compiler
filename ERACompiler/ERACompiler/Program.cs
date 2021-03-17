@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ERACompiler.Modules;
-using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
-using System.Diagnostics;
 
 /// <summary>
 /// Used for console allocation.
@@ -33,19 +32,18 @@ namespace ERACompiler
 
         public static string currentFile = "none";
         public static bool extendedErrorMessages = false; // For syntax errors better display
+        public static bool extendedSemanticMessages = false; // For more detailed semantic messages
+        public static bool convertToAssemblyCode = false; // To get assembly code instead of binary code
 
         static void Main(string[] args)
         {
             NativeMethods.AllocConsole();
 
-            //args = new string[] { "-s", "example.era" };
-            //args = new string[] { "-s", "example.era", "--syntax" };
-            //args = new string[] { "-s", "debug.era" };
-            //args = new string[] { "-s", "debug.era", "--lexis" };
-            //args = new string[] { "-s", "debug.era", "--syntax" };
-            //args = new string[] { "-s", "debug.era", "--semantics" };
-            //args = new string[] { "-s", "fast_sort.era", "--lexis" };
-            //args = new string[] { "-s", "fast_sort_big.era", "--semantics" };
+            //args = new string[] { "-s", "debug.era"};
+            //args = new string[] { "-s", "debug.era", "--lex" };
+            //args = new string[] { "-s", "debug.era", "--syn" };
+            //args = new string[] { "-s", "debug.era", "--sem" };
+            //args = new string[] { "-s", "debug.era", "--asm" };
 
             bool error = true;
             try
@@ -235,8 +233,9 @@ namespace ERACompiler
                                     "  '--lex'  :  compile in lexis mode (separate into tokens only)\r\n" +
                                     "  '--syn'  :  compile in syntax mode (build AST only)\r\n" +
                                     "  '--sem'  :  compile in semantic mode (build AAST only)\r\n" +
+                                    "  '--semext'  :  same as \"--sem\" with extended debug information\r\n" +
+                                    "  '--asm'  :  full compilation with the assembly code output\r\n" +
                                     "  '--err'  :  displays more detailed error messages\r\n" +
-                                    "  '--flog'  :  put compilation logs into file\r\n" +
                                     "  '-h'  :  show manual\r\n" +
                                     "  Default source code file is 'code.era'.\r\n" +
                                     "  Default output file is 'compiled_' + source code file name\r\n"
@@ -256,6 +255,17 @@ namespace ERACompiler
                         case "--sem":
                             {
                                 cmode = Compiler.CompilationMode.SEMANTICS;
+                                break;
+                            }
+                        case "--semext":
+                            {
+                                cmode = Compiler.CompilationMode.SEMANTICS;
+                                extendedSemanticMessages = true;
+                                break;
+                            }
+                        case "--asm":
+                            {
+                                convertToAssemblyCode = true;
                                 break;
                             }
                         case "--err":

@@ -11,13 +11,28 @@ namespace ERACompiler.Structures.Types
             Type = type;
         }
 
+        public bool IsArray()
+        {
+            return Type == ERAType.ARRAY;
+        }
+
         public bool IsStruct()
         {
             return Type == ERAType.STRUCTURE;
         }
+        
         public bool IsConst()
         {
             return Type >= ERAType.CONST_INT && Type <= ERAType.CONST_BYTE_ADDR;
+        }
+
+        /// <summary>
+        /// Returns the size of the variable in bytes (e.g. int == 4 bytes)
+        /// </summary>
+        /// <returns>Size in bytes</returns>
+        public virtual int GetSize()
+        {
+            return 4; // TODO: this is ridiculous, however we have to work in this way for now.
         }
 
         public enum ERAType

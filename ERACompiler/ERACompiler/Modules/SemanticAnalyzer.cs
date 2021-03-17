@@ -17,10 +17,10 @@ namespace ERACompiler.Modules
         {
             AASTNode program = AnnotateNode(ASTRoot, null);
 
-            // Additional checks.
+            // Additional checks
             PostChecks(program, program.Context);
 
-            // The "code" segment should be present in a program.
+            // The "code" segment should be present in a program
             if (!program.Context.IsVarDeclared(new Token(TokenType.KEYWORD, "code", new TokenPosition(0, 0))))
             {
                 throw new SemanticErrorException(
@@ -102,7 +102,6 @@ namespace ERACompiler.Modules
                 case "Operator":
                 case "Receiver":
                 case "Some unit":
-                //case "LoopBody end":
                 case "Primary | Register":
                 case "Extension statement":
                 case "Some module statement":
@@ -112,7 +111,7 @@ namespace ERACompiler.Modules
                 case "Reference":
                 case "Dereference":
                 case "Explicit address":
-                    return AnnotatePASS(node, parent);
+                    return AnnotatePass(node, parent);
                 default:
                     return new AASTNode(node, null, no_type);
             }
@@ -121,7 +120,6 @@ namespace ERACompiler.Modules
         private AASTNode AnnotateGoto(ASTNode node, AASTNode parent)
         {
             AASTNode gotoNode = new AASTNode(node, parent, no_type);
-            //CheckVariablesForExistance(node, FindParentContext(parent));
             gotoNode.Children.Add(AnnotateNode(node.Children[1], gotoNode));
             return gotoNode;
         }
@@ -130,7 +128,6 @@ namespace ERACompiler.Modules
         {
             AASTNode loopWhileNode = new AASTNode(node, parent, no_type);
             loopWhileNode.Children.Add(AnnotateNode(node.Children[0], loopWhileNode));
-            //CheckVariablesForExistance(node.Children[2], FindParentContext(parent));
             loopWhileNode.Children.Add(AnnotateExpr(node.Children[2], loopWhileNode));
             return loopWhileNode;
         }
@@ -235,21 +232,25 @@ namespace ERACompiler.Modules
             AASTNode forNode = new AASTNode(node, parent, no_type);
             forNode.Children.Add(AnnotateNode(node.Children[1], forNode));
             ((AASTNode)forNode.Children[0]).AASTType = new VarType(VarType.ERAType.INT);
+            ((AASTNode)forNode.Children[0]).LIStart = 1;
             varToAddToCtx = (AASTNode) forNode.Children[0];
             // If 'from' expression exists
             if (node.Children[2].Children.Count > 0)
             {
                 forNode.Children.Add(AnnotateExpr(node.Children[2].Children[1], forNode));
+                ((AASTNode)forNode.Children[^1]).AASTValue = 1; // For generator
             }
             // If 'to' expression exists
             if (node.Children[3].Children.Count > 0)
             {
                 forNode.Children.Add(AnnotateExpr(node.Children[3].Children[1], forNode));
+                ((AASTNode)forNode.Children[^1]).AASTValue = 2; // For generator
             }
             // If 'step' expression exists
             if (node.Children[4].Children.Count > 0)
             {
                 forNode.Children.Add(AnnotateExpr(node.Children[4].Children[1], forNode));
+                ((AASTNode)forNode.Children[^1]).AASTValue = 3; // For generator
             }
             forNode.Children.Add(AnnotateNode(node.Children[5], forNode)); // Loop body
             return forNode;
@@ -275,14 +276,22 @@ namespace ERACompiler.Modules
             {
                 Context = new Context("BlockBody_" + (++blockBodyCounter).ToString(), FindParentContext(parent))
             };
+            bool setLIEnd = false;
+            string varName = "";
             if (varToAddToCtx != null)
             {
                 bb.Context.AddVar(varToAddToCtx, varToAddToCtx.Token.Value);
+                varName = varToAddToCtx.Token.Value;
+                setLIEnd = true;
                 varToAddToCtx = null;
             }
             foreach (ASTNode child in node.Children)
             {
                 bb.Children.Add(AnnotateNode(child, bb));
+            }
+            if (setLIEnd)
+            {
+                bb.Context.SetLIEnd(varName, bb.Children.Count);
             }
             return bb;
         }
@@ -347,7 +356,7 @@ namespace ERACompiler.Modules
             return callArgs;
         }
 
-        private AASTNode AnnotatePASS(ASTNode node, AASTNode parent)
+        private AASTNode AnnotatePass(ASTNode node, AASTNode parent)
         {
             //CheckVariablesForExistance(node, FindParentContext(parent));
             AASTNode nodeToPass = new AASTNode(node, parent, no_type);
@@ -402,7 +411,6 @@ namespace ERACompiler.Modules
             {
                 // Check if expression is constant
                 Context ctx = FindParentContext(parent);
-                //CheckVariablesForExistance(node.Children[2], ctx);
                 if (!IsExprConstant(node.Children[2], ctx))
                 {
                     throw new SemanticErrorException(
@@ -416,7 +424,6 @@ namespace ERACompiler.Modules
             {
                 // Check if expression is constant
                 Context ctx = FindParentContext(parent);
-                //CheckVariablesForExistance(node.Children[4], ctx);
                 if (!IsExprConstant(node.Children[4], ctx))
                 {
                     throw new SemanticErrorException(
@@ -557,8 +564,6 @@ namespace ERACompiler.Modules
             AASTNode somePrim = new AASTNode(node, parent, no_type);
             Context ctx = FindParentContext(parent);
 
-            //CheckVariablesForExistance(node, ctx);
-
             // Identifier
             somePrim.Children.Add(AnnotateNode(node.Children[0], somePrim));
             ASTNode idLink = node.Children[0];
@@ -591,7 +596,15 @@ namespace ERACompiler.Modules
                 }
                 else
                 {
-                    // If expression is constant we can check for array boundaries (TODO: array size can be non-constant. Need to be fixed.)
+                    if (!ctx.IsVarArray(idLink.Token))
+                    {
+                        throw new SemanticErrorException(
+                            "Trying to access non-array variable via \'[]\' notation!!!\r\n" +
+                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                            );
+                    }
+                    // If expression is constant we can check for array boundaries
                     if (IsExprConstant(node.Children[2].Children[0].Children[0].Children[1], ctx))
                     {
                         int index = CalculateConstExpr(node.Children[2].Children[0].Children[0].Children[1], ctx);
@@ -666,11 +679,6 @@ namespace ERACompiler.Modules
                                                                                         // Check expr if exists
                         if (node.Children[0].Children[1].Children.Count > 0)
                         {
-                            /*CheckVariablesForExistance(
-                                node.Children[0].Children[1] // [ := Expression ]
-                                .Children[0]                 // := Expression sequence
-                                .Children[1],                // Expression
-                                ctx);*/
                             AASTNode firstExpr = AnnotateNode(node.Children[0].Children[1].Children[0].Children[1], firstDef);
                             firstDef.Children.Add(firstExpr);
                         }
@@ -684,11 +692,6 @@ namespace ERACompiler.Modules
                                 ctx.AddVar(def, varDef.Children[0].Token.Value); // VarDef's identifier
                                 if (varDef.Children[1].Children.Count > 0)
                                 {
-                                    /*CheckVariablesForExistance(
-                                        varDef.Children[1] // [ := Expression ]
-                                        .Children[0]       // := Expression sequence
-                                        .Children[1],      // Expression
-                                        ctx);*/
                                     AASTNode expr = AnnotateNode(varDef.Children[1].Children[0].Children[1], def);
                                     def.Children.Add(expr);
                                 }
@@ -704,7 +707,6 @@ namespace ERACompiler.Modules
                         lst.Add(firstDef);
                         ctx.AddVar(firstDef, node.Children[1].Children[0].Token.Value); // ConstDef's identifier
 
-                        //CheckVariablesForExistance(node.Children[1].Children[2], ctx); // Expression of ConstDef
                         if (!IsExprConstant(node.Children[1].Children[2], ctx))
                         {
                             throw new SemanticErrorException(
@@ -723,7 +725,6 @@ namespace ERACompiler.Modules
                                 lst.Add(def);
                                 ctx.AddVar(def, varDef.Children[0].Token.Value); // ConstDef's identifier
 
-                                //CheckVariablesForExistance(varDef.Children[2], ctx); // Expression of ConstDef
                                 if (!IsExprConstant(varDef.Children[2], ctx))
                                 {
                                     throw new SemanticErrorException(
@@ -804,7 +805,27 @@ namespace ERACompiler.Modules
         {
             AASTNode expr = new AASTNode(node, parent, no_type);            
             List<ASTNode> children = node.Children;
-            
+            Context ctx = FindParentContext(parent);
+
+            // Special case -1: if we have constant expression - calculate it and return literal instead
+            // ATTENTION: need to be tested
+            if (IsExprConstant(node, ctx))
+            {
+                int exprValue = CalculateConstExpr(node, ctx);             
+                ASTNode number = new ASTNode(expr, new List<ASTNode>(), expr.Token, "NUMBER");                                
+                ASTNode opMinus = new ASTNode(number, new List<ASTNode>(), expr.Token, "[ - ]");
+                if (exprValue < 0)
+                {
+                    opMinus.Children.Add(new ASTNode(opMinus, new List<ASTNode>(), expr.Token, "OPERATOR"));
+                    exprValue *= -1;
+                }
+                number.Children.Add(opMinus);
+                ASTNode literal = new ASTNode(number, new List<ASTNode>(), new Token(TokenType.NUMBER, exprValue.ToString(), expr.Token.Position), "SOME_LITERAL");
+                number.Children.Add(literal);
+                expr.Children.Add(AnnotateNode(number, expr));
+                return expr;
+            }
+
             // Special case 0: if we have "legal" or initial Expression from Syntax Analyzer
             if (node.Children.Count == 2 && node.Children[1].ASTType.Equals("{ Operator Operand }"))
             {
@@ -848,7 +869,6 @@ namespace ERACompiler.Modules
                         child_expr.Children.Add(children[i + 1]);
                         children.RemoveRange(i - 1, 3);
                         children.Insert(i - 1, child_expr);
-                        // TODO: fix this shit
                         i--;                       
                     }
                 }
@@ -892,6 +912,194 @@ namespace ERACompiler.Modules
             return program;
         }
 
+        /// <summary>
+        /// Performs additional checks after the AAST is constructed.
+        /// </summary>
+        /// <param name="node">Expected ASTType - Any node (preferrable Program)</param>
+        /// <param name="ctx">Current context</param>
+        private void PostChecks(AASTNode node, Context ctx)
+        {
+            int lword = 4;
+            int word = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
+            int sword = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
+
+            if (node.Context != null) ctx = node.Context;
+
+            if (node.ASTType.Equals("IDENTIFIER") && !node.Parent.ASTType.Equals("Pragma declaration"))
+            {
+                if (node.Parent.ASTType.Equals("For"))
+                {
+                    ctx = ((AASTNode)node.Parent.Children[node.Parent.Children.Count - 1].Children[0]).Context;
+                }
+                if (!ctx.IsVarDeclared(node.Token))
+                    throw new SemanticErrorException(
+                        "A variable with name \"" + node.Token.Value + "\" has been never declared in this context!!!\r\n" +
+                        "\tAt (Line: " + node.Token.Position.Line.ToString() + ", Char: " + node.Token.Position.Char.ToString() + ")."
+                        );
+            }
+            else if (node.ASTType.Equals("Call"))
+            {
+                int paramNum = ctx.GetRoutineParamNum(node.Children[0].Token);
+                if (node.Children[1].Children.Count != paramNum)
+                {
+                    throw new SemanticErrorException(
+                        "Incorrect number of arguments when calling routine \"" + node.Children[0].Token.Value + "\"!!!\r\n" +
+                        "Expected: " + paramNum.ToString() + ", received: " + node.Children[1].Children.Count.ToString() + ".\r\n" +
+                        "  At (Line: " + node.Children[1].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
+                        );
+                }
+            }
+            else if (node.ASTType.Equals("Code") || node.ASTType.Equals("Routine body") || node.ASTType.Equals("Block body"))
+            {
+                // Numbering the statements and variable declarations for Linear Scan
+                int num = 0;
+                foreach(AASTNode child in node.Children)
+                {
+                    child.BlockPosition = ++num;
+                }
+
+                // Compute LI start and end for each declaration
+                foreach (AASTNode child in node.Children)
+                {
+                    if (child.ASTType.Equals("Variable declaration"))
+                    {
+                        foreach (AASTNode varDef in child.Children)
+                        {
+                            ctx.SetLIStart(varDef.Token, child.BlockPosition);
+                        }
+                    }
+                    else
+                    {
+                        foreach (string var in GetAllUsedVars(child))
+                        {
+                            if (ctx.IsVarDeclaredInThisContext(var))
+                                ctx.SetLIEnd(var, child.BlockPosition);
+                        }
+                    }
+                }
+
+                // Calculate offsets relative to Frame Pointer
+                int i = 0;
+                foreach (AASTNode var in ctx.GetDeclaredVars())
+                {
+                    var.FrameOffset = i;
+                    switch (var.AASTType.Type)
+                    {
+                        case VarType.ERAType.INT:
+                        case VarType.ERAType.INT_ADDR:
+                        case VarType.ERAType.SHORT_ADDR:
+                        case VarType.ERAType.BYTE_ADDR:
+                            i += lword;
+                            break;
+                        case VarType.ERAType.SHORT:
+                            i += word;
+                            break;
+                        case VarType.ERAType.BYTE:
+                            i += sword;
+                            break;
+                        case VarType.ERAType.STRUCTURE:
+                            // TODO: compute the structure size and put it to the stack
+                            break;
+                        case VarType.ERAType.ARRAY:
+                            ArrayType arrType = (ArrayType)var.AASTType;
+                            switch (arrType.ElementType.Type)
+                            {
+                                case VarType.ERAType.INT:
+                                case VarType.ERAType.INT_ADDR:
+                                case VarType.ERAType.SHORT_ADDR:
+                                case VarType.ERAType.BYTE_ADDR:
+                                    i += lword * arrType.Size;
+                                    break;
+                                case VarType.ERAType.SHORT:
+                                    i += word * arrType.Size;
+                                    break;
+                                case VarType.ERAType.BYTE:
+                                    i += sword * arrType.Size;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case VarType.ERAType.LABEL:
+                            // TODO: get the statement number and generate... (?) question mark
+                            break;
+                        case VarType.ERAType.NO_TYPE:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else if (node.ASTType.Equals("Program")) // Global data
+            {
+                // Calculate offsets relative to Static Base
+                int i = 0;
+                foreach (AASTNode var in ctx.GetDeclaredVars())
+                {
+                    var.IsGlobal = true;
+                    var.StaticOffset = i;
+                    switch (var.AASTType.Type)
+                    {
+                        case VarType.ERAType.INT:
+                        case VarType.ERAType.INT_ADDR:
+                        case VarType.ERAType.SHORT_ADDR:
+                        case VarType.ERAType.BYTE_ADDR:
+                        case VarType.ERAType.ROUTINE:
+                        case VarType.ERAType.MODULE:
+                            if (!var.Token.Value.Equals("code"))
+                                i += lword;
+                            break;
+                        case VarType.ERAType.SHORT:
+                            i += word;
+                            break;
+                        case VarType.ERAType.BYTE:
+                            i += sword;
+                            break;
+                        case VarType.ERAType.STRUCTURE:
+                            // TODO: compute the structure size and put it to the stack
+                            break;
+                        case VarType.ERAType.ARRAY:
+                            ArrayType arrType = (ArrayType)var.AASTType;
+                            switch (arrType.ElementType.Type)
+                            {
+                                case VarType.ERAType.INT:
+                                case VarType.ERAType.INT_ADDR:
+                                case VarType.ERAType.SHORT_ADDR:
+                                case VarType.ERAType.BYTE_ADDR:
+                                    i += lword * arrType.Size;
+                                    break;
+                                case VarType.ERAType.SHORT:
+                                    i += word * arrType.Size;
+                                    break;
+                                case VarType.ERAType.BYTE:
+                                    i += sword * arrType.Size;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case VarType.ERAType.DATA:
+                            // TODO: what to do with this stuff???
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // Store the length of the Static Data inside Program node
+                node.AASTValue = i;
+            }
+
+            foreach (AASTNode child in node.Children)
+            {
+                PostChecks(child, ctx);
+            }
+        }
+
+        /*
+         Helper functions
+        */
 
         /// <summary>
         /// Calculates a numerical value of a given constant expression
@@ -923,6 +1131,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] * operands[i + 1];
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -935,6 +1144,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] + operands[i + 1];
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                     else if (operators[i].Equals("-"))
                     {
@@ -942,6 +1152,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] - operands[i + 1];
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -954,6 +1165,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] > operands[i + 1] ? 1 : 0;
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                     else if (operators[i].Equals("<"))
                     {
@@ -961,6 +1173,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] < operands[i + 1] ? 1 : 0;
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                     else if (operators[i].Equals("="))
                     {
@@ -968,6 +1181,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] == operands[i + 1] ? 1 : 0;
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                     else if (operators[i].Equals("/="))
                     {
@@ -975,6 +1189,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] != operands[i + 1] ? 1 : 0;
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -987,6 +1202,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] & operands[i + 1];
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -999,6 +1215,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] ^ operands[i + 1];
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -1011,6 +1228,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] | operands[i + 1];
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -1023,6 +1241,7 @@ namespace ERACompiler.Modules
                         int res = operands[i] > operands[i + 1] ? 1 : operands[i] == operands[i + 1] ? 4 : 2;
                         operands.RemoveRange(i, 2);
                         operands.Insert(i, res);
+                        i--;
                     }
                 }
 
@@ -1051,48 +1270,6 @@ namespace ERACompiler.Modules
                 _ => -1,
             };
         }
-        
-        /// <summary>
-        /// Performs additional checks after the AAST is constructed.
-        /// </summary>
-        /// <param name="node">Expected ASTType - Any node (preferrable Program)</param>
-        /// <param name="ctx">Current context</param>
-        private void PostChecks(AASTNode node, Context ctx)
-        {
-            if (node.Context != null) ctx = node.Context;
-
-            if (node.ASTType.Equals("IDENTIFIER") && !node.Parent.ASTType.Equals("Pragma declaration"))
-            {
-                if (node.Parent.ASTType.Equals("For"))
-                {
-                    ctx = ((AASTNode)node.Parent.Children[node.Parent.Children.Count - 1].Children[0]).Context;
-                }
-                if (!ctx.IsVarDeclared(node.Token)) 
-                    throw new SemanticErrorException(
-                    "A variable with name \"" + node.Token.Value + "\" has been never declared in this context!!!\r\n" +
-                    "\tAt (Line: " + node.Token.Position.Line.ToString() + ", Char: " + node.Token.Position.Char.ToString() + ")."
-                    );
-            }
-            else if (node.ASTType.Equals("Call"))
-            {
-                int paramNum = ctx.GetRoutineParamNum(node.Children[0].Token);
-                if (node.Children[1].Children.Count != paramNum)
-                {
-                    throw new SemanticErrorException(
-                        "Incorrect number of arguments when calling routine \"" + node.Children[0].Token.Value + "\"!!!\r\n" +
-                        "Expected: " + paramNum.ToString() + ", received: " + node.Children[1].Children.Count.ToString() + ".\r\n" +
-                        "  At (Line: " + node.Children[1].Token.Position.Line.ToString() +
-                        ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
-                        );
-                }
-            }
-
-
-            foreach (AASTNode child in node.Children)
-            {
-                PostChecks(child, ctx);
-            }
-        }
        
         /// <summary>
         /// Checks whether an expression is constant.
@@ -1113,11 +1290,12 @@ namespace ERACompiler.Modules
 
             return true;
         }
+        
         private bool IsOperandConstant(ASTNode node, Context ctx)
         {
             string type = node.Children[0].ASTType; // The child of Operand
             
-            if (type.Equals("Explicit address") || type.Equals("Dereference")/* || type.Equals("Reference") */)
+            if (type.Equals("Explicit address") || type.Equals("Dereference") || type.Equals("Reference"))
             {
                 return false;
             }
@@ -1197,7 +1375,25 @@ namespace ERACompiler.Modules
             }
             return vt;           
         }
-        private Context FindParentContext(AASTNode parent)
+        
+        private HashSet<string> GetAllUsedVars(AASTNode node)
+        {
+            HashSet<string> set = new HashSet<string>();
+            foreach (AASTNode child in node.Children)
+            {
+                if (child.ASTType.Equals("IDENTIFIER"))
+                    set.Add(child.Token.Value);
+                set.UnionWith(GetAllUsedVars(child));
+            }
+            return set;
+        }
+        
+        /// <summary>
+        /// Used for current context retrieval
+        /// </summary>
+        /// <param name="parent">Parent (or current) node from which to start the search</param>
+        /// <returns>Nearest context (may return global Program context)</returns>
+        public static Context FindParentContext(AASTNode parent)
         {
             while (true)
             {
@@ -1207,5 +1403,6 @@ namespace ERACompiler.Modules
             }
             return null;
         }
+        
     }
 }

@@ -11,6 +11,11 @@
             ElementType = elementsType;            
         }
 
+        public override int GetSize()
+        {
+            return base.GetSize() * Size;
+        }
+
         public override string ToString()
         {
             return "Array of type " + ElementType.ToString() + " of size " + Size.ToString();

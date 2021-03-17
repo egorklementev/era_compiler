@@ -76,11 +76,11 @@ namespace ERACompiler.Modules
                         SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
                         ASTNode ast = synResp.AstNode;
                         AASTNode aast = semantics.BuildAAST(ast);                        
-                        return generator.GetAssemblyCode(aast);
+                        return generator.GetBinaryCode(aast);
                     }
 
                 default:
-                    return new byte[] { 0x00 };
+                    return new byte[] {};
             }
         }
 

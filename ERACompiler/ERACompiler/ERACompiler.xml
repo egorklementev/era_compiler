@@ -40,6 +40,18 @@
             Generates the actual assembly code
             </summary>
         </member>
+        <member name="M:ERACompiler.Modules.Generator.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Generator.GetBinaryCode(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Constructs a binary code (or assembly code) from a given AAST root.
+            </summary>
+            <param name="root">AAST root node</param>
+            <returns>Corresponding binary code in byte array</returns>
+        </member>
         <member name="T:ERACompiler.Modules.LexicalAnalyzer">
             <summary>
             Contains functionality for conversion of source code of the program to the list of tokens.
@@ -79,6 +91,13 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.PostChecks(ERACompiler.Structures.AASTNode,ERACompiler.Structures.Context)">
+            <summary>
+            Performs additional checks after the AAST is constructed.
+            </summary>
+            <param name="node">Expected ASTType - Any node (preferrable Program)</param>
+            <param name="ctx">Current context</param>
+        </member>
         <member name="M:ERACompiler.Modules.SemanticAnalyzer.CalculateConstExpr(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Calculates a numerical value of a given constant expression
@@ -95,13 +114,6 @@
             <param name="ctx">Current context</param>
             <returns>The value of an operand.</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticAnalyzer.PostChecks(ERACompiler.Structures.AASTNode,ERACompiler.Structures.Context)">
-            <summary>
-            Performs additional checks after the AAST is constructed.
-            </summary>
-            <param name="node">Expected ASTType - Any node (preferrable Program)</param>
-            <param name="ctx">Current context</param>
-        </member>
         <member name="M:ERACompiler.Modules.SemanticAnalyzer.IsExprConstant(ERACompiler.Structures.ASTNode,ERACompiler.Structures.Context)">
             <summary>
             Checks whether an expression is constant.
@@ -109,6 +121,13 @@
             <param name="node">Expected ASTType - Expression</param>
             <param name="ctx">Current context</param>
             <returns>True if constant, false otherwise</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.FindParentContext(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Used for current context retrieval
+            </summary>
+            <param name="parent">Parent (or current) node from which to start the search</param>
+            <returns>Nearest context (may return global Program context)</returns>
         </member>
         <member name="T:ERACompiler.Modules.SyntaxAnalyzer">
             <summary>
@@ -149,10 +168,48 @@
             constant expression calculations and for storing initial values.
             </summary>
         </member>
+        <member name="P:ERACompiler.Structures.AASTNode.BlockPosition">
+            <summary>
+            Used in Linear Scan for Statement/VarDecl numeration.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.LIStart">
+            <summary>
+            Live interval start (var declaration)
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.LIEnd">
+            <summary>
+            Live interval end (some statement)
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.FrameOffset">
+            <summary>
+            The local address of this variable relative to the FP (in bytes)
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.StaticOffset">
+            <summary>
+            The global address of this variable relative to the SB (in bytes)
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.AASTNode.IsGlobal">
+            <summary>
+            Used to know whether this variable is global or not
+            </summary>
+        </member>
         <member name="P:ERACompiler.Structures.AASTNode.Context">
             <summary>
             The context that this node owns.
             </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.AASTNode.#ctor(ERACompiler.Structures.ASTNode,ERACompiler.Structures.AASTNode,ERACompiler.Structures.Types.VarType)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="node">AST node from which it is derived basic information.</param>
+            <param name="parent">AAST node parent of this node.</param>
+            <param name="type">Static type of this variable (if it is a variable).</param>
         </member>
         <member name="T:ERACompiler.Structures.ASTNode">
             <summary>
@@ -236,7 +293,7 @@
             <param name="identifier">The variable name.</param>
             <returns>Value of a constant variable.</returns>
         </member>
-        <member name="M:ERACompiler.Structures.Context.IsVarConstant(ERACompiler.Structures.Token)">
+        <member name="M:ERACompiler.Structures.Context.GetRoutineParamNum(ERACompiler.Structures.Token)">
             <summary>
             Checks if a variable with given name is constant
             </summary>
@@ -250,11 +307,26 @@
             <param name="identifier">The name of a variable.</param>
             <returns>True if it exists, false otherwise</returns>
         </member>
-        <member name="M:ERACompiler.Structures.Context.LocateVar(System.String)">
+        <member name="M:ERACompiler.Structures.Context.SetLIStart(ERACompiler.Structures.Token,System.Int32)">
+            <summary>
+            Sets the LI start value of a variable
+            </summary>
+            <param name="identifier">Variable identifier token</param>
+            <param name="blockPosition">Position in the block</param>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.SetLIEnd(System.String,System.Int32)">
+            <summary>
+            Sets a new value (previous one increased by 1) for the LI end value
+            </summary>
+            <param name="identifier">Variable identifier</param>
+            <param name="blockPosition">Statement position in current block</param>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.LocateVar(System.String,System.Boolean)">
             <summary>
             Searches for the variable recursively up in the context tree.
             </summary>
             <param name="identifier">Identifier of the variable to be found.</param>
+            <param name="onlyInCurrentContext">If true, searches for a declaration only in this context.</param>
             <returns>Null if there is no such variable in this context, AAST node with the variable if it exists.</returns>
         </member>
         <member name="T:ERACompiler.Structures.Rules.SyntaxRule">
@@ -377,6 +449,12 @@
             <summary>
             Position (in terms of line and characters on the line) of the token in the source code.
             </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Types.VarType.GetSize">
+            <summary>
+            Returns the size of the variable in bytes (e.g. int == 4 bytes)
+            </summary>
+            <returns>Size in bytes</returns>
         </member>
         <member name="T:NativeMethods">
             <summary>

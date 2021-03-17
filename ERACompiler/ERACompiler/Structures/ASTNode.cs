@@ -58,13 +58,16 @@ namespace ERACompiler.Structures
             // Json format
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+            string tabs_lvl = string.Concat(Enumerable.Repeat("\t", level));
+            string tabs_lvl1 = tabs_lvl + "\t";
+
+            sb.Append(tabs_lvl)
                 .Append("{\r\n");
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("\"node_type\": ").Append("\"" + ASTType + "\"").Append(",\r\n");            
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("\"token\": ").Append("\"" + Token.Value + "\"").Append(",\r\n");            
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+            sb.Append(tabs_lvl1)
                 .Append("\"children\": [");            
 
             if (Children.Count > 0)
@@ -75,7 +78,7 @@ namespace ERACompiler.Structures
                 }
                 sb.Remove(sb.Length - 1, 1); // Remove last ','
                 sb.Append("\r\n");
-                sb.Append(string.Concat(Enumerable.Repeat("\t", level + 1)))
+                sb.Append(tabs_lvl1)
                     .Append("]\r\n");
             }
             else
@@ -83,7 +86,7 @@ namespace ERACompiler.Structures
                 sb.Append("]\r\n");
             }
 
-            sb.Append(string.Concat(Enumerable.Repeat("\t", level)))
+            sb.Append(tabs_lvl)
                 .Append('}');
 
             return sb.ToString();
