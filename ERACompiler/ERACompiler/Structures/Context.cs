@@ -46,7 +46,7 @@ namespace ERACompiler.Structures
         /// <param name="identifier">The name of the variable node.</param>
         public void AddVar(AASTNode variable, string identifier)
         {
-            AASTNode? var = LocateVar(identifier); // First is identifier
+            AASTNode? var = LocateVar(identifier);
 
             if (var == null)
             {
@@ -54,12 +54,12 @@ namespace ERACompiler.Structures
             }
             else
             {
-                TokenPosition pos = st[identifier].Token.Position;
+                TokenPosition pos = var.Token.Position;
                 TokenPosition dPos = variable.Token.Position;
                 throw new SemanticErrorException(
                     "A variable with name \"" + identifier + "\" is already declared!!!\r\n" +
-                    "\tAt (Line: " + pos.Line + ", Char: " + pos.Char + ").\r\n" +
-                    "\tAt (Line: " + dPos.Line + ", Char: " + dPos.Char + ") - duplicate."
+                    "  At (Line: " + pos.Line + ", Char: " + pos.Char + ").\r\n" +
+                    "  At (Line: " + dPos.Line + ", Char: " + dPos.Char + ") - duplicate."
                     );
             }
         }
@@ -77,7 +77,7 @@ namespace ERACompiler.Structures
             {
                 throw new SemanticErrorException(
                     "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
-                    "\tAt (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
+                    "  At (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
                     );
             }
             else
@@ -86,31 +86,11 @@ namespace ERACompiler.Structures
             }
         }
 
-        public bool IsVarStruct(Token identifier)
-        {
-            return LocateVar(identifier.Value).AASTType.IsStruct();
-        }
-
         /// <summary>
         /// Checks if a variable with given name is constant
         /// </summary>
         /// <param name="identifier">A variable to check</param>
         /// <returns>True if var is constant, false otherwise</returns>
-        public bool IsVarConstant(Token identifier)
-        {
-            AASTNode? var = LocateVar(identifier.Value);
-            if (var == null)
-            {
-                throw new SemanticErrorException(
-                    "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
-                    "\tAt (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
-                    );
-            }
-            else
-            {
-                return var.AASTType.IsConst();
-            }
-        }
 
         public int GetRoutineParamNum(Token identifier)
         {
@@ -132,36 +112,153 @@ namespace ERACompiler.Structures
             return LocateVar(identifier.Value) != null;
         }
 
-        /// <summary>
-        /// Updates the version of a variable. For SSA needs.
-        /// </summary>
-        /// <param name="identifier">The identifier of a variable.</param>
-        /// <returns>Updated version.</returns>
-        public int UpdateVersion(Token identifier)
+        public bool IsVarDeclared(string identifier)
         {
-            AASTNode varToUpdate = LocateVar(identifier.Value);            
-            return ++varToUpdate.Version;
+            return LocateVar(identifier) != null;
+        }
+
+        public bool IsVarDeclaredInThisContext(string identifier)
+        {
+            return LocateVar(identifier, true) != null;
+        }
+        
+        public int GetVarDeclarationBlockOffset(string identifier)
+        {
+            int distance = 0;
+            Context iter = this;
+            while (iter != null)
+            {
+                if (!iter.st.ContainsKey(identifier))
+                {
+                    return distance;
+                }
+                else
+                {
+                    iter = iter.parent;
+                    distance++;
+                }
+            }
+            return -1;
+        }
+
+        public bool IsVarStruct(Token identifier)
+        {
+            return LocateVar(identifier.Value).AASTType.IsStruct();
+        }
+
+        public bool IsVarArray(Token identifier)
+        {
+            return LocateVar(identifier.Value).AASTType.IsArray();
+        }
+
+        public bool IsVarConstant(Token identifier)
+        {
+            AASTNode? var = LocateVar(identifier.Value);
+            if (var == null)
+            {
+                throw new SemanticErrorException(
+                    "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
+                    "  At (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
+                    );
+            }
+            else
+            {
+                return var.AASTType.IsConst();
+            }
+        }
+        
+        public bool IsVarGlobal(string identifier)
+        {
+            return LocateVar(identifier).IsGlobal;
         }
 
         /// <summary>
-        /// For SSA needs.
+        /// Sets the LI start value of a variable
         /// </summary>
-        /// <param name="identifier">The identifier of a variable.</param>
-        /// <returns>Current variable version.</returns>
-        public int GetVersion(Token identifier)
+        /// <param name="identifier">Variable identifier token</param>
+        /// <param name="blockPosition">Position in the block</param>
+        public void SetLIStart(Token identifier, int blockPosition)
         {
-            return LocateVar(identifier.Value).Version;
+            AASTNode var = LocateVar(identifier.Value);
+            var.LIStart = blockPosition;
+            var.LIEnd = blockPosition;
         }
+
+        public int GetLIStart(string identifier)
+        {
+            return LocateVar(identifier).LIStart;
+        }
+
+        /// <summary>
+        /// Sets a new value (previous one increased by 1) for the LI end value
+        /// </summary>
+        /// <param name="identifier">Variable identifier</param>
+        /// <param name="blockPosition">Statement position in current block</param>
+        public void SetLIEnd(string identifier, int blockPosition)
+        {
+            AASTNode var = LocateVar(identifier);
+            if (var.LIStart != 0) 
+                var.LIEnd = blockPosition;
+        }
+
+        public int GetLIEnd(string identifier)
+        {
+            return LocateVar(identifier).LIEnd;
+        }
+
+        public int GetStaticOffset(string identifier)
+        {
+            return LocateVar(identifier).StaticOffset;
+        }
+
+        public int GetFrameOffset(string identifier)
+        {
+            return LocateVar(identifier).FrameOffset;
+        }
+
+        public int GetArrayOffset(string identifier)
+        {
+            int lword = 4;
+            int word = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
+            int sword = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
+            switch (((ArrayType)LocateVar(identifier).AASTType).ElementType.Type)
+            {
+                case VarType.ERAType.INT:
+                case VarType.ERAType.INT_ADDR:
+                case VarType.ERAType.SHORT_ADDR:
+                case VarType.ERAType.BYTE_ADDR:
+                    return lword;
+                case VarType.ERAType.SHORT:
+                    return word;
+                case VarType.ERAType.BYTE:
+                    return sword;
+                case VarType.ERAType.STRUCTURE:
+                    return 0; // TODO: calculate and return struct size
+                default:
+                    return 0;
+            }
+        }
+        
+        public Dictionary<string, AASTNode>.ValueCollection GetDeclaredVars()
+        {
+            return st.Values;
+        }
+
+        /* --- */
 
         /// <summary>
         /// Searches for the variable recursively up in the context tree.
         /// </summary>
         /// <param name="identifier">Identifier of the variable to be found.</param>
+        /// <param name="onlyInCurrentContext">If true, searches for a declaration only in this context.</param>
         /// <returns>Null if there is no such variable in this context, AAST node with the variable if it exists.</returns>
-        private AASTNode? LocateVar(string identifier)
+        private AASTNode? LocateVar(string identifier, bool onlyInCurrentContext = false)
         {
             if (!st.ContainsKey(identifier))
             {
+                if (onlyInCurrentContext)
+                    return null;
+
                 if (parent != null)
                     return parent.LocateVar(identifier);
             }
@@ -172,24 +269,13 @@ namespace ERACompiler.Structures
 
             return null;
         }
-
-        public override string ToString()
+        
+        private string SymbolTableToString(Dictionary<string, AASTNode> st)
         {
             StringBuilder sb = new StringBuilder();
 
-            string tabs_lvl1 = string.Concat(Enumerable.Repeat("\t", Level + 1));
-            string tabs_lvl2 = tabs_lvl1 + "\t";
-            string tabs_lvl3 = tabs_lvl2 + "\t";
+            string tabs_lvl3 = string.Concat(Enumerable.Repeat("\t", Level + 3));
             string tabs_lvl4 = tabs_lvl3 + "\t";
-
-            sb.Append(tabs_lvl1)
-                .Append("{\r\n");
-
-            sb.Append(tabs_lvl2)
-                .Append("\"name\": \"").Append(Name).Append("\",\r\n");
-
-            sb.Append(tabs_lvl2)
-                .Append("\"symbol_table\": [");
 
             foreach (KeyValuePair<string, AASTNode> pair in st)
             {
@@ -203,16 +289,70 @@ namespace ERACompiler.Structures
                     .Append("\"var_type\": \"").Append(var.AASTType.ToString()).Append("\",\r\n");
                 sb.Append(tabs_lvl4)
                     .Append("\"var_name\": \"").Append(varName).Append("\",\r\n");
-                sb.Append(tabs_lvl4)
-                    .Append("\"var_versions\": \"").Append(var.Version).Append("\",\r\n");
-                sb.Append(tabs_lvl4)
-                    .Append("\"var_value\": \"").Append(var.AASTValue.ToString()).Append("\"\r\n");
+
+                if (var.FrameOffset != 0 || Program.extendedSemanticMessages)
+                {
+                    sb.Append(tabs_lvl4)
+                        .Append("\"var_frame_offset\": \"").Append(var.FrameOffset).Append("\",\r\n");
+                }
+
+                if (var.StaticOffset != 0 || Program.extendedSemanticMessages)
+                {
+                    sb.Append(tabs_lvl4)
+                        .Append("\"var_static_offset\": \"").Append(var.FrameOffset).Append("\",\r\n");
+                }
+
+                if (var.LIStart != 0 || Program.extendedSemanticMessages)
+                {
+                    sb.Append(tabs_lvl4)
+                        .Append("\"li_start\": \"").Append(var.LIStart).Append("\",\r\n");
+                    sb.Append(tabs_lvl4)
+                        .Append("\"li_end\": \"").Append(var.LIEnd).Append("\",\r\n");
+                }
+
+                if (var.AASTValue != 0 || Program.extendedSemanticMessages)
+                    sb.Append(tabs_lvl4)
+                        .Append("\"var_value\": \"").Append(var.AASTValue.ToString()).Append("\"\r\n");
+                else
+                    sb.Remove(sb.Length - 3, 1);
 
                 sb.Append(tabs_lvl3)
                     .Append("},");
             }
 
-            if (st.Count > 0)
+            return sb.ToString();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            string tabs_lvl1 = string.Concat(Enumerable.Repeat("\t", Level + 1));
+            string tabs_lvl2 = tabs_lvl1 + "\t";
+
+            sb.Append(tabs_lvl1)
+                .Append("{\r\n");
+
+            sb.Append(tabs_lvl2)
+                .Append("\"name\": \"").Append(Name).Append("\",\r\n");
+
+            sb.Append(tabs_lvl2)
+                .Append("\"symbol_table\": [");
+
+            // Show all variables visible from this context
+            if (Program.extendedSemanticMessages)
+            {
+                Context? prnt = parent;
+                while (prnt != null)
+                {
+                    sb.Append(SymbolTableToString(prnt.st));
+                    prnt = prnt.parent;
+                }
+            }
+
+            sb.Append(SymbolTableToString(st));
+
+            if (st.Count > 0 || Program.extendedSemanticMessages)
             {
                 sb.Remove(sb.Length - 1, 1).Append("\r\n");
                 sb.Append(tabs_lvl2);
@@ -226,6 +366,6 @@ namespace ERACompiler.Structures
             return sb.ToString();
         }
 
-        
+
     }
 }

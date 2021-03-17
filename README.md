@@ -24,8 +24,10 @@ There are several arguments available:
 * `--lex`  :  perform tokenization only  
 * `--syn`  :  perform tokenization and AST assembling  
 * `--sem`  :  perform tokenization, AST assembling, and AAST assembling  
+* `--semext`  :  same as `--sem` with more detailed output  
+* `--asm`  :  full compilation with the assembly code output  
   
 Examples of commands:  
 `ERACompiler -h`  -  get help message  
 `ERACompiler -s test.txt folder1/file1.java`  -  will compile source files to `compiled_test.txt` and `folder1/compiled_file1.java`  
-`ERACompiler --lexis -o out.a`  -  will compile default `code.era` file to the `out.a` using only tokenization
+`ERACompiler --lex -o out.a`  -  will compile default `code.era` file to the `out.a` using only tokenization
