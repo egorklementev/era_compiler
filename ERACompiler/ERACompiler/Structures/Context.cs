@@ -128,7 +128,7 @@ namespace ERACompiler.Structures
             Context iter = this;
             while (iter != null)
             {
-                if (!iter.st.ContainsKey(identifier))
+                if (iter.st.ContainsKey(identifier))
                 {
                     return distance;
                 }

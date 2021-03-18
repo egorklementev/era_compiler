@@ -358,7 +358,6 @@ namespace ERACompiler.Modules
 
         private AASTNode AnnotatePass(ASTNode node, AASTNode parent)
         {
-            //CheckVariablesForExistance(node, FindParentContext(parent));
             AASTNode nodeToPass = new AASTNode(node, parent, no_type);
             foreach (ASTNode child in node.Children)
             {
@@ -663,6 +662,7 @@ namespace ERACompiler.Modules
             varDecl.Children.AddRange(IdentifyVarDecl(node.Children[1].Children[0], varDecl, type));
             return varDecl;
         }
+        
         private List<AASTNode> IdentifyVarDecl(ASTNode node, AASTNode parent, VarType type)
         {
             List<AASTNode> lst = new List<AASTNode>();
