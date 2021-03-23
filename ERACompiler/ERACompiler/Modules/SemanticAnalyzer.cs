@@ -115,7 +115,7 @@ namespace ERACompiler.Modules
                 default:
                     return new AASTNode(node, null, no_type);
             }
-        }
+         }
 
         private AASTNode AnnotateGoto(ASTNode node, AASTNode parent)
         {
@@ -290,8 +290,8 @@ namespace ERACompiler.Modules
                 bb.Children.Add(AnnotateNode(child, bb));
             }
             if (setLIEnd)
-            {
-                bb.Context.SetLIEnd(varName, bb.Children.Count);
+            {                
+                bb.Context.SetLIEnd(varName, GetMaxDepth(bb));
             }
             return bb;
         }
@@ -959,26 +959,6 @@ namespace ERACompiler.Modules
                     child.BlockPosition = ++num;
                 }
 
-                // Compute LI start and end for each declaration
-                foreach (AASTNode child in node.Children)
-                {
-                    if (child.ASTType.Equals("Variable declaration"))
-                    {
-                        foreach (AASTNode varDef in child.Children)
-                        {
-                            ctx.SetLIStart(varDef.Token, child.BlockPosition);
-                        }
-                    }
-                    else
-                    {
-                        foreach (string var in GetAllUsedVars(child))
-                        {
-                            if (ctx.IsVarDeclaredInThisContext(var))
-                                ctx.SetLIEnd(var, child.BlockPosition);
-                        }
-                    }
-                }
-
                 // Calculate offsets relative to Frame Pointer
                 int i = 0;
                 foreach (AASTNode var in ctx.GetDeclaredVars())
@@ -1003,22 +983,29 @@ namespace ERACompiler.Modules
                             break;
                         case VarType.ERAType.ARRAY:
                             ArrayType arrType = (ArrayType)var.AASTType;
-                            switch (arrType.ElementType.Type)
+                            if (arrType.Size == 0) // Dynamic allocation
                             {
-                                case VarType.ERAType.INT:
-                                case VarType.ERAType.INT_ADDR:
-                                case VarType.ERAType.SHORT_ADDR:
-                                case VarType.ERAType.BYTE_ADDR:
-                                    i += lword * arrType.Size;
-                                    break;
-                                case VarType.ERAType.SHORT:
-                                    i += word * arrType.Size;
-                                    break;
-                                case VarType.ERAType.BYTE:
-                                    i += sword * arrType.Size;
-                                    break;
-                                default:
-                                    break;
+                                i += lword;
+                            }
+                            else
+                            {
+                                switch (arrType.ElementType.Type)
+                                {
+                                    case VarType.ERAType.INT:
+                                    case VarType.ERAType.INT_ADDR:
+                                    case VarType.ERAType.SHORT_ADDR:
+                                    case VarType.ERAType.BYTE_ADDR:
+                                        i += lword * arrType.Size;
+                                        break;
+                                    case VarType.ERAType.SHORT:
+                                        i += word * arrType.Size;
+                                        break;
+                                    case VarType.ERAType.BYTE:
+                                        i += sword * arrType.Size;
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                             break;
                         case VarType.ERAType.LABEL:
@@ -1029,6 +1016,31 @@ namespace ERACompiler.Modules
                         default:
                             break;
                     }
+                }
+            }
+            else if (node.ASTType.Equals("Variable declaration"))
+            {                
+                if (node.Parent.ASTType.Equals("Statement"))
+                {
+                    foreach (AASTNode child in node.Children)
+                    {
+                        ctx.SetLIStart(child.Token, ((AASTNode)node.Parent).BlockPosition);
+                    }
+                }
+                else
+                {
+                    foreach (AASTNode child in node.Children)
+                    {
+                        ctx.SetLIStart(child.Token, node.BlockPosition);
+                    }
+                }
+            }
+            else if (node.ASTType.Equals("Statement"))
+            {
+                foreach (string var in GetAllUsedVars(node))
+                {
+                    if (ctx.IsVarDeclaredInThisContext(var))
+                        ctx.SetLIEnd(var, node.BlockPosition);
                 }
             }
             else if (node.ASTType.Equals("Program")) // Global data
@@ -1061,22 +1073,29 @@ namespace ERACompiler.Modules
                             break;
                         case VarType.ERAType.ARRAY:
                             ArrayType arrType = (ArrayType)var.AASTType;
-                            switch (arrType.ElementType.Type)
+                            if (arrType.Size == 0) // Dynamic allocation
                             {
-                                case VarType.ERAType.INT:
-                                case VarType.ERAType.INT_ADDR:
-                                case VarType.ERAType.SHORT_ADDR:
-                                case VarType.ERAType.BYTE_ADDR:
-                                    i += lword * arrType.Size;
-                                    break;
-                                case VarType.ERAType.SHORT:
-                                    i += word * arrType.Size;
-                                    break;
-                                case VarType.ERAType.BYTE:
-                                    i += sword * arrType.Size;
-                                    break;
-                                default:
-                                    break;
+                                i += lword;
+                            }
+                            else
+                            {
+                                switch (arrType.ElementType.Type)
+                                {
+                                    case VarType.ERAType.INT:
+                                    case VarType.ERAType.INT_ADDR:
+                                    case VarType.ERAType.SHORT_ADDR:
+                                    case VarType.ERAType.BYTE_ADDR:
+                                        i += lword * arrType.Size;
+                                        break;
+                                    case VarType.ERAType.SHORT:
+                                        i += word * arrType.Size;
+                                        break;
+                                    case VarType.ERAType.BYTE:
+                                        i += sword * arrType.Size;
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                             break;
                         case VarType.ERAType.DATA:
@@ -1113,145 +1132,288 @@ namespace ERACompiler.Modules
             List<int> operands = new List<int>();
             List<string> operators = new List<string>();
 
-            operands.Add(GetOperandValue(node.Children[0], ctx));
-            if (node.Children[1].Children.Count > 0)
+            if (node.Children.Count == 2 && node.Children[1].ASTType.Equals("{ Operator Operand }")) // Standart Expression
             {
-                for (int i = 0; i < node.Children[1].Children.Count; i += 2)
+                operands.Add(GetOperandValue(node.Children[0], ctx));
+                if (node.Children[1].Children.Count > 0)
                 {
-                    operators.Add(node.Children[1].Children[i].Token.Value);
-                    operands.Add(GetOperandValue(node.Children[1].Children[i + 1], ctx));
-                }
+                    for (int i = 0; i < node.Children[1].Children.Count; i += 2)
+                    {
+                        operators.Add(node.Children[1].Children[i].Token.Value);
+                        operands.Add(GetOperandValue(node.Children[1].Children[i + 1], ctx));
+                    }
 
-                // Execute higher order operators (*) 
-                for (int i = 0; i < operators.Count; i++)
+                    // Execute higher order operators (*) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("*"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] * operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute higher order operators (+, -) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("+"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] + operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("-"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] - operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (<, >, =, /=) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals(">"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] > operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("<"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] < operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("="))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] == operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("/="))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] != operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (&) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("&"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] & operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (^) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("^"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] ^ operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (|) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("|"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] | operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (?)
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("?"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] > operands[i + 1] ? 1 : operands[i] == operands[i + 1] ? 4 : 2;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    return operands[0];
+                }
+                else
                 {
-                    if (operators[i].Equals("*"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] * operands[i + 1];
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
+                    return operands[0];
                 }
-
-                // Execute higher order operators (+, -) 
-                for (int i = 0; i < operators.Count; i++)
-                {
-                    if (operators[i].Equals("+"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] + operands[i + 1];
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                    else if (operators[i].Equals("-"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] - operands[i + 1];
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                }
-
-                // Execute lower order operators (<, >, =, /=) 
-                for (int i = 0; i < operators.Count; i++)
-                {
-                    if (operators[i].Equals(">"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] > operands[i + 1] ? 1 : 0;
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                    else if (operators[i].Equals("<"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] < operands[i + 1] ? 1 : 0;
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                    else if (operators[i].Equals("="))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] == operands[i + 1] ? 1 : 0;
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                    else if (operators[i].Equals("/="))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] != operands[i + 1] ? 1 : 0;
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                }
-
-                // Execute lower order operators (&) 
-                for (int i = 0; i < operators.Count; i++)
-                {
-                    if (operators[i].Equals("&"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] & operands[i + 1];
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                }
-
-                // Execute lower order operators (^) 
-                for (int i = 0; i < operators.Count; i++)
-                {
-                    if (operators[i].Equals("^"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] ^ operands[i + 1];
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                }
-
-                // Execute lower order operators (|) 
-                for (int i = 0; i < operators.Count; i++)
-                {
-                    if (operators[i].Equals("|"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] | operands[i + 1];
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                }
-
-                // Execute lower order operators (?)
-                for (int i = 0; i < operators.Count; i++)
-                {
-                    if (operators[i].Equals("?"))
-                    {
-                        operators.RemoveAt(i);
-                        int res = operands[i] > operands[i + 1] ? 1 : operands[i] == operands[i + 1] ? 4 : 2;
-                        operands.RemoveRange(i, 2);
-                        operands.Insert(i, res);
-                        i--;
-                    }
-                }
-
-                return operands[0];
             }
-            else
+            else // Compressed Expression
             {
-                return operands[0];
+                operands.Add(GetOperandValue(node.Children[0], ctx));
+                if (node.Children.Count > 1)
+                {
+                    for (int i = 1; i < node.Children.Count; i += 2)
+                    {
+                        operators.Add(node.Children[i].Token.Value);
+                        operands.Add(GetOperandValue(node.Children[i + 1], ctx));
+                    }
+
+                    // Execute higher order operators (*) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("*"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] * operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute higher order operators (+, -) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("+"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] + operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("-"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] - operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (<, >, =, /=) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals(">"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] > operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("<"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] < operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("="))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] == operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals("/="))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] != operands[i + 1] ? 1 : 0;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (&) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("&"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] & operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (^) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("^"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] ^ operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (|) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("|"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] | operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute lower order operators (?)
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("?"))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] > operands[i + 1] ? 1 : operands[i] == operands[i + 1] ? 4 : 2;
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    return operands[0];
+                }
+                else
+                {
+                    return operands[0];
+                }
             }
-            
         }
         
         /// <summary>
@@ -1388,6 +1550,23 @@ namespace ERACompiler.Modules
             return set;
         }
         
+        private int GetMaxDepth(AASTNode node)
+        {            
+            int maxDepth = 1;
+            foreach (AASTNode child in node.Children)
+            {
+                int childDepth = GetMaxDepth(child);
+                if (childDepth > maxDepth)
+                    maxDepth = childDepth; 
+            }
+            if (node.ASTType.Equals("Block body"))
+            {
+                if (node.Children.Count > maxDepth)
+                    maxDepth = node.Children.Count;
+            }
+            return maxDepth;
+        }
+
         /// <summary>
         /// Used for current context retrieval
         /// </summary>

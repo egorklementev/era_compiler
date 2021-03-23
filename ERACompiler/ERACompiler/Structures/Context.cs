@@ -197,7 +197,7 @@ namespace ERACompiler.Structures
         public void SetLIEnd(string identifier, int blockPosition)
         {
             AASTNode var = LocateVar(identifier);
-            if (var.LIStart != 0) 
+            if (var.LIStart != 0 && var.LIEnd < blockPosition) 
                 var.LIEnd = blockPosition;
         }
 
@@ -216,7 +216,7 @@ namespace ERACompiler.Structures
             return LocateVar(identifier).FrameOffset;
         }
 
-        public int GetArrayOffset(string identifier)
+        public int GetArrayOffsetSize(string identifier)
         {
             int lword = 4;
             int word = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
