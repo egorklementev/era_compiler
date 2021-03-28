@@ -370,7 +370,14 @@ namespace ERACompiler.Modules
         {
             AASTNode asgnmt = new AASTNode(node, parent, no_type);
             //CheckVariablesForExistance(node, FindParentContext(parent));
-            // TODO: check for type accordance
+            // TODO: check for type accordance (debatable)
+            // TODO: dot-notation here
+            Token id = node.Children[0].Children[0].Token;
+            if (FindParentContext(asgnmt).IsVarConstant(id))
+            {
+                throw new SemanticErrorException("Attempt to modify a constant!!!\n" +
+                    "  At(Line: " + id.Position.Line + ", Char: " + id.Position.Char + ").");
+            }
             asgnmt.Children.Add(AnnotateNode(node.Children[0], asgnmt)); // Receiver
             asgnmt.Children.Add(AnnotateExpr(node.Children[2], asgnmt)); // Expression
             return asgnmt;
@@ -567,62 +574,81 @@ namespace ERACompiler.Modules
             somePrim.Children.Add(AnnotateNode(node.Children[0], somePrim));
             ASTNode idLink = node.Children[0];
 
-            // { '.' Identifier }
-            if (node.Children[1].Children.Count > 0)
+            // If constant, convert to number
+            if (ctx.IsVarConstant(idLink.Token))
             {
-                foreach (ASTNode child in node.Children[1].Children)
+                int constValue = ctx.GetConstValue(idLink.Token);
+                ASTNode number = new ASTNode(parent, new List<ASTNode>(), idLink.Token, "NUMBER");
+                ASTNode opMinus = new ASTNode(number, new List<ASTNode>(), idLink.Token, "[ - ]");
+                if (constValue < 0)
                 {
-                    if (!ctx.IsVarStruct(idLink.Token))
-                    {
-                        throw new SemanticErrorException(
-                            "Trying to access non-struct variable via \'.\' notation!!!\r\n" +
-                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() + 
-                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
-                            );
-                    }
-                    if (child.ASTType.Equals("IDENTIFIER"))
-                        idLink = child;
-                    somePrim.Children.Add(AnnotateNode(child, somePrim));
+                    opMinus.Children.Add(new ASTNode(opMinus, new List<ASTNode>(), idLink.Token, "OPERATOR"));
+                    constValue *= -1;
                 }
+                number.Children.Add(opMinus);
+                ASTNode literal = new ASTNode(number, new List<ASTNode>(), new Token(TokenType.NUMBER, constValue.ToString(), idLink.Token.Position), "SOME_LITERAL");
+                number.Children.Add(literal);
+                return AnnotateNode(number, parent);
             }
-
-            // [ ArrayAccess | CallArgs ]
-            if (node.Children[2].Children.Count > 0)
+            else
             {
-                if (node.Children[2].Children[0].Children[0].ASTType.Equals("Call arguments"))
+                // { '.' Identifier }
+                if (node.Children[1].Children.Count > 0)
                 {
-                    somePrim.Children.Add(AnnotateCallArgs(node.Children[2].Children[0].Children[0], somePrim));
+                    foreach (ASTNode child in node.Children[1].Children)
+                    {
+                        if (!ctx.IsVarStruct(idLink.Token))
+                        {
+                            throw new SemanticErrorException(
+                                "Trying to access non-struct variable via \'.\' notation!!!\r\n" +
+                                "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                                ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                                );
+                        }
+                        if (child.ASTType.Equals("IDENTIFIER"))
+                            idLink = child;
+                        somePrim.Children.Add(AnnotateNode(child, somePrim));
+                    }
                 }
-                else
+
+                // [ ArrayAccess | CallArgs ]
+                if (node.Children[2].Children.Count > 0)
                 {
-                    if (!ctx.IsVarArray(idLink.Token))
+                    if (node.Children[2].Children[0].Children[0].ASTType.Equals("Call arguments"))
                     {
-                        throw new SemanticErrorException(
-                            "Trying to access non-array variable via \'[]\' notation!!!\r\n" +
-                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
-                            ", Char: " + idLink.Token.Position.Char.ToString() + ")."
-                            );
+                        somePrim.Children.Add(AnnotateCallArgs(node.Children[2].Children[0].Children[0], somePrim));
                     }
-                    // If expression is constant we can check for array boundaries
-                    if (IsExprConstant(node.Children[2].Children[0].Children[0].Children[1], ctx))
+                    else
                     {
-                        int index = CalculateConstExpr(node.Children[2].Children[0].Children[0].Children[1], ctx);
-                        int arrSize = ctx.GetArrSize(idLink.Token);
-                        if (index < 0) 
+                        if (!ctx.IsVarArray(idLink.Token))
+                        {
                             throw new SemanticErrorException(
-                            "Negative array index!!!\r\n" +
-                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                                "Trying to access non-array variable via \'[]\' notation!!!\r\n" +
+                                "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
                                 ", Char: " + idLink.Token.Position.Char.ToString() + ")."
-                            );
-                        // If we know the size of the array already (arrSize != 0 indicates this)
-                        if (arrSize != 0 && index >= arrSize) 
-                            throw new SemanticErrorException(
-                            "Accessing element with index higher than array the size!!!\r\n" +
-                            "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
-                                ", Char: " + idLink.Token.Position.Char.ToString() + ")."
-                            );
+                                );
+                        }
+                        // If expression is constant we can check for array boundaries
+                        if (IsExprConstant(node.Children[2].Children[0].Children[0].Children[1], ctx))
+                        {
+                            int index = CalculateConstExpr(node.Children[2].Children[0].Children[0].Children[1], ctx);
+                            int arrSize = ctx.GetArrSize(idLink.Token);
+                            if (index < 0)
+                                throw new SemanticErrorException(
+                                "Negative array index!!!\r\n" +
+                                "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                                    ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                                );
+                            // If we know the size of the array already (arrSize != 0 indicates this)
+                            if (arrSize != 0 && index >= arrSize)
+                                throw new SemanticErrorException(
+                                "Accessing element with index higher than array the size!!!\r\n" +
+                                "\tAt (Line: " + idLink.Token.Position.Line.ToString() +
+                                    ", Char: " + idLink.Token.Position.Char.ToString() + ")."
+                                );
+                        }
+                        somePrim.Children.Add(AnnotateExpr(node.Children[2].Children[0].Children[0].Children[1], somePrim));
                     }
-                    somePrim.Children.Add(AnnotateExpr(node.Children[2].Children[0].Children[0].Children[1], somePrim));
                 }
             }
 
