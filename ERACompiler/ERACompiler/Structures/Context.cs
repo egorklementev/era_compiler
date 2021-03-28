@@ -216,6 +216,11 @@ namespace ERACompiler.Structures
             return LocateVar(identifier).FrameOffset;
         }
 
+        public VarType GetVarType(Token identifier)
+        {
+            return ((AASTNode)LocateVar(identifier.Value)).AASTType;
+        }
+
         public int GetArrayOffsetSize(string identifier)
         {
             int lword = 4;
