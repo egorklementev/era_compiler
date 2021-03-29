@@ -64,7 +64,7 @@ jobs:
             /d:sonar.cs.vstest.reportsPaths="TestResults/"
             dotnet restore
             dotnet build --configuration Release --no-restore
-            "%VSINSTALLDIR%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx "ERACompilerUnitTests\bin\Debug\net5.0\ERACompilerUnitTests.dll"
+            "%VSINSTALLDIR%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" \Logger:trx "ERACompilerUnitTests\bin\Debug\net5.0\ERACompilerUnitTests.dll"
             "%LOCALAPPDATA%\Apps\OpenCover\OpenCover.Console.exe" -output:"%CD%\opencover.xml" -register:user -target:"%VSINSTALLDIR%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" -targetargs:"ERACompilerUnitTests\bin\Debug\net5.0\ERACompilerUnitTests.dll"
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
