@@ -62,8 +62,8 @@ jobs:
             .\.sonar\scanner\dotnet-sonarscanner begin /k:"egorklementev_era_compiler" /o:"egorklementev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="TestResults/" /d:sonar.cs.vstest.reportsPaths="TestResults/"
             dotnet restore
             dotnet build --configuration Release --no-restore
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx "ERACompilerUnitTests\bin\Debug\net5.0\ERACompilerUnitTests.dll"
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /EnableCodeCoverage "ERACompilerUnitTests\bin\Debug\net5.0\ERACompilerUnitTests.dll"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /EnableCodeCoverage "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
             & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output: "TestResults/VisualStudio.coveragexml" "TestResults/VisualStudio.coverage"
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
