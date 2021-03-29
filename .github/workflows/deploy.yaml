@@ -11,14 +11,16 @@ jobs:
         dotnet-version: [ '5.0.201' ]
 
     steps:
+    - name: Go to project folder
+      run: cd ./ERACompiler
     - uses: actions/checkout@v2
     - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
       uses: actions/setup-dotnet@v1.7.2
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: Install dependencies
-      run: dotnet ERACompiler/restore
+      run: dotnet restore
     - name: Build
-      run: dotnet ERACompiler/build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet ERACompiler/test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
