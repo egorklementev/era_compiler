@@ -1723,7 +1723,8 @@ namespace ERACompiler.Modules
                     if (regAllocVTR.ContainsKey(var) && liEnd < statementNum) // Deallocation
                     {
                         byte reg = regAllocVTR[var];
-                        regDeallocBytes = MergeLists(regDeallocBytes, LoadOutVariable(var, reg, ctx));
+                        if (!ctx.IsVarArray(var)) // No need to load out array stuff
+                            regDeallocBytes = MergeLists(regDeallocBytes, LoadOutVariable(var, reg, ctx));
                         regAllocVTR.Remove(var);
                         regAllocRTV.Remove(reg);
                         FreeReg(reg);
