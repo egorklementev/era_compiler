@@ -369,12 +369,11 @@ namespace ERACompiler.Modules
         private AASTNode AnnotateAssignment(ASTNode node, AASTNode parent)
         {
             AASTNode asgnmt = new AASTNode(node, parent, no_type);
-            //CheckVariablesForExistance(node, FindParentContext(parent));
             // TODO: check for type accordance (debatable)
             // TODO: dot-notation here
-            Token id = node.Children[0].Children[0].Token;
-            if (FindParentContext(asgnmt).IsVarConstant(id))
+            if (node.Children[0].Children[0].ASTType.Equals("Primary") && FindParentContext(asgnmt).IsVarConstant(node.Children[0].Children[0].Token))
             {
+                Token id = node.Children[0].Children[0].Token;
                 throw new SemanticErrorException("Attempt to modify a constant!!!\n" +
                     "  At(Line: " + id.Position.Line + ", Char: " + id.Position.Char + ").");
             }

@@ -32,7 +32,7 @@ namespace ERACompiler.Structures.Types
         /// <returns>Size in bytes</returns>
         public virtual int GetSize()
         {
-            return 4; // TODO: this is ridiculous, however we have to work in this way for now.
+            return IsConst() ? 0 : 4; // TODO: this is ridiculous, however we have to work in this way for now.
         }
 
         public enum ERAType

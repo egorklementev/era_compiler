@@ -1,4 +1,4 @@
-﻿using ERACompiler.Structures;
+using ERACompiler.Structures;
 using ERACompiler.Structures.Types;
 using System;
 using System.Linq;
@@ -158,7 +158,7 @@ namespace ERACompiler.Modules
             {
                 int offsetSize = ctx.GetArrayOffsetSize(node.Token.Value) / 2;
                 arrDefBytes = MergeLists(arrDefBytes, ConstructExpression((AASTNode)node.Children[0]));
-                byte fr0 = arrDefBytes.Last.Value;
+                byte fr0 = arrDefBytes.Last.Value; // Execution-time array size
                 arrDefBytes.RemoveLast();
                 while (offsetSize > 0)
                 {
@@ -171,11 +171,24 @@ namespace ERACompiler.Modules
                 arrDefBytes = MergeLists(arrDefBytes, GetFreeReg(node));
                 byte fr2 = arrDefBytes.Last.Value;
                 arrDefBytes.RemoveLast();
+                /* heap: [array_size 4 bytes] [0th element] [1st element] ... [last element];  Allocated register contains address of 0th element. */
+                arrDefBytes = MergeLists(arrDefBytes, GenerateLDA(fr0, fr0, 4)); // Allocate 4 additional bytes for array size
                 arrDefBytes = MergeLists(arrDefBytes, ChangeHeapTop(fr0, true)); // heapTop 
+                arrDefBytes = MergeLists(arrDefBytes, StoreToHeap(0, fr0)); // heap[0] := fr0;
                 arrDefBytes = MergeLists(arrDefBytes, GenerateLDC(0, fr1)); // fr1 := 0;
                 arrDefBytes = MergeLists(arrDefBytes, GenerateLD(fr1, fr2)); // fr2 := ->fr1;
-                arrDefBytes = MergeLists(arrDefBytes, LoadOutVariable(node.Token.Value, fr2, ctx));
-                arrDefBytes = MergeLists(arrDefBytes, LoadInVariable(node.Token.Value, regAllocVTR[node.Token.Value], ctx));
+                arrDefBytes = MergeLists(arrDefBytes, GenerateLDA(fr2, fr2, 4)); // fr2 := fr2 + 4; # Skip array size bytes
+                if (regAllocVTR.ContainsKey(node.Token.Value)) 
+                {
+                    arrDefBytes = MergeLists(
+                            arrDefBytes,
+                            GenerateMOV(fr2, regAllocVTR[node.Token.Value])
+                        );
+                }
+                else
+                {
+                    arrDefBytes = MergeLists(arrDefBytes, LoadOutVariable(node.Token.Value, fr2, ctx));
+                }
 
                 FreeReg(fr0);
                 FreeReg(fr1);
@@ -327,7 +340,7 @@ namespace ERACompiler.Modules
             {
                 frameSize =
                     ctx.GetFrameOffset(ctx.GetDeclaredVars().Last().Token.Value) +
-                    ctx.GetDeclaredVars().Last().AASTType.GetSize(); // ATTENTION: ??? Does it work? Check needed.
+                    ctx.GetDeclaredVars().Last().AASTType.GetSize();
             }
 
             bbBytes = MergeLists(bbBytes, GenerateST(FP, SP)); // Store where to return
@@ -339,54 +352,25 @@ namespace ERACompiler.Modules
             int statementNum = 1;
             foreach (AASTNode statement in node.Children)
             {
-                // -- Register allocation 
-                HashSet<string> vars = GetAllUsedVars(statement);
-                foreach (string var in vars)
-                {
-                    if (ctx.IsVarDeclaredInThisContext(var))
-                    {
-                        int liStart = ctx.GetLIStart(var);
-                        int liEnd = ctx.GetLIEnd(var);
-
-                        if (!regAllocVTR.ContainsKey(var) && liStart <= statementNum) // Allocation (if possible)
-                        {
-                            for (byte ri = 0; ri < 27; ri++)
-                            {
-                                if (!regOccup[ri])
-                                {
-                                    bbBytes = MergeLists(bbBytes, LoadInVariable(var, ri, ctx));
-                                    regAllocVTR.Add(var, ri);
-                                    regAllocRTV.Add(ri, var);
-                                    OccupateReg(ri);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
+                bbBytes = MergeLists(bbBytes, AllocateRegisters(statement, ctx, statementNum));
                 bbBytes = MergeLists(bbBytes, Construct(statement));
                 statementNum++;
+                bbBytes = MergeLists(bbBytes, DeallocateRegisters(statement, ctx, statementNum));
+            }
 
-                foreach (string var in vars)
+            // Deallocate dynamic arrays
+            bbBytes = MergeLists(bbBytes, GetFreeReg(node));
+            byte fr0 = bbBytes.Last.Value;
+            bbBytes.RemoveLast();
+            foreach (AASTNode var in ctx.GetDeclaredVars())
+            {
+                if (ctx.IsVarDynamicArray(var.Token.Value))
                 {
-                    if (ctx.IsVarDeclaredInThisContext(var))
-                    {
-                        int liStart = ctx.GetLIStart(var);
-                        int liEnd = ctx.GetLIEnd(var);
-
-                        if (regAllocVTR.ContainsKey(var) && liEnd < statementNum) // Deallocation
-                        {
-                            // TODO: Check if array - then change heap top
-                            byte reg = regAllocVTR[var];
-                            bbBytes = MergeLists(bbBytes, LoadOutVariable(var, reg, ctx));
-                            regAllocVTR.Remove(var);
-                            regAllocRTV.Remove(reg);
-                            FreeReg(reg);
-                        }
-                    }
+                    bbBytes = MergeLists(bbBytes, LoadFromHeap(0, fr0)); // Size of dynamic array
+                    bbBytes = MergeLists(bbBytes, ChangeHeapTop(fr0, true, false));
                 }
             }
+            FreeReg(fr0);
 
             bbBytes = MergeLists(bbBytes, GenerateLDA(FP, FP, -4));
             bbBytes = MergeLists(bbBytes, GenerateMOV(FP, SP)); // Return stack pointer
@@ -757,7 +741,7 @@ namespace ERACompiler.Modules
                 case VarType.ERAType.SHORT:
                 case VarType.ERAType.BYTE:
                     {
-                        // If we have initial asignment - store it to register/memory
+                        // If we have initial assignment - store it to register/memory
                         if (node.Children.Count > 0)
                         {
                             varDefBytes = MergeLists(varDefBytes, ConstructExpression((AASTNode)node.Children[0]));
@@ -804,57 +788,26 @@ namespace ERACompiler.Modules
             int statementNum = 1;
             foreach (AASTNode statement in node.Children)
             {
-                
-                // -- Register allocation --
-                HashSet<string> vars = GetAllUsedVars(statement);
-                foreach (string var in vars)
-                {
-                    if (ctx.IsVarDeclaredInThisContext(var))
-                    {
-                        int liStart = ctx.GetLIStart(var);
-                        int liEnd = ctx.GetLIEnd(var);
-
-                        if (!regAllocVTR.ContainsKey(var) && liStart <= statementNum) // Allocation (if possible)
-                        {
-                            for (byte ri = 0; ri < 27; ri++)
-                            {
-                                if (!regOccup[ri])
-                                {
-                                    codeBytes = MergeLists(codeBytes, LoadInVariable(var, ri, ctx));
-                                    regAllocVTR.Add(var, ri);
-                                    regAllocRTV.Add(ri, var);
-                                    OccupateReg(ri);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                
+                codeBytes = MergeLists(codeBytes, AllocateRegisters(statement, ctx, statementNum));
                 // Recursive statement bincode generation
                 codeBytes = MergeLists(codeBytes, Construct(statement));
                 statementNum++;
+                codeBytes = MergeLists(codeBytes, DeallocateRegisters(statement, ctx, statementNum));
+            }
 
-                foreach (string var in vars)
+            // Deallocate dynamic arrays
+            codeBytes = MergeLists(codeBytes, GetFreeReg(node));
+            byte fr0 = codeBytes.Last.Value;
+            codeBytes.RemoveLast();
+            foreach (AASTNode var in ctx.GetDeclaredVars())
+            {
+                if (ctx.IsVarDynamicArray(var.Token.Value))
                 {
-                    if (ctx.IsVarDeclaredInThisContext(var))
-                    {
-                        int liStart = ctx.GetLIStart(var);
-                        int liEnd = ctx.GetLIEnd(var);
-
-                        if (regAllocVTR.ContainsKey(var) && liEnd < statementNum) // Deallocation
-                        {
-                            // TODO: Check if array - then change heap top
-                            byte reg = regAllocVTR[var];
-                            codeBytes = MergeLists(codeBytes, LoadOutVariable(var, reg, ctx));
-                            regAllocVTR.Remove(var);
-                            regAllocRTV.Remove(reg);
-                            FreeReg(reg);
-                        }
-                    }
+                    codeBytes = MergeLists(codeBytes, LoadFromHeap(0, fr0)); // Size of dynamic array
+                    codeBytes = MergeLists(codeBytes, ChangeHeapTop(fr0, true, false));
                 }
             }
+            FreeReg(fr0);
 
             return codeBytes;
         }
@@ -1240,8 +1193,17 @@ namespace ERACompiler.Modules
                     primBytes = MergeLists(primBytes, GetFreeReg(node));
                     byte fr1 = primBytes.Last.Value;
                     primBytes.RemoveLast();
-                    
-                    primBytes = MergeLists(primBytes, LoadInVariable(varName, fr1, ctx));
+
+                    if (regAllocVTR.ContainsKey(varName))
+                    {
+                        primBytes = MergeLists(primBytes, GenerateMOV(regAllocVTR[varName], fr1));
+                    }
+                    else
+                    {
+                        primBytes = MergeLists(primBytes, LoadInVariable(varName, fr1, ctx, ctx.IsVarDynamicArray(varName)));
+                        regAllocVTR.Add(varName, fr1); 
+                        regAllocRTV.Add(fr1, varName);
+                    }
 
                     primBytes = MergeLists(primBytes, GenerateADD(fr0, fr1));
                     if (rightValue)
@@ -1575,7 +1537,7 @@ namespace ERACompiler.Modules
             {
                 while (regToFree < 27) // God bless this while to not loop forever! NOTE: It won't
                 {
-                    if (!exclude.Contains(regToFree) && (regAllocRTV.ContainsKey(regToFree)/* || heapAlloc.ContainsKey(regToFree)*/)) break;
+                    if (!exclude.Contains(regToFree) && (regAllocRTV.ContainsKey(regToFree))) break;
                     regToFree++;
                 }
             }            
@@ -1595,16 +1557,6 @@ namespace ERACompiler.Modules
                     GetLList(regToFree)
                     );
             }
-            /*else if (heapAlloc.ContainsKey(regToFree)) // Store to heap
-            {
-                int labelAddress = heapAlloc[regToFree];
-                heapAlloc.Remove(regToFree);
-           
-                return MergeLists(
-                    StoreToHeap(labelAddress, regToFree),
-                    GetLList(regToFree)
-                    );
-            }*/
             else
             {
                 throw new CompilationErrorException("Out of registers!!!");
@@ -1723,6 +1675,62 @@ namespace ERACompiler.Modules
             lst = MergeLists(lst, GenerateLD(fr0, reg));
             FreeReg(fr0);
             return lst;
+        }
+
+        private LinkedList<byte> AllocateRegisters(AASTNode node, Context ctx, int statementNum)
+        {
+            LinkedList<byte> regAllocBytes = new LinkedList<byte>();
+
+            HashSet<string> vars = GetAllUsedVars(node);
+            foreach (string var in vars)
+            {
+                if (ctx.IsVarDeclaredInThisContext(var))
+                {
+                    int liStart = ctx.GetLIStart(var);
+                    int liEnd = ctx.GetLIEnd(var);
+
+                    if (!regAllocVTR.ContainsKey(var) && liStart <= statementNum) // Allocation (if possible)
+                    {
+                        for (byte ri = 0; ri < 27; ri++)
+                        {
+                            if (!regOccup[ri])
+                            {
+                                bool arrayCheck = !ctx.IsVarArray(var) || ctx.IsVarDynamicArray(var);
+                                regAllocBytes = MergeLists(regAllocBytes, LoadInVariable(var, ri, ctx, arrayCheck));
+                                regAllocVTR.Add(var, ri);
+                                regAllocRTV.Add(ri, var);
+                                OccupateReg(ri);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return regAllocBytes;
+        }
+
+        private LinkedList<byte> DeallocateRegisters(AASTNode node, Context ctx, int statementNum)
+        {
+            LinkedList<byte> regDeallocBytes = new LinkedList<byte>();
+            HashSet<string> vars = GetAllUsedVars(node);
+            foreach (string var in vars)
+            {
+                if (ctx.IsVarDeclaredInThisContext(var))
+                {
+                    int liStart = ctx.GetLIStart(var);
+                    int liEnd = ctx.GetLIEnd(var);
+
+                    if (regAllocVTR.ContainsKey(var) && liEnd < statementNum) // Deallocation
+                    {
+                        byte reg = regAllocVTR[var];
+                        regDeallocBytes = MergeLists(regDeallocBytes, LoadOutVariable(var, reg, ctx));
+                        regAllocVTR.Remove(var);
+                        regAllocRTV.Remove(reg);
+                        FreeReg(reg);
+                    }
+                }
+            }
+            return regDeallocBytes;
         }
 
         private void OccupateReg(byte regNum)
