@@ -67,7 +67,4 @@ jobs:
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Generate report
-      run: "%VSINSTALLDIR%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx "ERACompilerUnitTests\bin\Debug\net5.0\ERACompilerUnitTests.dll"
-            
 
