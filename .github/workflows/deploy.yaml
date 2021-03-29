@@ -59,12 +59,12 @@ jobs:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: powershell
       run: |
-            .\.sonar\scanner\dotnet-sonarscanner begin /k:"egorklementev_era_compiler" /o:"egorklementev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/*.coveragexml" /d:sonar.cs.vstest.reportsPaths="**/*.trx"
+            .\.sonar\scanner\dotnet-sonarscanner begin /k:"egorklementev_era_compiler" /o:"egorklementev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/*.coverage" /d:sonar.cs.vstest.reportsPaths="**/*.trx"
             dotnet restore
             dotnet build --configuration Release --no-restore
             & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /InIsolation /EnableCodeCoverage "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output: "/TestResults/VisualStudio.coveragexml" "/TestResults/VisualStudio.coverage"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Settings: "ERACompilerUnitTests\CodeCoverage.runsettings" /InIsolation /EnableCodeCoverage "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output: "/TestResults/VisualStudio.coverage"
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
       run: dotnet test --no-restore --verbosity normal
