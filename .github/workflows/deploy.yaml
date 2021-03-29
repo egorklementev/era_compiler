@@ -17,7 +17,7 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet ERACompiler/restore
     - name: Build
       run: dotnet ERACompiler/build --configuration Release --no-restore
     - name: Test
