@@ -9,10 +9,12 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '5.0.201' ]
+    
+    defaults:
+      run:
+        working-directory: ./ERACompiler
 
     steps:
-    - name: Go to project folder
-      run: cd ./ERACompiler
     - uses: actions/checkout@v2
     - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
       uses: actions/setup-dotnet@v1.7.2
