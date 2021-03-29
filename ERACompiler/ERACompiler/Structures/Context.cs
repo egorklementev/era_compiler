@@ -151,6 +151,17 @@ namespace ERACompiler.Structures
             return LocateVar(identifier.Value).AASTType.IsArray();
         }
 
+        public bool IsVarArray(string identifier)
+        {
+            return LocateVar(identifier).AASTType.IsArray();
+        }
+
+        public bool IsVarDynamicArray(string identifier)
+        {
+            VarType type = LocateVar(identifier).AASTType;
+            return type.IsArray() && ((ArrayType)type).Size == 0;
+        }
+
         public bool IsVarConstant(Token identifier)
         {
             AASTNode? var = LocateVar(identifier.Value);
@@ -218,7 +229,7 @@ namespace ERACompiler.Structures
 
         public VarType GetVarType(Token identifier)
         {
-            return ((AASTNode)LocateVar(identifier.Value)).AASTType;
+            return LocateVar(identifier.Value).AASTType;
         }
 
         public int GetArrayOffsetSize(string identifier)

@@ -149,6 +149,15 @@ namespace ERACompilerUnitTests
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(SemanticErrorException), "Semantic error occured.")]
+        public void ConstantModificationTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_16.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
+        }
+
         private void CompileFiles(string test_name)
         {
             int i = 1;
