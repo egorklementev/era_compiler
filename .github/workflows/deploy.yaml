@@ -63,8 +63,8 @@ jobs:
             dotnet restore
             dotnet build --configuration Release --no-restore
             & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Settings:ERACompilerUnitTests\CodeCoverage.runsettings /InIsolation /EnableCodeCoverage "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output: "/TestResults/report.coveragexml" "/TestResults/report.coverage"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /InIsolation /EnableCodeCoverage /Settings: "ERACompilerUnitTests/CodeCoverage.runsettings" "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:"/TestResults/report.coveragexml" "/TestResults/report.coverage"
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
       run: dotnet test --no-restore --verbosity normal
