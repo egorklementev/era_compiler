@@ -2,7 +2,7 @@
 <!-- File name extension must be .runsettings -->
 <RunSettings>
   <RunConfiguration>
-	  <ResultsDirectory>..\TestResults</ResultsDirectory>
+	  <ResultsDirectory>..\</ResultsDirectory>
   </RunConfiguration>
   <DataCollectionRunSettings>
     <DataCollectors>
