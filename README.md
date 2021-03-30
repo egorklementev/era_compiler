@@ -1,5 +1,7 @@
 # ERA COMPILER
 
+![example workflow](https://github.com/egorklementev/era_compiler/actions/workflows/deploy.yaml/badge.svg)
+
 This is system-level programming language compiler for processors with ERA architecture.
 
 ### Basic architecture
