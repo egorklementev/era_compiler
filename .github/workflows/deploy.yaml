@@ -63,7 +63,7 @@ jobs:
             dotnet restore
             dotnet build --configuration Release --no-restore
             & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /ResultsDirectory:TestResults /Logger:trx "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll" --testcasefilter:"TestCategory!=Lexis"
-      & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" --collect:"Code Coverage" /Settings:ERACompilerUnitTests/CodeCoverage.runsettings "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll" --testcasefilter:"TestCategory!=Lexis"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Settings:ERACompilerUnitTests/CodeCoverage.runsettings --collect:"Code Coverage" "ERACompilerUnitTests\bin\Release\net5.0\ERACompilerUnitTests.dll" --testcasefilter:"TestCategory!=Lexis"
             & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:TestResults/report.coveragexml TestResults/report.coverage
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
