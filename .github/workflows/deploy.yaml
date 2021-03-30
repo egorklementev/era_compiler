@@ -65,7 +65,7 @@ jobs:
             dotnet test --collect "Code Coverage" --logger 'trx;LogFileName=TestResults.trx' --settings ERACompilerUnitTests/CodeCoverage.runsettings --filter "TestCategory!=Lexis"
             ls TestResults
             echo -----
-            Remove-Item -Path TestResults/runneradmin_fv-az153-981_2021-03-30_04_34_40 -Force
+            mv TestResults\runn* .\
             mv TestResults\TestResults.trx .\
             $Folder = Get-ChildItem -Path TestResults\** -Name
             echo $Folder
