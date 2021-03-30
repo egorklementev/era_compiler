@@ -1,0 +1,3 @@
+code
+	goto some_label_1;
+end

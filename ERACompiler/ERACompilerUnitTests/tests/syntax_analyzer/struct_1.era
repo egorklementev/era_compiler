@@ -1,0 +1,4 @@
+struct TestStructure1
+	int var1;
+	AnotherStruct var2;
+end

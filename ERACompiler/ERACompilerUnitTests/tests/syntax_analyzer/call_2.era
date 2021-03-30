@@ -1,0 +1,11 @@
+code
+	FuncCall 
+	(
+		arg1,
+		<-arg2,
+		arg3[0],
+		4,
+		R5,
+		6 + 7
+	);
+end

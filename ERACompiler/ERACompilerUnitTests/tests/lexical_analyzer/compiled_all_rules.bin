@@ -1,0 +1,2188 @@
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 1, Char: 0
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 2, Char: 0
+
+Token type: KEYWORD
+Value: pragma
+Position: Line: 3, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 3, Char: 7
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 4, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 4, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 5, Char: 1
+
+Token type: IDENTIFIER
+Value: some_pargma_1
+Position: Line: 5, Char: 2
+
+Token type: DELIMITER
+Value: (
+Position: Line: 5, Char: 15
+
+Token type: DELIMITER
+Value: )
+Position: Line: 5, Char: 16
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 5, Char: 17
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 6, Char: 1
+
+Token type: IDENTIFIER
+Value: some_pargma_2
+Position: Line: 6, Char: 2
+
+Token type: DELIMITER
+Value: (
+Position: Line: 6, Char: 15
+
+Token type: DELIMITER
+Value: "
+Position: Line: 6, Char: 16
+
+Token type: IDENTIFIER
+Value: text
+Position: Line: 6, Char: 17
+
+Token type: DELIMITER
+Value: "
+Position: Line: 6, Char: 21
+
+Token type: DELIMITER
+Value: )
+Position: Line: 6, Char: 22
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 6, Char: 23
+
+Token type: KEYWORD
+Value: end
+Position: Line: 7, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 7, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 8, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 9, Char: 0
+
+Token type: KEYWORD
+Value: data
+Position: Line: 10, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 10, Char: 5
+
+Token type: IDENTIFIER
+Value: data_1
+Position: Line: 10, Char: 6
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 10, Char: 12
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 11, Char: 1
+
+Token type: NUMBER
+Value: 3
+Position: Line: 11, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 3
+
+Token type: NUMBER
+Value: 1
+Position: Line: 11, Char: 4
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 5
+
+Token type: NUMBER
+Value: 4
+Position: Line: 11, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 7
+
+Token type: NUMBER
+Value: 1
+Position: Line: 11, Char: 8
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 9
+
+Token type: NUMBER
+Value: 5
+Position: Line: 11, Char: 10
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 11
+
+Token type: NUMBER
+Value: 9
+Position: Line: 11, Char: 12
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 13
+
+Token type: NUMBER
+Value: 2
+Position: Line: 11, Char: 14
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 11, Char: 15
+
+Token type: NUMBER
+Value: 6
+Position: Line: 11, Char: 16
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 11, Char: 17
+
+Token type: KEYWORD
+Value: end
+Position: Line: 12, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 12, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 13, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 14, Char: 0
+
+Token type: KEYWORD
+Value: module
+Position: Line: 15, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 15, Char: 7
+
+Token type: IDENTIFIER
+Value: module_1
+Position: Line: 15, Char: 8
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 15, Char: 16
+
+Token type: KEYWORD
+Value: end
+Position: Line: 16, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 16, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 17, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 18, Char: 0
+
+Token type: KEYWORD
+Value: code
+Position: Line: 19, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 19, Char: 5
+
+Token type: KEYWORD
+Value: end
+Position: Line: 20, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 20, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 21, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 22, Char: 0
+
+Token type: KEYWORD
+Value: struct
+Position: Line: 23, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 23, Char: 7
+
+Token type: IDENTIFIER
+Value: struct_1
+Position: Line: 23, Char: 8
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 23, Char: 16
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 24, Char: 1
+
+Token type: KEYWORD
+Value: int
+Position: Line: 24, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 24, Char: 5
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 24, Char: 6
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 24, Char: 7
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 24, Char: 8
+
+Token type: KEYWORD
+Value: end
+Position: Line: 25, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 25, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 26, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 27, Char: 0
+
+Token type: KEYWORD
+Value: routine
+Position: Line: 28, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 28, Char: 8
+
+Token type: IDENTIFIER
+Value: routine_1
+Position: Line: 28, Char: 9
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 28, Char: 18
+
+Token type: DELIMITER
+Value: (
+Position: Line: 28, Char: 19
+
+Token type: DELIMITER
+Value: )
+Position: Line: 28, Char: 20
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 28, Char: 21
+
+Token type: KEYWORD
+Value: do
+Position: Line: 29, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 29, Char: 3
+
+Token type: KEYWORD
+Value: end
+Position: Line: 30, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 30, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 31, Char: 1
+
+Token type: KEYWORD
+Value: routine
+Position: Line: 32, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 32, Char: 8
+
+Token type: IDENTIFIER
+Value: routine_2
+Position: Line: 32, Char: 9
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 32, Char: 18
+
+Token type: DELIMITER
+Value: (
+Position: Line: 32, Char: 19
+
+Token type: KEYWORD
+Value: int
+Position: Line: 32, Char: 20
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 32, Char: 23
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 32, Char: 24
+
+Token type: DELIMITER
+Value: )
+Position: Line: 32, Char: 25
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 32, Char: 26
+
+Token type: DELIMITER
+Value: :
+Position: Line: 32, Char: 27
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 32, Char: 28
+
+Token type: KEYWORD
+Value: short
+Position: Line: 32, Char: 29
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 32, Char: 34
+
+Token type: KEYWORD
+Value: do
+Position: Line: 33, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 33, Char: 3
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 34, Char: 1
+
+Token type: KEYWORD
+Value: int
+Position: Line: 34, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 34, Char: 5
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 34, Char: 6
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 34, Char: 7
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 34, Char: 8
+
+Token type: KEYWORD
+Value: end
+Position: Line: 35, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 35, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 36, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 37, Char: 0
+
+Token type: KEYWORD
+Value: module
+Position: Line: 38, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 38, Char: 7
+
+Token type: IDENTIFIER
+Value: module_var_decl
+Position: Line: 38, Char: 8
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 38, Char: 23
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 39, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 39, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 40, Char: 1
+
+Token type: KEYWORD
+Value: byte
+Position: Line: 40, Char: 2
+
+Token type: DELIMITER
+Value: @
+Position: Line: 40, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 40, Char: 7
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 40, Char: 8
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 40, Char: 9
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 40, Char: 10
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 41, Char: 1
+
+Token type: IDENTIFIER
+Value: struct_1
+Position: Line: 41, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 41, Char: 10
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 41, Char: 11
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 41, Char: 12
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 41, Char: 13
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 42, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 42, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 43, Char: 1
+
+Token type: KEYWORD
+Value: int
+Position: Line: 43, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 43, Char: 5
+
+Token type: IDENTIFIER
+Value: c
+Position: Line: 43, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 43, Char: 7
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 43, Char: 8
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 43, Char: 10
+
+Token type: NUMBER
+Value: 0
+Position: Line: 43, Char: 11
+
+Token type: DELIMITER
+Value: ,
+Position: Line: 43, Char: 12
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 43, Char: 13
+
+Token type: IDENTIFIER
+Value: d
+Position: Line: 43, Char: 14
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 43, Char: 15
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 43, Char: 16
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 43, Char: 18
+
+Token type: NUMBER
+Value: 1
+Position: Line: 43, Char: 19
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 43, Char: 20
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 43, Char: 21
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 44, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 44, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 45, Char: 1
+
+Token type: KEYWORD
+Value: int
+Position: Line: 45, Char: 2
+
+Token type: DELIMITER
+Value: @
+Position: Line: 45, Char: 5
+
+Token type: DELIMITER
+Value: [
+Position: Line: 45, Char: 6
+
+Token type: DELIMITER
+Value: ]
+Position: Line: 45, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 45, Char: 8
+
+Token type: IDENTIFIER
+Value: e
+Position: Line: 45, Char: 9
+
+Token type: DELIMITER
+Value: [
+Position: Line: 45, Char: 10
+
+Token type: NUMBER
+Value: 10
+Position: Line: 45, Char: 11
+
+Token type: DELIMITER
+Value: ]
+Position: Line: 45, Char: 13
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 45, Char: 14
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 45, Char: 15
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 46, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 46, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 47, Char: 1
+
+Token type: KEYWORD
+Value: int
+Position: Line: 47, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 47, Char: 5
+
+Token type: KEYWORD
+Value: const
+Position: Line: 47, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 47, Char: 11
+
+Token type: IDENTIFIER
+Value: f
+Position: Line: 47, Char: 12
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 47, Char: 13
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 47, Char: 14
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 47, Char: 16
+
+Token type: NUMBER
+Value: 0
+Position: Line: 47, Char: 17
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 47, Char: 18
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 47, Char: 19
+
+Token type: KEYWORD
+Value: end
+Position: Line: 48, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 48, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 49, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 50, Char: 0
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 51, Char: 0
+
+Token type: KEYWORD
+Value: routine
+Position: Line: 52, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 52, Char: 8
+
+Token type: IDENTIFIER
+Value: routine_asm
+Position: Line: 52, Char: 9
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 52, Char: 20
+
+Token type: DELIMITER
+Value: (
+Position: Line: 52, Char: 21
+
+Token type: DELIMITER
+Value: )
+Position: Line: 52, Char: 22
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 52, Char: 23
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 53, Char: 1
+
+Token type: KEYWORD
+Value: asm
+Position: Line: 53, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 53, Char: 5
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 54, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 54, Char: 2
+
+Token type: KEYWORD
+Value: skip
+Position: Line: 54, Char: 3
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 54, Char: 7
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 54, Char: 8
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 55, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 55, Char: 2
+
+Token type: KEYWORD
+Value: stop
+Position: Line: 55, Char: 3
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 55, Char: 7
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 55, Char: 8
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 56, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 56, Char: 2
+
+Token type: KEYWORD
+Value: format
+Position: Line: 56, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 56, Char: 9
+
+Token type: NUMBER
+Value: 32
+Position: Line: 56, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 56, Char: 12
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 56, Char: 13
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 57, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 57, Char: 2
+
+Token type: REGISTER
+Value: r0
+Position: Line: 57, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 57, Char: 5
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 57, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 57, Char: 8
+
+Token type: OPERATOR
+Value: ->
+Position: Line: 57, Char: 9
+
+Token type: REGISTER
+Value: r1
+Position: Line: 57, Char: 11
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 57, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 57, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 58, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 58, Char: 2
+
+Token type: OPERATOR
+Value: ->
+Position: Line: 58, Char: 3
+
+Token type: REGISTER
+Value: r2
+Position: Line: 58, Char: 5
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 58, Char: 7
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 58, Char: 8
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 58, Char: 10
+
+Token type: REGISTER
+Value: r3
+Position: Line: 58, Char: 11
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 58, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 58, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 59, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 59, Char: 2
+
+Token type: REGISTER
+Value: r4
+Position: Line: 59, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 59, Char: 5
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 59, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 59, Char: 8
+
+Token type: REGISTER
+Value: r5
+Position: Line: 59, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 59, Char: 11
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 59, Char: 12
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 60, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 60, Char: 2
+
+Token type: REGISTER
+Value: r6
+Position: Line: 60, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 60, Char: 5
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 60, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 60, Char: 8
+
+Token type: NUMBER
+Value: 31
+Position: Line: 60, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 60, Char: 11
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 60, Char: 12
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 61, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 61, Char: 2
+
+Token type: REGISTER
+Value: r7
+Position: Line: 61, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 61, Char: 5
+
+Token type: OPERATOR
+Value: +=
+Position: Line: 61, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 61, Char: 8
+
+Token type: REGISTER
+Value: r8
+Position: Line: 61, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 61, Char: 11
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 61, Char: 12
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 62, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 62, Char: 2
+
+Token type: REGISTER
+Value: r9
+Position: Line: 62, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 62, Char: 5
+
+Token type: OPERATOR
+Value: -=
+Position: Line: 62, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 62, Char: 8
+
+Token type: REGISTER
+Value: r10
+Position: Line: 62, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 62, Char: 12
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 62, Char: 13
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 63, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 63, Char: 2
+
+Token type: REGISTER
+Value: r11
+Position: Line: 63, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 63, Char: 6
+
+Token type: OPERATOR
+Value: >>=
+Position: Line: 63, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 63, Char: 10
+
+Token type: REGISTER
+Value: r12
+Position: Line: 63, Char: 11
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 63, Char: 14
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 63, Char: 15
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 64, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 64, Char: 2
+
+Token type: REGISTER
+Value: r13
+Position: Line: 64, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 64, Char: 6
+
+Token type: OPERATOR
+Value: <<=
+Position: Line: 64, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 64, Char: 10
+
+Token type: REGISTER
+Value: r14
+Position: Line: 64, Char: 11
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 64, Char: 14
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 64, Char: 15
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 65, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 65, Char: 2
+
+Token type: REGISTER
+Value: r15
+Position: Line: 65, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 65, Char: 6
+
+Token type: OPERATOR
+Value: |=
+Position: Line: 65, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 65, Char: 9
+
+Token type: REGISTER
+Value: r16
+Position: Line: 65, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 65, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 65, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 66, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 66, Char: 2
+
+Token type: REGISTER
+Value: r17
+Position: Line: 66, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 66, Char: 6
+
+Token type: OPERATOR
+Value: &=
+Position: Line: 66, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 66, Char: 9
+
+Token type: REGISTER
+Value: r18
+Position: Line: 66, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 66, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 66, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 67, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 67, Char: 2
+
+Token type: REGISTER
+Value: r19
+Position: Line: 67, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 67, Char: 6
+
+Token type: OPERATOR
+Value: ^=
+Position: Line: 67, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 67, Char: 9
+
+Token type: REGISTER
+Value: r20
+Position: Line: 67, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 67, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 67, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 68, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 68, Char: 2
+
+Token type: REGISTER
+Value: r21
+Position: Line: 68, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 68, Char: 6
+
+Token type: OPERATOR
+Value: <=
+Position: Line: 68, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 68, Char: 9
+
+Token type: REGISTER
+Value: r22
+Position: Line: 68, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 68, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 68, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 69, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 69, Char: 2
+
+Token type: REGISTER
+Value: r23
+Position: Line: 69, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 69, Char: 6
+
+Token type: OPERATOR
+Value: >=
+Position: Line: 69, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 69, Char: 9
+
+Token type: REGISTER
+Value: r24
+Position: Line: 69, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 69, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 69, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 70, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 70, Char: 2
+
+Token type: REGISTER
+Value: r25
+Position: Line: 70, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 70, Char: 6
+
+Token type: OPERATOR
+Value: ?=
+Position: Line: 70, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 70, Char: 9
+
+Token type: REGISTER
+Value: r26
+Position: Line: 70, Char: 10
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 70, Char: 13
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 70, Char: 14
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 71, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 71, Char: 2
+
+Token type: REGISTER
+Value: sb
+Position: Line: 71, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 71, Char: 5
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 71, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 71, Char: 8
+
+Token type: REGISTER
+Value: sp
+Position: Line: 71, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 71, Char: 11
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 71, Char: 12
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 72, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 72, Char: 2
+
+Token type: KEYWORD
+Value: if
+Position: Line: 72, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 72, Char: 5
+
+Token type: REGISTER
+Value: pc
+Position: Line: 72, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 72, Char: 8
+
+Token type: KEYWORD
+Value: goto
+Position: Line: 72, Char: 9
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 72, Char: 13
+
+Token type: REGISTER
+Value: fp
+Position: Line: 72, Char: 14
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 72, Char: 16
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 72, Char: 17
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 73, Char: 1
+
+Token type: KEYWORD
+Value: end
+Position: Line: 73, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 73, Char: 5
+
+Token type: KEYWORD
+Value: end
+Position: Line: 74, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 74, Char: 4
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 75, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 76, Char: 0
+
+Token type: KEYWORD
+Value: routine
+Position: Line: 77, Char: 1
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 77, Char: 8
+
+Token type: IDENTIFIER
+Value: routine_ext
+Position: Line: 77, Char: 9
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 77, Char: 20
+
+Token type: DELIMITER
+Value: (
+Position: Line: 77, Char: 21
+
+Token type: DELIMITER
+Value: )
+Position: Line: 77, Char: 22
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 77, Char: 23
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 78, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 78, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 79, Char: 1
+
+Token type: KEYWORD
+Value: int
+Position: Line: 79, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 79, Char: 5
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 79, Char: 6
+
+Token type: DELIMITER
+Value: ,
+Position: Line: 79, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 79, Char: 8
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 79, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 79, Char: 10
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 79, Char: 11
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 80, Char: 1
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 80, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 80, Char: 3
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 80, Char: 4
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 80, Char: 6
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 80, Char: 7
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 80, Char: 8
+
+Token type: OPERATOR
+Value: +
+Position: Line: 80, Char: 9
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 80, Char: 10
+
+Token type: NUMBER
+Value: 0
+Position: Line: 80, Char: 11
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 80, Char: 12
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 80, Char: 13
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 81, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 81, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 82, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 82, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 83, Char: 1
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 83, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 83, Char: 3
+
+Token type: OPERATOR
+Value: <=>
+Position: Line: 83, Char: 4
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 83, Char: 7
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 83, Char: 8
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 83, Char: 9
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 83, Char: 10
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 84, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 84, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 85, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 85, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 86, Char: 1
+
+Token type: IDENTIFIER
+Value: routine_2
+Position: Line: 86, Char: 2
+
+Token type: DELIMITER
+Value: (
+Position: Line: 86, Char: 11
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 86, Char: 12
+
+Token type: DELIMITER
+Value: )
+Position: Line: 86, Char: 13
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 86, Char: 14
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 86, Char: 15
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 87, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 87, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 88, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 88, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 89, Char: 1
+
+Token type: KEYWORD
+Value: if
+Position: Line: 89, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 89, Char: 4
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 89, Char: 5
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 89, Char: 6
+
+Token type: KEYWORD
+Value: do
+Position: Line: 89, Char: 7
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 89, Char: 9
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 90, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 90, Char: 2
+
+Token type: KEYWORD
+Value: if
+Position: Line: 90, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 90, Char: 5
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 90, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 90, Char: 7
+
+Token type: KEYWORD
+Value: do
+Position: Line: 90, Char: 8
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 90, Char: 10
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 91, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 91, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 91, Char: 3
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 91, Char: 4
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 91, Char: 5
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 91, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 91, Char: 8
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 91, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 91, Char: 10
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 91, Char: 11
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 92, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 92, Char: 2
+
+Token type: KEYWORD
+Value: else
+Position: Line: 92, Char: 3
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 92, Char: 7
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 93, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 93, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 93, Char: 3
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 93, Char: 4
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 93, Char: 5
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 93, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 93, Char: 8
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 93, Char: 9
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 93, Char: 10
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 93, Char: 11
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 94, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 94, Char: 2
+
+Token type: KEYWORD
+Value: end
+Position: Line: 94, Char: 3
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 94, Char: 6
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 95, Char: 1
+
+Token type: KEYWORD
+Value: end
+Position: Line: 95, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 95, Char: 5
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 96, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 96, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 97, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 97, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 98, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 98, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 99, Char: 1
+
+Token type: KEYWORD
+Value: for
+Position: Line: 99, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 5
+
+Token type: IDENTIFIER
+Value: i
+Position: Line: 99, Char: 6
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 7
+
+Token type: KEYWORD
+Value: from
+Position: Line: 99, Char: 8
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 12
+
+Token type: NUMBER
+Value: 0
+Position: Line: 99, Char: 13
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 14
+
+Token type: KEYWORD
+Value: to
+Position: Line: 99, Char: 15
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 17
+
+Token type: NUMBER
+Value: 10
+Position: Line: 99, Char: 18
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 20
+
+Token type: KEYWORD
+Value: step
+Position: Line: 99, Char: 21
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 25
+
+Token type: NUMBER
+Value: 1
+Position: Line: 99, Char: 26
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 99, Char: 27
+
+Token type: KEYWORD
+Value: loop
+Position: Line: 99, Char: 28
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 99, Char: 32
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 100, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 100, Char: 2
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 100, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 100, Char: 4
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 100, Char: 5
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 100, Char: 7
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 100, Char: 8
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 100, Char: 9
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 100, Char: 10
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 101, Char: 1
+
+Token type: KEYWORD
+Value: end
+Position: Line: 101, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 101, Char: 5
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 102, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 102, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 103, Char: 1
+
+Token type: KEYWORD
+Value: while
+Position: Line: 103, Char: 2
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 103, Char: 7
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 103, Char: 8
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 103, Char: 9
+
+Token type: OPERATOR
+Value: /=
+Position: Line: 103, Char: 10
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 103, Char: 12
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 103, Char: 13
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 103, Char: 14
+
+Token type: KEYWORD
+Value: loop
+Position: Line: 103, Char: 15
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 103, Char: 19
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 104, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 104, Char: 2
+
+Token type: IDENTIFIER
+Value: a
+Position: Line: 104, Char: 3
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 104, Char: 4
+
+Token type: OPERATOR
+Value: :=
+Position: Line: 104, Char: 5
+
+Token type: WHITESPACE
+Value: " "
+Position: Line: 104, Char: 7
+
+Token type: IDENTIFIER
+Value: b
+Position: Line: 104, Char: 8
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 104, Char: 9
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 104, Char: 10
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 105, Char: 1
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 105, Char: 2
+
+Token type: KEYWORD
+Value: break
+Position: Line: 105, Char: 3
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 105, Char: 8
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 105, Char: 9
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 106, Char: 1
+
+Token type: KEYWORD
+Value: end
+Position: Line: 106, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 106, Char: 5
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 107, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 107, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 108, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 108, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 109, Char: 1
+
+Token type: KEYWORD
+Value: return
+Position: Line: 109, Char: 2
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 109, Char: 8
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 109, Char: 9
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 110, Char: 1
+
+Token type: KEYWORD
+Value: end
+Position: Line: 111, Char: 1
+

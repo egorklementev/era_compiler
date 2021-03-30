@@ -1,0 +1,54 @@
+		{
+			"node_type": "Program",
+			"token": "data",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "data",
+					"children": [
+						{
+							"node_type": "Data",
+							"token": "data",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "data",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "testdata1",
+									"children": []
+								},
+								{
+									"node_type": "NUMBER",
+									"token": "1",
+									"children": [
+										{
+											"node_type": "[ - ]",
+											"token": "1",
+											"children": []
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "1",
+											"children": []
+										}
+									]
+								},
+								{
+									"node_type": "Data literals",
+									"token": "end",
+									"children": []
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}

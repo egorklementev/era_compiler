@@ -1,0 +1,284 @@
+Token type: REGISTER
+Value: r0
+Position: Line: 1, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 1, Char: 3
+
+Token type: REGISTER
+Value: r1
+Position: Line: 2, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 2, Char: 3
+
+Token type: REGISTER
+Value: r2
+Position: Line: 3, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 3, Char: 3
+
+Token type: REGISTER
+Value: r3
+Position: Line: 4, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 4, Char: 3
+
+Token type: REGISTER
+Value: r4
+Position: Line: 5, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 5, Char: 3
+
+Token type: REGISTER
+Value: r5
+Position: Line: 6, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 6, Char: 3
+
+Token type: REGISTER
+Value: r6
+Position: Line: 7, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 7, Char: 3
+
+Token type: REGISTER
+Value: r7
+Position: Line: 8, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 8, Char: 3
+
+Token type: REGISTER
+Value: r8
+Position: Line: 9, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 9, Char: 3
+
+Token type: REGISTER
+Value: r9
+Position: Line: 10, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 10, Char: 3
+
+Token type: REGISTER
+Value: r10
+Position: Line: 11, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 11, Char: 4
+
+Token type: REGISTER
+Value: r11
+Position: Line: 12, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 12, Char: 4
+
+Token type: REGISTER
+Value: r12
+Position: Line: 13, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 13, Char: 4
+
+Token type: REGISTER
+Value: r13
+Position: Line: 14, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 14, Char: 4
+
+Token type: REGISTER
+Value: r14
+Position: Line: 15, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 15, Char: 4
+
+Token type: REGISTER
+Value: r15
+Position: Line: 16, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 16, Char: 4
+
+Token type: REGISTER
+Value: r16
+Position: Line: 17, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 17, Char: 4
+
+Token type: REGISTER
+Value: r17
+Position: Line: 18, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 18, Char: 4
+
+Token type: REGISTER
+Value: r18
+Position: Line: 19, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 19, Char: 4
+
+Token type: REGISTER
+Value: r19
+Position: Line: 20, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 20, Char: 4
+
+Token type: REGISTER
+Value: r20
+Position: Line: 21, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 21, Char: 4
+
+Token type: REGISTER
+Value: r21
+Position: Line: 22, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 22, Char: 4
+
+Token type: REGISTER
+Value: r22
+Position: Line: 23, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 23, Char: 4
+
+Token type: REGISTER
+Value: r23
+Position: Line: 24, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 24, Char: 4
+
+Token type: REGISTER
+Value: r24
+Position: Line: 25, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 25, Char: 4
+
+Token type: REGISTER
+Value: r25
+Position: Line: 26, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 26, Char: 4
+
+Token type: REGISTER
+Value: r26
+Position: Line: 27, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 27, Char: 4
+
+Token type: REGISTER
+Value: r27
+Position: Line: 28, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 28, Char: 4
+
+Token type: REGISTER
+Value: sp
+Position: Line: 29, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 29, Char: 3
+
+Token type: REGISTER
+Value: sb
+Position: Line: 30, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 30, Char: 3
+
+Token type: REGISTER
+Value: fp
+Position: Line: 31, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 31, Char: 3
+
+Token type: REGISTER
+Value: pc
+Position: Line: 32, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 32, Char: 3
+
+Token type: IDENTIFIER
+Value: r28
+Position: Line: 33, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 33, Char: 4
+
+Token type: IDENTIFIER
+Value: r29
+Position: Line: 34, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 34, Char: 4
+
+Token type: IDENTIFIER
+Value: r30
+Position: Line: 35, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 35, Char: 4
+
+Token type: IDENTIFIER
+Value: r31
+Position: Line: 36, Char: 1
+

@@ -1,0 +1,7 @@
+code
+	asm
+		format 18;
+		skip;
+		stop;
+	end
+end

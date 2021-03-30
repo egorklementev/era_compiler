@@ -8,6 +8,8 @@ namespace ERACompilerUnitTests
     [TestClass]
     public class SemanticAnalyzerUnitTests
     {
+        private readonly string pathPrefix = "../../../tests/semantic_analyzer/";
+
         [TestMethod]
         public void ComplexTests()
         {
@@ -19,7 +21,7 @@ namespace ERACompilerUnitTests
         public void MultipleDeclarationTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_1.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_1.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -28,7 +30,7 @@ namespace ERACompilerUnitTests
         public void NoDeclarationTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_2.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_2.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -37,7 +39,7 @@ namespace ERACompilerUnitTests
         public void NoCodeSegmentTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_3.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_3.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -46,7 +48,7 @@ namespace ERACompilerUnitTests
         public void BreakIsNotInPlaceTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_4.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_4.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -55,7 +57,7 @@ namespace ERACompilerUnitTests
         public void ReturnIsNotInPlaceTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_5.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_5.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -64,7 +66,7 @@ namespace ERACompilerUnitTests
         public void IncorrectFormatTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_6.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_6.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -73,7 +75,7 @@ namespace ERACompilerUnitTests
         public void DynamicLDATest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_7.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_7.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -82,7 +84,7 @@ namespace ERACompilerUnitTests
         public void NonArrayAccessTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_8.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_8.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -91,7 +93,7 @@ namespace ERACompilerUnitTests
         public void NegativeIndexTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_9.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_9.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -100,7 +102,7 @@ namespace ERACompilerUnitTests
         public void IncorrectIndexTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_10.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_10.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -109,7 +111,7 @@ namespace ERACompilerUnitTests
         public void DynamicConstDefTest1()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_11.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_11.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -118,7 +120,7 @@ namespace ERACompilerUnitTests
         public void DynamicConstDefTest2()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_12.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_12.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -127,7 +129,7 @@ namespace ERACompilerUnitTests
         public void IncorrectArraySizeTest1()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_13.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_13.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -136,7 +138,7 @@ namespace ERACompilerUnitTests
         public void IncorrectArraySizeTest2()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_14.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_14.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -145,7 +147,7 @@ namespace ERACompilerUnitTests
         public void IncorrectNumberOfArgumentsTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_15.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_15.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -154,7 +156,7 @@ namespace ERACompilerUnitTests
         public void ConstantModificationTest()
         {
             Compiler c = new Compiler();
-            string sourceCode = File.ReadAllText("tests/semantic_analyzer/semantic_error_16.era");
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_16.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
@@ -164,11 +166,11 @@ namespace ERACompilerUnitTests
             while (File.Exists("tests/semantic_analyzer/" + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/semantic_analyzer/" + test_name + "_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/semantic_analyzer/expected_compiled_" + test_name + "_" + i + ".bin");
+                string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes(pathPrefix + "expected_compiled_" + test_name + "_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
                 // Store the compiler output in a file
-                File.WriteAllBytes("tests/semantic_analyzer/actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
+                File.WriteAllBytes(pathPrefix + "actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
                 Assert.AreEqual(expectedCode.Length, actualCode.Length);
                 for (int j = 0; j < expectedCode.Length; j++)
                 {

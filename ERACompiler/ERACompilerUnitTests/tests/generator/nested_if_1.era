@@ -1,0 +1,43 @@
+
+code
+	int a := 1; // 14 for ANS
+	if a do
+		if a do
+			if a do
+				if a do
+					if a do
+						if a do
+							if a do
+								if a do
+									if a do
+										if a do
+											if a do
+												if a do
+													if a do
+														a := a + 1;
+													end
+													a := a + 1;
+												end
+												a := a + 1;
+											end
+											a := a + 1;
+										end
+										a := a + 1;
+									end
+									a := a + 1;
+								end
+								a := a + 1;
+							end
+							a := a + 1;
+						end
+						a := a + 1;
+					end
+					a := a + 1;
+				end
+				a := a + 1;
+			end
+			a := a + 1;
+		end
+		a := a + 1;
+	end
+end

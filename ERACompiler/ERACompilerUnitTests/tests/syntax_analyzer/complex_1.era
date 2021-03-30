@@ -1,0 +1,12 @@
+code
+	for i loop
+		for j loop
+			if i = j 
+			do
+				// Some random assignments
+				R0 := i + j;
+				->R1 := i + 2 * j; 
+			end
+		end
+	end
+end

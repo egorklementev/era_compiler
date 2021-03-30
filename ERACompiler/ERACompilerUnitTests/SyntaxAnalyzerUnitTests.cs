@@ -7,6 +7,8 @@ namespace ERACompilerUnitTests
     [TestClass]
     public class SyntaxAnalyzerUnitTests
     {
+        private readonly string pathPrefix = "../../../tests/syntax_analyzer/";
+
         [TestMethod]
         public void LabelRuleTests()
         {
@@ -121,11 +123,11 @@ namespace ERACompilerUnitTests
             while (File.Exists("tests/syntax_analyzer/" + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/syntax_analyzer/" + test_name + "_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/syntax_analyzer/expected_compiled_" + test_name + "_" + i + ".bin");
+                string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes(pathPrefix + "expected_compiled_" + test_name + "_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
                 // Store the compiler output in a file
-                File.WriteAllBytes("tests/syntax_analyzer/actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
+                File.WriteAllBytes(pathPrefix + "actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
                 Assert.AreEqual(expectedCode.Length, actualCode.Length);
                 for (int j = 0; j < expectedCode.Length; j++)
                 {

@@ -1,0 +1,4 @@
+code
+	int[] a[10], b[12];
+	byte[] c[13], d[-5];
+end

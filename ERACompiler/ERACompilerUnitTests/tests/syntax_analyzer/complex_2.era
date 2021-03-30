@@ -1,0 +1,123 @@
+// Program
+// Annotations
+pragma
+	// PragmaDeclaration {PragmaDeclaration}
+	some_pargma_1()
+	some_pargma_2("text")
+end
+
+// Data
+data data_1
+	3 1 4 1 5 9 2 6
+end
+
+// Module
+module module_1
+end
+
+// Code
+code
+end
+
+// Structure
+struct struct_1
+	int a;
+end
+
+// Routine 
+routine routine_1 ()
+do
+end
+
+routine routine_2 (int a) : short
+do
+	int b;
+end
+
+// VarDeclaration
+module module_var_decl
+	// Type
+	byte@ a;
+	struct_1 b;
+	// Variable
+	int c := 0, d := 1;
+	// Array
+	int@[] e[10];
+	// Constant
+	int const f := 0;
+end
+
+// Statement
+// AssemblyBlock
+routine routine_asm ()
+do
+	<label1>
+	asm
+		<label1>;
+		skip;
+		stop;
+		format 32;
+		r0 := label1;
+		r0 := r0 + 1000;
+		r0 := ->r1;
+		->r2 := r3;
+		r4 := r5;
+		r6 := 31;
+		r7 += r8;
+		r9 -= r10;
+		r11 >>= r12;
+		r13 <<= r14;
+		r15 |= r16;
+		r17 &= r18;
+		r19 ^= r20;
+		r21 <= r22;
+		r23 >= r24;
+		r25 ?= r26;
+		sb := sp;
+		if pc goto fp;
+	end
+	// Goto
+	goto label1;
+end
+
+// ExtenstionStatement
+routine routine_ext ()
+do
+	// Assignment
+	int a, b;
+	a := b + 0;
+	
+	// Swap
+	a <=> b;
+	
+	// Call
+	routine_2(a);
+	
+	// If
+	if a do
+		if b do
+			a := b;
+		else
+			b := a;
+		end
+	end
+	
+	// Loop
+	// For
+	for i from 0 to 10 step 1 loop
+		a := b;
+	end
+	// While / Break
+	while a /= b loop
+		a := b;
+		break;
+	end
+	// Loop while
+	loop 
+		a := b;
+	while a end
+	
+	// Return
+	return;
+
+end

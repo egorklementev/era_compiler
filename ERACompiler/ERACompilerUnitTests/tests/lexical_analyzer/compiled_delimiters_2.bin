@@ -1,0 +1,100 @@
+Token type: IDENTIFIER
+Value: _
+Position: Line: 1, Char: 1
+
+Token type: DELIMITER
+Value: :
+Position: Line: 1, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 1, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 2, Char: 1
+
+Token type: DELIMITER
+Value: ;
+Position: Line: 2, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 2, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 3, Char: 1
+
+Token type: DELIMITER
+Value: .
+Position: Line: 3, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 3, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 4, Char: 1
+
+Token type: DELIMITER
+Value: ,
+Position: Line: 4, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 4, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 5, Char: 1
+
+Token type: DELIMITER
+Value: ]
+Position: Line: 5, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 5, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 6, Char: 1
+
+Token type: DELIMITER
+Value: [
+Position: Line: 6, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 6, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 7, Char: 1
+
+Token type: DELIMITER
+Value: )
+Position: Line: 7, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 7, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 8, Char: 1
+
+Token type: DELIMITER
+Value: (
+Position: Line: 8, Char: 2
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 8, Char: 3
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 9, Char: 1
+

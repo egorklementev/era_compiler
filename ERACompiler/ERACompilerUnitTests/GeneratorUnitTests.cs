@@ -7,6 +7,8 @@ namespace ERACompilerUnitTests
     [TestClass]
     public class GeneratorUnitTests
     {
+        private readonly string pathPrefix = "../../../tests/generator/";
+
         [TestMethod]
         public void NestedForTest()
         {
@@ -58,14 +60,14 @@ namespace ERACompilerUnitTests
         private void CompileFiles(string test_name)
         {
             int i = 1;
-            while (File.Exists("tests/generator/" + test_name + "_" + i + ".era"))
+            while (File.Exists("../../../tests/generator/" + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
-                string sourceCode = File.ReadAllText("tests/generator/" + test_name + "_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes("tests/generator/expected_compiled_" + test_name + "_" + i + ".bin");
+                string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
+                byte[] expectedCode = File.ReadAllBytes(pathPrefix + "expected_compiled_" + test_name + "_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.GENERATION);
                 // Store the compiler output in a file
-                File.WriteAllBytes("tests/generator/actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
+                File.WriteAllBytes(pathPrefix + "actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
                 Assert.AreEqual(expectedCode.Length, actualCode.Length);
                 for (int j = 0; j < expectedCode.Length; j++)
                 {

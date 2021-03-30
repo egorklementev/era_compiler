@@ -1,0 +1,204 @@
+Token type: KEYWORD
+Value: code
+Position: Line: 1, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 1, Char: 5
+
+Token type: KEYWORD
+Value: end
+Position: Line: 2, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 2, Char: 4
+
+Token type: KEYWORD
+Value: data
+Position: Line: 3, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 3, Char: 5
+
+Token type: KEYWORD
+Value: module
+Position: Line: 4, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 4, Char: 7
+
+Token type: KEYWORD
+Value: pragma
+Position: Line: 5, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 5, Char: 7
+
+Token type: KEYWORD
+Value: struct
+Position: Line: 6, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 6, Char: 7
+
+Token type: KEYWORD
+Value: return
+Position: Line: 7, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 7, Char: 7
+
+Token type: KEYWORD
+Value: int
+Position: Line: 8, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 8, Char: 4
+
+Token type: KEYWORD
+Value: short
+Position: Line: 9, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 9, Char: 6
+
+Token type: KEYWORD
+Value: byte
+Position: Line: 10, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 10, Char: 5
+
+Token type: KEYWORD
+Value: const
+Position: Line: 11, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 11, Char: 6
+
+Token type: KEYWORD
+Value: routine
+Position: Line: 12, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 12, Char: 8
+
+Token type: KEYWORD
+Value: do
+Position: Line: 13, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 13, Char: 3
+
+Token type: KEYWORD
+Value: start
+Position: Line: 14, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 14, Char: 6
+
+Token type: KEYWORD
+Value: entry
+Position: Line: 15, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 15, Char: 6
+
+Token type: KEYWORD
+Value: skip
+Position: Line: 16, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 16, Char: 5
+
+Token type: KEYWORD
+Value: stop
+Position: Line: 17, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 17, Char: 5
+
+Token type: KEYWORD
+Value: format
+Position: Line: 18, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 18, Char: 7
+
+Token type: KEYWORD
+Value: for
+Position: Line: 19, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 19, Char: 4
+
+Token type: KEYWORD
+Value: from
+Position: Line: 20, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 20, Char: 5
+
+Token type: KEYWORD
+Value: to
+Position: Line: 21, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 21, Char: 3
+
+Token type: KEYWORD
+Value: step
+Position: Line: 22, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 22, Char: 5
+
+Token type: KEYWORD
+Value: while
+Position: Line: 23, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 23, Char: 6
+
+Token type: KEYWORD
+Value: loop
+Position: Line: 24, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 24, Char: 5
+
+Token type: KEYWORD
+Value: break
+Position: Line: 25, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 25, Char: 6
+
+Token type: KEYWORD
+Value: goto
+Position: Line: 26, Char: 1
+

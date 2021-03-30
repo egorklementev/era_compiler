@@ -1,0 +1,166 @@
+		{
+			"node_type": "Program",
+			"token": "struct",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "struct",
+					"children": [
+						{
+							"node_type": "Structure",
+							"token": "struct",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "struct",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "teststructure1",
+									"children": []
+								},
+								{
+									"node_type": "{ Variable declarations }",
+									"token": "int",
+									"children": [
+										{
+											"node_type": "Variable declaration",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Type",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "int | byte | short [ @ ]",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "KEYWORD",
+																			"token": "int",
+																			"children": []
+																		}
+																	]
+																},
+																{
+																	"node_type": "[ @ ]",
+																	"token": "var1",
+																	"children": []
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Variable | Array | Constant",
+													"token": "var1",
+													"children": [
+														{
+															"node_type": "Variable",
+															"token": "var1",
+															"children": [
+																{
+																	"node_type": "Variable definition",
+																	"token": "var1",
+																	"children": [
+																		{
+																			"node_type": "IDENTIFIER",
+																			"token": "var1",
+																			"children": []
+																		},
+																		{
+																			"node_type": "[ := Expression ]",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																},
+																{
+																	"node_type": "{ , VarDefinition }",
+																	"token": ";",
+																	"children": []
+																},
+																{
+																	"node_type": "DELIMITER",
+																	"token": ";",
+																	"children": []
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "Variable declaration",
+											"token": "anotherstruct",
+											"children": [
+												{
+													"node_type": "Type",
+													"token": "anotherstruct",
+													"children": [
+														{
+															"node_type": "IDENTIFIER",
+															"token": "anotherstruct",
+															"children": []
+														}
+													]
+												},
+												{
+													"node_type": "Variable | Array | Constant",
+													"token": "var2",
+													"children": [
+														{
+															"node_type": "Variable",
+															"token": "var2",
+															"children": [
+																{
+																	"node_type": "Variable definition",
+																	"token": "var2",
+																	"children": [
+																		{
+																			"node_type": "IDENTIFIER",
+																			"token": "var2",
+																			"children": []
+																		},
+																		{
+																			"node_type": "[ := Expression ]",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																},
+																{
+																	"node_type": "{ , VarDefinition }",
+																	"token": ";",
+																	"children": []
+																},
+																{
+																	"node_type": "DELIMITER",
+																	"token": ";",
+																	"children": []
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}

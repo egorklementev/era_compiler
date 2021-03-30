@@ -1,0 +1,8 @@
+code
+	int a;
+	asm
+		r5 := r5 + a;
+		skip;
+		stop;
+	end
+end

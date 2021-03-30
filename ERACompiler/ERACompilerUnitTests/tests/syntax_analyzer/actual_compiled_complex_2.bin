@@ -1,0 +1,4052 @@
+		{
+			"node_type": "Program",
+			"token": "pragma",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "pragma",
+					"children": [
+						{
+							"node_type": "Annotations",
+							"token": "pragma",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "pragma",
+									"children": []
+								},
+								{
+									"node_type": "Pragma declaration",
+									"token": "some_pargma_1",
+									"children": [
+										{
+											"node_type": "IDENTIFIER",
+											"token": "some_pargma_1",
+											"children": []
+										},
+										{
+											"node_type": "DELIMITER",
+											"token": "(",
+											"children": []
+										},
+										{
+											"node_type": "Pragma parameter",
+											"token": ")",
+											"children": []
+										},
+										{
+											"node_type": "DELIMITER",
+											"token": ")",
+											"children": []
+										}
+									]
+								},
+								{
+									"node_type": "Pragma declarations",
+									"token": "some_pargma_2",
+									"children": [
+										{
+											"node_type": "Pragma declaration",
+											"token": "some_pargma_2",
+											"children": [
+												{
+													"node_type": "IDENTIFIER",
+													"token": "some_pargma_2",
+													"children": []
+												},
+												{
+													"node_type": "DELIMITER",
+													"token": "(",
+													"children": []
+												},
+												{
+													"node_type": "Pragma parameter",
+													"token": """,
+													"children": [
+														{
+															"node_type": "DELIMITER",
+															"token": """,
+															"children": []
+														},
+														{
+															"node_type": "IDENTIFIER",
+															"token": "text",
+															"children": []
+														},
+														{
+															"node_type": "DELIMITER",
+															"token": """,
+															"children": []
+														}
+													]
+												},
+												{
+													"node_type": "DELIMITER",
+													"token": ")",
+													"children": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "data",
+					"children": [
+						{
+							"node_type": "Data",
+							"token": "data",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "data",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "data_1",
+									"children": []
+								},
+								{
+									"node_type": "NUMBER",
+									"token": "3",
+									"children": [
+										{
+											"node_type": "[ - ]",
+											"token": "3",
+											"children": []
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "3",
+											"children": []
+										}
+									]
+								},
+								{
+									"node_type": "Data literals",
+									"token": "1",
+									"children": [
+										{
+											"node_type": "NUMBER",
+											"token": "1",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "1",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "1",
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "4",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "4",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "4",
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "1",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "1",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "1",
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "5",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "5",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "5",
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "9",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "9",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "9",
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "2",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "2",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "2",
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "NUMBER",
+											"token": "6",
+											"children": [
+												{
+													"node_type": "[ - ]",
+													"token": "6",
+													"children": []
+												},
+												{
+													"node_type": "NUMBER",
+													"token": "6",
+													"children": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "module",
+					"children": [
+						{
+							"node_type": "Module",
+							"token": "module",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "module",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "module_1",
+									"children": []
+								},
+								{
+									"node_type": "Module statements",
+									"token": "end",
+									"children": []
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "code",
+					"children": [
+						{
+							"node_type": "Code",
+							"token": "code",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "code",
+									"children": []
+								},
+								{
+									"node_type": "{ VarDeclaration | Statement }",
+									"token": "end",
+									"children": []
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "struct",
+					"children": [
+						{
+							"node_type": "Structure",
+							"token": "struct",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "struct",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "struct_1",
+									"children": []
+								},
+								{
+									"node_type": "{ Variable declarations }",
+									"token": "int",
+									"children": [
+										{
+											"node_type": "Variable declaration",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Type",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "int | byte | short [ @ ]",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "KEYWORD",
+																			"token": "int",
+																			"children": []
+																		}
+																	]
+																},
+																{
+																	"node_type": "[ @ ]",
+																	"token": "a",
+																	"children": []
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Variable | Array | Constant",
+													"token": "a",
+													"children": [
+														{
+															"node_type": "Variable",
+															"token": "a",
+															"children": [
+																{
+																	"node_type": "Variable definition",
+																	"token": "a",
+																	"children": [
+																		{
+																			"node_type": "IDENTIFIER",
+																			"token": "a",
+																			"children": []
+																		},
+																		{
+																			"node_type": "[ := Expression ]",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																},
+																{
+																	"node_type": "{ , VarDefinition }",
+																	"token": ";",
+																	"children": []
+																},
+																{
+																	"node_type": "DELIMITER",
+																	"token": ";",
+																	"children": []
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "routine",
+					"children": [
+						{
+							"node_type": "Routine",
+							"token": "routine",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "routine",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "routine_1",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": "(",
+									"children": []
+								},
+								{
+									"node_type": "[ Parameters ]",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "[ : Type ]",
+									"token": "do",
+									"children": []
+								},
+								{
+									"node_type": "Routine body",
+									"token": "do",
+									"children": [
+										{
+											"node_type": "KEYWORD",
+											"token": "do",
+											"children": []
+										},
+										{
+											"node_type": "{ Statement }",
+											"token": "end",
+											"children": []
+										},
+										{
+											"node_type": "KEYWORD",
+											"token": "end",
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "routine",
+					"children": [
+						{
+							"node_type": "Routine",
+							"token": "routine",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "routine",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "routine_2",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": "(",
+									"children": []
+								},
+								{
+									"node_type": "[ Parameters ]",
+									"token": "int",
+									"children": [
+										{
+											"node_type": "Parameters",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Parameter",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short [ @ ]",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "int | byte | short",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "int",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "[ @ ]",
+																			"token": "a",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "IDENTIFIER",
+															"token": "a",
+															"children": []
+														}
+													]
+												},
+												{
+													"node_type": "{ , Parameter }",
+													"token": ")",
+													"children": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "[ : Type ]",
+									"token": ":",
+									"children": [
+										{
+											"node_type": "DELIMITER",
+											"token": ":",
+											"children": []
+										},
+										{
+											"node_type": "Type",
+											"token": "short",
+											"children": [
+												{
+													"node_type": "int | byte | short [ @ ]",
+													"token": "short",
+													"children": [
+														{
+															"node_type": "int | byte | short",
+															"token": "short",
+															"children": [
+																{
+																	"node_type": "KEYWORD",
+																	"token": "short",
+																	"children": []
+																}
+															]
+														},
+														{
+															"node_type": "[ @ ]",
+															"token": "do",
+															"children": []
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "Routine body",
+									"token": "do",
+									"children": [
+										{
+											"node_type": "KEYWORD",
+											"token": "do",
+											"children": []
+										},
+										{
+											"node_type": "{ Statement }",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Statement",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "int",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "Variable declaration",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "Type",
+																					"token": "int",
+																					"children": [
+																						{
+																							"node_type": "int | byte | short [ @ ]",
+																							"token": "int",
+																							"children": [
+																								{
+																									"node_type": "int | byte | short",
+																									"token": "int",
+																									"children": [
+																										{
+																											"node_type": "KEYWORD",
+																											"token": "int",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "[ @ ]",
+																									"token": "b",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "Variable | Array | Constant",
+																					"token": "b",
+																					"children": [
+																						{
+																							"node_type": "Variable",
+																							"token": "b",
+																							"children": [
+																								{
+																									"node_type": "Variable definition",
+																									"token": "b",
+																									"children": [
+																										{
+																											"node_type": "IDENTIFIER",
+																											"token": "b",
+																											"children": []
+																										},
+																										{
+																											"node_type": "[ := Expression ]",
+																											"token": ";",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ , VarDefinition }",
+																									"token": ";",
+																									"children": []
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": ";",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "KEYWORD",
+											"token": "end",
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "module",
+					"children": [
+						{
+							"node_type": "Module",
+							"token": "module",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "module",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "module_var_decl",
+									"children": []
+								},
+								{
+									"node_type": "Module statements",
+									"token": "byte",
+									"children": [
+										{
+											"node_type": "Some module statement",
+											"token": "byte",
+											"children": [
+												{
+													"node_type": "Variable declaration",
+													"token": "byte",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "byte",
+															"children": [
+																{
+																	"node_type": "int | byte | short [ @ ]",
+																	"token": "byte",
+																	"children": [
+																		{
+																			"node_type": "int | byte | short",
+																			"token": "byte",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "byte",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "[ @ ]",
+																			"token": "@",
+																			"children": [
+																				{
+																					"node_type": "DELIMITER",
+																					"token": "@",
+																					"children": []
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "Variable | Array | Constant",
+															"token": "a",
+															"children": [
+																{
+																	"node_type": "Variable",
+																	"token": "a",
+																	"children": [
+																		{
+																			"node_type": "Variable definition",
+																			"token": "a",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "a",
+																					"children": []
+																				},
+																				{
+																					"node_type": "[ := Expression ]",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "{ , VarDefinition }",
+																			"token": ";",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "Some module statement",
+											"token": "struct_1",
+											"children": [
+												{
+													"node_type": "Variable declaration",
+													"token": "struct_1",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "struct_1",
+															"children": [
+																{
+																	"node_type": "IDENTIFIER",
+																	"token": "struct_1",
+																	"children": []
+																}
+															]
+														},
+														{
+															"node_type": "Variable | Array | Constant",
+															"token": "b",
+															"children": [
+																{
+																	"node_type": "Variable",
+																	"token": "b",
+																	"children": [
+																		{
+																			"node_type": "Variable definition",
+																			"token": "b",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "b",
+																					"children": []
+																				},
+																				{
+																					"node_type": "[ := Expression ]",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "{ , VarDefinition }",
+																			"token": ";",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "Some module statement",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Variable declaration",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short [ @ ]",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "int | byte | short",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "int",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "[ @ ]",
+																			"token": "c",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "Variable | Array | Constant",
+															"token": "c",
+															"children": [
+																{
+																	"node_type": "Variable",
+																	"token": "c",
+																	"children": [
+																		{
+																			"node_type": "Variable definition",
+																			"token": "c",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "c",
+																					"children": []
+																				},
+																				{
+																					"node_type": "[ := Expression ]",
+																					"token": ":=",
+																					"children": [
+																						{
+																							"node_type": ":= Expression",
+																							"token": ":=",
+																							"children": [
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
+																									"token": "0",
+																									"children": [
+																										{
+																											"node_type": "Operand",
+																											"token": "0",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "0",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "0",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "0",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": ",",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "{ , VarDefinition }",
+																			"token": ",",
+																			"children": [
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ",",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Variable definition",
+																					"token": "d",
+																					"children": [
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "d",
+																							"children": []
+																						},
+																						{
+																							"node_type": "[ := Expression ]",
+																							"token": ":=",
+																							"children": [
+																								{
+																									"node_type": ":= Expression",
+																									"token": ":=",
+																									"children": [
+																										{
+																											"node_type": "OPERATOR",
+																											"token": ":=",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Expression",
+																											"token": "1",
+																											"children": [
+																												{
+																													"node_type": "Operand",
+																													"token": "1",
+																													"children": [
+																														{
+																															"node_type": "NUMBER",
+																															"token": "1",
+																															"children": [
+																																{
+																																	"node_type": "[ - ]",
+																																	"token": "1",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "NUMBER",
+																																	"token": "1",
+																																	"children": []
+																																}
+																															]
+																														}
+																													]
+																												},
+																												{
+																													"node_type": "{ Operator Operand }",
+																													"token": ";",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "Some module statement",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Variable declaration",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short [ @ ]",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "int | byte | short",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "int",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "[ @ ]",
+																			"token": "@",
+																			"children": [
+																				{
+																					"node_type": "DELIMITER",
+																					"token": "@",
+																					"children": []
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "Variable | Array | Constant",
+															"token": "[",
+															"children": [
+																{
+																	"node_type": "Array",
+																	"token": "[",
+																	"children": [
+																		{
+																			"node_type": "DELIMITER",
+																			"token": "[",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": "]",
+																			"children": []
+																		},
+																		{
+																			"node_type": "Array definition",
+																			"token": "e",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "e",
+																					"children": []
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": "[",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Expression",
+																					"token": "10",
+																					"children": [
+																						{
+																							"node_type": "Operand",
+																							"token": "10",
+																							"children": [
+																								{
+																									"node_type": "NUMBER",
+																									"token": "10",
+																									"children": [
+																										{
+																											"node_type": "[ - ]",
+																											"token": "10",
+																											"children": []
+																										},
+																										{
+																											"node_type": "NUMBER",
+																											"token": "10",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "{ Operator Operand }",
+																							"token": "]",
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": "]",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "{ , ArrDefinition }",
+																			"token": ";",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "Some module statement",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Variable declaration",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short [ @ ]",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "int | byte | short",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "int",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "[ @ ]",
+																			"token": "const",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "Variable | Array | Constant",
+															"token": "const",
+															"children": [
+																{
+																	"node_type": "Constant",
+																	"token": "const",
+																	"children": [
+																		{
+																			"node_type": "KEYWORD",
+																			"token": "const",
+																			"children": []
+																		},
+																		{
+																			"node_type": "Constant definition",
+																			"token": "f",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "f",
+																					"children": []
+																				},
+																				{
+																					"node_type": "OPERATOR",
+																					"token": ":=",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Expression",
+																					"token": "0",
+																					"children": [
+																						{
+																							"node_type": "Operand",
+																							"token": "0",
+																							"children": [
+																								{
+																									"node_type": "NUMBER",
+																									"token": "0",
+																									"children": [
+																										{
+																											"node_type": "[ - ]",
+																											"token": "0",
+																											"children": []
+																										},
+																										{
+																											"node_type": "NUMBER",
+																											"token": "0",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "{ Operator Operand }",
+																							"token": ";",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "{ , ConstDefinition }",
+																			"token": ";",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "routine",
+					"children": [
+						{
+							"node_type": "Routine",
+							"token": "routine",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "routine",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "routine_asm",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": "(",
+									"children": []
+								},
+								{
+									"node_type": "[ Parameters ]",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "[ : Type ]",
+									"token": "do",
+									"children": []
+								},
+								{
+									"node_type": "Routine body",
+									"token": "do",
+									"children": [
+										{
+											"node_type": "KEYWORD",
+											"token": "do",
+											"children": []
+										},
+										{
+											"node_type": "{ Statement }",
+											"token": "<",
+											"children": [
+												{
+													"node_type": "Statement",
+													"token": "<",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "<",
+															"children": [
+																{
+																	"node_type": "Label",
+																	"token": "<",
+																	"children": [
+																		{
+																			"node_type": "OPERATOR",
+																			"token": "<",
+																			"children": []
+																		},
+																		{
+																			"node_type": "IDENTIFIER",
+																			"token": "label1",
+																			"children": []
+																		},
+																		{
+																			"node_type": "OPERATOR",
+																			"token": ">",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "asm",
+															"children": [
+																{
+																	"node_type": "Assembly block",
+																	"token": "asm",
+																	"children": [
+																		{
+																			"node_type": "KEYWORD",
+																			"token": "asm",
+																			"children": []
+																		},
+																		{
+																			"node_type": "Assembly statement",
+																			"token": "<",
+																			"children": [
+																				{
+																					"node_type": "< Identifier >",
+																					"token": "<",
+																					"children": [
+																						{
+																							"node_type": "OPERATOR",
+																							"token": "<",
+																							"children": []
+																						},
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "label1",
+																							"children": []
+																						},
+																						{
+																							"node_type": "OPERATOR",
+																							"token": ">",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		},
+																		{
+																			"node_type": "{ AssemblyStatement ; }",
+																			"token": "skip",
+																			"children": [
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "skip",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "skip",
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "stop",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "stop",
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "format",
+																					"children": [
+																						{
+																							"node_type": "format ( 8 | 16 | 32 )",
+																							"token": "format",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "format",
+																									"children": []
+																								},
+																								{
+																									"node_type": "NUMBER",
+																									"token": "32",
+																									"children": [
+																										{
+																											"node_type": "[ - ]",
+																											"token": "32",
+																											"children": []
+																										},
+																										{
+																											"node_type": "NUMBER",
+																											"token": "32",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r0",
+																					"children": [
+																						{
+																							"node_type": "Register := Identifier",
+																							"token": "r0",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r0",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "IDENTIFIER",
+																									"token": "label1",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r0",
+																					"children": [
+																						{
+																							"node_type": "Register := Register + Expression",
+																							"token": "r0",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r0",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r0",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "+",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
+																									"token": "1000",
+																									"children": [
+																										{
+																											"node_type": "Operand",
+																											"token": "1000",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "1000",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "1000",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "1000",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": ";",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r0",
+																					"children": [
+																						{
+																							"node_type": "Register := -> Register",
+																							"token": "r0",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r0",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "->",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r1",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "->",
+																					"children": [
+																						{
+																							"node_type": "-> Register := Register",
+																							"token": "->",
+																							"children": [
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "->",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r2",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r3",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r4",
+																					"children": [
+																						{
+																							"node_type": "Register := Register",
+																							"token": "r4",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r4",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r5",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r6",
+																					"children": [
+																						{
+																							"node_type": "Register := Expression",
+																							"token": "r6",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r6",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
+																									"token": "31",
+																									"children": [
+																										{
+																											"node_type": "Operand",
+																											"token": "31",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "31",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "31",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "31",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": ";",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r7",
+																					"children": [
+																						{
+																							"node_type": "Register += Register",
+																							"token": "r7",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r7",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "+=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r8",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r9",
+																					"children": [
+																						{
+																							"node_type": "Register -= Register",
+																							"token": "r9",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r9",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "-=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r10",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r11",
+																					"children": [
+																						{
+																							"node_type": "Register >>= Register",
+																							"token": "r11",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r11",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ">>=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r12",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r13",
+																					"children": [
+																						{
+																							"node_type": "Register <<= Register",
+																							"token": "r13",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r13",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "<<=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r14",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r15",
+																					"children": [
+																						{
+																							"node_type": "Register |= Register",
+																							"token": "r15",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r15",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "|=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r16",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r17",
+																					"children": [
+																						{
+																							"node_type": "Register &= Register",
+																							"token": "r17",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r17",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "&=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r18",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r19",
+																					"children": [
+																						{
+																							"node_type": "Register ^= Register",
+																							"token": "r19",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r19",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "^=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r20",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r21",
+																					"children": [
+																						{
+																							"node_type": "Register <= Register",
+																							"token": "r21",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r21",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "<=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r22",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r23",
+																					"children": [
+																						{
+																							"node_type": "Register >= Register",
+																							"token": "r23",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r23",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ">=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r24",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "r25",
+																					"children": [
+																						{
+																							"node_type": "Register ?= Register",
+																							"token": "r25",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r25",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": "?=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "r26",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "sb",
+																					"children": [
+																						{
+																							"node_type": "Register := Register",
+																							"token": "sb",
+																							"children": [
+																								{
+																									"node_type": "REGISTER",
+																									"token": "sb",
+																									"children": []
+																								},
+																								{
+																									"node_type": "OPERATOR",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "sp",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Assembly statement",
+																					"token": "if",
+																					"children": [
+																						{
+																							"node_type": "if Register goto Register",
+																							"token": "if",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "if",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "pc",
+																									"children": []
+																								},
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "goto",
+																									"children": []
+																								},
+																								{
+																									"node_type": "REGISTER",
+																									"token": "fp",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "KEYWORD",
+																			"token": "end",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "goto",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "goto",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "goto",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "goto",
+																	"children": [
+																		{
+																			"node_type": "Goto",
+																			"token": "goto",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "goto",
+																					"children": []
+																				},
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "label1",
+																					"children": []
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "KEYWORD",
+											"token": "end",
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"node_type": "Some unit",
+					"token": "routine",
+					"children": [
+						{
+							"node_type": "Routine",
+							"token": "routine",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "routine",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "routine_ext",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": "(",
+									"children": []
+								},
+								{
+									"node_type": "[ Parameters ]",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "DELIMITER",
+									"token": ")",
+									"children": []
+								},
+								{
+									"node_type": "[ : Type ]",
+									"token": "do",
+									"children": []
+								},
+								{
+									"node_type": "Routine body",
+									"token": "do",
+									"children": [
+										{
+											"node_type": "KEYWORD",
+											"token": "do",
+											"children": []
+										},
+										{
+											"node_type": "{ Statement }",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Statement",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "int",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "Variable declaration",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "Type",
+																					"token": "int",
+																					"children": [
+																						{
+																							"node_type": "int | byte | short [ @ ]",
+																							"token": "int",
+																							"children": [
+																								{
+																									"node_type": "int | byte | short",
+																									"token": "int",
+																									"children": [
+																										{
+																											"node_type": "KEYWORD",
+																											"token": "int",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "[ @ ]",
+																									"token": "a",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "Variable | Array | Constant",
+																					"token": "a",
+																					"children": [
+																						{
+																							"node_type": "Variable",
+																							"token": "a",
+																							"children": [
+																								{
+																									"node_type": "Variable definition",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "IDENTIFIER",
+																											"token": "a",
+																											"children": []
+																										},
+																										{
+																											"node_type": "[ := Expression ]",
+																											"token": ",",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ , VarDefinition }",
+																									"token": ",",
+																									"children": [
+																										{
+																											"node_type": "DELIMITER",
+																											"token": ",",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Variable definition",
+																											"token": "b",
+																											"children": [
+																												{
+																													"node_type": "IDENTIFIER",
+																													"token": "b",
+																													"children": []
+																												},
+																												{
+																													"node_type": "[ := Expression ]",
+																													"token": ";",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": ";",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "a",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "a",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "a",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "a",
+																	"children": [
+																		{
+																			"node_type": "Assignment",
+																			"token": "a",
+																			"children": [
+																				{
+																					"node_type": "Receiver",
+																					"token": "a",
+																					"children": [
+																						{
+																							"node_type": "Primary",
+																							"token": "a",
+																							"children": [
+																								{
+																									"node_type": "IDENTIFIER",
+																									"token": "a",
+																									"children": []
+																								},
+																								{
+																									"node_type": "{ '.' Identifier }",
+																									"token": ":=",
+																									"children": []
+																								},
+																								{
+																									"node_type": "[ ArrayAccess | CallArgs ]",
+																									"token": ":=",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "OPERATOR",
+																					"token": ":=",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Expression",
+																					"token": "b",
+																					"children": [
+																						{
+																							"node_type": "Operand",
+																							"token": "b",
+																							"children": [
+																								{
+																									"node_type": "Primary",
+																									"token": "b",
+																									"children": [
+																										{
+																											"node_type": "IDENTIFIER",
+																											"token": "b",
+																											"children": []
+																										},
+																										{
+																											"node_type": "{ '.' Identifier }",
+																											"token": "+",
+																											"children": []
+																										},
+																										{
+																											"node_type": "[ ArrayAccess | CallArgs ]",
+																											"token": "+",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "{ Operator Operand }",
+																							"token": "+",
+																							"children": [
+																								{
+																									"node_type": "Operator",
+																									"token": "+",
+																									"children": [
+																										{
+																											"node_type": "OPERATOR",
+																											"token": "+",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "Operand",
+																									"token": "0",
+																									"children": [
+																										{
+																											"node_type": "NUMBER",
+																											"token": "0",
+																											"children": [
+																												{
+																													"node_type": "[ - ]",
+																													"token": "0",
+																													"children": []
+																												},
+																												{
+																													"node_type": "NUMBER",
+																													"token": "0",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "a",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "a",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "a",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "a",
+																	"children": [
+																		{
+																			"node_type": "Swap",
+																			"token": "a",
+																			"children": [
+																				{
+																					"node_type": "Receiver",
+																					"token": "a",
+																					"children": [
+																						{
+																							"node_type": "Primary",
+																							"token": "a",
+																							"children": [
+																								{
+																									"node_type": "IDENTIFIER",
+																									"token": "a",
+																									"children": []
+																								},
+																								{
+																									"node_type": "{ '.' Identifier }",
+																									"token": "<=>",
+																									"children": []
+																								},
+																								{
+																									"node_type": "[ ArrayAccess | CallArgs ]",
+																									"token": "<=>",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "OPERATOR",
+																					"token": "<=>",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Receiver",
+																					"token": "b",
+																					"children": [
+																						{
+																							"node_type": "Primary",
+																							"token": "b",
+																							"children": [
+																								{
+																									"node_type": "IDENTIFIER",
+																									"token": "b",
+																									"children": []
+																								},
+																								{
+																									"node_type": "{ '.' Identifier }",
+																									"token": ";",
+																									"children": []
+																								},
+																								{
+																									"node_type": "[ ArrayAccess | CallArgs ]",
+																									"token": ";",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "routine_2",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "routine_2",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "routine_2",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "routine_2",
+																	"children": [
+																		{
+																			"node_type": "Call ;",
+																			"token": "routine_2",
+																			"children": [
+																				{
+																					"node_type": "Call",
+																					"token": "routine_2",
+																					"children": [
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "routine_2",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Call arguments",
+																							"token": "(",
+																							"children": [
+																								{
+																									"node_type": "DELIMITER",
+																									"token": "(",
+																									"children": []
+																								},
+																								{
+																									"node_type": "[ Expression { , Expression } ]",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "Expression",
+																											"token": "a",
+																											"children": [
+																												{
+																													"node_type": "Operand",
+																													"token": "a",
+																													"children": [
+																														{
+																															"node_type": "Primary",
+																															"token": "a",
+																															"children": [
+																																{
+																																	"node_type": "IDENTIFIER",
+																																	"token": "a",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "{ '.' Identifier }",
+																																	"token": ")",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "[ ArrayAccess | CallArgs ]",
+																																	"token": ")",
+																																	"children": []
+																																}
+																															]
+																														}
+																													]
+																												},
+																												{
+																													"node_type": "{ Operator Operand }",
+																													"token": ")",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ , Expression }",
+																											"token": ")",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": ")",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "DELIMITER",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "if",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "if",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "if",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "if",
+																	"children": [
+																		{
+																			"node_type": "If",
+																			"token": "if",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "if",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Expression",
+																					"token": "a",
+																					"children": [
+																						{
+																							"node_type": "Operand",
+																							"token": "a",
+																							"children": [
+																								{
+																									"node_type": "Primary",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "IDENTIFIER",
+																											"token": "a",
+																											"children": []
+																										},
+																										{
+																											"node_type": "{ '.' Identifier }",
+																											"token": "do",
+																											"children": []
+																										},
+																										{
+																											"node_type": "[ ArrayAccess | CallArgs ]",
+																											"token": "do",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "{ Operator Operand }",
+																							"token": "do",
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "do",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Block body",
+																					"token": "if",
+																					"children": [
+																						{
+																							"node_type": "Statement",
+																							"token": "if",
+																							"children": [
+																								{
+																									"node_type": "[ Label ]",
+																									"token": "if",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Assembly Block | Extension Statement",
+																									"token": "if",
+																									"children": [
+																										{
+																											"node_type": "Extension statement",
+																											"token": "if",
+																											"children": [
+																												{
+																													"node_type": "If",
+																													"token": "if",
+																													"children": [
+																														{
+																															"node_type": "KEYWORD",
+																															"token": "if",
+																															"children": []
+																														},
+																														{
+																															"node_type": "Expression",
+																															"token": "b",
+																															"children": [
+																																{
+																																	"node_type": "Operand",
+																																	"token": "b",
+																																	"children": [
+																																		{
+																																			"node_type": "Primary",
+																																			"token": "b",
+																																			"children": [
+																																				{
+																																					"node_type": "IDENTIFIER",
+																																					"token": "b",
+																																					"children": []
+																																				},
+																																				{
+																																					"node_type": "{ '.' Identifier }",
+																																					"token": "do",
+																																					"children": []
+																																				},
+																																				{
+																																					"node_type": "[ ArrayAccess | CallArgs ]",
+																																					"token": "do",
+																																					"children": []
+																																				}
+																																			]
+																																		}
+																																	]
+																																},
+																																{
+																																	"node_type": "{ Operator Operand }",
+																																	"token": "do",
+																																	"children": []
+																																}
+																															]
+																														},
+																														{
+																															"node_type": "KEYWORD",
+																															"token": "do",
+																															"children": []
+																														},
+																														{
+																															"node_type": "Block body",
+																															"token": "a",
+																															"children": [
+																																{
+																																	"node_type": "Statement",
+																																	"token": "a",
+																																	"children": [
+																																		{
+																																			"node_type": "[ Label ]",
+																																			"token": "a",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "Assembly Block | Extension Statement",
+																																			"token": "a",
+																																			"children": [
+																																				{
+																																					"node_type": "Extension statement",
+																																					"token": "a",
+																																					"children": [
+																																						{
+																																							"node_type": "Assignment",
+																																							"token": "a",
+																																							"children": [
+																																								{
+																																									"node_type": "Receiver",
+																																									"token": "a",
+																																									"children": [
+																																										{
+																																											"node_type": "Primary",
+																																											"token": "a",
+																																											"children": [
+																																												{
+																																													"node_type": "IDENTIFIER",
+																																													"token": "a",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "{ '.' Identifier }",
+																																													"token": ":=",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "[ ArrayAccess | CallArgs ]",
+																																													"token": ":=",
+																																													"children": []
+																																												}
+																																											]
+																																										}
+																																									]
+																																								},
+																																								{
+																																									"node_type": "OPERATOR",
+																																									"token": ":=",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "Expression",
+																																									"token": "b",
+																																									"children": [
+																																										{
+																																											"node_type": "Operand",
+																																											"token": "b",
+																																											"children": [
+																																												{
+																																													"node_type": "Primary",
+																																													"token": "b",
+																																													"children": [
+																																														{
+																																															"node_type": "IDENTIFIER",
+																																															"token": "b",
+																																															"children": []
+																																														},
+																																														{
+																																															"node_type": "{ '.' Identifier }",
+																																															"token": ";",
+																																															"children": []
+																																														},
+																																														{
+																																															"node_type": "[ ArrayAccess | CallArgs ]",
+																																															"token": ";",
+																																															"children": []
+																																														}
+																																													]
+																																												}
+																																											]
+																																										},
+																																										{
+																																											"node_type": "{ Operator Operand }",
+																																											"token": ";",
+																																											"children": []
+																																										}
+																																									]
+																																								},
+																																								{
+																																									"node_type": "DELIMITER",
+																																									"token": ";",
+																																									"children": []
+																																								}
+																																							]
+																																						}
+																																					]
+																																				}
+																																			]
+																																		}
+																																	]
+																																}
+																															]
+																														},
+																														{
+																															"node_type": "end | else BlockBody end",
+																															"token": "else",
+																															"children": [
+																																{
+																																	"node_type": "else BlockBody end",
+																																	"token": "else",
+																																	"children": [
+																																		{
+																																			"node_type": "KEYWORD",
+																																			"token": "else",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "Block body",
+																																			"token": "b",
+																																			"children": [
+																																				{
+																																					"node_type": "Statement",
+																																					"token": "b",
+																																					"children": [
+																																						{
+																																							"node_type": "[ Label ]",
+																																							"token": "b",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "Assembly Block | Extension Statement",
+																																							"token": "b",
+																																							"children": [
+																																								{
+																																									"node_type": "Extension statement",
+																																									"token": "b",
+																																									"children": [
+																																										{
+																																											"node_type": "Assignment",
+																																											"token": "b",
+																																											"children": [
+																																												{
+																																													"node_type": "Receiver",
+																																													"token": "b",
+																																													"children": [
+																																														{
+																																															"node_type": "Primary",
+																																															"token": "b",
+																																															"children": [
+																																																{
+																																																	"node_type": "IDENTIFIER",
+																																																	"token": "b",
+																																																	"children": []
+																																																},
+																																																{
+																																																	"node_type": "{ '.' Identifier }",
+																																																	"token": ":=",
+																																																	"children": []
+																																																},
+																																																{
+																																																	"node_type": "[ ArrayAccess | CallArgs ]",
+																																																	"token": ":=",
+																																																	"children": []
+																																																}
+																																															]
+																																														}
+																																													]
+																																												},
+																																												{
+																																													"node_type": "OPERATOR",
+																																													"token": ":=",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "Expression",
+																																													"token": "a",
+																																													"children": [
+																																														{
+																																															"node_type": "Operand",
+																																															"token": "a",
+																																															"children": [
+																																																{
+																																																	"node_type": "Primary",
+																																																	"token": "a",
+																																																	"children": [
+																																																		{
+																																																			"node_type": "IDENTIFIER",
+																																																			"token": "a",
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"node_type": "{ '.' Identifier }",
+																																																			"token": ";",
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"node_type": "[ ArrayAccess | CallArgs ]",
+																																																			"token": ";",
+																																																			"children": []
+																																																		}
+																																																	]
+																																																}
+																																															]
+																																														},
+																																														{
+																																															"node_type": "{ Operator Operand }",
+																																															"token": ";",
+																																															"children": []
+																																														}
+																																													]
+																																												},
+																																												{
+																																													"node_type": "DELIMITER",
+																																													"token": ";",
+																																													"children": []
+																																												}
+																																											]
+																																										}
+																																									]
+																																								}
+																																							]
+																																						}
+																																					]
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "KEYWORD",
+																																			"token": "end",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "end | else BlockBody end",
+																					"token": "end",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "end",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "for",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "for",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "for",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "for",
+																	"children": [
+																		{
+																			"node_type": "Loop",
+																			"token": "for",
+																			"children": [
+																				{
+																					"node_type": "For",
+																					"token": "for",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "for",
+																							"children": []
+																						},
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "i",
+																							"children": []
+																						},
+																						{
+																							"node_type": "[ from Expression ]",
+																							"token": "from",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "from",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
+																									"token": "0",
+																									"children": [
+																										{
+																											"node_type": "Operand",
+																											"token": "0",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "0",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "0",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "0",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": "to",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "[ to Expression ]",
+																							"token": "to",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "to",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
+																									"token": "10",
+																									"children": [
+																										{
+																											"node_type": "Operand",
+																											"token": "10",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "10",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "10",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "10",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": "step",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "[ step Expression ]",
+																							"token": "step",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "step",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
+																									"token": "1",
+																									"children": [
+																										{
+																											"node_type": "Operand",
+																											"token": "1",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "1",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "1",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "1",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": "loop",
+																											"children": []
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "Loop body",
+																							"token": "loop",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "loop",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Block body",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "Statement",
+																											"token": "a",
+																											"children": [
+																												{
+																													"node_type": "[ Label ]",
+																													"token": "a",
+																													"children": []
+																												},
+																												{
+																													"node_type": "Assembly Block | Extension Statement",
+																													"token": "a",
+																													"children": [
+																														{
+																															"node_type": "Extension statement",
+																															"token": "a",
+																															"children": [
+																																{
+																																	"node_type": "Assignment",
+																																	"token": "a",
+																																	"children": [
+																																		{
+																																			"node_type": "Receiver",
+																																			"token": "a",
+																																			"children": [
+																																				{
+																																					"node_type": "Primary",
+																																					"token": "a",
+																																					"children": [
+																																						{
+																																							"node_type": "IDENTIFIER",
+																																							"token": "a",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "{ '.' Identifier }",
+																																							"token": ":=",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "[ ArrayAccess | CallArgs ]",
+																																							"token": ":=",
+																																							"children": []
+																																						}
+																																					]
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "OPERATOR",
+																																			"token": ":=",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "Expression",
+																																			"token": "b",
+																																			"children": [
+																																				{
+																																					"node_type": "Operand",
+																																					"token": "b",
+																																					"children": [
+																																						{
+																																							"node_type": "Primary",
+																																							"token": "b",
+																																							"children": [
+																																								{
+																																									"node_type": "IDENTIFIER",
+																																									"token": "b",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "{ '.' Identifier }",
+																																									"token": ";",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "[ ArrayAccess | CallArgs ]",
+																																									"token": ";",
+																																									"children": []
+																																								}
+																																							]
+																																						}
+																																					]
+																																				},
+																																				{
+																																					"node_type": "{ Operator Operand }",
+																																					"token": ";",
+																																					"children": []
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "DELIMITER",
+																																			"token": ";",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "end",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "while",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "while",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "while",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "while",
+																	"children": [
+																		{
+																			"node_type": "Loop",
+																			"token": "while",
+																			"children": [
+																				{
+																					"node_type": "While",
+																					"token": "while",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "while",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
+																							"token": "a",
+																							"children": [
+																								{
+																									"node_type": "Operand",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "Primary",
+																											"token": "a",
+																											"children": [
+																												{
+																													"node_type": "IDENTIFIER",
+																													"token": "a",
+																													"children": []
+																												},
+																												{
+																													"node_type": "{ '.' Identifier }",
+																													"token": "/=",
+																													"children": []
+																												},
+																												{
+																													"node_type": "[ ArrayAccess | CallArgs ]",
+																													"token": "/=",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ Operator Operand }",
+																									"token": "/=",
+																									"children": [
+																										{
+																											"node_type": "Operator",
+																											"token": "/=",
+																											"children": [
+																												{
+																													"node_type": "OPERATOR",
+																													"token": "/=",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "Operand",
+																											"token": "b",
+																											"children": [
+																												{
+																													"node_type": "Primary",
+																													"token": "b",
+																													"children": [
+																														{
+																															"node_type": "IDENTIFIER",
+																															"token": "b",
+																															"children": []
+																														},
+																														{
+																															"node_type": "{ '.' Identifier }",
+																															"token": "loop",
+																															"children": []
+																														},
+																														{
+																															"node_type": "[ ArrayAccess | CallArgs ]",
+																															"token": "loop",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "Loop body",
+																							"token": "loop",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "loop",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Block body",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "Statement",
+																											"token": "a",
+																											"children": [
+																												{
+																													"node_type": "[ Label ]",
+																													"token": "a",
+																													"children": []
+																												},
+																												{
+																													"node_type": "Assembly Block | Extension Statement",
+																													"token": "a",
+																													"children": [
+																														{
+																															"node_type": "Extension statement",
+																															"token": "a",
+																															"children": [
+																																{
+																																	"node_type": "Assignment",
+																																	"token": "a",
+																																	"children": [
+																																		{
+																																			"node_type": "Receiver",
+																																			"token": "a",
+																																			"children": [
+																																				{
+																																					"node_type": "Primary",
+																																					"token": "a",
+																																					"children": [
+																																						{
+																																							"node_type": "IDENTIFIER",
+																																							"token": "a",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "{ '.' Identifier }",
+																																							"token": ":=",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "[ ArrayAccess | CallArgs ]",
+																																							"token": ":=",
+																																							"children": []
+																																						}
+																																					]
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "OPERATOR",
+																																			"token": ":=",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "Expression",
+																																			"token": "b",
+																																			"children": [
+																																				{
+																																					"node_type": "Operand",
+																																					"token": "b",
+																																					"children": [
+																																						{
+																																							"node_type": "Primary",
+																																							"token": "b",
+																																							"children": [
+																																								{
+																																									"node_type": "IDENTIFIER",
+																																									"token": "b",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "{ '.' Identifier }",
+																																									"token": ";",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "[ ArrayAccess | CallArgs ]",
+																																									"token": ";",
+																																									"children": []
+																																								}
+																																							]
+																																						}
+																																					]
+																																				},
+																																				{
+																																					"node_type": "{ Operator Operand }",
+																																					"token": ";",
+																																					"children": []
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "DELIMITER",
+																																			"token": ";",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "Statement",
+																											"token": "break",
+																											"children": [
+																												{
+																													"node_type": "[ Label ]",
+																													"token": "break",
+																													"children": []
+																												},
+																												{
+																													"node_type": "Assembly Block | Extension Statement",
+																													"token": "break",
+																													"children": [
+																														{
+																															"node_type": "Extension statement",
+																															"token": "break",
+																															"children": [
+																																{
+																																	"node_type": "Break",
+																																	"token": "break",
+																																	"children": [
+																																		{
+																																			"node_type": "KEYWORD",
+																																			"token": "break",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "DELIMITER",
+																																			"token": ";",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "end",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "loop",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "loop",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "loop",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "loop",
+																	"children": [
+																		{
+																			"node_type": "Loop",
+																			"token": "loop",
+																			"children": [
+																				{
+																					"node_type": "Loop While",
+																					"token": "loop",
+																					"children": [
+																						{
+																							"node_type": "Loop body",
+																							"token": "loop",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "loop",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Block body",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "Statement",
+																											"token": "a",
+																											"children": [
+																												{
+																													"node_type": "[ Label ]",
+																													"token": "a",
+																													"children": []
+																												},
+																												{
+																													"node_type": "Assembly Block | Extension Statement",
+																													"token": "a",
+																													"children": [
+																														{
+																															"node_type": "Extension statement",
+																															"token": "a",
+																															"children": [
+																																{
+																																	"node_type": "Assignment",
+																																	"token": "a",
+																																	"children": [
+																																		{
+																																			"node_type": "Receiver",
+																																			"token": "a",
+																																			"children": [
+																																				{
+																																					"node_type": "Primary",
+																																					"token": "a",
+																																					"children": [
+																																						{
+																																							"node_type": "IDENTIFIER",
+																																							"token": "a",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "{ '.' Identifier }",
+																																							"token": ":=",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "[ ArrayAccess | CallArgs ]",
+																																							"token": ":=",
+																																							"children": []
+																																						}
+																																					]
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "OPERATOR",
+																																			"token": ":=",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "Expression",
+																																			"token": "b",
+																																			"children": [
+																																				{
+																																					"node_type": "Operand",
+																																					"token": "b",
+																																					"children": [
+																																						{
+																																							"node_type": "Primary",
+																																							"token": "b",
+																																							"children": [
+																																								{
+																																									"node_type": "IDENTIFIER",
+																																									"token": "b",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "{ '.' Identifier }",
+																																									"token": ";",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "[ ArrayAccess | CallArgs ]",
+																																									"token": ";",
+																																									"children": []
+																																								}
+																																							]
+																																						}
+																																					]
+																																				},
+																																				{
+																																					"node_type": "{ Operator Operand }",
+																																					"token": ";",
+																																					"children": []
+																																				}
+																																			]
+																																		},
+																																		{
+																																			"node_type": "DELIMITER",
+																																			"token": ";",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "while",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
+																							"token": "a",
+																							"children": [
+																								{
+																									"node_type": "Operand",
+																									"token": "a",
+																									"children": [
+																										{
+																											"node_type": "Primary",
+																											"token": "a",
+																											"children": [
+																												{
+																													"node_type": "IDENTIFIER",
+																													"token": "a",
+																													"children": []
+																												},
+																												{
+																													"node_type": "{ '.' Identifier }",
+																													"token": "end",
+																													"children": []
+																												},
+																												{
+																													"node_type": "[ ArrayAccess | CallArgs ]",
+																													"token": "end",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ Operator Operand }",
+																									"token": "end",
+																									"children": []
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "end",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												},
+												{
+													"node_type": "Statement",
+													"token": "return",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "return",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "return",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "return",
+																	"children": [
+																		{
+																			"node_type": "Return",
+																			"token": "return",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "return",
+																					"children": []
+																				},
+																				{
+																					"node_type": "[ ( Expression | Call ) ] ; ",
+																					"token": ";",
+																					"children": [
+																						{
+																							"node_type": "[ Expression | Call ]",
+																							"token": ";",
+																							"children": []
+																						},
+																						{
+																							"node_type": "DELIMITER",
+																							"token": ";",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										},
+										{
+											"node_type": "KEYWORD",
+											"token": "end",
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}

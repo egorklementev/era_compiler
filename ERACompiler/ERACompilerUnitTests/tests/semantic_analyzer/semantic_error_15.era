@@ -1,0 +1,8 @@
+routine test (int a, int b, int c, int d) : int
+do
+	return 2;
+end
+
+code
+	test(1, 2, 3);
+end

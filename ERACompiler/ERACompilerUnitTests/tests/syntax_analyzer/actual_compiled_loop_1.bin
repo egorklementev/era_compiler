@@ -1,0 +1,121 @@
+		{
+			"node_type": "Program",
+			"token": "code",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "code",
+					"children": [
+						{
+							"node_type": "Code",
+							"token": "code",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "code",
+									"children": []
+								},
+								{
+									"node_type": "{ VarDeclaration | Statement }",
+									"token": "for",
+									"children": [
+										{
+											"node_type": "VarDeclaration | Statement",
+											"token": "for",
+											"children": [
+												{
+													"node_type": "Statement",
+													"token": "for",
+													"children": [
+														{
+															"node_type": "[ Label ]",
+															"token": "for",
+															"children": []
+														},
+														{
+															"node_type": "Assembly Block | Extension Statement",
+															"token": "for",
+															"children": [
+																{
+																	"node_type": "Extension statement",
+																	"token": "for",
+																	"children": [
+																		{
+																			"node_type": "Loop",
+																			"token": "for",
+																			"children": [
+																				{
+																					"node_type": "For",
+																					"token": "for",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "for",
+																							"children": []
+																						},
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "i",
+																							"children": []
+																						},
+																						{
+																							"node_type": "[ from Expression ]",
+																							"token": "loop",
+																							"children": []
+																						},
+																						{
+																							"node_type": "[ to Expression ]",
+																							"token": "loop",
+																							"children": []
+																						},
+																						{
+																							"node_type": "[ step Expression ]",
+																							"token": "loop",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Loop body",
+																							"token": "loop",
+																							"children": [
+																								{
+																									"node_type": "KEYWORD",
+																									"token": "loop",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Block body",
+																									"token": "end",
+																									"children": []
+																								}
+																							]
+																						},
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "end",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}

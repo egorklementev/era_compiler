@@ -1,0 +1,5 @@
+pragma 
+	TestPragma1("TestText1")
+	TestPragma2()
+	TestPragma3("TestText2")
+end

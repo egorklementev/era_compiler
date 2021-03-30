@@ -1,0 +1,5 @@
+code
+	loop
+	while 1 > 1
+	end
+end

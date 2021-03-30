@@ -1,0 +1,24 @@
+Token type: WHITESPACE
+Value: " "
+Position: Line: 1, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 1, Char: 0
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 2, Char: 1
+
+Token type: IDENTIFIER
+Value: _
+Position: Line: 2, Char: 2
+
+Token type: WHITESPACE
+Value: \t
+Position: Line: 2, Char: 3
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 2, Char: 0
+

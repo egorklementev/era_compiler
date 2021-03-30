@@ -1,0 +1,38 @@
+		{
+			"node_type": "Program",
+			"token": "module",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "module",
+					"children": [
+						{
+							"node_type": "Module",
+							"token": "module",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "module",
+									"children": []
+								},
+								{
+									"node_type": "IDENTIFIER",
+									"token": "testmodule1",
+									"children": []
+								},
+								{
+									"node_type": "Module statements",
+									"token": "end",
+									"children": []
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}

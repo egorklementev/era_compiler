@@ -1,0 +1,3 @@
+code
+	short a := 1;
+end

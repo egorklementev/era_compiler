@@ -1,0 +1,86 @@
+// Divide 'num' by 2
+// @return: 'num' divided by 2
+routine div2 (int@ num) : int
+do
+	r0 := num; // Put address to the reg
+	asm
+		format 32;
+		r1 := ->r0;
+		r0 >>= r1; // Can we use the same register?
+		//skip;
+	end
+	int res := r0;
+	return res;
+end
+
+
+// Fast sort algorithm
+routine fast_sort (int@ arr_addr, int size)
+do
+	if size = 1 do
+		return;
+	end
+	
+	// Select a pivot element
+	int pivot := div2(<-size);
+	int@ pivot_element_addr := arr_addr + pivot;
+	int pivot_element := ->pivot_element_addr;
+
+	// Count how much elements greater 
+	// or equal and less than pivot
+	int greater := 0;
+	int less := 0;
+	for i to size loop
+		int@ next_addr := arr_addr + i; 
+		if ->next_addr < pivot do
+			less := less + 1;
+		else
+			greater := greater + 1;
+		end
+	end
+
+	// Create two subarrays for recursive calls
+	int[] left[less];
+	int[] right[greater - 1]; // Since we counted the pivot itself
+
+	// Populate arrays
+	int left_i := 0, right_i := 0;
+	for i to size loop
+		int@ next_addr := arr_addr + i;
+		if ->next_addr < pivot do
+			left[left_i] := ->next_addr;
+		else
+			if i /= pivot do
+				right[right_i] := ->next_addr;
+			end
+		end
+	end
+
+	// Recursive calls
+	fast_sort(left, less);
+	fast_sort(right, greater - 1);
+
+	// Concatenate arrays
+	for i to less loop
+		int@ next_addr := arr_addr + i;
+		->next_addr := left[i]; 
+	end
+	int@ new_pivot_addr := arr_addr + less;
+	->new_pivot_addr := pivot_element;
+	for i to greater - 1 loop
+		int@ next_addr := arr_addr + i;
+		->next_addr := right[i]; 
+	end
+end
+
+code 
+	int const size := 4;
+
+	int[] arr[size];
+	arr[0] := 10; 
+	arr[1] := 9;
+	arr[2] := 8; 
+	arr[3] := 7;
+
+	fast_sort(arr, size);
+end

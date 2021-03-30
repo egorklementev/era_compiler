@@ -1,0 +1,36 @@
+Token type: IDENTIFIER
+Value: _code
+Position: Line: 1, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 1, Char: 6
+
+Token type: IDENTIFIER
+Value: _end
+Position: Line: 2, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 2, Char: 5
+
+Token type: IDENTIFIER
+Value: _data
+Position: Line: 3, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 3, Char: 6
+
+Token type: IDENTIFIER
+Value: data_1
+Position: Line: 4, Char: 1
+
+Token type: WHITESPACE
+Value: \r\n
+Position: Line: 4, Char: 7
+
+Token type: IDENTIFIER
+Value: pragma_data
+Position: Line: 5, Char: 1
+

@@ -1,0 +1,75 @@
+		{
+			"node_type": "Program",
+			"token": "pragma",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "pragma",
+					"children": [
+						{
+							"node_type": "Annotations",
+							"token": "pragma",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "pragma",
+									"children": []
+								},
+								{
+									"node_type": "Pragma declaration",
+									"token": "testpragma1",
+									"children": [
+										{
+											"node_type": "IDENTIFIER",
+											"token": "testpragma1",
+											"children": []
+										},
+										{
+											"node_type": "DELIMITER",
+											"token": "(",
+											"children": []
+										},
+										{
+											"node_type": "Pragma parameter",
+											"token": """,
+											"children": [
+												{
+													"node_type": "DELIMITER",
+													"token": """,
+													"children": []
+												},
+												{
+													"node_type": "IDENTIFIER",
+													"token": "testtext1",
+													"children": []
+												},
+												{
+													"node_type": "DELIMITER",
+													"token": """,
+													"children": []
+												}
+											]
+										},
+										{
+											"node_type": "DELIMITER",
+											"token": ")",
+											"children": []
+										}
+									]
+								},
+								{
+									"node_type": "Pragma declarations",
+									"token": "end",
+									"children": []
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}

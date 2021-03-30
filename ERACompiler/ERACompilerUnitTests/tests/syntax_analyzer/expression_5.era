@@ -1,0 +1,3 @@
+code
+	int a := 1 + TestVar[0];
+end

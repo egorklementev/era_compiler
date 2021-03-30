@@ -1,0 +1,112 @@
+		{
+			"node_type": "Program",
+			"token": "code",
+			"children": [
+				{
+					"node_type": "Some unit",
+					"token": "code",
+					"children": [
+						{
+							"node_type": "Code",
+							"token": "code",
+							"children": [
+								{
+									"node_type": "KEYWORD",
+									"token": "code",
+									"children": []
+								},
+								{
+									"node_type": "{ VarDeclaration | Statement }",
+									"token": "int",
+									"children": [
+										{
+											"node_type": "VarDeclaration | Statement",
+											"token": "int",
+											"children": [
+												{
+													"node_type": "Variable declaration",
+													"token": "int",
+													"children": [
+														{
+															"node_type": "Type",
+															"token": "int",
+															"children": [
+																{
+																	"node_type": "int | byte | short [ @ ]",
+																	"token": "int",
+																	"children": [
+																		{
+																			"node_type": "int | byte | short",
+																			"token": "int",
+																			"children": [
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "int",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "[ @ ]",
+																			"token": "a",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"node_type": "Variable | Array | Constant",
+															"token": "a",
+															"children": [
+																{
+																	"node_type": "Variable",
+																	"token": "a",
+																	"children": [
+																		{
+																			"node_type": "Variable definition",
+																			"token": "a",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "a",
+																					"children": []
+																				},
+																				{
+																					"node_type": "[ := Expression ]",
+																					"token": ";",
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "{ , VarDefinition }",
+																			"token": ";",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"node_type": "KEYWORD",
+									"token": "end",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}

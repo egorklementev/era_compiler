@@ -1,0 +1,4 @@
+code
+	int a;
+	int const b := 0, c := a;
+end

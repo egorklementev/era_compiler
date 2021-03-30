@@ -1,0 +1,4 @@
+code
+	int a;
+	a := a + b;
+end
