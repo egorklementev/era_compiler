@@ -59,11 +59,11 @@ jobs:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: powershell
       run: |
-            .\.sonar\scanner\dotnet-sonarscanner begin /k:"egorklementev_era_compiler" /o:"egorklementev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/*.xml" /d:sonar.cs.vstest.reportsPaths="**/*.trx"
+            .\.sonar\scanner\dotnet-sonarscanner begin /k:"egorklementev_era_compiler" /o:"egorklementev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/*.coveragexml" /d:sonar.cs.vstest.reportsPaths="**/*.trx"
             dotnet restore
             dotnet build --configuration Release --no-restore
-            dotnet test --logger 'trx;LogFileName=TestResults.trx' --results-directory ./TestResults --settings ERACompilerUnitTests/CodeCoverage.runsettings /p:CollectCoverage=true
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:report.coveragexml TestResults/report.coverage
+            dotnet test --collect "DotnetCodeCoverage" --logger 'trx;LogFileName=TestResults.trx' --results-directory ./TestResults
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:report.coveragexml TestResults/DotnetCoverage.coverage
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
       run: dotnet test --no-restore --verbosity normal --filter "TestCategory!=Lexis"
