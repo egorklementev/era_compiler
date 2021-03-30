@@ -63,10 +63,9 @@ jobs:
             dotnet restore
             dotnet build --configuration Release --no-restore
             dotnet test --collect "Code Coverage" --logger 'trx;LogFileName=TestResults.trx' --settings ERACompilerUnitTests/CodeCoverage.runsettings --filter "TestCategory!=Lexis"
-            ls
+            ls TestResults
             echo -----
-            pwd
-            Remove-Item -Path TestResults\run* -Force
+            Remove-Item -Path TestResults/runneradmin_fv-az153-981_2021-03-30_04_34_40 -Force
             mv TestResults\TestResults.trx .\
             $Folder = Get-ChildItem -Path TestResults\** -Name
             echo $Folder
