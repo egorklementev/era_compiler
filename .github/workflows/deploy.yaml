@@ -63,7 +63,7 @@ jobs:
             dotnet restore
             dotnet build --configuration Release --no-restore
             dotnet test --collect "Code Coverage" --logger 'trx;LogFileName=TestResults.trx' --settings ERACompilerUnitTests/CodeCoverage.runsettings --filter "TestCategory!=Lexis"
-            rm ./TestResults/runner*
+            echo ls
             mv ./TestResults/TestResults.trx ./
             $Folder = Get-ChildItem -Path .\TestResults\** -Name
             echo $Folder
