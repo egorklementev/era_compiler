@@ -63,7 +63,8 @@ jobs:
             dotnet restore
             dotnet build --configuration Release --no-restore
             dotnet test --collect "Code Coverage" --logger 'trx;LogFileName=TestResults.trx' --settings ERACompilerUnitTests/CodeCoverage.runsettings --results-directory ./TestResults --filter "TestCategory!=Lexis"
-            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:report.coveragexml TestResults/DotnetCoverage.coverage
+            $Folder = Get-ChildItem -Path .\TestResults\** -Name
+            & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:./TestResults/report.coveragexml ./TestResults/$Folder/report.coverage
             .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
     - name: Test
       run: dotnet test --no-restore --verbosity normal --filter "TestCategory!=Lexis"
