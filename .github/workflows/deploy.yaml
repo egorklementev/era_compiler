@@ -62,7 +62,9 @@ jobs:
             .\.sonar\scanner\dotnet-sonarscanner begin /k:"egorklementev_era_compiler" /o:"egorklementev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/*.coveragexml" /d:sonar.cs.vstest.reportsPaths="**/*.trx"
             dotnet restore
             dotnet build --configuration Release --no-restore
-            dotnet test --collect "Code Coverage" --logger 'trx;LogFileName=TestResults.trx' --settings ERACompilerUnitTests/CodeCoverage.runsettings --results-directory ./TestResults --filter "TestCategory!=Lexis"
+            dotnet test --collect "Code Coverage" --logger 'trx;LogFileName=TestResults.trx' --settings ERACompilerUnitTests/CodeCoverage.runsettings --filter "TestCategory!=Lexis"
+            rm ./TestResults/runner*
+            mv ./TestResults/TestResults.trx ./
             $Folder = Get-ChildItem -Path .\TestResults\** -Name
             echo $Folder
             & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" analyze /output:./TestResults/report.coveragexml ./TestResults/$Folder/report.coverage
