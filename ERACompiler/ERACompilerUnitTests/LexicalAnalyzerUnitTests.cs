@@ -7,7 +7,7 @@ namespace ERACompilerUnitTests
     [TestClass]
     public class LexicalAnalyzerUnitTests
     {
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void KeywordsTest1()
         {
             Compiler c = new Compiler();
@@ -20,7 +20,7 @@ namespace ERACompilerUnitTests
                 Assert.AreEqual(expectedCode[i], actualCode[i]);
             }
         }
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void KeywordsTest2()
         {
             Compiler c = new Compiler();
@@ -36,7 +36,7 @@ namespace ERACompilerUnitTests
 
         // ----------------------------------------------------------------------------------
 
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void OperatorsTest1()
         {
             Compiler c = new Compiler();
@@ -49,7 +49,7 @@ namespace ERACompilerUnitTests
                 Assert.AreEqual(expectedCode[i], actualCode[i]);
             }
         }
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void OperatorsTest2()
         {
             Compiler c = new Compiler();
@@ -65,7 +65,7 @@ namespace ERACompilerUnitTests
 
         // ----------------------------------------------------------------------------------
 
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void RegistersTest1()
         {
             Compiler c = new Compiler();
@@ -78,7 +78,7 @@ namespace ERACompilerUnitTests
                 Assert.AreEqual(expectedCode[i], actualCode[i]);
             }
         }
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void RegistersTest2()
         {
             Compiler c = new Compiler();
@@ -94,7 +94,7 @@ namespace ERACompilerUnitTests
 
         // ----------------------------------------------------------------------------------
 
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void DelimitersTest1()
         {
             Compiler c = new Compiler();
@@ -107,7 +107,7 @@ namespace ERACompilerUnitTests
                 Assert.AreEqual(expectedCode[i], actualCode[i]);
             }
         }
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void DelimitersTest2()
         {
             Compiler c = new Compiler();
@@ -123,7 +123,7 @@ namespace ERACompilerUnitTests
 
         // ----------------------------------------------------------------------------------
 
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void WhitespacesTest1()
         {
             Compiler c = new Compiler();
@@ -139,7 +139,7 @@ namespace ERACompilerUnitTests
 
         // ----------------------------------------------------------------------------------
 
-        [TestMethod]
+        [TestMethod, TestCategory("Lexis")]
         public void AllRulesTest1()
         {
             Compiler c = new Compiler();
