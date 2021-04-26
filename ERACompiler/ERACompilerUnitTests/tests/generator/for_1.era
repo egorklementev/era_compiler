@@ -1,6 +1,6 @@
-
+// r0 = 10
 code
-	int a := 0;
+	int a := 0; 
 	for i loop
 		a := a + 1;
 	end

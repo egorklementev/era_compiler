@@ -13,14 +13,17 @@ namespace ERACompiler.Structures
         /// Parent node. Only the root node has parent equals to null.
         /// </summary>
         public ASTNode? Parent { get; set; }
+
         /// <summary>
         /// Child nodes of the node.
         /// </summary>
         public List<ASTNode> Children { get; }
+
         /// <summary>
         /// The token of the source code that corresponds to this node.
         /// </summary>
         public Token Token { get; }
+
         /// <summary>
         /// Represents the type of an AST entry.
         /// </summary>
@@ -29,7 +32,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
         /// </summary>
-        protected int level = 0;
+        public int level { get; } = 0;
 
         /// <summary>
         /// Creates an AST node.

@@ -236,7 +236,7 @@
             Represents the type of an AST entry.
             </summary>
         </member>
-        <member name="F:ERACompiler.Structures.ASTNode.level">
+        <member name="P:ERACompiler.Structures.ASTNode.level">
             <summary>
             How deep in the AST the node is located. Used for proper tabulation in the ToString() method.
             </summary>

@@ -1,4 +1,4 @@
-
+// 00 00 00 2c 00 00 00 1b  at the heap top
 code
 	int size := 10;
 	int[] a[size];

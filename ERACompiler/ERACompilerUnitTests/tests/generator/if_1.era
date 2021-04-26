@@ -1,4 +1,4 @@
-
+// r0 = 2
 code
 	int a := 1;
 	if a do
