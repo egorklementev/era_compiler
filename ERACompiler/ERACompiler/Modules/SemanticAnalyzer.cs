@@ -896,7 +896,7 @@ namespace ERACompiler.Modules
             // If more, we need to rearrange the operands and operators to follow the operation priority
             // --  Gospod' dast - srabotaet  -- 
             // Priority list
-            List<string> ops = new List<string>() { "*", "+", "-", ">", "<", "=", "/=", "&", "^", "|", "?" };
+            List<string> ops = new List<string>() { "*", "+", "-", ">=", "<=", ">", "<", "=", "/=", "&", "^", "|", "?" };
 
             foreach (string op in ops)
             {
@@ -1228,6 +1228,27 @@ namespace ERACompiler.Modules
                         {
                             operators.RemoveAt(i);
                             int res = operands[i] - operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                    }
+
+                    // Execute higher order operators (<=, >=) 
+                    for (int i = 0; i < operators.Count; i++)
+                    {
+                        if (operators[i].Equals("<="))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] << operands[i + 1];
+                            operands.RemoveRange(i, 2);
+                            operands.Insert(i, res);
+                            i--;
+                        }
+                        else if (operators[i].Equals(">="))
+                        {
+                            operators.RemoveAt(i);
+                            int res = operands[i] >> operands[i + 1];
                             operands.RemoveRange(i, 2);
                             operands.Insert(i, res);
                             i--;

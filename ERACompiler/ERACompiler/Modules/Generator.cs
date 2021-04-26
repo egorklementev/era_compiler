@@ -982,6 +982,18 @@ namespace ERACompiler.Modules
                             exprBytes = MergeLists(exprBytes, MergeLists(GenerateSUB(fr1, fr0), GetLList(fr0)));
                             break;
                         }
+                    case ">=":
+                        {
+                            // FR0 >= FR1; FR0
+                            exprBytes = MergeLists(exprBytes, MergeLists(GenerateLSR(fr1, fr0), GetLList(fr0)));
+                            break;
+                        }
+                    case "<=":
+                        {
+                            // FR0 <= FR1; FR0
+                            exprBytes = MergeLists(exprBytes, MergeLists(GenerateLSL(fr1, fr0), GetLList(fr0)));
+                            break;
+                        }
                     case "&":
                         {
                             // FR0 &= FR1; FR0
@@ -1259,7 +1271,7 @@ namespace ERACompiler.Modules
         private LinkedList<byte> ConstructReference(AASTNode node)
         {
             LinkedList<byte> refBytes = new LinkedList<byte>();
-            refBytes = MergeLists(refBytes, ConstructPrimary((AASTNode)node.Children[1], false));
+            refBytes = MergeLists(refBytes, ConstructPrimary((AASTNode)node.Children[1], false, 100, false));
             return refBytes;
         }
 
@@ -1296,7 +1308,7 @@ namespace ERACompiler.Modules
             return derefBytes;
         }
 
-        private LinkedList<byte> ConstructPrimary(AASTNode node, bool rightValue = true, byte fr_op = 100)
+        private LinkedList<byte> ConstructPrimary(AASTNode node, bool rightValue = true, byte fr_op = 100, bool isReceiver = true)
         {
             LinkedList<byte> primBytes = new LinkedList<byte>();
 
@@ -1386,10 +1398,10 @@ namespace ERACompiler.Modules
                 // Otherwise we should find a register for it and load it to this register.
                 if (regAllocVTR.ContainsKey(varName))
                 {
+                    // FR0 := Rxy;
+                    // fr0
                     if (rightValue)
                     {
-                        // FR0 := Rxy;
-                        // fr0
                         byte reg = regAllocVTR[varName];
                         primBytes = MergeLists(primBytes, GetFreeReg(node, new List<int>() { reg }));
                         byte fr0 = primBytes.Last.Value;
@@ -1399,7 +1411,19 @@ namespace ERACompiler.Modules
                     }
                     else
                     {
-                        primBytes = MergeLists(primBytes, GetLList(regAllocVTR[varName]));
+                        if (isReceiver)
+                        {
+                            primBytes = MergeLists(primBytes, GetLList(regAllocVTR[varName]));
+                        }
+                        else // Reference
+                        {
+                            byte reg = regAllocVTR[varName];
+                            primBytes = MergeLists(primBytes, GetFreeReg(node, new List<int>() { reg }));
+                            byte fr0 = primBytes.Last.Value;
+                            primBytes.RemoveLast();
+                            primBytes = MergeLists(primBytes, LoadInVariable(varName, fr0, ctx, rightValue));
+                            primBytes = MergeLists(primBytes, GetLList(fr0));
+                        }
                     }
                 }
                 else
@@ -1408,7 +1432,7 @@ namespace ERACompiler.Modules
                     byte fr0 = primBytes.Last.Value;
                     primBytes.RemoveLast();
                     primBytes = MergeLists(primBytes, LoadInVariable(varName, fr0, ctx, rightValue));
-                    regAllocVTR.Add(varName, fr0); // ATTENTION: This is questionable
+                    regAllocVTR.Add(varName, fr0);
                     regAllocRTV.Add(fr0, varName);
                     primBytes = MergeLists(primBytes, GetLList(fr0));
                 }

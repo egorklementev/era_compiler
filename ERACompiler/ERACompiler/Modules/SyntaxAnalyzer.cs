@@ -175,7 +175,7 @@ namespace ERACompiler.Modules
                     .AddRule(opMinusRule)
                 )
                 .AddRule(numberRule);
-            
+
             SyntaxRule operatorRule = new SyntaxRule()
                 .SetName("Operator")
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
@@ -189,7 +189,9 @@ namespace ERACompiler.Modules
                 .AddRule(opEqualsRule)
                 .AddRule(opNotEqualsRule)
                 .AddRule(opGreaterRule)
-                .AddRule(opLessRule);
+                .AddRule(opLessRule)
+                .AddRule(opLslRule)
+                .AddRule(opLsrRule);
 
             SyntaxRule primaryRule = new SyntaxRule()
                 .SetName("Primary")

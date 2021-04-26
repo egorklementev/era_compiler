@@ -33,6 +33,7 @@ end
 routine routine_2 (int a) : short
 do
 	int b;
+	return 1;
 end
 
 // VarDeclaration
@@ -92,7 +93,7 @@ do
 	a <=> b;
 	
 	// Call
-	routine_2(a);
+	short ff := routine_2(a);
 	
 	// If
 	if a do
@@ -123,5 +124,5 @@ do
 
 	// Constant expression
 	int const fff := 1;
-	int const cnst := 1 * 2 + 3 - 4 > 5 < 6 = fff /= 8 & 9 ^ 10 | 11 ? 12; 
+	int const cnst := 1 * 2 + 3 - 4 > 5 < 6 = fff /= 8 & 9 ^ 10 | 11 ? 12 >= 13 <= 14; 
 end
