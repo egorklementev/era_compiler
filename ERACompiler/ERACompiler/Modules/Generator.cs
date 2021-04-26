@@ -1018,12 +1018,21 @@ namespace ERACompiler.Modules
                             // FR2 := mask;
                             // FR1 ?= FR0;
                             // FR2 &= FR1;
-                            // FR0 := FR2;
+                            // FR0 = 1;
+                            // FR1 = <true>;
+                            // if FR2 goto FR0;
+                            // FR0 := 0;
+                            // <true>
                             // fr0
                             exprBytes = MergeLists(exprBytes, GenerateLDC(mask, fr2));
                             exprBytes = MergeLists(exprBytes, GenerateCND(fr0, fr1));
                             exprBytes = MergeLists(exprBytes, GenerateAND(fr1, fr2));
-                            exprBytes = MergeLists(exprBytes, GenerateMOV(fr2, fr0));
+                            exprBytes = MergeLists(exprBytes, GenerateLDC(1, fr0));
+                            exprBytes = MergeLists(exprBytes, GenerateLDL(fr1));
+                            int trueLabel = exprBytes.Count;
+                            exprBytes = MergeLists(exprBytes, GenerateCBR(fr2, fr1));
+                            exprBytes = MergeLists(exprBytes, GenerateLDC(0, fr0));
+                            ResolveLabel(exprBytes, trueLabel);
                             exprBytes = MergeLists(exprBytes, GetLList(fr0));
                             FreeReg(fr2);
                             break;

@@ -31,6 +31,7 @@ namespace ERACompiler
         private static bool forceFolderCreation = false;
 
         public static string currentFile = "none";
+        public static string currentPref = null;
         public static bool extendedErrorMessages = false; // For syntax errors better display
         public static bool extendedSemanticMessages = false; // For more detailed semantic messages
         public static bool convertToAssemblyCode = false; // To get assembly code instead of binary code
@@ -91,11 +92,11 @@ namespace ERACompiler
                         if (defaultFilename.Contains("/") || defaultFilename.Contains("\\"))
                         {
                             int j = defaultFilename.LastIndexOfAny(new char[] { '\\', '/' });
-                            defaultFilename = defaultFilename.Insert(j + 1, "compiled_");
+                            defaultFilename = defaultFilename.Insert(j + 1, (currentPref ?? "compiled_"));
                         }
                         else
                         {
-                            defaultFilename = "compiled_" + defaultFilename;
+                            defaultFilename = (currentPref ?? "compiled_") + defaultFilename;
                         }
                         int dot = defaultFilename.LastIndexOf('.');
                         defaultFilename = defaultFilename.Remove(dot); // Remove .* and add .bin
@@ -236,6 +237,7 @@ namespace ERACompiler
                                     "  '--semext'  :  same as \"--sem\" with extended debug information\r\n" +
                                     "  '--asm'  :  full compilation with the assembly code output\r\n" +
                                     "  '--err'  :  displays more detailed error messages\r\n" +
+                                    "  '--prefix'  :  custom name prefix for output binary file/files\r\n" +
                                     "  '-h'  :  show manual\r\n" +
                                     "  Default source code file is 'code.era'.\r\n" +
                                     "  Default output file is 'compiled_' + source code file name\r\n"
@@ -271,6 +273,18 @@ namespace ERACompiler
                         case "--err":
                             {
                                 extendedErrorMessages = true;
+                                break;
+                            }
+                        case "--prefix":
+                            {
+                                // No prefix found
+                                if (i == args.Length - 1 || IsFlag(args[i + 1]))
+                                {
+                                    Console.Error.WriteLine("No prefix specified!!!");
+                                    return true;
+                                }
+                                i++;
+                                currentPref = args[i];
                                 break;
                             }
                         default:

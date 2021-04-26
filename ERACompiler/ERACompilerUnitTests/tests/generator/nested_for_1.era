@@ -1,4 +1,4 @@
-
+// r0 = 65536
 code
 	int a := 0;
 	for i1 from 0 to 2 loop
