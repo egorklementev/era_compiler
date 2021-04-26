@@ -97,6 +97,11 @@ namespace ERACompiler.Structures
             return ((RoutineType)LocateVar(identifier.Value).AASTType).ParamTypes.Count;
         }
 
+        public VarType GetRoutineReturnType(Token identifier)
+        {
+            return ((RoutineType)LocateVar(identifier.Value).AASTType).ReturnType;
+        }
+
         public int GetArrSize(Token identifier)
         {
             return ((ArrayType) LocateVar(identifier.Value).AASTType).Size;
@@ -315,7 +320,7 @@ namespace ERACompiler.Structures
                 if (var.StaticOffset != 0 || Program.extendedSemanticMessages)
                 {
                     sb.Append(tabs_lvl4)
-                        .Append("\"var_static_offset\": \"").Append(var.FrameOffset).Append("\",\r\n");
+                        .Append("\"var_static_offset\": \"").Append(var.StaticOffset).Append("\",\r\n");
                 }
 
                 if (var.LIStart != 0 || Program.extendedSemanticMessages)

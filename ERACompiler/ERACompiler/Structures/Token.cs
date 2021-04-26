@@ -14,7 +14,7 @@ namespace ERACompiler.Structures
         /// <summary>
         /// A token value. For example, identifier name "arg1", or number 528.
         /// </summary>
-        public string Value { get; }
+        public string Value { get; set; }
         /// <summary>
         /// A position of the token in the source code in terms of lines and characters.
         /// </summary>

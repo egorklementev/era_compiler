@@ -176,6 +176,18 @@ namespace ERACompiler.Modules
                     {
                         if (node.Children[1].Children[0].Children[0].ASTType.Equals("Call"))
                         {
+                            if (FindParentContext(returnNode)
+                                .GetRoutineReturnType(
+                                node.Children[1].Children[0].Children[0].Children[0].Token).Type == VarType.ERAType.NO_TYPE
+                                )
+                            {
+                                throw new SemanticErrorException(
+                                    "Attempt to return NO TYPE routine!!!\r\n" +
+                                    "  At (Line: " + node.Children[0].Token.Position.Line.ToString() + ", " +
+                                    "Char: " + node.Children[0].Token.Position.Char.ToString() + ")."
+                                    );
+
+                            } 
                             returnNode.Children.Add(AnnotateCall(node.Children[1].Children[0].Children[0], returnNode));
                         }
                         else
@@ -310,33 +322,15 @@ namespace ERACompiler.Modules
 
         private AASTNode AnnotateCall(ASTNode node, AASTNode parent)
         {
-            //Context ctx = FindParentContext(parent);
-            //CheckVariablesForExistance(node, ctx);
             AASTNode call = new AASTNode(node, parent, no_type);
             call.Children.Add(AnnotateNode(node.Children[0], call));
             call.Children.Add(AnnotateNode(node.Children[1], call));
-            
-            // MOVED TO POST_CHECKS()
-            // We need to check the number of arguments (TODO and their types) since they should be in accordance with the routine definition
-            /*int paramNum = ctx.GetRoutineParamNum(node.Children[0].Token);
-            if (call.Children[1].Children.Count != paramNum)
-            {
-                Logger.LogError(new SemanticError(
-                    "Incorrect number of arguments when calling routine \"" + node.Children[0].Token.Value + "\"!!!\r\n" +
-                    "Expected: " + paramNum.ToString() + ", received: " + call.Children[1].Children.Count.ToString() + ".\r\n" +
-                    "  At (Line: " + node.Children[1].Token.Position.Line.ToString() + 
-                    ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
-                    ));
-            }*/
-            // TODO: type checking...
             return call;
         }
 
         private AASTNode AnnotateCallArgs(ASTNode node, AASTNode parent)
         {
-            //Context ctx = FindParentContext(parent);
             AASTNode callArgs = new AASTNode(node, parent, no_type);
-            //CheckVariablesForExistance(node, ctx);
             if (node.Children[1].Children.Count > 0) // If some arguments exist
             {
                 // First expression
@@ -477,6 +471,9 @@ namespace ERACompiler.Modules
             if (node.Children[3].Children.Count > 0)
             {
                 AASTNode firstParam = new AASTNode(node.Children[3].Children[0].Children[0], routine, paramTypes[0]);
+                firstParam.Token.Type = TokenType.IDENTIFIER;
+                firstParam.Token.Value = node.Children[3].Children[0].Children[0].Children[1].Token.Value;
+                firstParam.LIStart = 1;
                 routine.Context.AddVar(firstParam, node.Children[3].Children[0].Children[0].Children[1].Token.Value);
                 int i = 1;
                 foreach (ASTNode child in node.Children[3].Children[0].Children[1].Children)
@@ -484,6 +481,9 @@ namespace ERACompiler.Modules
                     if (child.ASTType.Equals("Parameter")) // Skip comma rule
                     {
                         AASTNode param = new AASTNode(child, routine, paramTypes[i]);
+                        param.Token.Type = TokenType.IDENTIFIER;
+                        param.Token.Value = child.Children[1].Token.Value;
+                        param.LIStart = 1;
                         routine.Context.AddVar(param, child.Children[1].Token.Value);
                         i++;
                     }
@@ -491,6 +491,26 @@ namespace ERACompiler.Modules
             }            
             // Annotate routine body
             routine.Children.Add(AnnotateNode(node.Children[6], routine));
+
+            // Check if return statement exists
+            if (ctx.GetRoutineReturnType(node.Children[1].Token).Type != VarType.ERAType.NO_TYPE)
+            {
+                /*if (!CheckForReturn(routine.Children[0]))
+                {
+                   TODO: !!! 
+                }*/
+            } 
+
+            // Set LI end of parameters
+            int maxDepth = GetMaxDepth(routine);
+            Dictionary<string, AASTNode>.ValueCollection parameters = routine.Context.GetDeclaredVars();
+            int j = 0;
+            foreach (AASTNode param in parameters)
+            {
+                if (j >= paramTypes.Count) break;
+                routine.Context.SetLIEnd(param.Token.Value, maxDepth);
+                j++;
+            }
             return routine;
         }
 
@@ -668,7 +688,7 @@ namespace ERACompiler.Modules
             Context ctx = FindParentContext(parent);
             AASTNode module = new AASTNode(node, parent, new VarType(VarType.ERAType.MODULE))
             {
-                Context = new Context("module_" + node.Children[1].Token.Value, ctx)
+                Context = new Context(node.Children[1].Token.Value, ctx)
             };
             foreach (ASTNode child in node.Children[2].Children)
             {
@@ -909,7 +929,7 @@ namespace ERACompiler.Modules
         {
             AASTNode code = new AASTNode(node, parent, new VarType(VarType.ERAType.MODULE))
             {
-                Context = new Context("Code", FindParentContext(parent))
+                Context = new Context("code", FindParentContext(parent))
             };
 
             foreach (ASTNode child in node.Children[1].Children)
@@ -962,7 +982,7 @@ namespace ERACompiler.Modules
                         "\tAt (Line: " + node.Token.Position.Line.ToString() + ", Char: " + node.Token.Position.Char.ToString() + ")."
                         );
             }
-            else if (node.ASTType.Equals("Call"))
+            else if (node.ASTType.Equals("Primary") && node.Children.Count > 1 && node.Children[1].ASTType.Equals("Call arguments"))
             {
                 int paramNum = ctx.GetRoutineParamNum(node.Children[0].Token);
                 if (node.Children[1].Children.Count != paramNum)
@@ -974,6 +994,18 @@ namespace ERACompiler.Modules
                         ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
                         );
                 }
+            }
+            else if (node.ASTType.Equals("Call"))
+            {
+                if (ctx.GetRoutineReturnType(node.Children[0].Token).Type != VarType.ERAType.NO_TYPE)
+                {
+                    throw new SemanticErrorException(
+                        "Calling a routine \"" + node.Children[0].Token.Value + "\" without using the return value!!!\r\n" +
+                        "  At (Line: " + node.Children[1].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[1].Token.Position.Char.ToString() + ")."
+                        );
+                }
+
             }
             else if (node.ASTType.Equals("Code") || node.ASTType.Equals("Routine body") || node.ASTType.Equals("Block body"))
             {
@@ -1084,8 +1116,8 @@ namespace ERACompiler.Modules
                         case VarType.ERAType.BYTE_ADDR:
                         case VarType.ERAType.ROUTINE:
                         case VarType.ERAType.MODULE:
-                            if (!var.Token.Value.Equals("code"))
-                                i += lword;
+                            //if (!var.Token.Value.Equals("code")) // ATTENTION: may cause troubles
+                            i += lword;
                             break;
                         case VarType.ERAType.SHORT:
                             i += word;

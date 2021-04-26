@@ -111,42 +111,178 @@ namespace ERACompiler.Modules
 
         private LinkedList<byte> Construct(AASTNode node)
         {
+            LinkedList<byte> bytes;
             switch (node.ASTType)
             {
                 case "Program":
-                    return ConstructProgram(node);
+                    bytes = ConstructProgram(node);
+                    break;
                 case "Assembly block":
-                    return ConstructAssemblyBlock(node);
+                    bytes = ConstructAssemblyBlock(node);
+                    break;
                 case "Expression":
-                    return ConstructExpression(node);
+                    bytes = ConstructExpression(node);
+                    break;
                 case "Code":
-                    return ConstructCode(node);
+                    bytes = ConstructCode(node);
+                    break;
                 case "Variable definition":
-                    return ConstructVarDef(node);
+                    bytes = ConstructVarDef(node);
+                    break;
                 case "Array definition":
-                    return ConstructArrDef(node);
+                    bytes = ConstructArrDef(node);
+                    break;
                 case "Assignment":
-                    return ConstructAssignment(node);
+                    bytes = ConstructAssignment(node);
+                    break;
                 case "If":
-                    return ConstructIf(node);
+                    bytes = ConstructIf(node);
+                    break;
                 case "For":
-                    return ConstructFor(node);
+                    bytes = ConstructFor(node);
+                    break;
                 case "Block body":
-                    return ConstructBlockBody(node);
+                    bytes = ConstructBlockBody(node);
+                    break;
                 case "While":
-                    return ConstructWhile(node);
+                    bytes = ConstructWhile(node);
+                    break;
                 case "Loop While":
-                    return ConstructLoopWhile(node);
+                    bytes = ConstructLoopWhile(node);
+                    break;
+                case "Routine body":
+                    bytes = ConstructRoutineBody(node);
+                    break;
+                case "Return":
+                    bytes = ConstructReturn(node);
+                    break;
+                case "Call":
+                    bytes = ConstructCall(node);
+                    break;
                 default: // If skip, just go for children nodes
                     {
-                        LinkedList<byte> bytes = new LinkedList<byte>();
+                        bytes = new LinkedList<byte>();
                         foreach (AASTNode child in node.Children)
                         {
                             bytes = MergeLists(bytes, Construct(child));
                         }
-                        return bytes;
+                        break;
                     }                
             }
+
+            return bytes;
+        }
+
+        private LinkedList<byte> ConstructReturn(AASTNode node)
+        {
+            LinkedList<byte> returnBytes = new LinkedList<byte>();
+            Context ctx = SemanticAnalyzer.FindParentContext(node);
+
+            if (node.Children.Count > 0)
+            {
+                // Call or Expr
+                returnBytes = MergeLists(returnBytes, ConstructExpression((AASTNode)node.Children[0]));
+                byte fr1 = returnBytes.Last.Value;
+                returnBytes.RemoveLast();
+                returnBytes = MergeLists(returnBytes, GenerateMOV(fr1, 26));
+                OccupateReg(26);
+                FreeReg(fr1);
+            }
+
+            returnBytes = MergeLists(returnBytes, DeallocateRegisters(node, ctx, 0, true));
+
+            // Deallocate dynamic arrays
+            returnBytes = MergeLists(returnBytes, GetFreeReg(node));
+            byte fr0 = returnBytes.Last.Value;
+            returnBytes.RemoveLast();
+            foreach (AASTNode var in ctx.GetDeclaredVars())
+            {
+                if (ctx.IsVarDynamicArray(var.Token.Value))
+                {
+                    returnBytes = MergeLists(returnBytes, LoadFromHeap(0, fr0));
+                    returnBytes = MergeLists(returnBytes, ChangeHeapTop(fr0, true, false));
+                }
+            }
+            FreeReg(fr0);
+
+            // Deallocate all scope related memory from the stack
+            int ctxNum = 0;
+            ASTNode anchor = node.Parent;
+            while (!anchor.ASTType.Equals("Routine body"))
+            {
+                if (((AASTNode)anchor).Context != null)
+                    ctxNum++;
+                anchor = anchor.Parent;
+            }
+            for (int i = 0; i < ctxNum; i++)
+            {
+                returnBytes = MergeLists(returnBytes, GenerateLDA(FP, FP, -4));
+                returnBytes = MergeLists(returnBytes, GenerateMOV(FP, SP)); // Return stack pointer
+                returnBytes = MergeLists(returnBytes, GenerateLD(FP, FP)); // Return frame pointer
+            }
+
+            returnBytes = MergeLists(returnBytes, GenerateLDA(FP, FP, -4));
+            returnBytes = MergeLists(returnBytes, GenerateLD(FP, 27));
+            returnBytes = MergeLists(returnBytes, GenerateLDA(FP, FP, -4));
+            returnBytes = MergeLists(returnBytes, GenerateMOV(FP, SP)); // Return stack pointer
+            returnBytes = MergeLists(returnBytes, GenerateLD(FP, FP)); // Return frame pointer
+            returnBytes = MergeLists(returnBytes, GenerateCBR(27, 27));
+
+            return returnBytes;
+        }
+
+        private LinkedList<byte> ConstructRoutineBody(AASTNode node)
+        {
+            LinkedList<byte> routineBytes = new LinkedList<byte>();
+            Context ctx = SemanticAnalyzer.FindParentContext(node);
+
+            int frameSize = 0;
+            if (ctx.GetDeclaredVars().Count > 0)
+            {
+                frameSize =
+                    ctx.GetFrameOffset(ctx.GetDeclaredVars().Last().Token.Value) +
+                    ctx.GetDeclaredVars().Last().AASTType.GetSize();
+            }
+
+            routineBytes = MergeLists(routineBytes, GenerateST(FP, SP)); 
+            routineBytes = MergeLists(routineBytes, GenerateMOV(SP, FP)); 
+            routineBytes = MergeLists(routineBytes, GenerateLDA(FP, FP, 4));
+            routineBytes = MergeLists(routineBytes, GenerateST(27, FP)); 
+            routineBytes = MergeLists(routineBytes, GenerateLDA(FP, FP, 4));
+            routineBytes = MergeLists(routineBytes, GenerateMOV(FP, SP));
+            routineBytes = MergeLists(routineBytes, GenerateLDA(SP, SP, frameSize));
+
+            int statementNum = 1;
+            foreach (AASTNode statement in node.Children)
+            {
+                routineBytes = MergeLists(routineBytes, AllocateRegisters(statement, ctx, statementNum));
+                routineBytes = MergeLists(routineBytes, Construct(statement));
+                statementNum++;
+                routineBytes = MergeLists(routineBytes, DeallocateRegisters(statement, ctx, statementNum));
+            }
+
+            // Deallocate dynamic arrays
+            routineBytes = MergeLists(routineBytes, GetFreeReg(node));
+            byte fr0 = routineBytes.Last.Value;
+            routineBytes.RemoveLast();
+            foreach (AASTNode var in ctx.GetDeclaredVars())
+            {
+                if (ctx.IsVarDynamicArray(var.Token.Value))
+                {
+                    routineBytes = MergeLists(routineBytes, LoadFromHeap(0, fr0)); // Size of dynamic array
+                    routineBytes = MergeLists(routineBytes, ChangeHeapTop(fr0, true, false));
+                }
+            }
+            FreeReg(fr0);
+
+            routineBytes = MergeLists(routineBytes, GenerateLDA(FP, FP, -4));
+            routineBytes = MergeLists(routineBytes, GenerateLD(FP, 27));
+            routineBytes = MergeLists(routineBytes, GenerateLDA(FP, FP, -4));
+            routineBytes = MergeLists(routineBytes, GenerateMOV(FP, SP)); // Return stack pointer
+            routineBytes = MergeLists(routineBytes, GenerateLD(FP, FP)); // Return frame pointer
+            routineBytes = MergeLists(routineBytes, GenerateCBR(27, 27));
+
+            return routineBytes;
         }
 
         private LinkedList<byte> ConstructArrDef(AASTNode node)
@@ -775,13 +911,12 @@ namespace ERACompiler.Modules
             Context ctx = node.Context;
             
             codeBytes = MergeLists(codeBytes, GenerateMOV(SP, FP)); // FP := SP;
-            codeBytes = MergeLists(codeBytes, GenerateLDA(SB, SB, 4)); // Skip heap top bytes
-
+            
             if (ctx.GetDeclaredVars().Count > 0)
             {
                 int frameSize =
                     ctx.GetFrameOffset(ctx.GetDeclaredVars().Last().Token.Value) +
-                    ctx.GetDeclaredVars().Last().AASTType.GetSize(); // ATTENTION: ??? Does it work? Check needed.
+                    ctx.GetDeclaredVars().Last().AASTType.GetSize();
                 codeBytes = MergeLists(codeBytes, GenerateLDA(SP, SP, frameSize));
             }
 
@@ -824,7 +959,7 @@ namespace ERACompiler.Modules
             {
                 exprBytes.RemoveLast();
                 // 2) Store result of the right operand in FR0/FR1
-                exprBytes = MergeLists(exprBytes, ConstructOperand((AASTNode)node.Children[2]));
+                exprBytes = MergeLists(exprBytes, ConstructOperand((AASTNode)node.Children[2], fr0));
                 byte fr1 = exprBytes.Last.Value;
                 exprBytes.RemoveLast();
 
@@ -1040,7 +1175,7 @@ namespace ERACompiler.Modules
             return recBytes;
         }
 
-        private LinkedList<byte> ConstructOperand(AASTNode node)
+        private LinkedList<byte> ConstructOperand(AASTNode node, byte fr_op = 100)
         {
             LinkedList<byte> opBytes = new LinkedList<byte>();
 
@@ -1053,7 +1188,7 @@ namespace ERACompiler.Modules
                     }                
                 case "Primary":
                     {
-                        opBytes = MergeLists(opBytes, ConstructPrimary(node));
+                        opBytes = MergeLists(opBytes, ConstructPrimary(node, true, fr_op));
                         break;
                     }
                 case "REGISTER":
@@ -1108,6 +1243,7 @@ namespace ERACompiler.Modules
                 expAddrBytes = MergeLists(expAddrBytes, GenerateLD(fr0, fr0));
             expAddrBytes = MergeLists(expAddrBytes, GetLList(fr0));
             OccupateReg(fr0);
+            
             return expAddrBytes;
         }
 
@@ -1147,10 +1283,11 @@ namespace ERACompiler.Modules
                 }
                 OccupateReg(fr0);
             }
+
             return derefBytes;
         }
 
-        private LinkedList<byte> ConstructPrimary(AASTNode node, bool rightValue = true)
+        private LinkedList<byte> ConstructPrimary(AASTNode node, bool rightValue = true, byte fr_op = 100)
         {
             LinkedList<byte> primBytes = new LinkedList<byte>();
 
@@ -1210,12 +1347,26 @@ namespace ERACompiler.Modules
                         primBytes = MergeLists(primBytes, GenerateLD(fr1, fr1));
                     primBytes = MergeLists(primBytes, GetLList(fr1));
 
-                    OccupateReg(fr1);
                     FreeReg(fr0);
                 }
                 else
                 {
-                    // Generate call bytes
+                    // Load out to heap the first operand (due to recursion)
+                    if (fr_op != 100)
+                    {
+                        primBytes = MergeLists(primBytes, ChangeHeapTop(-4));
+                        primBytes = MergeLists(primBytes, StoreToHeap(0, fr_op));
+                        primBytes = MergeLists(primBytes, ConstructCall(node));
+                        byte fr = primBytes.Last.Value;
+                        primBytes.RemoveLast();
+                        primBytes = MergeLists(primBytes, LoadFromHeap(0, fr_op));
+                        primBytes = MergeLists(primBytes, ChangeHeapTop(4));
+                        primBytes = MergeLists(primBytes, GetLList(fr));
+                    } 
+                    else
+                    {
+                        primBytes = MergeLists(primBytes, ConstructCall(node));
+                    }
                 }
             }
             else
@@ -1236,7 +1387,6 @@ namespace ERACompiler.Modules
                         primBytes.RemoveLast();
                         primBytes = MergeLists(primBytes, GenerateMOV(reg, fr0));
                         primBytes = MergeLists(primBytes, GetLList(fr0));
-                        //OccupateReg(fr0);
                     }
                     else
                     {
@@ -1252,11 +1402,60 @@ namespace ERACompiler.Modules
                     regAllocVTR.Add(varName, fr0); // ATTENTION: This is questionable
                     regAllocRTV.Add(fr0, varName);
                     primBytes = MergeLists(primBytes, GetLList(fr0));
-                    OccupateReg(fr0);
                 }
             }
 
             return primBytes;
+        }
+
+        private LinkedList<byte> ConstructCall(AASTNode node)
+        {
+            // prim [ iden, call args ]
+            // 
+            // Generate call bytes TODO: Dot notation (routines in modules)
+            //
+            // Construct parameters and put them in the stack
+            // Deallocate everything
+            // R27 = SB + offset(func);
+            // if R27 goto R27;
+            // Allocate back
+            // Manage return value (if any) 
+
+            LinkedList<byte> callBytes = new LinkedList<byte>();
+            Context ctx = SemanticAnalyzer.FindParentContext(node);
+
+            int param_i = 2;
+            foreach (AASTNode expr in node.Children[1].Children)
+            {
+                callBytes = MergeLists(callBytes, ConstructExpression(expr));
+                byte fr0 = callBytes.Last.Value;
+                callBytes.RemoveLast();
+
+                callBytes = MergeLists(callBytes, GenerateMOV(SP, 27));
+                callBytes = MergeLists(callBytes, GenerateLDA(27, 27, param_i * 4));
+                callBytes = MergeLists(callBytes, GenerateST(fr0, 27));
+
+                param_i++;
+                FreeReg(fr0);
+            }
+
+            callBytes = MergeLists(callBytes, DeallocateRegisters(node, ctx, 0, true));
+            callBytes = MergeLists(callBytes, GenerateLDA(SB, 27, ctx.GetStaticOffset(node.Children[0].Token.Value)));
+            callBytes = MergeLists(callBytes, GenerateLD(27, 27));
+            callBytes = MergeLists(callBytes, GenerateCBR(27, 27));
+            callBytes = MergeLists(callBytes, AllocateRegisters(node, ctx, GetStatementNumber(node)));
+
+            if (ctx.GetRoutineReturnType(node.Children[0].Token).Type != VarType.ERAType.NO_TYPE) // Return value is in R26
+            {
+                callBytes = MergeLists(callBytes, GetFreeReg(node));
+                byte fr0 = callBytes.Last.Value;
+                callBytes.RemoveLast();
+                callBytes = MergeLists(callBytes, GenerateMOV(26, fr0));
+                callBytes = MergeLists(callBytes, GetLList(fr0));
+                FreeReg(26);
+            }
+
+            return callBytes;
         }
 
         private LinkedList<byte> ConstructNumber(AASTNode node)
@@ -1308,17 +1507,46 @@ namespace ERACompiler.Modules
             LinkedList<byte> staticBytes = GetConstBytes(memorySize); // [HEAP TOP] We need this value when addressing heap 
             staticBytes = MergeLists(staticBytes, GetLList(new byte[node.AASTValue])); // We use precalculated length from Semantic Analyzer            
             int staticLength = (staticBytes.Count + staticBytes.Count % 2) / 2; // We count in words (2 bytes)
-            
-            // Move code data by the static data length
-            codeAddrBase += staticBytes.Count;
 
-            // Second descent - identify all code data
+            // First unit offset - to store correct addresses inside static frame
+            int techOffset = 16; // LDA(SB), LDA(SB + codeOffset), 27 = ->27, if 27 goto 27
+            LinkedList<byte> techBytes = GenerateLDA(SB, SB, 4); // Skip heap top bytes
+
+            // Identify all modules and routines
+            int modulesAndRoutines = 0;
+            foreach (AASTNode child in node.Children)
+            { 
+                if (child.ASTType.Equals("Routine") || child.ASTType.Equals("Module") || child.ASTType.Equals("Code"))
+                {
+                    modulesAndRoutines++;
+                }
+            }
+
+            techOffset += modulesAndRoutines * 16;
+
+            // Identify all code data
             LinkedList<byte> codeBytes = new LinkedList<byte>();
             foreach (AASTNode child in node.Children)
             {
+                if (child.ASTType.Equals("Routine") || child.ASTType.Equals("Module") || child.ASTType.Equals("Code"))
+                {
+                    techBytes = MergeLists(techBytes, GenerateLDA(SB, 27, node.Context.GetStaticOffset(child.Context.Name)));
+                    techBytes = MergeLists(techBytes, GenerateLDC(0, 26));
+                    techBytes = MergeLists(techBytes, GenerateLDA(26, 26, staticBytes.Count + techOffset + codeBytes.Count));
+                    techBytes = MergeLists(techBytes, GenerateST(26, 27));
+                }
+
                 codeBytes = MergeLists(codeBytes, Construct(child));
             }
-            int codeLength = (codeBytes.Count + codeBytes.Count % 2) / 2 + 2;
+
+            // Go to code module uncoditionally
+            techBytes = MergeLists(techBytes, GenerateLDA(SB, 27, node.Context.GetStaticOffset("code")));
+            techBytes = MergeLists(techBytes, GenerateLD(27, 27));
+            techBytes = MergeLists(techBytes, GenerateCBR(27, 27));
+
+            // Move code data by the static data length
+            codeAddrBase += staticBytes.Count;
+            int codeLength = (techBytes.Count + codeBytes.Count + codeBytes.Count % 2) / 2 + 2;
 
             // Convert static data and code lengths to chunks of four bytes
             LinkedList<byte> sda = GetConstBytes(staticDataAddrBase);
@@ -1356,6 +1584,7 @@ namespace ERACompiler.Modules
 
             // Merge previosly constructed bytes
             programBytes = MergeLists(programBytes, staticBytes);
+            programBytes = MergeLists(programBytes, techBytes);
             programBytes = MergeLists(programBytes, codeBytes);
 
             // Skip & Stop
@@ -1493,7 +1722,7 @@ namespace ERACompiler.Modules
             // In LDL case
             if (format != 2)
             {
-                format = format == 32 ? 11 : format == 16 ? 1 : 0;                
+                format = format == 32 ? 3 : format == 16 ? 1 : 0;                
             }
             return GetLList(
                 (byte)((opCode << 2) | (format << 6) | (regI >> 3)),
@@ -1709,7 +1938,7 @@ namespace ERACompiler.Modules
             return regAllocBytes;
         }
 
-        private LinkedList<byte> DeallocateRegisters(AASTNode node, Context ctx, int statementNum)
+        private LinkedList<byte> DeallocateRegisters(AASTNode node, Context ctx, int statementNum, bool unconditionally = false)
         {
             LinkedList<byte> regDeallocBytes = new LinkedList<byte>();
             HashSet<string> vars = GetAllUsedVars(node);
@@ -1720,7 +1949,7 @@ namespace ERACompiler.Modules
                     int liStart = ctx.GetLIStart(var);
                     int liEnd = ctx.GetLIEnd(var);
 
-                    if (regAllocVTR.ContainsKey(var) && liEnd < statementNum) // Deallocation
+                    if (regAllocVTR.ContainsKey(var) && (liEnd < statementNum || unconditionally)) // Deallocation
                     {
                         byte reg = regAllocVTR[var];
                         if (!ctx.IsVarArray(var)) // No need to load out array stuff
@@ -1732,6 +1961,14 @@ namespace ERACompiler.Modules
                 }
             }
             return regDeallocBytes;
+        }
+
+        private int GetStatementNumber(AASTNode node)
+        {
+            if (node.BlockPosition != 0)
+                return node.BlockPosition;
+            else
+                return GetStatementNumber((AASTNode)node.Parent);
         }
 
         private void OccupateReg(byte regNum)
@@ -1877,7 +2114,7 @@ namespace ERACompiler.Modules
                                 }
                                 else
                                 {
-                                    asmCode.Append(sFormat).Append(regj).Append(" := ").Append(regi[1..]).Append(";\r\n");
+                                    asmCode.Append(sFormat).Append(regj).Append(" := ").Append(bregi).Append(";\r\n");
                                 }
                                 break;
                             case 3: // ST
