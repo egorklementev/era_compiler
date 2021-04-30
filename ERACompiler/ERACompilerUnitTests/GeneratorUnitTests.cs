@@ -60,7 +60,7 @@ namespace ERACompilerUnitTests
         private void CompileFiles(string test_name)
         {
             int i = 1;
-            while (File.Exists("../../../tests/generator/" + test_name + "_" + i + ".era"))
+            while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
