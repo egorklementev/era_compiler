@@ -1,6 +1,6 @@
 {
 	"node_type": "Program",
-	"var_value": "8",
+	"var_value": "12",
 	"context": 
 		{
 			"name": "Program",
@@ -12,12 +12,12 @@
 				{
 					"var_type": "NO_TYPE routine, (INT_ADDR, INT)",
 					"var_name": "fast_sort",
-					"var_static_offset": "0"
+					"var_static_offset": "4"
 				},
 				{
 					"var_type": "MODULE",
 					"var_name": "code",
-					"var_static_offset": "0"
+					"var_static_offset": "8"
 				}
 			]
 		},
@@ -32,7 +32,9 @@
 					"symbol_table": [
 						{
 							"var_type": "INT_ADDR",
-							"var_name": "num"
+							"var_name": "num",
+							"li_start": "1",
+							"li_end": "1"
 						},
 						{
 							"var_type": "INT",
@@ -236,12 +238,16 @@
 					"symbol_table": [
 						{
 							"var_type": "INT_ADDR",
-							"var_name": "arr_addr"
+							"var_name": "arr_addr",
+							"li_start": "1",
+							"li_end": "17"
 						},
 						{
 							"var_type": "INT",
 							"var_name": "size",
-							"var_frame_offset": "4"
+							"var_frame_offset": "4",
+							"li_start": "1",
+							"li_end": "11"
 						},
 						{
 							"var_type": "INT",
@@ -2084,7 +2090,7 @@
 			"var_type": "MODULE",
 			"context": 
 				{
-					"name": "Code",
+					"name": "code",
 					"symbol_table": [
 						{
 							"var_type": "CONST_INT",

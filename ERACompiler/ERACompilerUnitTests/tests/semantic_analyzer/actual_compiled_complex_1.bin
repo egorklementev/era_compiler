@@ -1,6 +1,6 @@
 {
 	"node_type": "Program",
-	"var_value": "24",
+	"var_value": "28",
 	"context": 
 		{
 			"name": "Program",
@@ -16,37 +16,37 @@
 				{
 					"var_type": "MODULE",
 					"var_name": "code",
-					"var_static_offset": "0"
+					"var_static_offset": "4"
 				},
 				{
 					"var_type": "struct_1",
 					"var_name": "struct_1",
-					"var_static_offset": "0"
+					"var_static_offset": "8"
 				},
 				{
 					"var_type": "NO_TYPE routine, ()",
 					"var_name": "routine_1",
-					"var_static_offset": "0"
+					"var_static_offset": "8"
 				},
 				{
 					"var_type": "SHORT routine, (INT)",
 					"var_name": "routine_2",
-					"var_static_offset": "0"
+					"var_static_offset": "12"
 				},
 				{
 					"var_type": "MODULE",
 					"var_name": "module_var_decl",
-					"var_static_offset": "0"
+					"var_static_offset": "16"
 				},
 				{
 					"var_type": "NO_TYPE routine, ()",
 					"var_name": "routine_asm",
-					"var_static_offset": "0"
+					"var_static_offset": "20"
 				},
 				{
 					"var_type": "NO_TYPE routine, ()",
 					"var_name": "routine_ext",
-					"var_static_offset": "0"
+					"var_static_offset": "24"
 				}
 			]
 		},
@@ -150,7 +150,7 @@
 			"var_type": "MODULE",
 			"context": 
 				{
-					"name": "module_module_1",
+					"name": "module_1",
 					"symbol_table": []
 				},
 			"token": "module",
@@ -161,7 +161,7 @@
 			"var_type": "MODULE",
 			"context": 
 				{
-					"name": "Code",
+					"name": "code",
 					"symbol_table": []
 				},
 			"token": "code",
@@ -258,7 +258,9 @@
 					"symbol_table": [
 						{
 							"var_type": "INT",
-							"var_name": "a"
+							"var_name": "a",
+							"li_start": "1",
+							"li_end": "1"
 						},
 						{
 							"var_type": "INT",
@@ -293,6 +295,31 @@
 									]
 								}
 							]
+						},
+						{
+							"node_type": "Statement",
+							"block_position": "2",
+							"token": "return",
+							"children": [
+								{
+									"node_type": "Return",
+									"token": "return",
+									"children": [
+										{
+											"node_type": "Expression",
+											"token": "1",
+											"children": [
+												{
+													"node_type": "NUMBER",
+													"var_value": "1",
+													"token": "1",
+													"children": []
+												}
+											]
+										}
+									]
+								}
+							]
 						}
 					]
 				}
@@ -303,7 +330,7 @@
 			"var_type": "MODULE",
 			"context": 
 				{
-					"name": "module_module_var_decl",
+					"name": "module_var_decl",
 					"symbol_table": [
 						{
 							"var_type": "BYTE_ADDR",
@@ -978,9 +1005,16 @@
 							"li_end": "8"
 						},
 						{
+							"var_type": "SHORT",
+							"var_name": "ff",
+							"var_frame_offset": "8",
+							"li_start": "4",
+							"li_end": "4"
+						},
+						{
 							"var_type": "CONST_INT",
 							"var_name": "fff",
-							"var_frame_offset": "8",
+							"var_frame_offset": "12",
 							"li_start": "10",
 							"li_end": "10",
 							"var_value": "1"
@@ -988,10 +1022,10 @@
 						{
 							"var_type": "CONST_INT",
 							"var_name": "cnst",
-							"var_frame_offset": "8",
+							"var_frame_offset": "12",
 							"li_start": "11",
 							"li_end": "11",
-							"var_value": "2"
+							"var_value": "1"
 						}
 					]
 				},
@@ -1125,33 +1159,52 @@
 						{
 							"node_type": "Statement",
 							"block_position": "4",
-							"token": "routine_2",
+							"token": "short",
 							"children": [
 								{
-									"node_type": "Call",
-									"token": "routine_2",
+									"node_type": "Variable declaration",
+									"token": "short",
 									"children": [
 										{
-											"node_type": "IDENTIFIER",
-											"token": "routine_2",
-											"children": []
-										},
-										{
-											"node_type": "Call arguments",
-											"token": "(",
+											"node_type": "Variable definition",
+											"var_type": "SHORT",
+											"token": "ff",
 											"children": [
 												{
 													"node_type": "Expression",
-													"token": "a",
+													"token": "routine_2",
 													"children": [
 														{
 															"node_type": "Primary",
-															"token": "a",
+															"token": "routine_2",
 															"children": [
 																{
 																	"node_type": "IDENTIFIER",
-																	"token": "a",
+																	"token": "routine_2",
 																	"children": []
+																},
+																{
+																	"node_type": "Call arguments",
+																	"token": "(",
+																	"children": [
+																		{
+																			"node_type": "Expression",
+																			"token": "a",
+																			"children": [
+																				{
+																					"node_type": "Primary",
+																					"token": "a",
+																					"children": [
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "a",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
 																}
 															]
 														}
@@ -1708,7 +1761,7 @@
 										{
 											"node_type": "Constant definition",
 											"var_type": "CONST_INT",
-											"var_value": "2",
+											"var_value": "1",
 											"token": "cnst",
 											"children": []
 										}
