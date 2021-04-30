@@ -67,7 +67,7 @@
 * **CallArgs** : `(` [ Expression { `,` Expression } ] `)`
 ---
 * **Expression** : Operand { Operator Operand }
-* **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | `=` | `/=` | `<` | `>`
+* **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | `=` | `/=` | `<` | `>` | `>=` | `<=`
 * **Operand** : Primary | Register | Dereference | Reference | Literal | ExplicitAddress | `(` Expression `)`
 * **Receiver** : Primary | Dereference | ExplicitAddress | Register
 * **Primary** : Identifier { `.` Identifier } [ ArrayAccess | CallArgs ]
