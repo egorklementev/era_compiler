@@ -1,0 +1,12 @@
+
+routine shmest() : int
+do
+	return test(5);
+end
+
+routine test (int a)
+do
+end
+
+code
+end

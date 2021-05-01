@@ -1,0 +1,5 @@
+code
+	print a;
+	print r0;
+	print (pc + sb);
+end

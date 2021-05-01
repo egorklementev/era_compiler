@@ -16,72 +16,66 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "funccall",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "funccall",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "funccall",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "funccall",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "funccall",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "funccall",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Call ;",
 																	"token": "funccall",
 																	"children": [
 																		{
-																			"node_type": "Call ;",
+																			"node_type": "Call",
 																			"token": "funccall",
 																			"children": [
 																				{
-																					"node_type": "Call",
+																					"node_type": "IDENTIFIER",
 																					"token": "funccall",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Call arguments",
+																					"token": "(",
 																					"children": [
 																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "funccall",
+																							"node_type": "DELIMITER",
+																							"token": "(",
 																							"children": []
 																						},
 																						{
-																							"node_type": "Call arguments",
-																							"token": "(",
-																							"children": [
-																								{
-																									"node_type": "DELIMITER",
-																									"token": "(",
-																									"children": []
-																								},
-																								{
-																									"node_type": "[ Expression { , Expression } ]",
-																									"token": ")",
-																									"children": []
-																								},
-																								{
-																									"node_type": "DELIMITER",
-																									"token": ")",
-																									"children": []
-																								}
-																							]
+																							"node_type": "[ Expression { , Expression } ]",
+																							"token": ")",
+																							"children": []
+																						},
+																						{
+																							"node_type": "DELIMITER",
+																							"token": ")",
+																							"children": []
 																						}
 																					]
-																				},
-																				{
-																					"node_type": "DELIMITER",
-																					"token": ";",
-																					"children": []
 																				}
 																			]
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
 																		}
 																	]
 																}

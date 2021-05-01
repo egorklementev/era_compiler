@@ -1,36 +1,49 @@
-Token type: IDENTIFIER
-Value: _code
-Position: Line: 1, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 1, Char: 6
-
-Token type: IDENTIFIER
-Value: _end
-Position: Line: 2, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 2, Char: 5
-
-Token type: IDENTIFIER
-Value: _data
-Position: Line: 3, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 3, Char: 6
-
-Token type: IDENTIFIER
-Value: data_1
-Position: Line: 4, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 4, Char: 7
-
-Token type: IDENTIFIER
-Value: pragma_data
-Position: Line: 5, Char: 1
-
+{
+	[
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_code",
+			"position": "Line: 1, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 1, Char: 6"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_end",
+			"position": "Line: 2, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 2, Char: 5"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_data",
+			"position": "Line: 3, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 3, Char: 6"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "data_1",
+			"position": "Line: 4, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 4, Char: 7"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "pragma_data",
+			"position": "Line: 5, Char: 1"
+		}
+	]
+}

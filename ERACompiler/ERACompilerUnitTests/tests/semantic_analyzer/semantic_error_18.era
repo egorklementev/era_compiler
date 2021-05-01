@@ -1,0 +1,6 @@
+code
+	int a := 5;
+	asm
+		r0 := a;
+	end
+end

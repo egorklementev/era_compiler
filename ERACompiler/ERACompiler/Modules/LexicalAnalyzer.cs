@@ -331,7 +331,8 @@ namespace ERACompiler.Modules
                 "loop",
                 "break",
                 "goto",
-                "struct"
+                "struct",
+                "print"
             };
         }
         private List<string> OperatorsInitialization()

@@ -16,120 +16,114 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "<",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "<",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
 													"token": "<",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "Label",
 															"token": "<",
 															"children": [
 																{
-																	"node_type": "Label",
+																	"node_type": "OPERATOR",
 																	"token": "<",
-																	"children": [
-																		{
-																			"node_type": "OPERATOR",
-																			"token": "<",
-																			"children": []
-																		},
-																		{
-																			"node_type": "IDENTIFIER",
-																			"token": "label1",
-																			"children": []
-																		},
-																		{
-																			"node_type": "OPERATOR",
-																			"token": ">",
-																			"children": []
-																		}
-																	]
+																	"children": []
+																},
+																{
+																	"node_type": "IDENTIFIER",
+																	"token": "label1",
+																	"children": []
+																},
+																{
+																	"node_type": "OPERATOR",
+																	"token": ">",
+																	"children": []
 																}
 															]
-														},
+														}
+													]
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
+													"token": "while",
+													"children": [
 														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "while",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Loop",
 																	"token": "while",
 																	"children": [
 																		{
-																			"node_type": "Loop",
+																			"node_type": "While",
 																			"token": "while",
 																			"children": [
 																				{
-																					"node_type": "While",
+																					"node_type": "KEYWORD",
 																					"token": "while",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Expression",
+																					"token": "1",
 																					"children": [
 																						{
-																							"node_type": "KEYWORD",
-																							"token": "while",
-																							"children": []
-																						},
-																						{
-																							"node_type": "Expression",
+																							"node_type": "Operand",
 																							"token": "1",
 																							"children": [
 																								{
-																									"node_type": "Operand",
+																									"node_type": "NUMBER",
 																									"token": "1",
 																									"children": [
 																										{
+																											"node_type": "[ - ]",
+																											"token": "1",
+																											"children": []
+																										},
+																										{
 																											"node_type": "NUMBER",
 																											"token": "1",
-																											"children": [
-																												{
-																													"node_type": "[ - ]",
-																													"token": "1",
-																													"children": []
-																												},
-																												{
-																													"node_type": "NUMBER",
-																													"token": "1",
-																													"children": []
-																												}
-																											]
+																											"children": []
 																										}
 																									]
-																								},
-																								{
-																									"node_type": "{ Operator Operand }",
-																									"token": "loop",
-																									"children": []
 																								}
 																							]
 																						},
 																						{
-																							"node_type": "Loop body",
+																							"node_type": "{ Operator Operand }",
 																							"token": "loop",
-																							"children": [
-																								{
-																									"node_type": "KEYWORD",
-																									"token": "loop",
-																									"children": []
-																								},
-																								{
-																									"node_type": "Block body",
-																									"token": "end",
-																									"children": []
-																								}
-																							]
-																						},
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "Loop body",
+																					"token": "loop",
+																					"children": [
 																						{
 																							"node_type": "KEYWORD",
+																							"token": "loop",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Block body",
 																							"token": "end",
 																							"children": []
 																						}
 																					]
+																				},
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "end",
+																					"children": []
 																				}
 																			]
 																		}

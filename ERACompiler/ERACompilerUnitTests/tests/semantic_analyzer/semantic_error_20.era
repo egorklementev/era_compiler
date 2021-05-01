@@ -1,0 +1,4 @@
+code
+	int a := 5;
+	int b := c * 2;
+end

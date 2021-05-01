@@ -114,7 +114,7 @@ namespace ERACompiler.Structures
         /// <returns>True if it exists, false otherwise</returns>
         public bool IsVarDeclared(Token identifier)
         {
-            return LocateVar(identifier.Value) != null;
+            return IsVarDeclared(identifier.Value);
         }
 
         public bool IsVarDeclared(string identifier)
@@ -153,7 +153,7 @@ namespace ERACompiler.Structures
 
         public bool IsVarArray(Token identifier)
         {
-            return LocateVar(identifier.Value).AASTType.IsArray();
+            return IsVarArray(identifier.Value);
         }
 
         public bool IsVarArray(string identifier)
@@ -165,6 +165,11 @@ namespace ERACompiler.Structures
         {
             VarType type = LocateVar(identifier).AASTType;
             return type.IsArray() && ((ArrayType)type).Size == 0;
+        }
+
+        public bool IsVarLabel(Token identifier)
+        {
+            return LocateVar(identifier.Value).AASTType.Type == VarType.ERAType.LABEL;
         }
 
         public bool IsVarConstant(Token identifier)
@@ -311,19 +316,19 @@ namespace ERACompiler.Structures
                 sb.Append(tabs_lvl4)
                     .Append("\"var_name\": \"").Append(varName).Append("\",\r\n");
 
-                if (var.FrameOffset != 0 || Program.extendedSemanticMessages)
+                if (var.FrameOffset != 0 || Program.config.ExtendedSemanticMessages)
                 {
                     sb.Append(tabs_lvl4)
                         .Append("\"var_frame_offset\": \"").Append(var.FrameOffset).Append("\",\r\n");
                 }
 
-                if (var.StaticOffset != 0 || Program.extendedSemanticMessages)
+                if (var.StaticOffset != 0 || Program.config.ExtendedSemanticMessages)
                 {
                     sb.Append(tabs_lvl4)
                         .Append("\"var_static_offset\": \"").Append(var.StaticOffset).Append("\",\r\n");
                 }
 
-                if (var.LIStart != 0 || Program.extendedSemanticMessages)
+                if (var.LIStart != 0 || Program.config.ExtendedSemanticMessages)
                 {
                     sb.Append(tabs_lvl4)
                         .Append("\"li_start\": \"").Append(var.LIStart).Append("\",\r\n");
@@ -331,7 +336,7 @@ namespace ERACompiler.Structures
                         .Append("\"li_end\": \"").Append(var.LIEnd).Append("\",\r\n");
                 }
 
-                if (var.AASTValue != 0 || Program.extendedSemanticMessages)
+                if (var.AASTValue != 0 || Program.config.ExtendedSemanticMessages)
                     sb.Append(tabs_lvl4)
                         .Append("\"var_value\": \"").Append(var.AASTValue.ToString()).Append("\"\r\n");
                 else
@@ -361,7 +366,7 @@ namespace ERACompiler.Structures
                 .Append("\"symbol_table\": [");
 
             // Show all variables visible from this context
-            if (Program.extendedSemanticMessages)
+            if (Program.config.ExtendedSemanticMessages)
             {
                 Context? prnt = parent;
                 while (prnt != null)
@@ -373,7 +378,7 @@ namespace ERACompiler.Structures
 
             sb.Append(SymbolTableToString(st));
 
-            if (st.Count > 0 || Program.extendedSemanticMessages)
+            if (st.Count > 0 || Program.config.ExtendedSemanticMessages)
             {
                 sb.Remove(sb.Length - 1, 1).Append("\r\n");
                 sb.Append(tabs_lvl2);

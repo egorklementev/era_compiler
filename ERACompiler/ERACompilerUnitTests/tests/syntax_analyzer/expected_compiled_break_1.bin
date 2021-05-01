@@ -16,45 +16,39 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "break",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "break",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "break",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "break",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "break",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "break",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Break",
 																	"token": "break",
 																	"children": [
 																		{
-																			"node_type": "Break",
+																			"node_type": "KEYWORD",
 																			"token": "break",
-																			"children": [
-																				{
-																					"node_type": "KEYWORD",
-																					"token": "break",
-																					"children": []
-																				},
-																				{
-																					"node_type": "DELIMITER",
-																					"token": ";",
-																					"children": []
-																				}
-																			]
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
 																		}
 																	]
 																}

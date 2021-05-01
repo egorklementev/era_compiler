@@ -36,6 +36,11 @@ do
 	return 1;
 end
 
+routine routine_3 () : int
+do
+	return routine_2(4);
+end
+
 // VarDeclaration
 module module_var_decl
 	// Type
@@ -124,5 +129,10 @@ do
 
 	// Constant expression
 	int const fff := 1;
-	int const cnst := 1 * 2 + 3 - 4 > 5 < 6 = fff /= 8 & 9 ^ 10 | 11 ? 12 >= 13 <= 14; 
+	int const cnst := 1 * 2 + 3 - 4 > 5 < 6 = fff /= 8 & 9 ^ 10 | (11 ? 12) >= 13 <= 14; 
+
+	int af := a + (a - (a * b + (2 * a))) - (b * b + b - 3 * b * b);
+
+	// Print
+	print fff + cnst;
 end

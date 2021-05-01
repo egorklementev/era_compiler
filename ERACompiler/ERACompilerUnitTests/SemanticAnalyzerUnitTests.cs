@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using ERACompiler;
 using ERACompiler.Modules;
+using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -9,6 +11,17 @@ namespace ERACompilerUnitTests
     public class SemanticAnalyzerUnitTests
     {
         private readonly string pathPrefix = "../../../tests/semantic_analyzer/";
+
+        [TestInitialize]
+        public void InitTests()
+        {
+            Program.config = new Config
+            {
+                ConvertToAsmCode = false,
+                ExtendedErrorMessages = false,
+                ExtendedSemanticMessages = false
+            };
+        }
 
         [TestMethod]
         public void ComplexTests()
@@ -157,6 +170,51 @@ namespace ERACompilerUnitTests
         {
             Compiler c = new Compiler();
             string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_16.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SemanticErrorException), "Semantic error occured.")]
+        public void ReturnNoTypeRoutineTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_17.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SemanticErrorException), "Semantic error occured.")]
+        public void DynamicLDCTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_18.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(SemanticErrorException), "Semantic error occured.")]
+        public void NonStructAccessTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_19.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SemanticErrorException), "Semantic error occured.")]
+        public void UndeclaredVariableTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_20.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SemanticErrorException), "Semantic error occured.")]
+        public void IncorrectNumberOfParamsTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText(pathPrefix + "semantic_error_21.era");
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 

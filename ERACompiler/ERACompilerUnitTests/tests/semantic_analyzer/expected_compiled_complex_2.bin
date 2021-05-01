@@ -2110,29 +2110,41 @@
 			"token": "code",
 			"children": [
 				{
-					"node_type": "Variable declaration",
+					"node_type": "Statement",
 					"block_position": "1",
 					"token": "int",
 					"children": [
 						{
-							"node_type": "Constant definition",
-							"var_type": "CONST_INT",
-							"var_value": "4",
-							"token": "size",
-							"children": []
+							"node_type": "Variable declaration",
+							"token": "int",
+							"children": [
+								{
+									"node_type": "Constant definition",
+									"var_type": "CONST_INT",
+									"var_value": "4",
+									"token": "size",
+									"children": []
+								}
+							]
 						}
 					]
 				},
 				{
-					"node_type": "Variable declaration",
+					"node_type": "Statement",
 					"block_position": "2",
 					"token": "int",
 					"children": [
 						{
-							"node_type": "Array definition",
-							"var_type": "Array of type INT of size 4",
-							"token": "arr",
-							"children": []
+							"node_type": "Variable declaration",
+							"token": "int",
+							"children": [
+								{
+									"node_type": "Array definition",
+									"var_type": "Array of type INT of size 4",
+									"token": "arr",
+									"children": []
+								}
+							]
 						}
 					]
 				},

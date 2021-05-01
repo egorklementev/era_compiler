@@ -1,0 +1,8 @@
+routine r (int a) : int
+do
+	return 0;
+end
+
+code
+	int a := r(1, 2);
+end

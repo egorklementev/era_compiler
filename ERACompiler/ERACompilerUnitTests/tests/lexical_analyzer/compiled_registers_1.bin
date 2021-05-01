@@ -1,284 +1,359 @@
-Token type: REGISTER
-Value: r0
-Position: Line: 1, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 1, Char: 3
-
-Token type: REGISTER
-Value: r1
-Position: Line: 2, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 2, Char: 3
-
-Token type: REGISTER
-Value: r2
-Position: Line: 3, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 3, Char: 3
-
-Token type: REGISTER
-Value: r3
-Position: Line: 4, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 4, Char: 3
-
-Token type: REGISTER
-Value: r4
-Position: Line: 5, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 5, Char: 3
-
-Token type: REGISTER
-Value: r5
-Position: Line: 6, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 6, Char: 3
-
-Token type: REGISTER
-Value: r6
-Position: Line: 7, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 7, Char: 3
-
-Token type: REGISTER
-Value: r7
-Position: Line: 8, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 8, Char: 3
-
-Token type: REGISTER
-Value: r8
-Position: Line: 9, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 9, Char: 3
-
-Token type: REGISTER
-Value: r9
-Position: Line: 10, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 10, Char: 3
-
-Token type: REGISTER
-Value: r10
-Position: Line: 11, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 11, Char: 4
-
-Token type: REGISTER
-Value: r11
-Position: Line: 12, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 12, Char: 4
-
-Token type: REGISTER
-Value: r12
-Position: Line: 13, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 13, Char: 4
-
-Token type: REGISTER
-Value: r13
-Position: Line: 14, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 14, Char: 4
-
-Token type: REGISTER
-Value: r14
-Position: Line: 15, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 15, Char: 4
-
-Token type: REGISTER
-Value: r15
-Position: Line: 16, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 16, Char: 4
-
-Token type: REGISTER
-Value: r16
-Position: Line: 17, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 17, Char: 4
-
-Token type: REGISTER
-Value: r17
-Position: Line: 18, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 18, Char: 4
-
-Token type: REGISTER
-Value: r18
-Position: Line: 19, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 19, Char: 4
-
-Token type: REGISTER
-Value: r19
-Position: Line: 20, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 20, Char: 4
-
-Token type: REGISTER
-Value: r20
-Position: Line: 21, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 21, Char: 4
-
-Token type: REGISTER
-Value: r21
-Position: Line: 22, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 22, Char: 4
-
-Token type: REGISTER
-Value: r22
-Position: Line: 23, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 23, Char: 4
-
-Token type: REGISTER
-Value: r23
-Position: Line: 24, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 24, Char: 4
-
-Token type: REGISTER
-Value: r24
-Position: Line: 25, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 25, Char: 4
-
-Token type: REGISTER
-Value: r25
-Position: Line: 26, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 26, Char: 4
-
-Token type: REGISTER
-Value: r26
-Position: Line: 27, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 27, Char: 4
-
-Token type: REGISTER
-Value: r27
-Position: Line: 28, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 28, Char: 4
-
-Token type: REGISTER
-Value: sp
-Position: Line: 29, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 29, Char: 3
-
-Token type: REGISTER
-Value: sb
-Position: Line: 30, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 30, Char: 3
-
-Token type: REGISTER
-Value: fp
-Position: Line: 31, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 31, Char: 3
-
-Token type: REGISTER
-Value: pc
-Position: Line: 32, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 32, Char: 3
-
-Token type: IDENTIFIER
-Value: r28
-Position: Line: 33, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 33, Char: 4
-
-Token type: IDENTIFIER
-Value: r29
-Position: Line: 34, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 34, Char: 4
-
-Token type: IDENTIFIER
-Value: r30
-Position: Line: 35, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 35, Char: 4
-
-Token type: IDENTIFIER
-Value: r31
-Position: Line: 36, Char: 1
-
+{
+	[
+		{
+			"token_type": "REGISTER",
+			"value": "r0",
+			"position": "Line: 1, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 1, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r1",
+			"position": "Line: 2, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 2, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r2",
+			"position": "Line: 3, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 3, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r3",
+			"position": "Line: 4, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 4, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r4",
+			"position": "Line: 5, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 5, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r5",
+			"position": "Line: 6, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 6, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r6",
+			"position": "Line: 7, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 7, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r7",
+			"position": "Line: 8, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 8, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r8",
+			"position": "Line: 9, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 9, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r9",
+			"position": "Line: 10, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 10, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r10",
+			"position": "Line: 11, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 11, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r11",
+			"position": "Line: 12, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 12, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r12",
+			"position": "Line: 13, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 13, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r13",
+			"position": "Line: 14, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 14, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r14",
+			"position": "Line: 15, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 15, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r15",
+			"position": "Line: 16, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 16, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r16",
+			"position": "Line: 17, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 17, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r17",
+			"position": "Line: 18, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 18, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r18",
+			"position": "Line: 19, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 19, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r19",
+			"position": "Line: 20, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 20, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r20",
+			"position": "Line: 21, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 21, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r21",
+			"position": "Line: 22, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 22, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r22",
+			"position": "Line: 23, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 23, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r23",
+			"position": "Line: 24, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 24, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r24",
+			"position": "Line: 25, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 25, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r25",
+			"position": "Line: 26, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 26, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r26",
+			"position": "Line: 27, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 27, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "r27",
+			"position": "Line: 28, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 28, Char: 4"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "sp",
+			"position": "Line: 29, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 29, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "sb",
+			"position": "Line: 30, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 30, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "fp",
+			"position": "Line: 31, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 31, Char: 3"
+		},
+		{
+			"token_type": "REGISTER",
+			"value": "pc",
+			"position": "Line: 32, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 32, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "r28",
+			"position": "Line: 33, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 33, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "r29",
+			"position": "Line: 34, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 34, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "r30",
+			"position": "Line: 35, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 35, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "r31",
+			"position": "Line: 36, Char: 1"
+		}
+	]
+}

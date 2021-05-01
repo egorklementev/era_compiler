@@ -456,6 +456,11 @@
             </summary>
             <returns>Size in bytes</returns>
         </member>
+        <member name="T:ERACompiler.Utilities.Config">
+            <summary>
+            Used to configurate the program.
+            </summary>
+        </member>
         <member name="T:NativeMethods">
             <summary>
             Used for console allocation.

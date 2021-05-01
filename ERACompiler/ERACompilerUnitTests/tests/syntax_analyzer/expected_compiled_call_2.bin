@@ -16,81 +16,272 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "funccall",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "funccall",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "funccall",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "funccall",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "funccall",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "funccall",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Call ;",
 																	"token": "funccall",
 																	"children": [
 																		{
-																			"node_type": "Call ;",
+																			"node_type": "Call",
 																			"token": "funccall",
 																			"children": [
 																				{
-																					"node_type": "Call",
+																					"node_type": "IDENTIFIER",
 																					"token": "funccall",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Call arguments",
+																					"token": "(",
 																					"children": [
 																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "funccall",
+																							"node_type": "DELIMITER",
+																							"token": "(",
 																							"children": []
 																						},
 																						{
-																							"node_type": "Call arguments",
-																							"token": "(",
+																							"node_type": "[ Expression { , Expression } ]",
+																							"token": "arg1",
 																							"children": [
 																								{
-																									"node_type": "DELIMITER",
-																									"token": "(",
-																									"children": []
-																								},
-																								{
-																									"node_type": "[ Expression { , Expression } ]",
+																									"node_type": "Expression",
 																									"token": "arg1",
 																									"children": [
 																										{
-																											"node_type": "Expression",
+																											"node_type": "Operand",
 																											"token": "arg1",
 																											"children": [
 																												{
-																													"node_type": "Operand",
+																													"node_type": "Primary",
 																													"token": "arg1",
 																													"children": [
 																														{
-																															"node_type": "Primary",
+																															"node_type": "IDENTIFIER",
 																															"token": "arg1",
+																															"children": []
+																														},
+																														{
+																															"node_type": "{ '.' Identifier }",
+																															"token": ",",
+																															"children": []
+																														},
+																														{
+																															"node_type": "[ ArrayAccess | CallArgs ]",
+																															"token": ",",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": ",",
+																											"children": []
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ , Expression }",
+																									"token": ",",
+																									"children": [
+																										{
+																											"node_type": "DELIMITER",
+																											"token": ",",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Expression",
+																											"token": "<-",
+																											"children": [
+																												{
+																													"node_type": "Operand",
+																													"token": "<-",
+																													"children": [
+																														{
+																															"node_type": "Reference",
+																															"token": "<-",
+																															"children": [
+																																{
+																																	"node_type": "OPERATOR",
+																																	"token": "<-",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "Primary",
+																																	"token": "arg2",
+																																	"children": [
+																																		{
+																																			"node_type": "IDENTIFIER",
+																																			"token": "arg2",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "{ '.' Identifier }",
+																																			"token": ",",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "[ ArrayAccess | CallArgs ]",
+																																			"token": ",",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												},
+																												{
+																													"node_type": "{ Operator Operand }",
+																													"token": ",",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "DELIMITER",
+																											"token": ",",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Expression",
+																											"token": "arg3",
+																											"children": [
+																												{
+																													"node_type": "Operand",
+																													"token": "arg3",
+																													"children": [
+																														{
+																															"node_type": "Primary",
+																															"token": "arg3",
 																															"children": [
 																																{
 																																	"node_type": "IDENTIFIER",
-																																	"token": "arg1",
+																																	"token": "arg3",
 																																	"children": []
 																																},
 																																{
 																																	"node_type": "{ '.' Identifier }",
-																																	"token": ",",
+																																	"token": "[",
 																																	"children": []
 																																},
 																																{
 																																	"node_type": "[ ArrayAccess | CallArgs ]",
-																																	"token": ",",
+																																	"token": "[",
+																																	"children": [
+																																		{
+																																			"node_type": "ArrayAccess | CallArgs",
+																																			"token": "[",
+																																			"children": [
+																																				{
+																																					"node_type": "'[' Expression ']'",
+																																					"token": "[",
+																																					"children": [
+																																						{
+																																							"node_type": "DELIMITER",
+																																							"token": "[",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "Expression",
+																																							"token": "0",
+																																							"children": [
+																																								{
+																																									"node_type": "Operand",
+																																									"token": "0",
+																																									"children": [
+																																										{
+																																											"node_type": "NUMBER",
+																																											"token": "0",
+																																											"children": [
+																																												{
+																																													"node_type": "[ - ]",
+																																													"token": "0",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "NUMBER",
+																																													"token": "0",
+																																													"children": []
+																																												}
+																																											]
+																																										}
+																																									]
+																																								},
+																																								{
+																																									"node_type": "{ Operator Operand }",
+																																									"token": "]",
+																																									"children": []
+																																								}
+																																							]
+																																						},
+																																						{
+																																							"node_type": "DELIMITER",
+																																							"token": "]",
+																																							"children": []
+																																						}
+																																					]
+																																				}
+																																			]
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												},
+																												{
+																													"node_type": "{ Operator Operand }",
+																													"token": ",",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "DELIMITER",
+																											"token": ",",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Expression",
+																											"token": "4",
+																											"children": [
+																												{
+																													"node_type": "Operand",
+																													"token": "4",
+																													"children": [
+																														{
+																															"node_type": "NUMBER",
+																															"token": "4",
+																															"children": [
+																																{
+																																	"node_type": "[ - ]",
+																																	"token": "4",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "NUMBER",
+																																	"token": "4",
 																																	"children": []
 																																}
 																															]
@@ -105,292 +296,95 @@
 																											]
 																										},
 																										{
-																											"node_type": "{ , Expression }",
+																											"node_type": "DELIMITER",
 																											"token": ",",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Expression",
+																											"token": "r5",
 																											"children": [
 																												{
-																													"node_type": "DELIMITER",
-																													"token": ",",
-																													"children": []
-																												},
-																												{
-																													"node_type": "Expression",
-																													"token": "<-",
-																													"children": [
-																														{
-																															"node_type": "Operand",
-																															"token": "<-",
-																															"children": [
-																																{
-																																	"node_type": "Reference",
-																																	"token": "<-",
-																																	"children": [
-																																		{
-																																			"node_type": "OPERATOR",
-																																			"token": "<-",
-																																			"children": []
-																																		},
-																																		{
-																																			"node_type": "Primary",
-																																			"token": "arg2",
-																																			"children": [
-																																				{
-																																					"node_type": "IDENTIFIER",
-																																					"token": "arg2",
-																																					"children": []
-																																				},
-																																				{
-																																					"node_type": "{ '.' Identifier }",
-																																					"token": ",",
-																																					"children": []
-																																				},
-																																				{
-																																					"node_type": "[ ArrayAccess | CallArgs ]",
-																																					"token": ",",
-																																					"children": []
-																																				}
-																																			]
-																																		}
-																																	]
-																																}
-																															]
-																														},
-																														{
-																															"node_type": "{ Operator Operand }",
-																															"token": ",",
-																															"children": []
-																														}
-																													]
-																												},
-																												{
-																													"node_type": "DELIMITER",
-																													"token": ",",
-																													"children": []
-																												},
-																												{
-																													"node_type": "Expression",
-																													"token": "arg3",
-																													"children": [
-																														{
-																															"node_type": "Operand",
-																															"token": "arg3",
-																															"children": [
-																																{
-																																	"node_type": "Primary",
-																																	"token": "arg3",
-																																	"children": [
-																																		{
-																																			"node_type": "IDENTIFIER",
-																																			"token": "arg3",
-																																			"children": []
-																																		},
-																																		{
-																																			"node_type": "{ '.' Identifier }",
-																																			"token": "[",
-																																			"children": []
-																																		},
-																																		{
-																																			"node_type": "[ ArrayAccess | CallArgs ]",
-																																			"token": "[",
-																																			"children": [
-																																				{
-																																					"node_type": "ArrayAccess | CallArgs",
-																																					"token": "[",
-																																					"children": [
-																																						{
-																																							"node_type": "'[' Expression ']'",
-																																							"token": "[",
-																																							"children": [
-																																								{
-																																									"node_type": "DELIMITER",
-																																									"token": "[",
-																																									"children": []
-																																								},
-																																								{
-																																									"node_type": "Expression",
-																																									"token": "0",
-																																									"children": [
-																																										{
-																																											"node_type": "Operand",
-																																											"token": "0",
-																																											"children": [
-																																												{
-																																													"node_type": "NUMBER",
-																																													"token": "0",
-																																													"children": [
-																																														{
-																																															"node_type": "[ - ]",
-																																															"token": "0",
-																																															"children": []
-																																														},
-																																														{
-																																															"node_type": "NUMBER",
-																																															"token": "0",
-																																															"children": []
-																																														}
-																																													]
-																																												}
-																																											]
-																																										},
-																																										{
-																																											"node_type": "{ Operator Operand }",
-																																											"token": "]",
-																																											"children": []
-																																										}
-																																									]
-																																								},
-																																								{
-																																									"node_type": "DELIMITER",
-																																									"token": "]",
-																																									"children": []
-																																								}
-																																							]
-																																						}
-																																					]
-																																				}
-																																			]
-																																		}
-																																	]
-																																}
-																															]
-																														},
-																														{
-																															"node_type": "{ Operator Operand }",
-																															"token": ",",
-																															"children": []
-																														}
-																													]
-																												},
-																												{
-																													"node_type": "DELIMITER",
-																													"token": ",",
-																													"children": []
-																												},
-																												{
-																													"node_type": "Expression",
-																													"token": "4",
-																													"children": [
-																														{
-																															"node_type": "Operand",
-																															"token": "4",
-																															"children": [
-																																{
-																																	"node_type": "NUMBER",
-																																	"token": "4",
-																																	"children": [
-																																		{
-																																			"node_type": "[ - ]",
-																																			"token": "4",
-																																			"children": []
-																																		},
-																																		{
-																																			"node_type": "NUMBER",
-																																			"token": "4",
-																																			"children": []
-																																		}
-																																	]
-																																}
-																															]
-																														},
-																														{
-																															"node_type": "{ Operator Operand }",
-																															"token": ",",
-																															"children": []
-																														}
-																													]
-																												},
-																												{
-																													"node_type": "DELIMITER",
-																													"token": ",",
-																													"children": []
-																												},
-																												{
-																													"node_type": "Expression",
+																													"node_type": "Operand",
 																													"token": "r5",
 																													"children": [
 																														{
-																															"node_type": "Operand",
+																															"node_type": "REGISTER",
 																															"token": "r5",
+																															"children": []
+																														}
+																													]
+																												},
+																												{
+																													"node_type": "{ Operator Operand }",
+																													"token": ",",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "DELIMITER",
+																											"token": ",",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Expression",
+																											"token": "6",
+																											"children": [
+																												{
+																													"node_type": "Operand",
+																													"token": "6",
+																													"children": [
+																														{
+																															"node_type": "NUMBER",
+																															"token": "6",
 																															"children": [
 																																{
-																																	"node_type": "REGISTER",
-																																	"token": "r5",
+																																	"node_type": "[ - ]",
+																																	"token": "6",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "NUMBER",
+																																	"token": "6",
+																																	"children": []
+																																}
+																															]
+																														}
+																													]
+																												},
+																												{
+																													"node_type": "{ Operator Operand }",
+																													"token": "+",
+																													"children": [
+																														{
+																															"node_type": "Operator",
+																															"token": "+",
+																															"children": [
+																																{
+																																	"node_type": "OPERATOR",
+																																	"token": "+",
 																																	"children": []
 																																}
 																															]
 																														},
 																														{
-																															"node_type": "{ Operator Operand }",
-																															"token": ",",
-																															"children": []
-																														}
-																													]
-																												},
-																												{
-																													"node_type": "DELIMITER",
-																													"token": ",",
-																													"children": []
-																												},
-																												{
-																													"node_type": "Expression",
-																													"token": "6",
-																													"children": [
-																														{
 																															"node_type": "Operand",
-																															"token": "6",
+																															"token": "7",
 																															"children": [
 																																{
 																																	"node_type": "NUMBER",
-																																	"token": "6",
+																																	"token": "7",
 																																	"children": [
 																																		{
 																																			"node_type": "[ - ]",
-																																			"token": "6",
+																																			"token": "7",
 																																			"children": []
 																																		},
 																																		{
 																																			"node_type": "NUMBER",
-																																			"token": "6",
-																																			"children": []
-																																		}
-																																	]
-																																}
-																															]
-																														},
-																														{
-																															"node_type": "{ Operator Operand }",
-																															"token": "+",
-																															"children": [
-																																{
-																																	"node_type": "Operator",
-																																	"token": "+",
-																																	"children": [
-																																		{
-																																			"node_type": "OPERATOR",
-																																			"token": "+",
-																																			"children": []
-																																		}
-																																	]
-																																},
-																																{
-																																	"node_type": "Operand",
-																																	"token": "7",
-																																	"children": [
-																																		{
-																																			"node_type": "NUMBER",
 																																			"token": "7",
-																																			"children": [
-																																				{
-																																					"node_type": "[ - ]",
-																																					"token": "7",
-																																					"children": []
-																																				},
-																																				{
-																																					"node_type": "NUMBER",
-																																					"token": "7",
-																																					"children": []
-																																				}
-																																			]
+																																			"children": []
 																																		}
 																																	]
 																																}
@@ -401,22 +395,22 @@
 																											]
 																										}
 																									]
-																								},
-																								{
-																									"node_type": "DELIMITER",
-																									"token": ")",
-																									"children": []
 																								}
 																							]
+																						},
+																						{
+																							"node_type": "DELIMITER",
+																							"token": ")",
+																							"children": []
 																						}
 																					]
-																				},
-																				{
-																					"node_type": "DELIMITER",
-																					"token": ";",
-																					"children": []
 																				}
 																			]
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
 																		}
 																	]
 																}
