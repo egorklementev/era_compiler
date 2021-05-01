@@ -1,0 +1,4 @@
+code
+	int a := 15;
+	print a * a * (a + a);
+end

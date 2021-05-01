@@ -1,64 +1,84 @@
-Token type: DELIMITER
-Value: :
-Position: Line: 1, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 1, Char: 2
-
-Token type: DELIMITER
-Value: ;
-Position: Line: 2, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 2, Char: 2
-
-Token type: DELIMITER
-Value: .
-Position: Line: 3, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 3, Char: 2
-
-Token type: DELIMITER
-Value: ,
-Position: Line: 4, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 4, Char: 2
-
-Token type: DELIMITER
-Value: ]
-Position: Line: 5, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 5, Char: 2
-
-Token type: DELIMITER
-Value: [
-Position: Line: 6, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 6, Char: 2
-
-Token type: DELIMITER
-Value: )
-Position: Line: 7, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 7, Char: 2
-
-Token type: DELIMITER
-Value: (
-Position: Line: 8, Char: 1
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 8, Char: 2
-
+{
+	[
+		{
+			"token_type": "DELIMITER",
+			"value": ":",
+			"position": "Line: 1, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 1, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": ";",
+			"position": "Line: 2, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 2, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": ".",
+			"position": "Line: 3, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 3, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": ",",
+			"position": "Line: 4, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 4, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": "]",
+			"position": "Line: 5, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 5, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": "[",
+			"position": "Line: 6, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 6, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": ")",
+			"position": "Line: 7, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 7, Char: 2"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": "(",
+			"position": "Line: 8, Char: 1"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 8, Char: 2"
+		}
+	]
+}

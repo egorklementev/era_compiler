@@ -3,8 +3,11 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ERACompiler.Modules;
 using ERACompiler.Utilities.Errors;
+using ERACompiler.Utilities;
 
 /// <summary>
 /// Used for console allocation.
@@ -23,18 +26,20 @@ namespace ERACompiler
     /// <summary>
     /// The entrance point of the compiler.
     /// </summary>
-    class Program
+    public class Program
     {
         private static List<string> sourceFilenames; // File/Files to be compiled
         private static List<string> outputFilenames; // File/Files for compiled code
         private static Compiler.CompilationMode cmode = Compiler.CompilationMode.GENERATION;
+        private static bool ignoreConfigFile = false;
         private static bool forceFolderCreation = false;
+        private static bool extendedErrorMessages = false; // For syntax errors better display
+        private static bool extendedSemanticMessages = false; // For more detailed semantic messages
+        private static bool convertToAssemblyCode = false; // To get assembly code instead of binary code
+        private static string currentPref = null;
 
         public static string currentFile = "none";
-        public static string currentPref = null;
-        public static bool extendedErrorMessages = false; // For syntax errors better display
-        public static bool extendedSemanticMessages = false; // For more detailed semantic messages
-        public static bool convertToAssemblyCode = false; // To get assembly code instead of binary code
+        public static Config config;
 
         static void Main(string[] args)
         {
@@ -59,6 +64,35 @@ namespace ERACompiler
             {
                 NativeMethods.FreeConsole();
                 return;
+            }
+
+            if (File.Exists("compiler.config"))
+            {
+                if (ignoreConfigFile)
+                {
+                    config = new Config
+                    {
+                        ConvertToAsmCode = convertToAssemblyCode,
+                        ExtendedErrorMessages = extendedErrorMessages,
+                        ExtendedSemanticMessages = extendedSemanticMessages
+                    };
+                }
+                else
+                {
+                    string configJson = File.ReadAllText("compiler.config");
+                    config = JsonSerializer.Deserialize<Config>(configJson);
+                }
+            }
+            else
+            {
+                config = new Config
+                {
+                    ConvertToAsmCode = convertToAssemblyCode,
+                    ExtendedErrorMessages = extendedErrorMessages,
+                    ExtendedSemanticMessages = extendedSemanticMessages
+                };
+                string configJson = JsonSerializer.Serialize(config, new JsonSerializerOptions() { WriteIndented = true });
+                File.WriteAllText("compiler.config", configJson);
             }
 
             for (int i = 0; i < sourceFilenames.Count; i++)
@@ -104,7 +138,7 @@ namespace ERACompiler
 
                         outputFilenames.Add(defaultFilename);
                     }
-
+                    
                     if (outputFilenames[i].Contains("/") || outputFilenames[i].Contains("\\"))
                     {
                         // Check if directory exists
@@ -238,9 +272,11 @@ namespace ERACompiler
                                     "  '--asm'  :  full compilation with the assembly code output\r\n" +
                                     "  '--err'  :  displays more detailed error messages\r\n" +
                                     "  '--prefix'  :  custom name prefix for output binary file/files\r\n" +
+                                    "  '--ignconf'  :  ignore config file and only rely on command-line arguments\r\n" +
                                     "  '-h'  :  show manual\r\n" +
                                     "  Default source code file is 'code.era'.\r\n" +
-                                    "  Default output file is 'compiled_' + source code file name\r\n"
+                                    "  Default output file is 'compiled_' + source code file name\r\n" +
+                                    "  Default configuration file is 'compiler.config'\r\n"
                                     );
                                 break;
                             }
@@ -263,6 +299,11 @@ namespace ERACompiler
                             {
                                 cmode = Compiler.CompilationMode.SEMANTICS;
                                 extendedSemanticMessages = true;
+                                break;
+                            }
+                        case "--ignconf":
+                            {
+                                ignoreConfigFile = true;
                                 break;
                             }
                         case "--asm":

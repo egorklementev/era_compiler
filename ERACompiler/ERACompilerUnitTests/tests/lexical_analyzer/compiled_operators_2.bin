@@ -1,260 +1,329 @@
-Token type: IDENTIFIER
-Value: _
-Position: Line: 1, Char: 1
-
-Token type: OPERATOR
-Value: +
-Position: Line: 1, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 1, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 2, Char: 1
-
-Token type: OPERATOR
-Value: -
-Position: Line: 2, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 2, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 3, Char: 1
-
-Token type: OPERATOR
-Value: *
-Position: Line: 3, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 3, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 4, Char: 1
-
-Token type: OPERATOR
-Value: &
-Position: Line: 4, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 4, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 5, Char: 1
-
-Token type: OPERATOR
-Value: |
-Position: Line: 5, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 5, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 6, Char: 1
-
-Token type: OPERATOR
-Value: ^
-Position: Line: 6, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 6, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 7, Char: 1
-
-Token type: OPERATOR
-Value: =
-Position: Line: 7, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 7, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 8, Char: 1
-
-Token type: OPERATOR
-Value: <
-Position: Line: 8, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 8, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 9, Char: 1
-
-Token type: OPERATOR
-Value: >
-Position: Line: 9, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 9, Char: 3
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 10, Char: 1
-
-Token type: OPERATOR
-Value: /=
-Position: Line: 10, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 10, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 11, Char: 1
-
-Token type: OPERATOR
-Value: :=
-Position: Line: 11, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 11, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 12, Char: 1
-
-Token type: OPERATOR
-Value: +=
-Position: Line: 12, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 12, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 13, Char: 1
-
-Token type: OPERATOR
-Value: -=
-Position: Line: 13, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 13, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 14, Char: 1
-
-Token type: OPERATOR
-Value: >>=
-Position: Line: 14, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 14, Char: 5
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 15, Char: 1
-
-Token type: OPERATOR
-Value: <<=
-Position: Line: 15, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 15, Char: 5
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 16, Char: 1
-
-Token type: OPERATOR
-Value: |=
-Position: Line: 16, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 16, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 17, Char: 1
-
-Token type: OPERATOR
-Value: &=
-Position: Line: 17, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 17, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 18, Char: 1
-
-Token type: OPERATOR
-Value: ^=
-Position: Line: 18, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 18, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 19, Char: 1
-
-Token type: OPERATOR
-Value: <=
-Position: Line: 19, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 19, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 20, Char: 1
-
-Token type: OPERATOR
-Value: >=
-Position: Line: 20, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 20, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 21, Char: 1
-
-Token type: OPERATOR
-Value: ?=
-Position: Line: 21, Char: 2
-
-Token type: WHITESPACE
-Value: \r\n
-Position: Line: 21, Char: 4
-
-Token type: IDENTIFIER
-Value: _
-Position: Line: 22, Char: 1
-
-Token type: OPERATOR
-Value: <=>
-Position: Line: 22, Char: 2
-
+{
+	[
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 1, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "+",
+			"position": "Line: 1, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 1, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 2, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "-",
+			"position": "Line: 2, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 2, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 3, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "*",
+			"position": "Line: 3, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 3, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 4, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "&",
+			"position": "Line: 4, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 4, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 5, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "|",
+			"position": "Line: 5, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 5, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 6, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "^",
+			"position": "Line: 6, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 6, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 7, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "=",
+			"position": "Line: 7, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 7, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 8, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "<",
+			"position": "Line: 8, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 8, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 9, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": ">",
+			"position": "Line: 9, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 9, Char: 3"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 10, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "/=",
+			"position": "Line: 10, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 10, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 11, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": ":=",
+			"position": "Line: 11, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 11, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 12, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "+=",
+			"position": "Line: 12, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 12, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 13, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "-=",
+			"position": "Line: 13, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 13, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 14, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": ">>=",
+			"position": "Line: 14, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 14, Char: 5"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 15, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "<<=",
+			"position": "Line: 15, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 15, Char: 5"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 16, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "|=",
+			"position": "Line: 16, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 16, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 17, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "&=",
+			"position": "Line: 17, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 17, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 18, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "^=",
+			"position": "Line: 18, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 18, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 19, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "<=",
+			"position": "Line: 19, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 19, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 20, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": ">=",
+			"position": "Line: 20, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 20, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 21, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "?=",
+			"position": "Line: 21, Char: 2"
+		},
+		{
+			"token_type": "WHITESPACE",
+			"value": "\r\n",
+			"position": "Line: 21, Char: 4"
+		},
+		{
+			"token_type": "IDENTIFIER",
+			"value": "_",
+			"position": "Line: 22, Char: 1"
+		},
+		{
+			"token_type": "OPERATOR",
+			"value": "<=>",
+			"position": "Line: 22, Char: 2"
+		}
+	]
+}

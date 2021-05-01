@@ -38,6 +38,7 @@ namespace ERACompiler.Modules
             Token tLoop = new Token(TokenType.KEYWORD, "loop", new TokenPosition(0, 0));
             Token tModule = new Token(TokenType.KEYWORD, "module", new TokenPosition(0, 0));
             Token tPragma = new Token(TokenType.KEYWORD, "pragma", new TokenPosition(0, 0));
+            Token tPrint = new Token(TokenType.KEYWORD, "print", new TokenPosition(0, 0));
             Token tReturn = new Token(TokenType.KEYWORD, "return", new TokenPosition(0, 0));
             Token tRoutine = new Token(TokenType.KEYWORD, "routine", new TokenPosition(0, 0));
             Token tShort = new Token(TokenType.KEYWORD, "short", new TokenPosition(0, 0));
@@ -112,6 +113,7 @@ namespace ERACompiler.Modules
             RuleTerminal kLoopRule = new RuleTerminal(tLoop);
             RuleTerminal kModuleRule = new RuleTerminal(tModule);
             RuleTerminal kPragmaRule = new RuleTerminal(tPragma);
+            RuleTerminal kPrintRule = new RuleTerminal(tPrint);
             RuleTerminal kReturnRule = new RuleTerminal(tReturn);
             RuleTerminal kRoutineRule = new RuleTerminal(tRoutine);
             RuleTerminal kShortRule = new RuleTerminal(tShort);
@@ -738,6 +740,13 @@ namespace ERACompiler.Modules
                     .AddRule(semicolonRule)
                 );
 
+            SyntaxRule printRule = new SyntaxRule()
+                .SetName("Print")
+                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
+                .AddRule(kPrintRule)
+                .AddRule(expressionRule)
+                .AddRule(semicolonRule);
+
             SyntaxRule extensionStatementRule = new SyntaxRule()
                 .SetName("Extension statement")
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
@@ -755,7 +764,8 @@ namespace ERACompiler.Modules
                 .AddRule(breakRule)
                 .AddRule(gotoRule)
                 .AddRule(returnRule)
-                .AddRule(varDeclarationRule);
+                .AddRule(varDeclarationRule)
+                .AddRule(printRule);
 
             SyntaxRule labelRule = new SyntaxRule()
                 .SetName("Label")
@@ -917,15 +927,9 @@ namespace ERACompiler.Modules
                 .AddRule(kCodeRule)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("{ VarDeclaration | Statement }")
+                    .SetName("{ Statement }")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_MORE)
-                    .AddRule(
-                        new SyntaxRule()
-                        .SetName("VarDeclaration | Statement")
-                        .SetType(SyntaxRule.SyntaxRuleType.OR)
-                        .AddRule(varDeclarationRule)
-                        .AddRule(statementRule)
-                        )
+                    .AddRule(statementRule)
                 )
                 .AddRule(kEndRule);
 

@@ -16,50 +16,44 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "goto",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "goto",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "goto",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "goto",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "goto",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "goto",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Goto",
 																	"token": "goto",
 																	"children": [
 																		{
-																			"node_type": "Goto",
+																			"node_type": "KEYWORD",
 																			"token": "goto",
-																			"children": [
-																				{
-																					"node_type": "KEYWORD",
-																					"token": "goto",
-																					"children": []
-																				},
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "some_label_1",
-																					"children": []
-																				},
-																				{
-																					"node_type": "DELIMITER",
-																					"token": ";",
-																					"children": []
-																				}
-																			]
+																			"children": []
+																		},
+																		{
+																			"node_type": "IDENTIFIER",
+																			"token": "some_label_1",
+																			"children": []
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
 																		}
 																	]
 																}

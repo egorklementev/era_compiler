@@ -1,5 +1,6 @@
 using System.IO;
 using ERACompiler.Modules;
+using ERACompiler.Utilities.Errors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ERACompilerUnitTests
@@ -151,6 +152,15 @@ namespace ERACompilerUnitTests
             {
                 Assert.AreEqual(expectedCode[i], actualCode[i]);
             }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LexicalErrorException), "Lexical error occured.")]
+        public void EmptyFileErrorTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText("../../../tests/lexical_analyzer/lexical_error_1.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.LEXIS);
         }
     }
 }

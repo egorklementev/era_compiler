@@ -81,15 +81,15 @@ namespace ERACompiler.Structures
             sb.Append(tabs_lvl1)
                 .Append("\"node_type\": ").Append("\"" + ASTType.ToString() + "\"").Append(",\r\n");
             
-            if (AASTType.Type != VarType.ERAType.NO_TYPE || Program.extendedSemanticMessages)
+            if (AASTType.Type != VarType.ERAType.NO_TYPE || Program.config.ExtendedSemanticMessages)
                 sb.Append(tabs_lvl1)
                     .Append("\"var_type\": ").Append("\"" + AASTType.ToString() + "\"").Append(",\r\n");
             
-            if (AASTValue != 0 || Program.extendedSemanticMessages)
+            if (AASTValue != 0 || Program.config.ExtendedSemanticMessages)
                 sb.Append(tabs_lvl1)
                     .Append("\"var_value\": ").Append("\"" + AASTValue.ToString() + "\"").Append(",\r\n");
             
-            if (BlockPosition != 0 || Program.extendedSemanticMessages)
+            if (BlockPosition != 0 || Program.config.ExtendedSemanticMessages)
                 sb.Append(tabs_lvl1)
                     .Append("\"block_position\": ").Append("\"" + BlockPosition.ToString() + "\"").Append(",\r\n");
 

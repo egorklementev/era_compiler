@@ -1,5 +1,8 @@
 ﻿using System.IO;
+using ERACompiler;
 using ERACompiler.Modules;
+using ERACompiler.Utilities;
+using ERACompiler.Utilities.Errors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ERACompilerUnitTests
@@ -8,6 +11,18 @@ namespace ERACompilerUnitTests
     public class SyntaxAnalyzerUnitTests
     {
         private readonly string pathPrefix = "../../../tests/syntax_analyzer/";
+
+
+        [TestInitialize]
+        public void InitTests()
+        {
+            Program.config = new Config
+            {
+                ConvertToAsmCode = false,
+                ExtendedErrorMessages = false,
+                ExtendedSemanticMessages = false
+            };
+        }
 
         [TestMethod]
         public void LabelRuleTests()
@@ -49,6 +64,12 @@ namespace ERACompilerUnitTests
         public void PragmaRuleTests()
         {
             CompileFiles("pragma");
+        }
+
+        [TestMethod]
+        public void PrintRuleTests()
+        {
+            CompileFiles("print");
         }
 
         [TestMethod]
@@ -117,10 +138,19 @@ namespace ERACompilerUnitTests
             CompileFiles("complex");
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(SyntaxErrorException), "Syntax error occured.")]
+        public void MissingSemicolonTest()
+        {
+            Compiler c = new Compiler();
+            string sourceCode = File.ReadAllText(pathPrefix + "syntax_error_1.era");
+            c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
+        }
+
         private void CompileFiles(string test_name)
         {
             int i = 1;
-            while (File.Exists("tests/syntax_analyzer/" + test_name + "_" + i + ".era"))
+            while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
                 string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");

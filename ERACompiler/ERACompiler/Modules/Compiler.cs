@@ -42,8 +42,11 @@ namespace ERACompiler.Modules
                     {
                         List<Token> lst = lexis.GetTokenList(sourceCode);
                         StringBuilder sb = new StringBuilder();
+                        sb.Append("{\r\n\t[\r\n");
                         foreach (Token t in lst)
-                            sb.Append(t.ToString()).Append("\r\n");
+                            sb.Append(t.ToString()).Append(",\r\n");
+                        sb.Remove(sb.ToString().LastIndexOf(','), 1);
+                        sb.Append("\t]\r\n}");
                         return Encoding.ASCII.GetBytes(sb.ToString());
                     }
 

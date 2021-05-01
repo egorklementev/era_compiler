@@ -62,15 +62,14 @@ namespace ERACompiler.Structures
                 finalValue = "\" \"";
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("Token type: ")
+            sb
+                .Append("\t\t{\r\n\t\t\t\"token_type\": \"")
                 .Append(Type.ToString())
-                .Append("\n")
-                .Append("Value: ")
+                .Append("\",\r\n\t\t\t\"value\": \"")
                 .Append(finalValue)
-                .Append("\n")
-                .Append("Position: ")
+                .Append("\",\r\n\t\t\t\"position\": \"")
                 .Append(Position.ToString())
-                .Append("\n");
+                .Append("\"\r\n\t\t}");
             return sb.ToString();
         }
 

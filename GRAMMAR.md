@@ -5,7 +5,7 @@
 * **Annotations** : `pragma` PragmaDeclaration { PragmaDeclaration } `end`
 * **Data** : `data` Identifier Literal { Literal } `end`
 * **Module** : `module` Identifier { VarDeclaration | Routine | Structure } `end`
-* **Code** : `code` { VarDeclaration | Statement } `end`
+* **Code** : `code` { Statement } `end`
 * **Structure** : `struct` Identifier { VarDeclaration } `end`
 ---
 * **PragmaDeclaration** : Identifier `(` [ `"` Text `"` ] `)`
@@ -61,6 +61,7 @@
 * **Return** : `return` [ ( Expression | Call ) ] `;`
 * **Assignment** : Receiver `:=` Expression `;`
 * **Swap** : Reveiver `<=>` Receiver `;`
+* **Print** : `print` Expression `;`
 ---
 * **If** : `if` Expression `do` BlockBody ( `end` | `else` BlockBody `end` )
 * **Call** : Identifier CallArgs

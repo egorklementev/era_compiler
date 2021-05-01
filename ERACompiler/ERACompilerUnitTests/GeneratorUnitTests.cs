@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using ERACompiler;
 using ERACompiler.Modules;
+using ERACompiler.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ERACompilerUnitTests
@@ -8,6 +10,17 @@ namespace ERACompilerUnitTests
     public class GeneratorUnitTests
     {
         private readonly string pathPrefix = "../../../tests/generator/";
+
+        [TestInitialize]
+        public void InitTests()
+        {
+            Program.config = new Config
+            {
+                ConvertToAsmCode = false,
+                ExtendedErrorMessages = false,
+                ExtendedSemanticMessages = false
+            };
+        }
 
         [TestMethod]
         public void NestedForTest()
@@ -56,13 +69,27 @@ namespace ERACompilerUnitTests
         {
             CompileFiles("expression");
         }
+        
+        [TestMethod]
+        public void RoutineTest()
+        {
+            CompileFiles("routine");
+        }
 
-        private void CompileFiles(string test_name)
+        [TestMethod]
+        public void PrintTest()
+        {
+            CompileFiles("print");
+        }
+
+        private void CompileFiles(string test_name, bool asm = false)
         {
             int i = 1;
             while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
+                if (asm)
+                    Program.config.ConvertToAsmCode = true;
                 string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
                 byte[] expectedCode = File.ReadAllBytes(pathPrefix + "expected_compiled_" + test_name + "_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.GENERATION);

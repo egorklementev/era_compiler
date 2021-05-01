@@ -108,6 +108,7 @@ namespace ERACompiler.Modules
                 case "Identifier | Register":
                 case "VarDeclaration | Statement":
                     return AnnotateNode(node.Children[0], parent);
+                case "Print":
                 case "Reference":
                 case "Dereference":
                 case "Explicit address":
@@ -429,6 +430,27 @@ namespace ERACompiler.Modules
                         "This expression should be constant (refer to the documentation)!!!\r\n" +
                         "  At (Line: " + node.Children[4].Token.Position.Line.ToString() +
                         ", Char: " + node.Children[4].Token.Position.Char.ToString() + ")."
+                        );
+                }
+            }
+            else if (node.ASTType.Equals("Register := Identifier"))
+            {
+                // Check if identifier is label
+                Context ctx = FindParentContext(parent);
+                if (!ctx.IsVarDeclared(node.Children[2].Token))
+                {
+                    throw new SemanticErrorException(
+                        "Label is not declared!!!\r\n" +
+                        "  At (Line: " + node.Children[2].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[2].Token.Position.Char.ToString() + ")."
+                        );
+                }
+                if (!ctx.IsVarLabel(node.Children[2].Token))
+                {
+                    throw new SemanticErrorException(
+                        "Label expected!!!\r\n" +
+                        "  At (Line: " + node.Children[2].Token.Position.Line.ToString() +
+                        ", Char: " + node.Children[2].Token.Position.Char.ToString() + ")."
                         );
                 }
             }

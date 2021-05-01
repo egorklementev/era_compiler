@@ -16,239 +16,155 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "for",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "for",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "for",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "for",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "for",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "for",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Loop",
 																	"token": "for",
 																	"children": [
 																		{
-																			"node_type": "Loop",
+																			"node_type": "For",
 																			"token": "for",
 																			"children": [
 																				{
-																					"node_type": "For",
+																					"node_type": "KEYWORD",
 																					"token": "for",
+																					"children": []
+																				},
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "i",
+																					"children": []
+																				},
+																				{
+																					"node_type": "[ from Expression ]",
+																					"token": "from",
 																					"children": [
 																						{
 																							"node_type": "KEYWORD",
-																							"token": "for",
-																							"children": []
-																						},
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "i",
-																							"children": []
-																						},
-																						{
-																							"node_type": "[ from Expression ]",
 																							"token": "from",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
+																							"token": "0",
 																							"children": [
 																								{
-																									"node_type": "KEYWORD",
-																									"token": "from",
-																									"children": []
-																								},
-																								{
-																									"node_type": "Expression",
+																									"node_type": "Operand",
 																									"token": "0",
 																									"children": [
 																										{
-																											"node_type": "Operand",
+																											"node_type": "NUMBER",
 																											"token": "0",
 																											"children": [
 																												{
+																													"node_type": "[ - ]",
+																													"token": "0",
+																													"children": []
+																												},
+																												{
 																													"node_type": "NUMBER",
 																													"token": "0",
-																													"children": [
-																														{
-																															"node_type": "[ - ]",
-																															"token": "0",
-																															"children": []
-																														},
-																														{
-																															"node_type": "NUMBER",
-																															"token": "0",
-																															"children": []
-																														}
-																													]
+																													"children": []
 																												}
 																											]
-																										},
-																										{
-																											"node_type": "{ Operator Operand }",
-																											"token": "to",
-																											"children": []
 																										}
 																									]
-																								}
-																							]
-																						},
-																						{
-																							"node_type": "[ to Expression ]",
-																							"token": "to",
-																							"children": [
-																								{
-																									"node_type": "KEYWORD",
-																									"token": "to",
-																									"children": []
 																								},
 																								{
-																									"node_type": "Expression",
+																									"node_type": "{ Operator Operand }",
+																									"token": "to",
+																									"children": []
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "[ to Expression ]",
+																					"token": "to",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "to",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
+																							"token": "10",
+																							"children": [
+																								{
+																									"node_type": "Operand",
 																									"token": "10",
 																									"children": [
 																										{
-																											"node_type": "Operand",
+																											"node_type": "NUMBER",
 																											"token": "10",
 																											"children": [
 																												{
+																													"node_type": "[ - ]",
+																													"token": "10",
+																													"children": []
+																												},
+																												{
 																													"node_type": "NUMBER",
 																													"token": "10",
-																													"children": [
-																														{
-																															"node_type": "[ - ]",
-																															"token": "10",
-																															"children": []
-																														},
-																														{
-																															"node_type": "NUMBER",
-																															"token": "10",
-																															"children": []
-																														}
-																													]
+																													"children": []
 																												}
 																											]
-																										},
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ Operator Operand }",
+																									"token": "+",
+																									"children": [
 																										{
-																											"node_type": "{ Operator Operand }",
+																											"node_type": "Operator",
 																											"token": "+",
 																											"children": [
 																												{
-																													"node_type": "Operator",
+																													"node_type": "OPERATOR",
 																													"token": "+",
-																													"children": [
-																														{
-																															"node_type": "OPERATOR",
-																															"token": "+",
-																															"children": []
-																														}
-																													]
-																												},
-																												{
-																													"node_type": "Operand",
-																													"token": "20",
-																													"children": [
-																														{
-																															"node_type": "NUMBER",
-																															"token": "20",
-																															"children": [
-																																{
-																																	"node_type": "[ - ]",
-																																	"token": "20",
-																																	"children": []
-																																},
-																																{
-																																	"node_type": "NUMBER",
-																																	"token": "20",
-																																	"children": []
-																																}
-																															]
-																														}
-																													]
-																												}
-																											]
-																										}
-																									]
-																								}
-																							]
-																						},
-																						{
-																							"node_type": "[ step Expression ]",
-																							"token": "step",
-																							"children": [
-																								{
-																									"node_type": "KEYWORD",
-																									"token": "step",
-																									"children": []
-																								},
-																								{
-																									"node_type": "Expression",
-																									"token": "5",
-																									"children": [
-																										{
-																											"node_type": "Operand",
-																											"token": "5",
-																											"children": [
-																												{
-																													"node_type": "NUMBER",
-																													"token": "5",
-																													"children": [
-																														{
-																															"node_type": "[ - ]",
-																															"token": "5",
-																															"children": []
-																														},
-																														{
-																															"node_type": "NUMBER",
-																															"token": "5",
-																															"children": []
-																														}
-																													]
+																													"children": []
 																												}
 																											]
 																										},
 																										{
-																											"node_type": "{ Operator Operand }",
-																											"token": "-",
+																											"node_type": "Operand",
+																											"token": "20",
 																											"children": [
 																												{
-																													"node_type": "Operator",
-																													"token": "-",
+																													"node_type": "NUMBER",
+																													"token": "20",
 																													"children": [
 																														{
-																															"node_type": "OPERATOR",
-																															"token": "-",
+																															"node_type": "[ - ]",
+																															"token": "20",
 																															"children": []
-																														}
-																													]
-																												},
-																												{
-																													"node_type": "Operand",
-																													"token": "2",
-																													"children": [
+																														},
 																														{
 																															"node_type": "NUMBER",
-																															"token": "2",
-																															"children": [
-																																{
-																																	"node_type": "[ - ]",
-																																	"token": "2",
-																																	"children": []
-																																},
-																																{
-																																	"node_type": "NUMBER",
-																																	"token": "2",
-																																	"children": []
-																																}
-																															]
+																															"token": "20",
+																															"children": []
 																														}
 																													]
 																												}
@@ -257,29 +173,107 @@
 																									]
 																								}
 																							]
-																						},
-																						{
-																							"node_type": "Loop body",
-																							"token": "loop",
-																							"children": [
-																								{
-																									"node_type": "KEYWORD",
-																									"token": "loop",
-																									"children": []
-																								},
-																								{
-																									"node_type": "Block body",
-																									"token": "end",
-																									"children": []
-																								}
-																							]
-																						},
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "[ step Expression ]",
+																					"token": "step",
+																					"children": [
 																						{
 																							"node_type": "KEYWORD",
+																							"token": "step",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
+																							"token": "5",
+																							"children": [
+																								{
+																									"node_type": "Operand",
+																									"token": "5",
+																									"children": [
+																										{
+																											"node_type": "NUMBER",
+																											"token": "5",
+																											"children": [
+																												{
+																													"node_type": "[ - ]",
+																													"token": "5",
+																													"children": []
+																												},
+																												{
+																													"node_type": "NUMBER",
+																													"token": "5",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "{ Operator Operand }",
+																									"token": "-",
+																									"children": [
+																										{
+																											"node_type": "Operator",
+																											"token": "-",
+																											"children": [
+																												{
+																													"node_type": "OPERATOR",
+																													"token": "-",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "Operand",
+																											"token": "2",
+																											"children": [
+																												{
+																													"node_type": "NUMBER",
+																													"token": "2",
+																													"children": [
+																														{
+																															"node_type": "[ - ]",
+																															"token": "2",
+																															"children": []
+																														},
+																														{
+																															"node_type": "NUMBER",
+																															"token": "2",
+																															"children": []
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
+																								}
+																							]
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "Loop body",
+																					"token": "loop",
+																					"children": [
+																						{
+																							"node_type": "KEYWORD",
+																							"token": "loop",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Block body",
 																							"token": "end",
 																							"children": []
 																						}
 																					]
+																				},
+																				{
+																					"node_type": "KEYWORD",
+																					"token": "end",
+																					"children": []
 																				}
 																			]
 																		}

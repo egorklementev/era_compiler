@@ -16,108 +16,102 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "arr",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "arr",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "arr",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "arr",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "arr",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "arr",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Swap",
 																	"token": "arr",
 																	"children": [
 																		{
-																			"node_type": "Swap",
+																			"node_type": "Receiver",
 																			"token": "arr",
 																			"children": [
 																				{
-																					"node_type": "Receiver",
+																					"node_type": "Primary",
 																					"token": "arr",
 																					"children": [
 																						{
-																							"node_type": "Primary",
+																							"node_type": "IDENTIFIER",
 																							"token": "arr",
+																							"children": []
+																						},
+																						{
+																							"node_type": "{ '.' Identifier }",
+																							"token": "[",
+																							"children": []
+																						},
+																						{
+																							"node_type": "[ ArrayAccess | CallArgs ]",
+																							"token": "[",
 																							"children": [
 																								{
-																									"node_type": "IDENTIFIER",
-																									"token": "arr",
-																									"children": []
-																								},
-																								{
-																									"node_type": "{ '.' Identifier }",
-																									"token": "[",
-																									"children": []
-																								},
-																								{
-																									"node_type": "[ ArrayAccess | CallArgs ]",
+																									"node_type": "ArrayAccess | CallArgs",
 																									"token": "[",
 																									"children": [
 																										{
-																											"node_type": "ArrayAccess | CallArgs",
+																											"node_type": "'[' Expression ']'",
 																											"token": "[",
 																											"children": [
 																												{
-																													"node_type": "'[' Expression ']'",
+																													"node_type": "DELIMITER",
 																													"token": "[",
+																													"children": []
+																												},
+																												{
+																													"node_type": "Expression",
+																													"token": "0",
 																													"children": [
 																														{
-																															"node_type": "DELIMITER",
-																															"token": "[",
-																															"children": []
-																														},
-																														{
-																															"node_type": "Expression",
+																															"node_type": "Operand",
 																															"token": "0",
 																															"children": [
 																																{
-																																	"node_type": "Operand",
+																																	"node_type": "NUMBER",
 																																	"token": "0",
 																																	"children": [
 																																		{
+																																			"node_type": "[ - ]",
+																																			"token": "0",
+																																			"children": []
+																																		},
+																																		{
 																																			"node_type": "NUMBER",
 																																			"token": "0",
-																																			"children": [
-																																				{
-																																					"node_type": "[ - ]",
-																																					"token": "0",
-																																					"children": []
-																																				},
-																																				{
-																																					"node_type": "NUMBER",
-																																					"token": "0",
-																																					"children": []
-																																				}
-																																			]
+																																			"children": []
 																																		}
 																																	]
-																																},
-																																{
-																																	"node_type": "{ Operator Operand }",
-																																	"token": "]",
-																																	"children": []
 																																}
 																															]
 																														},
 																														{
-																															"node_type": "DELIMITER",
+																															"node_type": "{ Operator Operand }",
 																															"token": "]",
 																															"children": []
 																														}
 																													]
+																												},
+																												{
+																													"node_type": "DELIMITER",
+																													"token": "]",
+																													"children": []
 																												}
 																											]
 																										}
@@ -126,29 +120,29 @@
 																							]
 																						}
 																					]
-																				},
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "OPERATOR",
+																			"token": "<=>",
+																			"children": []
+																		},
+																		{
+																			"node_type": "Receiver",
+																			"token": "r0",
+																			"children": [
 																				{
-																					"node_type": "OPERATOR",
-																					"token": "<=>",
-																					"children": []
-																				},
-																				{
-																					"node_type": "Receiver",
+																					"node_type": "REGISTER",
 																					"token": "r0",
-																					"children": [
-																						{
-																							"node_type": "REGISTER",
-																							"token": "r0",
-																							"children": []
-																						}
-																					]
-																				},
-																				{
-																					"node_type": "DELIMITER",
-																					"token": ";",
 																					"children": []
 																				}
 																			]
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
 																		}
 																	]
 																}

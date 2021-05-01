@@ -94,7 +94,7 @@ namespace ERACompiler.Modules
             }
 
             // If we want assembly code, not binary
-            if (Program.convertToAssemblyCode)
+            if (Program.config.ConvertToAsmCode)
             {
                 return ConvertToAssemblyCode(code);
             }
@@ -159,6 +159,9 @@ namespace ERACompiler.Modules
                 case "Call":
                     bytes = ConstructCall(node);
                     break;
+                case "Print":
+                    bytes = ConstructPrint(node);
+                    break;
                 default: // If skip, just go for children nodes
                     {
                         bytes = new LinkedList<byte>();
@@ -171,6 +174,16 @@ namespace ERACompiler.Modules
             }
 
             return bytes;
+        }
+
+        private LinkedList<byte> ConstructPrint(AASTNode node)
+        {
+            LinkedList<byte> printBytes = ConstructExpression((AASTNode)node.Children[1]);
+            byte fr0 = printBytes.Last.Value;
+            printBytes.RemoveLast();
+            printBytes = MergeLists(printBytes, GeneratePRINT(fr0));
+            FreeReg(fr0);
+            return printBytes;
         }
 
         private LinkedList<byte> ConstructReturn(AASTNode node)
@@ -1621,7 +1634,8 @@ namespace ERACompiler.Modules
             programBytes = MergeLists(programBytes, codeBytes);
 
             // Skip & Stop
-            programBytes = MergeLists(programBytes, GetLList(0x40, 0x00, 0x00, 0x00));
+            programBytes = MergeLists(programBytes, GenerateSKIP());
+            programBytes = MergeLists(programBytes, GenerateSTOP());
             
             return programBytes;
         }
@@ -1750,9 +1764,14 @@ namespace ERACompiler.Modules
             return GenerateCommand(32, 1, regI, regJ);
         }
 
+        private LinkedList<byte> GeneratePRINT(int reg)
+        {
+            return GenerateCommand(2, 0, reg, 0);
+        }
+
         private LinkedList<byte> GenerateCommand(int format, int opCode, int regI, int regJ)
         {
-            // In LDL case
+            // In LDL | PRINT case
             if (format != 2)
             {
                 format = format == 32 ? 3 : format == 16 ? 1 : 0;                

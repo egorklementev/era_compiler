@@ -16,111 +16,105 @@
 									"children": []
 								},
 								{
-									"node_type": "{ VarDeclaration | Statement }",
+									"node_type": "{ Statement }",
 									"token": "->",
 									"children": [
 										{
-											"node_type": "VarDeclaration | Statement",
+											"node_type": "Statement",
 											"token": "->",
 											"children": [
 												{
-													"node_type": "Statement",
+													"node_type": "[ Label ]",
+													"token": "->",
+													"children": []
+												},
+												{
+													"node_type": "Assembly Block | Extension Statement",
 													"token": "->",
 													"children": [
 														{
-															"node_type": "[ Label ]",
-															"token": "->",
-															"children": []
-														},
-														{
-															"node_type": "Assembly Block | Extension Statement",
+															"node_type": "Extension statement",
 															"token": "->",
 															"children": [
 																{
-																	"node_type": "Extension statement",
+																	"node_type": "Assignment",
 																	"token": "->",
 																	"children": [
 																		{
-																			"node_type": "Assignment",
+																			"node_type": "Receiver",
 																			"token": "->",
 																			"children": [
 																				{
-																					"node_type": "Receiver",
+																					"node_type": "Explicit address",
 																					"token": "->",
 																					"children": [
 																						{
-																							"node_type": "Explicit address",
+																							"node_type": "OPERATOR",
 																							"token": "->",
+																							"children": []
+																						},
+																						{
+																							"node_type": "NUMBER",
+																							"token": "5",
 																							"children": [
 																								{
-																									"node_type": "OPERATOR",
-																									"token": "->",
+																									"node_type": "[ - ]",
+																									"token": "5",
 																									"children": []
 																								},
 																								{
 																									"node_type": "NUMBER",
 																									"token": "5",
-																									"children": [
-																										{
-																											"node_type": "[ - ]",
-																											"token": "5",
-																											"children": []
-																										},
-																										{
-																											"node_type": "NUMBER",
-																											"token": "5",
-																											"children": []
-																										}
-																									]
+																									"children": []
 																								}
 																							]
 																						}
 																					]
-																				},
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "OPERATOR",
+																			"token": ":=",
+																			"children": []
+																		},
+																		{
+																			"node_type": "Expression",
+																			"token": "6",
+																			"children": [
 																				{
-																					"node_type": "OPERATOR",
-																					"token": ":=",
-																					"children": []
-																				},
-																				{
-																					"node_type": "Expression",
+																					"node_type": "Operand",
 																					"token": "6",
 																					"children": [
 																						{
-																							"node_type": "Operand",
+																							"node_type": "NUMBER",
 																							"token": "6",
 																							"children": [
 																								{
+																									"node_type": "[ - ]",
+																									"token": "6",
+																									"children": []
+																								},
+																								{
 																									"node_type": "NUMBER",
 																									"token": "6",
-																									"children": [
-																										{
-																											"node_type": "[ - ]",
-																											"token": "6",
-																											"children": []
-																										},
-																										{
-																											"node_type": "NUMBER",
-																											"token": "6",
-																											"children": []
-																										}
-																									]
+																									"children": []
 																								}
 																							]
-																						},
-																						{
-																							"node_type": "{ Operator Operand }",
-																							"token": ";",
-																							"children": []
 																						}
 																					]
 																				},
 																				{
-																					"node_type": "DELIMITER",
+																					"node_type": "{ Operator Operand }",
 																					"token": ";",
 																					"children": []
 																				}
 																			]
+																		},
+																		{
+																			"node_type": "DELIMITER",
+																			"token": ";",
+																			"children": []
 																		}
 																	]
 																}

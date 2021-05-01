@@ -316,7 +316,7 @@ namespace ERACompiler.Structures.Rules
         public SyntaxErrorException GetErrors()
         {
             string errorMsg = "";
-            if (Program.extendedErrorMessages)
+            if (Program.config.ExtendedErrorMessages)
             {
                 errorList.Reverse();
                 foreach (var err in errorList)
