@@ -28,6 +28,8 @@ There are several arguments available:
 * `--sem`  :  perform tokenization, AST assembling, and AAST assembling  
 * `--semext`  :  same as `--sem` with more detailed output  
 * `--asm`  :  full compilation with the assembly code output  
+* `--prefix`  :  custom filename prefix for output files  
+* `--ignconf`  :  ignore configuration file and rely only upon command-line flags  
   
 Examples of commands:  
 `ERACompiler -h`  -  get help message  

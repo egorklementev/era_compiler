@@ -26,7 +26,7 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void ComplexTests()
         {
-            CompileFiles("complex");
+            Assert.IsTrue(CompileFiles("complex"));
         }
 
         [TestMethod]
@@ -218,7 +218,7 @@ namespace ERACompilerUnitTests
             c.Compile(sourceCode, Compiler.CompilationMode.SEMANTICS);
         }
 
-        private void CompileFiles(string test_name)
+        private bool CompileFiles(string test_name)
         {
             int i = 1;
             while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
@@ -236,6 +236,7 @@ namespace ERACompilerUnitTests
                 }
                 i++;
             }
+            return true;
         }
     }
 }

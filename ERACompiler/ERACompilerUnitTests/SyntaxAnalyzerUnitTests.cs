@@ -27,115 +27,115 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void LabelRuleTests()
         {
-            CompileFiles("label");
+            Assert.IsTrue(CompileFiles("label"));
         }
 
         [TestMethod]
         public void CodeRuleTests()
         {
-            CompileFiles("code");
+            Assert.IsTrue(CompileFiles("code"));
         }
 
         [TestMethod]
         public void RoutineRuleTests()
         {
-            CompileFiles("routine");
+            Assert.IsTrue(CompileFiles("routine"));
         }
 
         [TestMethod]
         public void DataRuleTests()
         {
-            CompileFiles("data");
+            Assert.IsTrue(CompileFiles("data"));
         }
 
         [TestMethod]
         public void ModuleRuleTests()
         {
-            CompileFiles("module");
+            Assert.IsTrue(CompileFiles("module"));
         }
 
         [TestMethod]
         public void StructRuleTests()
         {
-            CompileFiles("struct");
+            Assert.IsTrue(CompileFiles("struct"));
         }
 
         [TestMethod]
         public void PragmaRuleTests()
         {
-            CompileFiles("pragma");
+            Assert.IsTrue(CompileFiles("pragma"));
         }
 
         [TestMethod]
         public void PrintRuleTests()
         {
-            CompileFiles("print");
+            Assert.IsTrue(CompileFiles("print"));
         }
 
         [TestMethod]
         public void GotoRuleTests()
         {
-            CompileFiles("goto");
+            Assert.IsTrue(CompileFiles("goto"));
         }
 
         [TestMethod]
         public void VariableDeclarationRuleTests()
         {
-            CompileFiles("variable_declaration");
+            Assert.IsTrue(CompileFiles("variable_declaration"));
         }
 
         [TestMethod]
         public void AssemblyStatementRuleTests()
         {
-            CompileFiles("assembly_statement");
+            Assert.IsTrue(CompileFiles("assembly_statement"));
         }
 
         [TestMethod]
         public void ExpressionRuleTests()
         {
-            CompileFiles("expression");
+            Assert.IsTrue(CompileFiles("expression"));
         }
 
         [TestMethod]
         public void AssignmentRuleTests()
         {
-            CompileFiles("assignment");
+            Assert.IsTrue(CompileFiles("assignment"));
         }
 
         [TestMethod]
         public void SwapRuleTests()
         {
-            CompileFiles("swap");
+            Assert.IsTrue(CompileFiles("swap"));
         }
 
         [TestMethod]
         public void CallRuleTests()
         {
-            CompileFiles("call");
+            Assert.IsTrue(CompileFiles("call"));
         }
 
         [TestMethod]
         public void IfRuleTests()
         {
-            CompileFiles("if");
+            Assert.IsTrue(CompileFiles("if"));
         }
 
         [TestMethod]
         public void LoopRuleTests()
         {
-            CompileFiles("loop");
+            Assert.IsTrue(CompileFiles("loop"));
         }
 
         [TestMethod]
         public void BreakRuleTests()
         {
-            CompileFiles("break");
+            Assert.IsTrue(CompileFiles("break"));
         }
 
         [TestMethod]
         public void ComplexTests()
         {
-            CompileFiles("complex");
+            Assert.IsTrue(CompileFiles("complex"));
         }
 
         [TestMethod]
@@ -147,7 +147,7 @@ namespace ERACompilerUnitTests
             c.Compile(sourceCode, Compiler.CompilationMode.SYNTAX);
         }
 
-        private void CompileFiles(string test_name)
+        private bool CompileFiles(string test_name)
         {
             int i = 1;
             while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
@@ -165,6 +165,7 @@ namespace ERACompilerUnitTests
                 }
                 i++;
             }
+            return true;
         }
     }
 }

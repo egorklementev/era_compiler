@@ -25,76 +25,76 @@ namespace ERACompilerUnitTests
         [TestMethod]
         public void NestedForTest()
         {
-            CompileFiles("nested_for");
+            Assert.IsTrue(CompileFiles("nested_for"));
         }
 
         [TestMethod]
         public void NestedWhileTest()
         {
-            CompileFiles("nested_while");
+            Assert.IsTrue(CompileFiles("nested_while"));
         }
 
         [TestMethod]
         public void NestedLoopWhileTest()
         {
-            CompileFiles("nested_loop_while");
+            Assert.IsTrue(CompileFiles("nested_loop_while"));
         }
 
         [TestMethod]
         public void NestedIfTest()
         {
-            CompileFiles("nested_if");
+            Assert.IsTrue(CompileFiles("nested_if"));
         }
 
         [TestMethod]
         public void IfTest()
         {
-            CompileFiles("if");
+            Assert.IsTrue(CompileFiles("if"));
         }
 
         [TestMethod]
         public void ArrDefTest()
         {
-            CompileFiles("arr_def");
+           Assert.IsTrue(CompileFiles("arr_def"));
         }
 
         [TestMethod]
         public void ForTest()
         {
-            CompileFiles("for");
+            Assert.IsTrue(CompileFiles("for"));
         }
 
         [TestMethod]
         public void ExpressionTest()
         {
-            CompileFiles("expression");
+            Assert.IsTrue(CompileFiles("expression"));
         }
         
         [TestMethod]
         public void RoutineTest()
         {
-            CompileFiles("routine");
+            Assert.IsTrue(CompileFiles("routine"));
         }
 
         [TestMethod]
         public void PrintTest()
         {
-            CompileFiles("print");
+            Assert.IsTrue(CompileFiles("print"));
         }
 
         [TestMethod]
         public void ComplexTest()
         {
-            CompileFiles("complex");
+            Assert.IsTrue(CompileFiles("complex"));
         }
 
         [TestMethod]
         public void ComplexASMTest()
         {
-            CompileFiles("complex", true);
+            Assert.IsTrue(CompileFiles("complex", true));
         }
 
-        private void CompileFiles(string test_name, bool asm = false)
+        private bool CompileFiles(string test_name, bool asm = false)
         {
             int i = 1;
             while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
@@ -118,6 +118,7 @@ namespace ERACompilerUnitTests
                 }
                 i++;
             }
+            return true;
         }
     }
 }
