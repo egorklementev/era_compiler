@@ -161,6 +161,16 @@ namespace ERACompiler.Structures
             return LocateVar(identifier).AASTType.IsArray();
         }
 
+        public bool IsVarRoutine(Token identifier)
+        {
+            return IsVarRoutine(identifier.Value);
+        }
+
+        public bool IsVarRoutine(string identifier)
+        {
+            return LocateVar(identifier).AASTType.Type == VarType.ERAType.ROUTINE;
+        }
+
         public bool IsVarDynamicArray(string identifier)
         {
             VarType type = LocateVar(identifier).AASTType;
@@ -180,6 +190,21 @@ namespace ERACompiler.Structures
                 throw new SemanticErrorException(
                     "A variable with name \"" + identifier.Value + "\" has been never declared in this context!!!\r\n" +
                     "  At (Line: " + identifier.Position.Line.ToString() + ", Char: " + identifier.Position.Char.ToString() + ")."
+                    );
+            }
+            else
+            {
+                return var.AASTType.IsConst();
+            }
+        }
+
+        public bool IsVarConstant(string identifier)
+        {
+            AASTNode? var = LocateVar(identifier);
+            if (var == null)
+            {
+                throw new SemanticErrorException(
+                    "A variable with name \"" + identifier + "\" has been never declared in this context!!!\r\n"
                     );
             }
             else

@@ -82,19 +82,35 @@ namespace ERACompilerUnitTests
             CompileFiles("print");
         }
 
+        [TestMethod]
+        public void ComplexTest()
+        {
+            CompileFiles("complex");
+        }
+
+        [TestMethod]
+        public void ComplexASMTest()
+        {
+            CompileFiles("complex", true);
+        }
+
         private void CompileFiles(string test_name, bool asm = false)
         {
             int i = 1;
             while (File.Exists(pathPrefix + test_name + "_" + i + ".era"))
             {
                 Compiler c = new Compiler();
+                string asmSuf = "";
                 if (asm)
+                {
+                    asmSuf = "asm_";
                     Program.config.ConvertToAsmCode = true;
+                }
                 string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
-                byte[] expectedCode = File.ReadAllBytes(pathPrefix + "expected_compiled_" + test_name + "_" + i + ".bin");
+                byte[] expectedCode = File.ReadAllBytes(pathPrefix + "expected_compiled_" + asmSuf + test_name + "_" + i + ".bin");
                 byte[] actualCode = c.Compile(sourceCode, Compiler.CompilationMode.GENERATION);
                 // Store the compiler output in a file
-                File.WriteAllBytes(pathPrefix + "actual_compiled_" + test_name + "_" + i + ".bin", actualCode);
+                File.WriteAllBytes(pathPrefix + "actual_compiled_" + asmSuf + test_name + "_" + i + ".bin", actualCode);
                 Assert.AreEqual(expectedCode.Length, actualCode.Length);
                 for (int j = 0; j < expectedCode.Length; j++)
                 {

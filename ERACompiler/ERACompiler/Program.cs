@@ -45,11 +45,8 @@ namespace ERACompiler
         {
             NativeMethods.AllocConsole();
 
-            //args = new string[] { "-s", "debug.era"};
-            //args = new string[] { "-s", "debug.era", "--lex" };
-            //args = new string[] { "-s", "debug.era", "--syn" };
-            //args = new string[] { "-s", "debug.era", "--sem" };
-            //args = new string[] { "-s", "debug.era", "--asm" };
+            //args = new string[] { "-s", "to_compile/fast_sort.era", "--sem", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/fast_sort.era", "--asm", "--ignconf"};
 
             bool error = true;
             try

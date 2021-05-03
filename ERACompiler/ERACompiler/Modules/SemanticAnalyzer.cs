@@ -922,7 +922,7 @@ namespace ERACompiler.Modules
 
             foreach (string op in ops)
             {
-                if (children.Count == 3)
+                if (children.Count <= 3)
                 {
                     break;
                 }
@@ -936,7 +936,7 @@ namespace ERACompiler.Modules
                         child_expr.Children.Add(children[i + 1]);
                         children.RemoveRange(i - 1, 3);
                         children.Insert(i - 1, child_expr);
-                        i--;                       
+                        i -= 2;                       
                     }
                 }
             }
@@ -1541,13 +1541,22 @@ namespace ERACompiler.Modules
         /// <returns>True if constant, false otherwise</returns>
         private bool IsExprConstant(ASTNode node, Context ctx)
         {
-            // Check first Operand
-            if (!IsOperandConstant(node.Children[0], ctx)) return false;
-            
-            // Check { Operator Operand }
-            foreach (ASTNode child in node.Children[1].Children)
+            // Regular Expression
+            if (node.Children[1].ASTType.Equals("{ Operator Operand }"))
             {
-                if (child.ASTType.Equals("Operand") && !IsOperandConstant(child, ctx)) return false;
+                if (!IsOperandConstant(node.Children[0], ctx)) return false;
+                foreach (ASTNode child in node.Children[1].Children)
+                {
+                    if (child.ASTType.Equals("Operand") && !IsOperandConstant(child, ctx)) return false;
+                }
+            }
+            else
+            {
+                foreach (ASTNode child in node.Children)
+                {
+                    if (child.ASTType.Equals("Operand") && !IsOperandConstant(child, ctx)) return false;
+                    if (child.ASTType.Equals("Expression") && !IsExprConstant(child, ctx)) return false;
+                }
             }
 
             return true;

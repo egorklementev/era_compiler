@@ -1995,42 +1995,108 @@
 																	"token": "b",
 																	"children": [
 																		{
-																			"node_type": "NUMBER",
-																			"var_value": "-4",
+																			"node_type": "Expression",
 																			"token": "b",
+																			"children": [
+																				{
+																					"node_type": "Primary",
+																					"token": "b",
+																					"children": [
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "b",
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"node_type": "OPERATOR",
+																					"token": "*",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Primary",
+																					"token": "b",
+																					"children": [
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "b",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		},
+																		{
+																			"node_type": "OPERATOR",
+																			"token": "+",
 																			"children": []
+																		},
+																		{
+																			"node_type": "Primary",
+																			"token": "b",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "b",
+																					"children": []
+																				}
+																			]
 																		}
 																	]
 																},
 																{
 																	"node_type": "OPERATOR",
-																	"token": "*",
+																	"token": "-",
 																	"children": []
 																},
 																{
-																	"node_type": "Primary",
+																	"node_type": "Expression",
 																	"token": "b",
 																	"children": [
 																		{
-																			"node_type": "IDENTIFIER",
+																			"node_type": "Expression",
 																			"token": "b",
-																			"children": []
-																		}
-																	]
-																},
-																{
-																	"node_type": "OPERATOR",
-																	"token": "*",
-																	"children": []
-																},
-																{
-																	"node_type": "Primary",
-																	"token": "b",
-																	"children": [
+																			"children": [
+																				{
+																					"node_type": "NUMBER",
+																					"var_value": "3",
+																					"token": "3",
+																					"children": []
+																				},
+																				{
+																					"node_type": "OPERATOR",
+																					"token": "*",
+																					"children": []
+																				},
+																				{
+																					"node_type": "Primary",
+																					"token": "b",
+																					"children": [
+																						{
+																							"node_type": "IDENTIFIER",
+																							"token": "b",
+																							"children": []
+																						}
+																					]
+																				}
+																			]
+																		},
 																		{
-																			"node_type": "IDENTIFIER",
-																			"token": "b",
+																			"node_type": "OPERATOR",
+																			"token": "*",
 																			"children": []
+																		},
+																		{
+																			"node_type": "Primary",
+																			"token": "b",
+																			"children": [
+																				{
+																					"node_type": "IDENTIFIER",
+																					"token": "b",
+																					"children": []
+																				}
+																			]
 																		}
 																	]
 																}

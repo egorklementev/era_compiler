@@ -189,7 +189,7 @@ namespace ERACompiler.Modules
         private LinkedList<byte> ConstructReturn(AASTNode node)
         {
             LinkedList<byte> returnBytes = new LinkedList<byte>();
-            Context ctx = SemanticAnalyzer.FindParentContext(node);
+            //Context ctx = SemanticAnalyzer.FindParentContext(node);
 
             if (node.Children.Count > 0)
             {
@@ -201,22 +201,39 @@ namespace ERACompiler.Modules
                 OccupateReg(26);
                 FreeReg(fr1);
             }
-
-            returnBytes = MergeLists(returnBytes, DeallocateRegisters(node, ctx, 0, true));
-
-            // Deallocate dynamic arrays
-            returnBytes = MergeLists(returnBytes, GetFreeReg(node));
-            byte fr0 = returnBytes.Last.Value;
-            returnBytes.RemoveLast();
-            foreach (AASTNode var in ctx.GetDeclaredVars())
+            
+            AASTNode mainContextNode = node;
+            while (!mainContextNode.ASTType.Equals("Routine"))
             {
-                if (ctx.IsVarDynamicArray(var.Token.Value))
+                if (mainContextNode.Parent == null)
                 {
-                    returnBytes = MergeLists(returnBytes, LoadFromHeap(0, fr0));
-                    returnBytes = MergeLists(returnBytes, ChangeHeapTop(fr0, true, false));
+                    throw new CompilationErrorException("Return is bad!!!");
                 }
+                if (mainContextNode.Context != null)
+                {
+                    // Deallocate registers & dynamic arrays
+                    returnBytes = MergeLists(returnBytes, DeallocateRegisters(mainContextNode, mainContextNode.Context, 0, true));
+                    returnBytes = MergeLists(returnBytes, GetFreeReg(node));
+                    byte fr0 = returnBytes.Last.Value;
+                    returnBytes.RemoveLast();
+                    foreach (AASTNode var in mainContextNode.Context.GetDeclaredVars())
+                    {
+                        if (mainContextNode.Context.IsVarDynamicArray(var.Token.Value))
+                        {
+                            returnBytes = MergeLists(returnBytes, LoadFromHeap(0, fr0));
+                            returnBytes = MergeLists(returnBytes, ChangeHeapTop(fr0, true, false));
+                        }
+                    }
+                    FreeReg(fr0);
+                }
+                if (mainContextNode.ASTType.Equals("For"))
+                {
+                    returnBytes = MergeLists(returnBytes, ChangeHeapTop(16));
+                }
+                mainContextNode = (AASTNode)mainContextNode.Parent;
             }
-            FreeReg(fr0);
+            returnBytes = MergeLists(returnBytes, DeallocateRegisters(mainContextNode, mainContextNode.Context, 0, true));
+
 
             // Deallocate all scope related memory from the stack
             int ctxNum = 0;
@@ -273,6 +290,7 @@ namespace ERACompiler.Modules
                 statementNum++;
                 routineBytes = MergeLists(routineBytes, DeallocateRegisters(statement, ctx, statementNum));
             }
+            routineBytes = MergeLists(routineBytes, DeallocateRegisters(node, ctx, statementNum+1));
 
             // Deallocate dynamic arrays
             routineBytes = MergeLists(routineBytes, GetFreeReg(node));
@@ -506,6 +524,8 @@ namespace ERACompiler.Modules
                 statementNum++;
                 bbBytes = MergeLists(bbBytes, DeallocateRegisters(statement, ctx, statementNum));
             }
+
+            bbBytes = MergeLists(bbBytes, DeallocateRegisters(node, ctx, statementNum+1));
 
             // Deallocate dynamic arrays
             bbBytes = MergeLists(bbBytes, GetFreeReg(node));
@@ -887,6 +907,7 @@ namespace ERACompiler.Modules
             switch (node.AASTType.Type)
             {
                 case VarType.ERAType.INT:
+                case VarType.ERAType.INT_ADDR:
                 case VarType.ERAType.SHORT:
                 case VarType.ERAType.BYTE:
                     {
@@ -997,14 +1018,58 @@ namespace ERACompiler.Modules
                         }
                     case ">=":
                         {
-                            // FR0 >= FR1; FR0
-                            exprBytes = MergeLists(exprBytes, MergeLists(GenerateLSR(fr1, fr0), GetLList(fr0)));
+                            // FR2 := 1;
+                            // FR3 := <lsr>;
+                            // <lsr>
+                            // FR0 >= FR0;
+                            // FR1 -= FR2;
+                            // if FR1 goto FR3;
+                            // fr0
+                            exprBytes = MergeLists(exprBytes, GetFreeReg(node));
+                            byte fr2 = exprBytes.Last.Value;
+                            exprBytes.RemoveLast();
+                            exprBytes = MergeLists(exprBytes, GetFreeReg(node));
+                            byte fr3 = exprBytes.Last.Value;
+                            exprBytes.RemoveLast();
+                            exprBytes = MergeLists(exprBytes, GenerateLDC(1, fr2));
+                            exprBytes = MergeLists(exprBytes, GenerateLDL(fr3));
+                            int labelOffset = exprBytes.Count;
+                            ResolveLabel(exprBytes, labelOffset);
+                            exprBytes = MergeLists(exprBytes, GenerateLSR(fr0, fr0));
+                            exprBytes = MergeLists(exprBytes, GenerateSUB(fr2, fr1));
+                            exprBytes = MergeLists(exprBytes, GenerateCBR(fr1, fr3));
+                            exprBytes = MergeLists(exprBytes, GetLList(fr0));
+
+                            FreeReg(fr2);
+                            FreeReg(fr3);
                             break;
                         }
                     case "<=":
                         {
-                            // FR0 <= FR1; FR0
-                            exprBytes = MergeLists(exprBytes, MergeLists(GenerateLSL(fr1, fr0), GetLList(fr0)));
+                            // FR2 := 1;
+                            // FR3 := <lsr>;
+                            // <lsr>
+                            // FR0 >= FR0;
+                            // FR1 -= FR2;
+                            // if FR1 goto FR3;
+                            // fr0
+                            exprBytes = MergeLists(exprBytes, GetFreeReg(node));
+                            byte fr2 = exprBytes.Last.Value;
+                            exprBytes.RemoveLast();
+                            exprBytes = MergeLists(exprBytes, GetFreeReg(node));
+                            byte fr3 = exprBytes.Last.Value;
+                            exprBytes.RemoveLast();
+                            exprBytes = MergeLists(exprBytes, GenerateLDC(1, fr2));
+                            exprBytes = MergeLists(exprBytes, GenerateLDL(fr3));
+                            int labelOffset = exprBytes.Count;
+                            ResolveLabel(exprBytes, labelOffset);
+                            exprBytes = MergeLists(exprBytes, GenerateLSL(fr0, fr0));
+                            exprBytes = MergeLists(exprBytes, GenerateSUB(fr2, fr1));
+                            exprBytes = MergeLists(exprBytes, GenerateCBR(fr1, fr3));
+                            exprBytes = MergeLists(exprBytes, GetLList(fr0));
+
+                            FreeReg(fr2);
+                            FreeReg(fr3);
                             break;
                         }
                     case "&":
@@ -1227,7 +1292,9 @@ namespace ERACompiler.Modules
                     }
                 case "REGISTER":
                     {
-                        opBytes = MergeLists(opBytes, GetLList(IdentifyRegister(node.Token.Value)));
+                        byte reg = IdentifyRegister(node.Token.Value);
+                        opBytes = MergeLists(opBytes, GetLList(reg));
+                        OccupateReg(reg);
                         break;
                     }
                 case "Dereference":
@@ -1291,13 +1358,20 @@ namespace ERACompiler.Modules
         private LinkedList<byte> ConstructDereference(AASTNode node, bool rightValue = true)
         {
             LinkedList<byte> derefBytes = new LinkedList<byte>();
+            Context ctx = SemanticAnalyzer.FindParentContext(node);
             if (node.Children[1].ASTType.Equals("Primary"))
             {
                 derefBytes = MergeLists(derefBytes, ConstructPrimary((AASTNode)node.Children[1]));
                 byte fr0 = derefBytes.Last.Value;
                 derefBytes.RemoveLast();
                 if (rightValue)
+                {
                     derefBytes = MergeLists(derefBytes, GenerateLD(fr0, fr0));
+                }
+                else
+                {
+                    derefBytes = MergeLists(derefBytes, LoadOutVariable(node.Children[1].Token.Value, fr0, ctx));
+                }
                 derefBytes = MergeLists(derefBytes, GetLList(fr0));
                 OccupateReg(fr0);
             }
@@ -1364,19 +1438,17 @@ namespace ERACompiler.Modules
                     primBytes = MergeLists(primBytes, GetFreeReg(node));
                     byte fr1 = primBytes.Last.Value;
                     primBytes.RemoveLast();
-
-                    if (regAllocVTR.ContainsKey(varName))
+                    if (ctx.IsVarDynamicArray(varName) && regAllocVTR.ContainsKey(varName))
                     {
-                        primBytes = MergeLists(primBytes, GenerateMOV(regAllocVTR[varName], fr1));
+                        byte reg = regAllocVTR[varName];
+                        primBytes = MergeLists(primBytes, GenerateMOV(reg, fr1));
+                        primBytes = MergeLists(primBytes, GenerateADD(fr0, fr1));
                     }
                     else
                     {
                         primBytes = MergeLists(primBytes, LoadInVariable(varName, fr1, ctx, ctx.IsVarDynamicArray(varName)));
-                        regAllocVTR.Add(varName, fr1); 
-                        regAllocRTV.Add(fr1, varName);
+                        primBytes = MergeLists(primBytes, GenerateADD(fr0, fr1));
                     }
-
-                    primBytes = MergeLists(primBytes, GenerateADD(fr0, fr1));
                     if (rightValue)
                         primBytes = MergeLists(primBytes, GenerateLD(fr1, fr1));
                     primBytes = MergeLists(primBytes, GetLList(fr1));
@@ -1441,13 +1513,24 @@ namespace ERACompiler.Modules
                 }
                 else
                 {
-                    primBytes = MergeLists(primBytes, GetFreeReg(node));
-                    byte fr0 = primBytes.Last.Value;
-                    primBytes.RemoveLast();
-                    primBytes = MergeLists(primBytes, LoadInVariable(varName, fr0, ctx, rightValue));
-                    regAllocVTR.Add(varName, fr0);
-                    regAllocRTV.Add(fr0, varName);
-                    primBytes = MergeLists(primBytes, GetLList(fr0));
+                    if (ctx.IsVarArray(varName))
+                    {
+                        primBytes = MergeLists(primBytes, GetFreeReg(node));
+                        byte fr0 = primBytes.Last.Value;
+                        primBytes.RemoveLast();
+                        primBytes = MergeLists(primBytes, LoadInVariable(varName, fr0, ctx, ctx.IsVarDynamicArray(varName)));
+                        primBytes = MergeLists(primBytes, GetLList(fr0));
+                    }
+                    else
+                    {
+                        primBytes = MergeLists(primBytes, GetFreeReg(node));
+                        byte fr0 = primBytes.Last.Value;
+                        primBytes.RemoveLast();
+                        primBytes = MergeLists(primBytes, LoadInVariable(varName, fr0, ctx, rightValue));
+                        regAllocVTR.Add(varName, fr0);
+                        regAllocRTV.Add(fr0, varName);
+                        primBytes = MergeLists(primBytes, GetLList(fr0));
+                    }
                 }
             }
 
@@ -1485,11 +1568,20 @@ namespace ERACompiler.Modules
                 FreeReg(fr0);
             }
 
-            callBytes = MergeLists(callBytes, DeallocateRegisters(node, ctx, 0, true));
+            AASTNode mainContextNode = node;
+            while (!mainContextNode.ASTType.Equals("Routine") && !mainContextNode.ASTType.Equals("Code"))
+            {
+                if (mainContextNode.Parent == null)
+                {
+                    throw new CompilationErrorException("Routine call is bad!!!");
+                }
+                mainContextNode = (AASTNode)mainContextNode.Parent;
+            }
+            callBytes = MergeLists(callBytes, DeallocateRegisters(mainContextNode, mainContextNode.Context, 0, true));
             callBytes = MergeLists(callBytes, GenerateLDA(SB, 27, ctx.GetStaticOffset(node.Children[0].Token.Value)));
             callBytes = MergeLists(callBytes, GenerateLD(27, 27));
             callBytes = MergeLists(callBytes, GenerateCBR(27, 27));
-            callBytes = MergeLists(callBytes, AllocateRegisters(node, ctx, GetStatementNumber(node)));
+            callBytes = MergeLists(callBytes, AllocateRegisters(mainContextNode, mainContextNode.Context, GetStatementNumber(node)));
 
             if (ctx.GetRoutineReturnType(node.Children[0].Token).Type != VarType.ERAType.NO_TYPE) // Return value is in R26
             {
@@ -1965,7 +2057,7 @@ namespace ERACompiler.Modules
             HashSet<string> vars = GetAllUsedVars(node);
             foreach (string var in vars)
             {
-                if (ctx.IsVarDeclaredInThisContext(var))
+                if (ctx.IsVarDeclaredInThisContext(var) && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var))
                 {
                     int liStart = ctx.GetLIStart(var);
                     int liEnd = ctx.GetLIEnd(var);
@@ -1976,11 +2068,14 @@ namespace ERACompiler.Modules
                         {
                             if (!regOccup[ri])
                             {
-                                bool arrayCheck = !ctx.IsVarArray(var) || ctx.IsVarDynamicArray(var);
-                                regAllocBytes = MergeLists(regAllocBytes, LoadInVariable(var, ri, ctx, arrayCheck));
-                                regAllocVTR.Add(var, ri);
-                                regAllocRTV.Add(ri, var);
-                                OccupateReg(ri);
+                                bool arrayCheck = ctx.IsVarDynamicArray(var) || !ctx.IsVarArray(var);
+                                if (arrayCheck)
+                                {
+                                    regAllocBytes = MergeLists(regAllocBytes, LoadInVariable(var, ri, ctx, arrayCheck));
+                                    regAllocVTR.Add(var, ri);
+                                    regAllocRTV.Add(ri, var);
+                                    OccupateReg(ri);
+                                }
                                 break;
                             }
                         }
@@ -1996,7 +2091,7 @@ namespace ERACompiler.Modules
             HashSet<string> vars = GetAllUsedVars(node);
             foreach (string var in vars)
             {
-                if (ctx.IsVarDeclaredInThisContext(var))
+                if (ctx.IsVarDeclaredInThisContext(var) && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var))
                 {
                     int liStart = ctx.GetLIStart(var);
                     int liEnd = ctx.GetLIEnd(var);
@@ -2004,7 +2099,7 @@ namespace ERACompiler.Modules
                     if (regAllocVTR.ContainsKey(var) && (liEnd < statementNum || unconditionally)) // Deallocation
                     {
                         byte reg = regAllocVTR[var];
-                        if (!ctx.IsVarArray(var)) // No need to load out array stuff
+                        if (!ctx.IsVarArray(var) || ctx.IsVarDynamicArray(var)) // No need to load out array stuff
                             regDeallocBytes = MergeLists(regDeallocBytes, LoadOutVariable(var, reg, ctx));
                         regAllocVTR.Remove(var);
                         regAllocRTV.Remove(reg);
@@ -2076,7 +2171,8 @@ namespace ERACompiler.Modules
 
         private HashSet<string> GetAllUsedVars(AASTNode node)
         {
-            HashSet<string> set = new HashSet<string>();            
+            HashSet<string> set = new HashSet<string>();
+            Context ctx = SemanticAnalyzer.FindParentContext(node);
             foreach (AASTNode child in node.Children)
             {
                 if (child.ASTType.Equals("Variable definition") || child.ASTType.Equals("Constant definition") || child.ASTType.Equals("Array definition") || child.ASTType.Equals("IDENTIFIER"))
@@ -2131,7 +2227,7 @@ namespace ERACompiler.Modules
                     }
                     else
                     {
-                        int format = a >> 6 == 3 ? 32 : a >> 6 == 0 ? 8 : 16;
+                        int format = a >> 6 == 3 ? 32 : a >> 6 == 0 ? 8 : a >> 6 == 1 ? 16 : 2;
                         string sFormat = "[f" +
                             (format.ToString().Length == 1 ? "0" + format.ToString() : format.ToString())
                             + "]  ";
@@ -2149,6 +2245,10 @@ namespace ERACompiler.Modules
                                 if (format == 8)
                                 {
                                     asmCode.Append(sFormat).Append("stop;\r\n");
+                                }
+                                else if (format == 2)
+                                {
+                                    asmCode.Append(sFormat).Append("PRINT ").Append(regi).Append(";\r\n");
                                 }
                                 else
                                 {
