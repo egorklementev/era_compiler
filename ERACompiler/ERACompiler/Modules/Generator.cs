@@ -1506,6 +1506,7 @@ namespace ERACompiler.Modules
                             primBytes = MergeLists(primBytes, GetFreeReg(node, new List<int>() { reg }));
                             byte fr0 = primBytes.Last.Value;
                             primBytes.RemoveLast();
+                            primBytes = MergeLists(primBytes, LoadOutVariable(varName, fr0, ctx));
                             primBytes = MergeLists(primBytes, LoadInVariable(varName, fr0, ctx, rightValue));
                             primBytes = MergeLists(primBytes, GetLList(fr0));
                         }
@@ -1574,6 +1575,10 @@ namespace ERACompiler.Modules
                 if (mainContextNode.Parent == null)
                 {
                     throw new CompilationErrorException("Routine call is bad!!!");
+                }
+                if (mainContextNode.Context != null)
+                {
+                    callBytes = MergeLists(callBytes, DeallocateRegisters(mainContextNode, mainContextNode.Context, 0, true));
                 }
                 mainContextNode = (AASTNode)mainContextNode.Parent;
             }

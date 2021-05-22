@@ -48,6 +48,9 @@ namespace ERACompiler
             //args = new string[] { "-s", "to_compile/fast_sort.era", "--sem", "--ignconf"};
             //args = new string[] { "-s", "to_compile/fast_sort.era", "--asm", "--ignconf"};
 
+            //args = new string[] { "-s", "to_compile/merge_sort.era", "--syn", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/merge_sort.era", "--ignconf"};
+
             bool error = true;
             try
             {

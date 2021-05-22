@@ -616,7 +616,7 @@ namespace ERACompiler.Modules
             ASTNode idLink = node.Children[0];
 
             // If constant, convert to number
-            if (ctx.IsVarConstant(idLink.Token))
+            if (ctx.IsVarDeclared(idLink.Token) && ctx.IsVarConstant(idLink.Token))
             {
                 int constValue = ctx.GetConstValue(idLink.Token);
                 ASTNode number = new ASTNode(parent, new List<ASTNode>(), idLink.Token, "NUMBER");

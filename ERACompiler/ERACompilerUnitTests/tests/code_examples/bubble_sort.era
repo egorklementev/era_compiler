@@ -1,0 +1,26 @@
+routine bubble_sort (int@ arr, int size)
+do
+	for i to size - 1 loop
+		for j to size - 1 loop
+			int@ i1 := arr + j * 4;
+			int@ i2 := arr + j * 4 + 4;
+			if ->i1 > ->i2 do
+				int temp := ->i1;
+				->i1 := ->i2;
+				->i2 := temp;
+			end
+		end
+	end
+end
+
+code
+	int size := 50;
+	int[] arr[size];
+	for i to size loop
+		arr[i] := size - i;
+	end
+	bubble_sort(arr, size);
+	for i to size loop
+		print arr[i];
+	end
+end
