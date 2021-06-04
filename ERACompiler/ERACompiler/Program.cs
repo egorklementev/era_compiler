@@ -4,25 +4,25 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using ERACompiler.Modules;
 using ERACompiler.Utilities.Errors;
 using ERACompiler.Utilities;
 
-/// <summary>
-/// Used for console allocation.
-/// </summary>
-internal sealed class NativeMethods
-{
-    [DllImport("kernel32.dll")]
-    public static extern bool AllocConsole();
-
-    [DllImport("kernel32.dll")]
-    public static extern bool FreeConsole();
-}
 
 namespace ERACompiler
 {
+    /// <summary>
+    /// Used for console allocation.
+    /// </summary>
+    internal sealed class NativeMethods
+    {
+        [DllImport("kernel32.dll")]
+        public static extern bool AllocConsole();
+
+        [DllImport("kernel32.dll")]
+        public static extern bool FreeConsole();
+    }
+
     /// <summary>
     /// The entrance point of the compiler.
     /// </summary>
@@ -38,6 +38,7 @@ namespace ERACompiler
         private static bool convertToAssemblyCode = false; // To get assembly code instead of binary code
         private static string currentPref = null;
 
+        public static Compiler currentCompiler;
         public static string currentFile = "none";
         public static Config config;
 
@@ -49,7 +50,8 @@ namespace ERACompiler
             //args = new string[] { "-s", "to_compile/fast_sort.era", "--asm", "--ignconf"};
 
             //args = new string[] { "-s", "to_compile/merge_sort.era", "--syn", "--ignconf"};
-            //args = new string[] { "-s", "to_compile/merge_sort.era", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/merge_sort.era", "--sem", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/merge_sort.era", "--asm", "--ignconf"};
 
             bool error = true;
             try
@@ -111,7 +113,8 @@ namespace ERACompiler
                     // It is fresh everytime to refresh all the nodes (may be optimized obviously)                    
                     stopWatch.Start();
                     byte[] compiledCode = new byte[0];
-                    compiledCode = new Compiler().Compile(sourceCode, cmode);
+                    currentCompiler = new Compiler();
+                    compiledCode = currentCompiler.Compile(sourceCode, cmode);
                     stopWatch.Stop();
 
                     TimeSpan ts = stopWatch.Elapsed;

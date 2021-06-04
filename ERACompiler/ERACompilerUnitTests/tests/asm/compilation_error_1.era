@@ -1,0 +1,8 @@
+routine test () : int
+do
+	return 0;
+end
+
+code
+	test() := 5;
+end

@@ -1,0 +1,12 @@
+routine min (int a, int b) : int
+do
+	if a > b do
+		return b;
+	else
+		return a;
+	end
+end
+
+code
+	print min(10, 20);
+end

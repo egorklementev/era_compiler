@@ -45,7 +45,7 @@
             Default constructor
             </summary>
         </member>
-        <member name="M:ERACompiler.Modules.Generator.GetBinaryCode(ERACompiler.Structures.AASTNode)">
+        <member name="M:ERACompiler.Modules.Generator.GetProgramCodeNodeRoot(ERACompiler.Structures.AASTNode)">
             <summary>
             Constructs a binary code (or assembly code) from a given AAST root.
             </summary>
@@ -91,6 +91,13 @@
             <param name="sequence">A string for checking.</param>
             <returns>Whether or not there is a match.</returns>
         </member>
+        <member name="M:ERACompiler.Modules.SemanticAnalyzer.FindParentContext(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Used for current context retrieval
+            </summary>
+            <param name="parent">Parent (or current) node from which to start the search</param>
+            <returns>Nearest context (may return global Program context)</returns>
+        </member>
         <member name="M:ERACompiler.Modules.SemanticAnalyzer.PostChecks(ERACompiler.Structures.AASTNode,ERACompiler.Structures.Context)">
             <summary>
             Performs additional checks after the AAST is constructed.
@@ -122,13 +129,6 @@
             <param name="ctx">Current context</param>
             <returns>True if constant, false otherwise</returns>
         </member>
-        <member name="M:ERACompiler.Modules.SemanticAnalyzer.FindParentContext(ERACompiler.Structures.AASTNode)">
-            <summary>
-            Used for current context retrieval
-            </summary>
-            <param name="parent">Parent (or current) node from which to start the search</param>
-            <returns>Nearest context (may return global Program context)</returns>
-        </member>
         <member name="T:ERACompiler.Modules.SyntaxAnalyzer">
             <summary>
             The purpose of this class it to check the code for syntax errors and build Abstract Syntax Tree that can be used by Semantic Analyzer.
@@ -146,6 +146,11 @@
             </summary>
             <param name="tokens">Tokens of a whole program to be validated.</param>
             <returns>A syntax responce instance which contains the AST root node.</returns>
+        </member>
+        <member name="T:ERACompiler.NativeMethods">
+            <summary>
+            Used for console allocation.
+            </summary>
         </member>
         <member name="T:ERACompiler.Program">
             <summary>
@@ -459,11 +464,6 @@
         <member name="T:ERACompiler.Utilities.Config">
             <summary>
             Used to configurate the program.
-            </summary>
-        </member>
-        <member name="T:NativeMethods">
-            <summary>
-            Used for console allocation.
             </summary>
         </member>
     </members>

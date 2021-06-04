@@ -1654,7 +1654,7 @@
 																					"token": "r0",
 																					"children": [
 																						{
-																							"node_type": "Register := -> Register",
+																							"node_type": "Register := -> [ Register ]",
 																							"token": "r0",
 																							"children": [
 																								{
@@ -1673,8 +1673,18 @@
 																									"children": []
 																								},
 																								{
+																									"node_type": "DELIMITER",
+																									"token": "[",
+																									"children": []
+																								},
+																								{
 																									"node_type": "REGISTER",
 																									"token": "r1",
+																									"children": []
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": "]",
 																									"children": []
 																								}
 																							]
@@ -1691,7 +1701,7 @@
 																					"token": "->",
 																					"children": [
 																						{
-																							"node_type": "-> Register := Register",
+																							"node_type": "-> [ Register ] := Register",
 																							"token": "->",
 																							"children": [
 																								{
@@ -1700,8 +1710,18 @@
 																									"children": []
 																								},
 																								{
+																									"node_type": "DELIMITER",
+																									"token": "[",
+																									"children": []
+																								},
+																								{
 																									"node_type": "REGISTER",
 																									"token": "r2",
+																									"children": []
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": "]",
 																									"children": []
 																								},
 																								{

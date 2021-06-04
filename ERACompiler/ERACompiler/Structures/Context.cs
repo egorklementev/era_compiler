@@ -295,6 +295,19 @@ namespace ERACompiler.Structures
             return st.Values;
         }
 
+        public HashSet<string> GetAllVisibleVars()
+        {
+            HashSet<string> set = new HashSet<string>();
+            Context ctx = this;
+            do
+            {
+                set.UnionWith(ctx.st.Keys);
+                ctx = ctx.parent;
+            }
+            while (ctx != null);
+            return set;
+        }
+
         /* --- */
 
         /// <summary>

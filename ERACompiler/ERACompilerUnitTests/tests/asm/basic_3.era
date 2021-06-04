@@ -1,0 +1,6 @@
+code
+	int size := 10;
+	int[] a[size];
+	a[0] := 27;
+	print a[0];
+end

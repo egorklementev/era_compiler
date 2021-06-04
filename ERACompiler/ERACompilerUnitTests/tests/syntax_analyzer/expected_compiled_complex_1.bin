@@ -419,15 +419,36 @@
 																																																													"children": []
 																																																												},
 																																																												{
-																																																													"node_type": "Primary | Register",
+																																																													"node_type": "DELIMITER",
+																																																													"token": "[",
+																																																													"children": []
+																																																												},
+																																																												{
+																																																													"node_type": "Expression",
 																																																													"token": "r1",
 																																																													"children": [
 																																																														{
-																																																															"node_type": "REGISTER",
+																																																															"node_type": "Operand",
 																																																															"token": "r1",
+																																																															"children": [
+																																																																{
+																																																																	"node_type": "REGISTER",
+																																																																	"token": "r1",
+																																																																	"children": []
+																																																																}
+																																																															]
+																																																														},
+																																																														{
+																																																															"node_type": "{ Operator Operand }",
+																																																															"token": "]",
 																																																															"children": []
 																																																														}
 																																																													]
+																																																												},
+																																																												{
+																																																													"node_type": "DELIMITER",
+																																																													"token": "]",
+																																																													"children": []
 																																																												}
 																																																											]
 																																																										}

@@ -1,9 +1,0 @@
-// r0 = 2
-code
-	int a := 1;
-	if a do
-		a := 2;
-	else
-		a := 3;
-	end
-end

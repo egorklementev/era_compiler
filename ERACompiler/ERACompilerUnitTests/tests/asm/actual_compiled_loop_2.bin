@@ -1,0 +1,919 @@
+{
+	"name": "Program",
+	"token": "code",
+	"bytes": [],
+	"children": [
+		{
+			"name": "Version/padding/tech bytes",
+			"token": "no_token",
+			"bytes": [
+				"00",
+				"01",
+				"00",
+				"00",
+				"00",
+				"12",
+				"00",
+				"00",
+				"00",
+				"04",
+				"00",
+				"00",
+				"00",
+				"1A",
+				"00",
+				"00",
+				"00",
+				"E0"
+			],
+			"children": []
+		},
+		{
+			"name": "Static bytes",
+			"token": "no_token",
+			"bytes": [
+				"00",
+				"20",
+				"00",
+				"00",
+				"00",
+				"00",
+				"00",
+				"00"
+			],
+			"children": []
+		},
+		{
+			"name": "Units' addresses node",
+			"token": "no_token",
+			"bytes": [
+				"{00008} [f08] SB := SB + const",
+				"{00010} [f32] 0000 0004",
+				"{00014} [f08] R27 := SB + const",
+				"{00016} [f32] 0000 0000",
+				"{00020} [f32] R26 := 0",
+				"{00022} [f08] R26 := R26 + const",
+				"{00024} [f32] 0000 0028",
+				"{00028} [f32] ->R27 := R26",
+				"{00030} [f08] R27 := SB + const",
+				"{00032} [f32] 0000 0000",
+				"{00036} [f32] R27 := ->R27",
+				"{00038} [f32] if R27 goto R27"
+			],
+			"children": []
+		},
+		{
+			"name": "Actual program code",
+			"token": "no_token",
+			"bytes": [],
+			"children": [
+				{
+					"name": "Code",
+					"token": "code",
+					"bytes": [],
+					"children": [
+						{
+							"name": "Copy SP to FP",
+							"token": "no_token",
+							"bytes": [
+								"{00040} [f32] FP := SP"
+							],
+							"children": []
+						},
+						{
+							"name": "Stack allocation",
+							"token": "no_token",
+							"bytes": [
+								"{00042} [f08] SP := SP + const",
+								"{00044} [f32] 0000 0004"
+							],
+							"children": []
+						},
+						{
+							"name": "Register allocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": [
+								{
+									"name": "Load variable 'a' into R0",
+									"token": "no_token",
+									"bytes": [
+										"{00048} [f32] R27 := FP",
+										"{00050} [f08] R27 := R27 + const",
+										"{00052} [f32] 0000 0000",
+										"{00056} [f32] R0 := ->R27"
+									],
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "Statement",
+							"token": "int",
+							"bytes": [],
+							"children": [
+								{
+									"name": "Variable declaration",
+									"token": "int",
+									"bytes": [],
+									"children": [
+										{
+											"name": "Variable definition",
+											"token": "a",
+											"bytes": [],
+											"children": [
+												{
+													"name": "Expression",
+													"token": "0",
+													"bytes": [],
+													"children": [
+														{
+															"name": "NUMBER",
+															"token": "0",
+															"bytes": [],
+															"children": [
+																{
+																	"name": "Get free register",
+																	"token": "no_token",
+																	"bytes": [],
+																	"children": []
+																},
+																{
+																	"name": "Load LDC constant",
+																	"token": "no_token",
+																	"bytes": [
+																		"{00058} [f32] R1 := 0"
+																	],
+																	"children": []
+																}
+															]
+														}
+													]
+												},
+												{
+													"name": "VarDef MOV",
+													"token": "no_token",
+													"bytes": [
+														"{00060} [f32] R0 := R1"
+													],
+													"children": []
+												},
+												{
+													"name": "Store variable 'a' from R1",
+													"token": "no_token",
+													"bytes": [
+														"{00062} [f32] R27 := FP",
+														"{00064} [f08] R27 := R27 + const",
+														"{00066} [f32] 0000 0000",
+														"{00070} [f32] ->R27 := R1"
+													],
+													"children": []
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Register deallocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": []
+						},
+						{
+							"name": "Register allocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": []
+						},
+						{
+							"name": "Statement",
+							"token": "while",
+							"bytes": [],
+							"children": [
+								{
+									"name": "While",
+									"token": "while",
+									"bytes": [],
+									"children": [
+										{
+											"name": "Register deallocation",
+											"token": "no_token",
+											"bytes": [],
+											"children": [
+												{
+													"name": "Store variable 'a' from R0",
+													"token": "no_token",
+													"bytes": [
+														"{00072} [f32] R27 := FP",
+														"{00074} [f08] R27 := R27 + const",
+														"{00076} [f32] 0000 0000",
+														"{00080} [f32] ->R27 := R0"
+													],
+													"children": []
+												}
+											]
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "Loop start label",
+											"token": "no_token",
+											"bytes": [
+												"{00082} [f32] R0 := 0",
+												"{00084} [f08] R0 := R0 + const",
+												"{00086} [f32] 0000 006A"
+											],
+											"children": []
+										},
+										{
+											"name": "Loop body label",
+											"token": "no_token",
+											"bytes": [
+												"{00090} [f32] R1 := 0",
+												"{00092} [f08] R1 := R1 + const",
+												"{00094} [f32] 0000 00F8"
+											],
+											"children": []
+										},
+										{
+											"name": "Loop end label",
+											"token": "no_token",
+											"bytes": [
+												"{00098} [f32] R2 := 0",
+												"{000100} [f08] R2 := R2 + const",
+												"{000102} [f32] 0000 01AC"
+											],
+											"children": []
+										},
+										{
+											"name": "Heap top change by -12 bytes",
+											"token": "no_token",
+											"bytes": [
+												"{000106} [f32] R27 := 0",
+												"{000108} [f32] R27 := ->R27",
+												"{000110} [f08] R27 := R27 + const",
+												"{000112} [f32] FFFF FFF4",
+												"{000116} [f32] SB := 0",
+												"{000118} [f32] ->SB := R27",
+												"{000120} [f32] SB := 4"
+											],
+											"children": []
+										},
+										{
+											"name": "Store to heap at 0",
+											"token": "no_token",
+											"bytes": [
+												"{000122} [f32] R27 := 0",
+												"{000124} [f32] R27 := ->R27",
+												"{000126} [f08] R27 := R27 + const",
+												"{000128} [f32] 0000 0000",
+												"{000132} [f32] ->R27 := R0"
+											],
+											"children": []
+										},
+										{
+											"name": "Store to heap at 4",
+											"token": "no_token",
+											"bytes": [
+												"{000134} [f32] R27 := 0",
+												"{000136} [f32] R27 := ->R27",
+												"{000138} [f08] R27 := R27 + const",
+												"{000140} [f32] 0000 0004",
+												"{000144} [f32] ->R27 := R1"
+											],
+											"children": []
+										},
+										{
+											"name": "Store to heap at 8",
+											"token": "no_token",
+											"bytes": [
+												"{000146} [f32] R27 := 0",
+												"{000148} [f32] R27 := ->R27",
+												"{000150} [f08] R27 := R27 + const",
+												"{000152} [f32] 0000 0008",
+												"{000156} [f32] ->R27 := R2"
+											],
+											"children": []
+										},
+										{
+											"name": "Expression",
+											"token": "a",
+											"bytes": [],
+											"children": [
+												{
+													"name": "Primary",
+													"token": "a",
+													"bytes": [],
+													"children": [
+														{
+															"name": "Get free register",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
+															"name": "Load variable 'a' into R0",
+															"token": "no_token",
+															"bytes": [
+																"{000158} [f32] R27 := FP",
+																"{000160} [f08] R27 := R27 + const",
+																"{000162} [f32] 0000 0000",
+																"{000166} [f32] R0 := ->R27"
+															],
+															"children": []
+														}
+													]
+												},
+												{
+													"name": "NUMBER",
+													"token": "10",
+													"bytes": [],
+													"children": [
+														{
+															"name": "Get free register",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
+															"name": "Load LDC constant",
+															"token": "no_token",
+															"bytes": [
+																"{000168} [f32] R1 := 10"
+															],
+															"children": []
+														}
+													]
+												},
+												{
+													"name": "Operation '<'",
+													"token": "no_token",
+													"bytes": [],
+													"children": [
+														{
+															"name": "Get free register",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
+															"name": "PreLabel",
+															"token": "no_token",
+															"bytes": [
+																"{000170} [f32] R2 := 2",
+																"{000172} [f32] R1 ?= R0",
+																"{000174} [f32] R2 &= R1",
+																"{000176} [f32] R0 := 1"
+															],
+															"children": []
+														},
+														{
+															"name": "fr1 label",
+															"token": "no_token",
+															"bytes": [
+																"{000178} [f32] R1 := 0",
+																"{000180} [f08] R1 := R1 + const",
+																"{000182} [f32] 0000 00BE"
+															],
+															"children": []
+														},
+														{
+															"name": "PostLabel",
+															"token": "no_token",
+															"bytes": [
+																"{000186} [f32] if R2 goto R1",
+																"{000188} [f32] R0 := 0"
+															],
+															"children": []
+														}
+													]
+												}
+											]
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "Load from heap at 0",
+											"token": "no_token",
+											"bytes": [
+												"{000190} [f32] R1 := 0",
+												"{000192} [f32] R1 := ->R1",
+												"{000194} [f08] R1 := R1 + const",
+												"{000196} [f32] 0000 0000",
+												"{000200} [f32] R1 := ->R1"
+											],
+											"children": []
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "Load from heap at 4",
+											"token": "no_token",
+											"bytes": [
+												"{000202} [f32] R2 := 0",
+												"{000204} [f32] R2 := ->R2",
+												"{000206} [f08] R2 := R2 + const",
+												"{000208} [f32] 0000 0004",
+												"{000212} [f32] R2 := ->R2"
+											],
+											"children": []
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "Load from heap at 8",
+											"token": "no_token",
+											"bytes": [
+												"{000214} [f32] R3 := 0",
+												"{000216} [f32] R3 := ->R3",
+												"{000218} [f08] R3 := R3 + const",
+												"{000220} [f32] 0000 0008",
+												"{000224} [f32] R3 := ->R3"
+											],
+											"children": []
+										},
+										{
+											"name": "Heap top change by 12 bytes",
+											"token": "no_token",
+											"bytes": [
+												"{000226} [f32] R27 := 0",
+												"{000228} [f32] R27 := ->R27",
+												"{000230} [f08] R27 := R27 + const",
+												"{000232} [f32] 0000 000C",
+												"{000236} [f32] SB := 0",
+												"{000238} [f32] ->SB := R27",
+												"{000240} [f32] SB := 4"
+											],
+											"children": []
+										},
+										{
+											"name": "if fr0 cbr",
+											"token": "no_token",
+											"bytes": [
+												"{000242} [f32] if R0 goto R2"
+											],
+											"children": []
+										},
+										{
+											"name": "Get free register",
+											"token": "no_token",
+											"bytes": [],
+											"children": []
+										},
+										{
+											"name": "fr1 ldc, if fr0 cbr",
+											"token": "no_token",
+											"bytes": [
+												"{000244} [f32] R4 := 1",
+												"{000246} [f32] if R4 goto R3"
+											],
+											"children": []
+										},
+										{
+											"name": "Heap top change by -12 bytes",
+											"token": "no_token",
+											"bytes": [
+												"{000248} [f32] R27 := 0",
+												"{000250} [f32] R27 := ->R27",
+												"{000252} [f08] R27 := R27 + const",
+												"{000254} [f32] FFFF FFF4",
+												"{000258} [f32] SB := 0",
+												"{000260} [f32] ->SB := R27",
+												"{000262} [f32] SB := 4"
+											],
+											"children": []
+										},
+										{
+											"name": "Store to heap at 0",
+											"token": "no_token",
+											"bytes": [
+												"{000264} [f32] R27 := 0",
+												"{000266} [f32] R27 := ->R27",
+												"{000268} [f08] R27 := R27 + const",
+												"{000270} [f32] 0000 0000",
+												"{000274} [f32] ->R27 := R1"
+											],
+											"children": []
+										},
+										{
+											"name": "Store to heap at 4",
+											"token": "no_token",
+											"bytes": [
+												"{000276} [f32] R27 := 0",
+												"{000278} [f32] R27 := ->R27",
+												"{000280} [f08] R27 := R27 + const",
+												"{000282} [f32] 0000 0004",
+												"{000286} [f32] ->R27 := R2"
+											],
+											"children": []
+										},
+										{
+											"name": "Store to heap at 8",
+											"token": "no_token",
+											"bytes": [
+												"{000288} [f32] R27 := 0",
+												"{000290} [f32] R27 := ->R27",
+												"{000292} [f08] R27 := R27 + const",
+												"{000294} [f32] 0000 0008",
+												"{000298} [f32] ->R27 := R3"
+											],
+											"children": []
+										},
+										{
+											"name": "Loop body",
+											"token": "loop",
+											"bytes": [],
+											"children": [
+												{
+													"name": "Block body",
+													"token": "a",
+													"bytes": [],
+													"children": [
+														{
+															"name": "Block body cmds 1",
+															"token": "no_token",
+															"bytes": [
+																"{000300} [f32] ->SP := FP",
+																"{000302} [f32] FP := SP",
+																"{000304} [f08] FP := FP + const",
+																"{000306} [f32] 0000 0004",
+																"{000310} [f32] SP := FP",
+																"{000312} [f08] SP := SP + const",
+																"{000314} [f32] 0000 0000"
+															],
+															"children": []
+														},
+														{
+															"name": "Register allocation",
+															"token": "no_token",
+															"bytes": [],
+															"children": [
+																{
+																	"name": "Load variable 'a' into R1",
+																	"token": "no_token",
+																	"bytes": [
+																		"{000318} [f32] R27 := FP",
+																		"{000320} [f08] R27 := R27 + const",
+																		"{000322} [f32] FFFF FFFC",
+																		"{000326} [f32] R27 := ->R27",
+																		"{000328} [f08] R27 := R27 + const",
+																		"{000330} [f32] 0000 0000",
+																		"{000334} [f32] R1 := ->R27"
+																	],
+																	"children": []
+																}
+															]
+														},
+														{
+															"name": "Statement",
+															"token": "a",
+															"bytes": [],
+															"children": [
+																{
+																	"name": "Assignment",
+																	"token": "a",
+																	"bytes": [],
+																	"children": [
+																		{
+																			"name": "Expression",
+																			"token": "a",
+																			"bytes": [],
+																			"children": [
+																				{
+																					"name": "Primary",
+																					"token": "a",
+																					"bytes": [],
+																					"children": [
+																						{
+																							"name": "Get free register",
+																							"token": "no_token",
+																							"bytes": [],
+																							"children": []
+																						},
+																						{
+																							"name": "Copy for right value",
+																							"token": "no_token",
+																							"bytes": [
+																								"{000336} [f32] R2 := R1"
+																							],
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"name": "NUMBER",
+																					"token": "1",
+																					"bytes": [],
+																					"children": [
+																						{
+																							"name": "Get free register",
+																							"token": "no_token",
+																							"bytes": [],
+																							"children": []
+																						},
+																						{
+																							"name": "Load LDC constant",
+																							"token": "no_token",
+																							"bytes": [
+																								"{000338} [f32] R3 := 1"
+																							],
+																							"children": []
+																						}
+																					]
+																				},
+																				{
+																					"name": "Operation '+'",
+																					"token": "no_token",
+																					"bytes": [
+																						"{000340} [f32] R2 += R3"
+																					],
+																					"children": []
+																				}
+																			]
+																		},
+																		{
+																			"name": "Primary",
+																			"token": "a",
+																			"bytes": [],
+																			"children": []
+																		},
+																		{
+																			"name": "Assignment mov",
+																			"token": "no_token",
+																			"bytes": [
+																				"{000342} [f32] R1 := R2"
+																			],
+																			"children": []
+																		}
+																	]
+																}
+															]
+														},
+														{
+															"name": "Register deallocation",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
+															"name": "Register deallocation",
+															"token": "no_token",
+															"bytes": [],
+															"children": [
+																{
+																	"name": "Store variable 'a' from R1",
+																	"token": "no_token",
+																	"bytes": [
+																		"{000344} [f32] R27 := FP",
+																		"{000346} [f08] R27 := R27 + const",
+																		"{000348} [f32] FFFF FFFC",
+																		"{000352} [f32] R27 := ->R27",
+																		"{000354} [f08] R27 := R27 + const",
+																		"{000356} [f32] 0000 0000",
+																		"{000360} [f32] ->R27 := R1"
+																	],
+																	"children": []
+																}
+															]
+														},
+														{
+															"name": "Dynamic array deallocation",
+															"token": "no_token",
+															"bytes": [],
+															"children": [
+																{
+																	"name": "Get free register",
+																	"token": "no_token",
+																	"bytes": [],
+																	"children": []
+																}
+															]
+														},
+														{
+															"name": "Block body cmds 2",
+															"token": "no_token",
+															"bytes": [
+																"{000362} [f08] FP := FP + const",
+																"{000364} [f32] FFFF FFFC",
+																"{000368} [f32] SP := FP",
+																"{000370} [f32] FP := ->FP"
+															],
+															"children": []
+														}
+													]
+												}
+											]
+										},
+										{
+											"name": "Load from heap at 0",
+											"token": "no_token",
+											"bytes": [
+												"{000372} [f32] R0 := 0",
+												"{000374} [f32] R0 := ->R0",
+												"{000376} [f08] R0 := R0 + const",
+												"{000378} [f32] 0000 0000",
+												"{000382} [f32] R0 := ->R0"
+											],
+											"children": []
+										},
+										{
+											"name": "Load from heap at 4",
+											"token": "no_token",
+											"bytes": [
+												"{000384} [f32] R1 := 0",
+												"{000386} [f32] R1 := ->R1",
+												"{000388} [f08] R1 := R1 + const",
+												"{000390} [f32] 0000 0004",
+												"{000394} [f32] R1 := ->R1"
+											],
+											"children": []
+										},
+										{
+											"name": "Load from heap at 8",
+											"token": "no_token",
+											"bytes": [
+												"{000396} [f32] R2 := 0",
+												"{000398} [f32] R2 := ->R2",
+												"{000400} [f08] R2 := R2 + const",
+												"{000402} [f32] 0000 0008",
+												"{000406} [f32] R2 := ->R2"
+											],
+											"children": []
+										},
+										{
+											"name": "Heap top change by 12 bytes",
+											"token": "no_token",
+											"bytes": [
+												"{000408} [f32] R27 := 0",
+												"{000410} [f32] R27 := ->R27",
+												"{000412} [f08] R27 := R27 + const",
+												"{000414} [f32] 0000 000C",
+												"{000418} [f32] SB := 0",
+												"{000420} [f32] ->SB := R27",
+												"{000422} [f32] SB := 4"
+											],
+											"children": []
+										},
+										{
+											"name": "fr0 ldc, if fr0 cbr",
+											"token": "no_token",
+											"bytes": [
+												"{000424} [f32] R4 := 1",
+												"{000426} [f32] if R4 goto R0"
+											],
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Register deallocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": []
+						},
+						{
+							"name": "Register allocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": [
+								{
+									"name": "Load variable 'a' into R0",
+									"token": "no_token",
+									"bytes": [
+										"{000428} [f32] R27 := FP",
+										"{000430} [f08] R27 := R27 + const",
+										"{000432} [f32] 0000 0000",
+										"{000436} [f32] R0 := ->R27"
+									],
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "Statement",
+							"token": "print",
+							"bytes": [],
+							"children": [
+								{
+									"name": "Print",
+									"token": "print",
+									"bytes": [],
+									"children": [
+										{
+											"name": "Expression",
+											"token": "a",
+											"bytes": [],
+											"children": [
+												{
+													"name": "Primary",
+													"token": "a",
+													"bytes": [],
+													"children": [
+														{
+															"name": "Get free register",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
+															"name": "Copy for right value",
+															"token": "no_token",
+															"bytes": [
+																"{000438} [f32] R1 := R0"
+															],
+															"children": []
+														}
+													]
+												}
+											]
+										},
+										{
+											"name": "Print",
+											"token": "no_token",
+											"bytes": [
+												"{000440} [f02] PRINT R1"
+											],
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Register deallocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": [
+								{
+									"name": "Store variable 'a' from R0",
+									"token": "no_token",
+									"bytes": [
+										"{000442} [f32] R27 := FP",
+										"{000444} [f08] R27 := R27 + const",
+										"{000446} [f32] 0000 0000",
+										"{000450} [f32] ->R27 := R0"
+									],
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "Dynamic array deallocation",
+							"token": "no_token",
+							"bytes": [],
+							"children": [
+								{
+									"name": "Get free register",
+									"token": "no_token",
+									"bytes": [],
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Skip/Stop",
+			"token": "no_token",
+			"bytes": [
+				"{000452} [f16] skip",
+				"{000454} [f08] stop"
+			],
+			"children": []
+		}
+	]
+}

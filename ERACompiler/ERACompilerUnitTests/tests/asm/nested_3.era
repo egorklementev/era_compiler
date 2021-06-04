@@ -1,0 +1,47 @@
+// r0 = 256
+code
+	int check := 0;
+	
+	int i1 := 0;
+	loop
+		i1 := i1 + 1;
+		int i2 := 0;
+		loop
+			i2 := i2 + 1;
+			int i3 := 0;
+			loop
+				i3 := i3 + 1;
+				int i4 := 0;
+				loop
+					i4 := i4 + 1;
+					int i5 := 0;
+					loop
+						i5 := i5 + 1;
+						int i6 := 0;
+						loop
+							i6 := i6 + 1;
+							int i7 := 0;
+							loop
+								i7 := i7 + 1;
+								int i8 := 0;
+								loop
+									i8 := i8 + 1;
+									check := check + 1;
+								while i8 < 2
+								end
+							while i7 < 2
+							end
+						while i6 < 2
+						end
+					while i5 < 2
+					end
+				while i4 < 2
+				end
+			while i3 < 2
+			end
+		while i2 < 2
+		end
+	while i1 < 2
+	end
+	print check;
+end

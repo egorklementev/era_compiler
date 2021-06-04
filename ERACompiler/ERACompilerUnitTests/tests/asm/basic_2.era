@@ -1,0 +1,5 @@
+code
+	int a := 5;
+	int b := 25;
+	print a * b;
+end

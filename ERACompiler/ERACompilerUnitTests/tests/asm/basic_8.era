@@ -1,0 +1,9 @@
+code
+	int a := 0;
+	for i to 10 loop
+		for j to 10 loop
+			a := a + 1;
+		end
+	end
+	print a;
+end

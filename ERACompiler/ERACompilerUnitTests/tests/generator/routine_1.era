@@ -1,8 +1,0 @@
-routine test(int a) : int
-do
-	return a * a;
-end
-
-code
-	int a := test(a * a);
-end

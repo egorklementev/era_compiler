@@ -1,0 +1,6 @@
+code
+	int a := 10;
+	int@ b := <-a;
+	a := a + 5;
+	print ->[b];
+end

@@ -54,31 +54,52 @@
 																							"children": []
 																						},
 																						{
-																							"node_type": "Primary | Register",
+																							"node_type": "DELIMITER",
+																							"token": "[",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
 																							"token": "test_var",
 																							"children": [
 																								{
-																									"node_type": "Primary",
+																									"node_type": "Operand",
 																									"token": "test_var",
 																									"children": [
 																										{
-																											"node_type": "IDENTIFIER",
+																											"node_type": "Primary",
 																											"token": "test_var",
-																											"children": []
-																										},
-																										{
-																											"node_type": "{ '.' Identifier }",
-																											"token": ":=",
-																											"children": []
-																										},
-																										{
-																											"node_type": "[ ArrayAccess | CallArgs ]",
-																											"token": ":=",
-																											"children": []
+																											"children": [
+																												{
+																													"node_type": "IDENTIFIER",
+																													"token": "test_var",
+																													"children": []
+																												},
+																												{
+																													"node_type": "{ '.' Identifier }",
+																													"token": "]",
+																													"children": []
+																												},
+																												{
+																													"node_type": "[ ArrayAccess | CallArgs ]",
+																													"token": "]",
+																													"children": []
+																												}
+																											]
 																										}
 																									]
+																								},
+																								{
+																									"node_type": "{ Operator Operand }",
+																									"token": "]",
+																									"children": []
 																								}
 																							]
+																						},
+																						{
+																							"node_type": "DELIMITER",
+																							"token": "]",
+																							"children": []
 																						}
 																					]
 																				}

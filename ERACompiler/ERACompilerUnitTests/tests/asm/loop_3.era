@@ -1,0 +1,7 @@
+code
+	int a := 0;
+	loop
+		a := a + 1;
+	while a < 10 end
+	print a;
+end

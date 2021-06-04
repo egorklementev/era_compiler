@@ -1,0 +1,58 @@
+
+routine merge_sort (int@ arr1, int size1, int@ arr2, int size2, int@ arr3)
+do
+	int maximum := 2147483647;
+	int i1 := 0, i2 := 0;
+	for i to size1 + size2 loop
+		int@ next_put := arr3 + i * 4;
+		int@ next_arr1 := arr1 + i1 * 4;
+		int@ next_arr2 := arr2 + i2 * 4;
+		if i1 = size1 | i1 > size1 do
+			next_arr1 := <-maximum;
+		end
+		if i2 = size2 | i2 > size2 do
+			next_arr2 := <-maximum;
+		end
+		if min(->[next_arr1], ->[next_arr2]) = ->[next_arr1] do
+			->[next_put] := ->[next_arr1];
+			i1 := i1 + 1;
+		else
+			->[next_put] := ->[next_arr2];
+			i2 := i2 + 1;
+		end
+	end
+end
+
+routine min (int a, int b) : int
+do
+	if a < b do
+		return a;
+	else
+		return b;
+	end
+end
+
+routine max (int a, int b) : int
+do
+	if a > b do
+		return a;
+	else
+		return b;
+	end
+end
+
+code
+	int size1 := 5, size2 := 5;
+	int[] arr1[size1], arr2[size2];
+	int[] arr3[size1 + size2];
+	for i to size1 loop
+		arr1[i] := i + 1;
+	end
+	for i to size2 loop
+		arr2[i] := i + 1 + size1;
+	end
+	merge_sort(arr1, size1, arr2, size2, arr3);
+	for i to size1 + size2 loop
+		print arr3[i];
+	end
+end
