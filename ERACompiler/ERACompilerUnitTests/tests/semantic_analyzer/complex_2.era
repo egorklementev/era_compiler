@@ -1,86 +1,124 @@
-// Divide 'num' by 2
-// @return: 'num' divided by 2
-routine div2 (int@ num) : int
-do
-	r0 := num; // Put address to the reg
-	asm
-		format 32;
-		r1 := ->r0;
-		r0 >>= r1;
-		//skip;
-	end
-	int res := r0;
-	return res;
+// Program
+// Annotations
+pragma
+	// PragmaDeclaration {PragmaDeclaration}
+	some_pargma_1()
+	some_pargma_2("text")
 end
 
+// Data
+data data_1
+	3 1 4 1 5 9 2 6
+end
 
-// Fast sort algorithm
-routine fast_sort (int@ arr_addr, int size)
+// Module
+module module_1
+end
+
+// Code
+code
+end
+
+// Structure
+struct struct_1
+	int a;
+end
+
+// Routine 
+routine routine_1 ()
 do
-	if size = 1 do
-		return;
+end
+
+routine routine_2 (int a) : short
+do
+	int b;
+	return a;
+end
+
+// VarDeclaration
+module module_var_decl
+	// Type
+	byte@ a;
+	struct_1 b;
+	// Variable
+	int c := 0, d := 1;
+	// Array
+	int@[] e[10];
+	// Constant
+	int const f := 0;
+end
+
+// Statement
+// AssemblyBlock
+routine routine_asm ()
+do
+	<label1>
+	asm
+		<label1>;
+		skip;
+		stop;
+		format 32;
+		r0 := label1;
+		r0 := r0 + 1000;
+		r0 := ->[r1];
+		->[r2] := r3;
+		r4 := r5;
+		r6 := 31;
+		r7 += r8;
+		r9 -= r10;
+		r11 >>= r12;
+		r13 <<= r14;
+		r15 |= r16;
+		r17 &= r18;
+		r19 ^= r20;
+		r21 <= r22;
+		r23 >= r24;
+		r25 ?= r26;
+		sb := sp;
+		if pc goto fp;
+	end
+	// Goto
+	goto label1;
+end
+
+// ExtenstionStatement
+routine routine_ext ()
+do
+	// Assignment
+	int a, b;
+	a := b + 0;
+	
+	// Swap
+	a <=> b;
+	
+	// Call
+	a := routine_2(a);
+	
+	// If
+	if a do
+		if b do
+			a := b;
+		else
+			b := a;
+		end
 	end
 	
-	// Select a pivot element
-	int pivot := div2(<-size);
-	int@ pivot_element_addr := arr_addr + pivot;
-	int pivot_element := ->pivot_element_addr;
-
-	// Count how much elements greater 
-	// or equal and less than pivot
-	int greater := 0;
-	int less := 0;
-	for i to size loop
-		int@ next_addr := arr_addr + i; 
-		if ->next_addr < pivot do
-			less := less + 1;
-		else
-			greater := greater + 1;
-		end
+	// Loop
+	// For
+	for i from 0 to 10 step 1 loop
+		a := b;
 	end
-
-	// Create two subarrays for recursive calls
-	int[] left[less];
-	int[] right[greater - 1]; // Since we counted the pivot itself
-
-	// Populate arrays
-	int left_i := 0, right_i := 0;
-	for i to size loop
-		int@ next_addr := arr_addr + i;
-		if ->next_addr < pivot do
-			left[left_i] := ->next_addr;
-		else
-			if i /= pivot do
-				right[right_i] := ->next_addr;
-			end
-		end
+	// While / Break
+	while a /= b loop
+		a := b;
+		break;
 	end
+	// Loop while
+	loop 
+		a := b;
+	while a end
+	
+	// Return
+	return;
 
-	// Recursive calls
-	fast_sort(left, less);
-	fast_sort(right, greater - 1);
-
-	// Concatenate arrays
-	for i to less loop
-		int@ next_addr := arr_addr + i;
-		->next_addr := left[i]; 
-	end
-	int@ new_pivot_addr := arr_addr + less;
-	->new_pivot_addr := pivot_element;
-	for i to greater - 1 loop
-		int@ next_addr := arr_addr + i;
-		->next_addr := right[i]; 
-	end
-end
-
-code 
-	int const size := 4;
-
-	int[] arr[size];
-	arr[0] := 10; 
-	arr[1] := 9;
-	arr[2] := 8; 
-	arr[3] := 7;
-
-	fast_sort(arr, size);
 end

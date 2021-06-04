@@ -5,7 +5,7 @@ code
 			do
 				// Some random assignments
 				R0 := i + j;
-				->R1 := i + 2 * j; 
+				->[R1] := i + 2 * j; 
 			end
 		end
 	end

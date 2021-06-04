@@ -301,7 +301,7 @@
 																					"token": "r1",
 																					"children": [
 																						{
-																							"node_type": "Register := -> Register",
+																							"node_type": "Register := -> [ Register ]",
 																							"token": "r1",
 																							"children": [
 																								{
@@ -320,8 +320,18 @@
 																									"children": []
 																								},
 																								{
+																									"node_type": "DELIMITER",
+																									"token": "[",
+																									"children": []
+																								},
+																								{
 																									"node_type": "REGISTER",
 																									"token": "r0",
+																									"children": []
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": "]",
 																									"children": []
 																								}
 																							]
@@ -1461,31 +1471,52 @@
 																																					"children": []
 																																				},
 																																				{
-																																					"node_type": "Primary | Register",
+																																					"node_type": "DELIMITER",
+																																					"token": "[",
+																																					"children": []
+																																				},
+																																				{
+																																					"node_type": "Expression",
 																																					"token": "pivot_element_addr",
 																																					"children": [
 																																						{
-																																							"node_type": "Primary",
+																																							"node_type": "Operand",
 																																							"token": "pivot_element_addr",
 																																							"children": [
 																																								{
-																																									"node_type": "IDENTIFIER",
+																																									"node_type": "Primary",
 																																									"token": "pivot_element_addr",
-																																									"children": []
-																																								},
-																																								{
-																																									"node_type": "{ '.' Identifier }",
-																																									"token": ";",
-																																									"children": []
-																																								},
-																																								{
-																																									"node_type": "[ ArrayAccess | CallArgs ]",
-																																									"token": ";",
-																																									"children": []
+																																									"children": [
+																																										{
+																																											"node_type": "IDENTIFIER",
+																																											"token": "pivot_element_addr",
+																																											"children": []
+																																										},
+																																										{
+																																											"node_type": "{ '.' Identifier }",
+																																											"token": "]",
+																																											"children": []
+																																										},
+																																										{
+																																											"node_type": "[ ArrayAccess | CallArgs ]",
+																																											"token": "]",
+																																											"children": []
+																																										}
+																																									]
 																																								}
 																																							]
+																																						},
+																																						{
+																																							"node_type": "{ Operator Operand }",
+																																							"token": "]",
+																																							"children": []
 																																						}
 																																					]
+																																				},
+																																				{
+																																					"node_type": "DELIMITER",
+																																					"token": "]",
+																																					"children": []
 																																				}
 																																			]
 																																		}
@@ -2147,31 +2178,52 @@
 																																									"children": []
 																																								},
 																																								{
-																																									"node_type": "Primary | Register",
+																																									"node_type": "DELIMITER",
+																																									"token": "[",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "Expression",
 																																									"token": "next_addr",
 																																									"children": [
 																																										{
-																																											"node_type": "Primary",
+																																											"node_type": "Operand",
 																																											"token": "next_addr",
 																																											"children": [
 																																												{
-																																													"node_type": "IDENTIFIER",
+																																													"node_type": "Primary",
 																																													"token": "next_addr",
-																																													"children": []
-																																												},
-																																												{
-																																													"node_type": "{ '.' Identifier }",
-																																													"token": "<",
-																																													"children": []
-																																												},
-																																												{
-																																													"node_type": "[ ArrayAccess | CallArgs ]",
-																																													"token": "<",
-																																													"children": []
+																																													"children": [
+																																														{
+																																															"node_type": "IDENTIFIER",
+																																															"token": "next_addr",
+																																															"children": []
+																																														},
+																																														{
+																																															"node_type": "{ '.' Identifier }",
+																																															"token": "]",
+																																															"children": []
+																																														},
+																																														{
+																																															"node_type": "[ ArrayAccess | CallArgs ]",
+																																															"token": "]",
+																																															"children": []
+																																														}
+																																													]
 																																												}
 																																											]
+																																										},
+																																										{
+																																											"node_type": "{ Operator Operand }",
+																																											"token": "]",
+																																											"children": []
 																																										}
 																																									]
+																																								},
+																																								{
+																																									"node_type": "DELIMITER",
+																																									"token": "]",
+																																									"children": []
 																																								}
 																																							]
 																																						}
@@ -3443,31 +3495,52 @@
 																																									"children": []
 																																								},
 																																								{
-																																									"node_type": "Primary | Register",
+																																									"node_type": "DELIMITER",
+																																									"token": "[",
+																																									"children": []
+																																								},
+																																								{
+																																									"node_type": "Expression",
 																																									"token": "next_addr",
 																																									"children": [
 																																										{
-																																											"node_type": "Primary",
+																																											"node_type": "Operand",
 																																											"token": "next_addr",
 																																											"children": [
 																																												{
-																																													"node_type": "IDENTIFIER",
+																																													"node_type": "Primary",
 																																													"token": "next_addr",
-																																													"children": []
-																																												},
-																																												{
-																																													"node_type": "{ '.' Identifier }",
-																																													"token": "<",
-																																													"children": []
-																																												},
-																																												{
-																																													"node_type": "[ ArrayAccess | CallArgs ]",
-																																													"token": "<",
-																																													"children": []
+																																													"children": [
+																																														{
+																																															"node_type": "IDENTIFIER",
+																																															"token": "next_addr",
+																																															"children": []
+																																														},
+																																														{
+																																															"node_type": "{ '.' Identifier }",
+																																															"token": "]",
+																																															"children": []
+																																														},
+																																														{
+																																															"node_type": "[ ArrayAccess | CallArgs ]",
+																																															"token": "]",
+																																															"children": []
+																																														}
+																																													]
 																																												}
 																																											]
+																																										},
+																																										{
+																																											"node_type": "{ Operator Operand }",
+																																											"token": "]",
+																																											"children": []
 																																										}
 																																									]
+																																								},
+																																								{
+																																									"node_type": "DELIMITER",
+																																									"token": "]",
+																																									"children": []
 																																								}
 																																							]
 																																						}
@@ -3660,31 +3733,52 @@
 																																																			"children": []
 																																																		},
 																																																		{
-																																																			"node_type": "Primary | Register",
+																																																			"node_type": "DELIMITER",
+																																																			"token": "[",
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"node_type": "Expression",
 																																																			"token": "next_addr",
 																																																			"children": [
 																																																				{
-																																																					"node_type": "Primary",
+																																																					"node_type": "Operand",
 																																																					"token": "next_addr",
 																																																					"children": [
 																																																						{
-																																																							"node_type": "IDENTIFIER",
+																																																							"node_type": "Primary",
 																																																							"token": "next_addr",
-																																																							"children": []
-																																																						},
-																																																						{
-																																																							"node_type": "{ '.' Identifier }",
-																																																							"token": ";",
-																																																							"children": []
-																																																						},
-																																																						{
-																																																							"node_type": "[ ArrayAccess | CallArgs ]",
-																																																							"token": ";",
-																																																							"children": []
+																																																							"children": [
+																																																								{
+																																																									"node_type": "IDENTIFIER",
+																																																									"token": "next_addr",
+																																																									"children": []
+																																																								},
+																																																								{
+																																																									"node_type": "{ '.' Identifier }",
+																																																									"token": "]",
+																																																									"children": []
+																																																								},
+																																																								{
+																																																									"node_type": "[ ArrayAccess | CallArgs ]",
+																																																									"token": "]",
+																																																									"children": []
+																																																								}
+																																																							]
 																																																						}
 																																																					]
+																																																				},
+																																																				{
+																																																					"node_type": "{ Operator Operand }",
+																																																					"token": "]",
+																																																					"children": []
 																																																				}
 																																																			]
+																																																		},
+																																																		{
+																																																			"node_type": "DELIMITER",
+																																																			"token": "]",
+																																																			"children": []
 																																																		}
 																																																	]
 																																																}
@@ -3973,31 +4067,52 @@
 																																																																	"children": []
 																																																																},
 																																																																{
-																																																																	"node_type": "Primary | Register",
+																																																																	"node_type": "DELIMITER",
+																																																																	"token": "[",
+																																																																	"children": []
+																																																																},
+																																																																{
+																																																																	"node_type": "Expression",
 																																																																	"token": "next_addr",
 																																																																	"children": [
 																																																																		{
-																																																																			"node_type": "Primary",
+																																																																			"node_type": "Operand",
 																																																																			"token": "next_addr",
 																																																																			"children": [
 																																																																				{
-																																																																					"node_type": "IDENTIFIER",
+																																																																					"node_type": "Primary",
 																																																																					"token": "next_addr",
-																																																																					"children": []
-																																																																				},
-																																																																				{
-																																																																					"node_type": "{ '.' Identifier }",
-																																																																					"token": ";",
-																																																																					"children": []
-																																																																				},
-																																																																				{
-																																																																					"node_type": "[ ArrayAccess | CallArgs ]",
-																																																																					"token": ";",
-																																																																					"children": []
+																																																																					"children": [
+																																																																						{
+																																																																							"node_type": "IDENTIFIER",
+																																																																							"token": "next_addr",
+																																																																							"children": []
+																																																																						},
+																																																																						{
+																																																																							"node_type": "{ '.' Identifier }",
+																																																																							"token": "]",
+																																																																							"children": []
+																																																																						},
+																																																																						{
+																																																																							"node_type": "[ ArrayAccess | CallArgs ]",
+																																																																							"token": "]",
+																																																																							"children": []
+																																																																						}
+																																																																					]
 																																																																				}
 																																																																			]
+																																																																		},
+																																																																		{
+																																																																			"node_type": "{ Operator Operand }",
+																																																																			"token": "]",
+																																																																			"children": []
 																																																																		}
 																																																																	]
+																																																																},
+																																																																{
+																																																																	"node_type": "DELIMITER",
+																																																																	"token": "]",
+																																																																	"children": []
 																																																																}
 																																																															]
 																																																														}
@@ -4756,31 +4871,52 @@
 																																							"children": []
 																																						},
 																																						{
-																																							"node_type": "Primary | Register",
+																																							"node_type": "DELIMITER",
+																																							"token": "[",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "Expression",
 																																							"token": "next_addr",
 																																							"children": [
 																																								{
-																																									"node_type": "Primary",
+																																									"node_type": "Operand",
 																																									"token": "next_addr",
 																																									"children": [
 																																										{
-																																											"node_type": "IDENTIFIER",
+																																											"node_type": "Primary",
 																																											"token": "next_addr",
-																																											"children": []
-																																										},
-																																										{
-																																											"node_type": "{ '.' Identifier }",
-																																											"token": ":=",
-																																											"children": []
-																																										},
-																																										{
-																																											"node_type": "[ ArrayAccess | CallArgs ]",
-																																											"token": ":=",
-																																											"children": []
+																																											"children": [
+																																												{
+																																													"node_type": "IDENTIFIER",
+																																													"token": "next_addr",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "{ '.' Identifier }",
+																																													"token": "]",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "[ ArrayAccess | CallArgs ]",
+																																													"token": "]",
+																																													"children": []
+																																												}
+																																											]
 																																										}
 																																									]
+																																								},
+																																								{
+																																									"node_type": "{ Operator Operand }",
+																																									"token": "]",
+																																									"children": []
 																																								}
 																																							]
+																																						},
+																																						{
+																																							"node_type": "DELIMITER",
+																																							"token": "]",
+																																							"children": []
 																																						}
 																																					]
 																																				}
@@ -5147,31 +5283,52 @@
 																									"children": []
 																								},
 																								{
-																									"node_type": "Primary | Register",
+																									"node_type": "DELIMITER",
+																									"token": "[",
+																									"children": []
+																								},
+																								{
+																									"node_type": "Expression",
 																									"token": "new_pivot_addr",
 																									"children": [
 																										{
-																											"node_type": "Primary",
+																											"node_type": "Operand",
 																											"token": "new_pivot_addr",
 																											"children": [
 																												{
-																													"node_type": "IDENTIFIER",
+																													"node_type": "Primary",
 																													"token": "new_pivot_addr",
-																													"children": []
-																												},
-																												{
-																													"node_type": "{ '.' Identifier }",
-																													"token": ":=",
-																													"children": []
-																												},
-																												{
-																													"node_type": "[ ArrayAccess | CallArgs ]",
-																													"token": ":=",
-																													"children": []
+																													"children": [
+																														{
+																															"node_type": "IDENTIFIER",
+																															"token": "new_pivot_addr",
+																															"children": []
+																														},
+																														{
+																															"node_type": "{ '.' Identifier }",
+																															"token": "]",
+																															"children": []
+																														},
+																														{
+																															"node_type": "[ ArrayAccess | CallArgs ]",
+																															"token": "]",
+																															"children": []
+																														}
+																													]
 																												}
 																											]
+																										},
+																										{
+																											"node_type": "{ Operator Operand }",
+																											"token": "]",
+																											"children": []
 																										}
 																									]
+																								},
+																								{
+																									"node_type": "DELIMITER",
+																									"token": "]",
+																									"children": []
 																								}
 																							]
 																						}
@@ -5599,31 +5756,52 @@
 																																							"children": []
 																																						},
 																																						{
-																																							"node_type": "Primary | Register",
+																																							"node_type": "DELIMITER",
+																																							"token": "[",
+																																							"children": []
+																																						},
+																																						{
+																																							"node_type": "Expression",
 																																							"token": "next_addr",
 																																							"children": [
 																																								{
-																																									"node_type": "Primary",
+																																									"node_type": "Operand",
 																																									"token": "next_addr",
 																																									"children": [
 																																										{
-																																											"node_type": "IDENTIFIER",
+																																											"node_type": "Primary",
 																																											"token": "next_addr",
-																																											"children": []
-																																										},
-																																										{
-																																											"node_type": "{ '.' Identifier }",
-																																											"token": ":=",
-																																											"children": []
-																																										},
-																																										{
-																																											"node_type": "[ ArrayAccess | CallArgs ]",
-																																											"token": ":=",
-																																											"children": []
+																																											"children": [
+																																												{
+																																													"node_type": "IDENTIFIER",
+																																													"token": "next_addr",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "{ '.' Identifier }",
+																																													"token": "]",
+																																													"children": []
+																																												},
+																																												{
+																																													"node_type": "[ ArrayAccess | CallArgs ]",
+																																													"token": "]",
+																																													"children": []
+																																												}
+																																											]
 																																										}
 																																									]
+																																								},
+																																								{
+																																									"node_type": "{ Operator Operand }",
+																																									"token": "]",
+																																									"children": []
 																																								}
 																																							]
+																																						},
+																																						{
+																																							"node_type": "DELIMITER",
+																																							"token": "]",
+																																							"children": []
 																																						}
 																																					]
 																																				}

@@ -10,10 +10,10 @@ namespace ERACompiler.Modules
     ///</summary>
     public class Compiler
     {
-        private readonly LexicalAnalyzer lexis;         // Used to retrieve tokens from the source code.
-        private readonly SyntaxAnalyzer syntax;         // Used to build AST.
-        private readonly SemanticAnalyzer semantics;    // Used to check semantics of AST and more.
-        private readonly Generator generator;           // Used to generate assembly code given AAST.
+        public readonly LexicalAnalyzer lexis;         // Used to retrieve tokens from the source code.
+        public readonly SyntaxAnalyzer syntax;         // Used to build AST.
+        public readonly SemanticAnalyzer semantics;    // Used to check semantics of AST and more.
+        public readonly Generator generator;           // Used to generate assembly code given AAST.
 
         /// <summary>
         /// Constructor for the compiler. Initializates all the modules such as Lexical Analyzer, etc.
@@ -78,12 +78,24 @@ namespace ERACompiler.Modules
                         List<Token> lst = lexis.GetTokenList(sourceCode);
                         SyntaxRule.SyntaxResponse synResp = syntax.CheckSyntax(lst);
                         ASTNode ast = synResp.AstNode;
-                        AASTNode aast = semantics.BuildAAST(ast);                        
-                        return generator.GetBinaryCode(aast);
+                        AASTNode aast = semantics.BuildAAST(ast);
+                        if (Program.config.ConvertToAsmCode)
+                        {
+                            return Encoding.ASCII.GetBytes(Generator.GetProgramCodeNodeRoot(aast).ToString());
+                        }
+                        LinkedList<byte> bytes = CollectBytes(Generator.GetProgramCodeNodeRoot(aast));
+                        byte[] toReturn = new byte[bytes.Count];
+                        int i = 0;
+                        foreach (byte b in bytes)
+                        {
+                            toReturn[i] = b;
+                            i++;
+                        }
+                        return toReturn;
                     }
 
                 default:
-                    return new byte[] {};
+                    return System.Array.Empty<byte>();
             }
         }
 
@@ -95,6 +107,23 @@ namespace ERACompiler.Modules
         public byte[] Compile(string sourceCode)
         {
             return Compile(sourceCode, CompilationMode.GENERATION);
+        }
+
+        private LinkedList<byte> CollectBytes(CodeNode cn)
+        {
+            if (cn.IsLeaf())
+            {
+                return cn.Bytes;
+            }
+            LinkedList<byte> toReturn = new LinkedList<byte>();
+            foreach (CodeNode child in cn.Children)
+            {
+                foreach (byte b in CollectBytes(child))
+                {
+                    toReturn.AddLast(b);
+                }   
+            }
+            return toReturn;
         }
 
         /// <summary>

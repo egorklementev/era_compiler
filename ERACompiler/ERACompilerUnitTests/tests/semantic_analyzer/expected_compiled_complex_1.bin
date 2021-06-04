@@ -1,166 +1,18 @@
 {
 	"node_type": "Program",
-	"var_value": "32",
+	"var_value": "4",
 	"context": 
 		{
 			"name": "Program",
 			"symbol_table": [
 				{
-					"var_type": "DATA",
-					"var_name": "data_1"
-				},
-				{
 					"var_type": "MODULE",
-					"var_name": "module_1"
-				},
-				{
-					"var_type": "MODULE",
-					"var_name": "code",
-					"var_static_offset": "4"
-				},
-				{
-					"var_type": "struct_1",
-					"var_name": "struct_1",
-					"var_static_offset": "8"
-				},
-				{
-					"var_type": "NO_TYPE routine, ()",
-					"var_name": "routine_1",
-					"var_static_offset": "8"
-				},
-				{
-					"var_type": "SHORT routine, (INT)",
-					"var_name": "routine_2",
-					"var_static_offset": "12"
-				},
-				{
-					"var_type": "INT routine, ()",
-					"var_name": "routine_3",
-					"var_static_offset": "16"
-				},
-				{
-					"var_type": "MODULE",
-					"var_name": "module_var_decl",
-					"var_static_offset": "20"
-				},
-				{
-					"var_type": "NO_TYPE routine, ()",
-					"var_name": "routine_asm",
-					"var_static_offset": "24"
-				},
-				{
-					"var_type": "NO_TYPE routine, ()",
-					"var_name": "routine_ext",
-					"var_static_offset": "28"
+					"var_name": "code"
 				}
 			]
 		},
-	"token": "pragma",
+	"token": "code",
 	"children": [
-		{
-			"node_type": "Annotations",
-			"token": "pragma",
-			"children": [
-				{
-					"node_type": "Pragma declaration",
-					"token": "some_pargma_1",
-					"children": [
-						{
-							"node_type": "IDENTIFIER",
-							"token": "some_pargma_1",
-							"children": []
-						}
-					]
-				},
-				{
-					"node_type": "Pragma declaration",
-					"token": "some_pargma_2",
-					"children": [
-						{
-							"node_type": "IDENTIFIER",
-							"token": "some_pargma_2",
-							"children": []
-						},
-						{
-							"node_type": "IDENTIFIER",
-							"token": "text",
-							"children": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Data",
-			"var_type": "DATA",
-			"token": "data",
-			"children": [
-				{
-					"node_type": "IDENTIFIER",
-					"token": "data_1",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "3",
-					"token": "3",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "1",
-					"token": "1",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "4",
-					"token": "4",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "1",
-					"token": "1",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "5",
-					"token": "5",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "9",
-					"token": "9",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "2",
-					"token": "2",
-					"children": []
-				},
-				{
-					"node_type": "NUMBER",
-					"var_value": "6",
-					"token": "6",
-					"children": []
-				}
-			]
-		},
-		{
-			"node_type": "Module",
-			"var_type": "MODULE",
-			"context": 
-				{
-					"name": "module_1",
-					"symbol_table": []
-				},
-			"token": "module",
-			"children": []
-		},
 		{
 			"node_type": "Code",
 			"var_type": "MODULE",
@@ -170,1806 +22,276 @@
 					"symbol_table": []
 				},
 			"token": "code",
-			"children": []
-		},
-		{
-			"node_type": "Structure",
-			"var_type": "struct_1",
-			"context": 
-				{
-					"name": "struct_1",
-					"symbol_table": [
-						{
-							"var_type": "INT",
-							"var_name": "a"
-						}
-					]
-				},
-			"token": "struct",
 			"children": [
 				{
-					"node_type": "Variable declaration",
-					"token": "int",
+					"node_type": "Statement",
+					"block_position": "1",
+					"token": "for",
 					"children": [
 						{
-							"node_type": "Variable definition",
-							"var_type": "INT",
-							"token": "a",
-							"children": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Routine",
-			"var_type": "NO_TYPE routine, ()",
-			"context": 
-				{
-					"name": "routine_1",
-					"symbol_table": []
-				},
-			"token": "routine",
-			"children": [
-				{
-					"node_type": "Routine body",
-					"token": "do",
-					"children": [
-						{
-							"node_type": "Statement",
-							"block_position": "1",
-							"token": "return",
+							"node_type": "For",
+							"token": "for",
 							"children": [
 								{
-									"node_type": "Return",
-									"token": "return",
-									"children": [
-										{
-											"node_type": "Expression",
-											"token": "routine_1",
-											"children": [
-												{
-													"node_type": "Primary",
-													"token": "routine_1",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "routine_1",
-															"children": []
-														},
-														{
-															"node_type": "Call arguments",
-															"token": "(",
-															"children": []
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Routine",
-			"var_type": "SHORT routine, (INT)",
-			"context": 
-				{
-					"name": "routine_2",
-					"symbol_table": [
-						{
-							"var_type": "INT",
-							"var_name": "a",
-							"li_start": "1",
-							"li_end": "1"
-						},
-						{
-							"var_type": "INT",
-							"var_name": "b",
-							"var_frame_offset": "4",
-							"li_start": "1",
-							"li_end": "1"
-						}
-					]
-				},
-			"token": "routine",
-			"children": [
-				{
-					"node_type": "Routine body",
-					"token": "do",
-					"children": [
-						{
-							"node_type": "Statement",
-							"block_position": "1",
-							"token": "int",
-							"children": [
-								{
-									"node_type": "Variable declaration",
-									"token": "int",
-									"children": [
-										{
-											"node_type": "Variable definition",
-											"var_type": "INT",
-											"token": "b",
-											"children": []
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "2",
-							"token": "return",
-							"children": [
-								{
-									"node_type": "Return",
-									"token": "return",
-									"children": [
-										{
-											"node_type": "Expression",
-											"token": "1",
-											"children": [
-												{
-													"node_type": "NUMBER",
-													"var_value": "1",
-													"token": "1",
-													"children": []
-												}
-											]
-										}
-									]
-								}
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Routine",
-			"var_type": "INT routine, ()",
-			"context": 
-				{
-					"name": "routine_3",
-					"symbol_table": []
-				},
-			"token": "routine",
-			"children": [
-				{
-					"node_type": "Routine body",
-					"token": "do",
-					"children": [
-						{
-							"node_type": "Statement",
-							"block_position": "1",
-							"token": "return",
-							"children": [
-								{
-									"node_type": "Return",
-									"token": "return",
-									"children": [
-										{
-											"node_type": "Expression",
-											"token": "routine_2",
-											"children": [
-												{
-													"node_type": "Primary",
-													"token": "routine_2",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "routine_2",
-															"children": []
-														},
-														{
-															"node_type": "Call arguments",
-															"token": "(",
-															"children": [
-																{
-																	"node_type": "Expression",
-																	"token": "4",
-																	"children": [
-																		{
-																			"node_type": "NUMBER",
-																			"var_value": "4",
-																			"token": "4",
-																			"children": []
-																		}
-																	]
-																}
-															]
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Module",
-			"var_type": "MODULE",
-			"context": 
-				{
-					"name": "module_var_decl",
-					"symbol_table": [
-						{
-							"var_type": "BYTE_ADDR",
-							"var_name": "a"
-						},
-						{
-							"var_type": "struct_1",
-							"var_name": "b"
-						},
-						{
-							"var_type": "INT",
-							"var_name": "c"
-						},
-						{
-							"var_type": "INT",
-							"var_name": "d"
-						},
-						{
-							"var_type": "Array of type INT_ADDR of size 10",
-							"var_name": "e"
-						},
-						{
-							"var_type": "CONST_INT",
-							"var_name": "f"
-						}
-					]
-				},
-			"token": "module",
-			"children": [
-				{
-					"node_type": "Variable declaration",
-					"token": "byte",
-					"children": [
-						{
-							"node_type": "Variable definition",
-							"var_type": "BYTE_ADDR",
-							"token": "a",
-							"children": []
-						}
-					]
-				},
-				{
-					"node_type": "Variable declaration",
-					"token": "struct_1",
-					"children": [
-						{
-							"node_type": "Variable definition",
-							"var_type": "struct_1",
-							"token": "b",
-							"children": []
-						}
-					]
-				},
-				{
-					"node_type": "Variable declaration",
-					"token": "int",
-					"children": [
-						{
-							"node_type": "Variable definition",
-							"var_type": "INT",
-							"token": "c",
-							"children": [
-								{
-									"node_type": "Expression",
-									"token": "0",
-									"children": [
-										{
-											"node_type": "NUMBER",
-											"token": "0",
-											"children": []
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Variable definition",
-							"var_type": "INT",
-							"token": "d",
-							"children": [
-								{
-									"node_type": "Expression",
-									"token": "1",
-									"children": [
-										{
-											"node_type": "NUMBER",
-											"var_value": "1",
-											"token": "1",
-											"children": []
-										}
-									]
-								}
-							]
-						}
-					]
-				},
-				{
-					"node_type": "Variable declaration",
-					"token": "int",
-					"children": [
-						{
-							"node_type": "Array definition",
-							"var_type": "Array of type INT_ADDR of size 10",
-							"token": "e",
-							"children": []
-						}
-					]
-				},
-				{
-					"node_type": "Variable declaration",
-					"token": "int",
-					"children": [
-						{
-							"node_type": "Constant definition",
-							"var_type": "CONST_INT",
-							"token": "f",
-							"children": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Routine",
-			"var_type": "NO_TYPE routine, ()",
-			"context": 
-				{
-					"name": "routine_asm",
-					"symbol_table": [
-						{
-							"var_type": "LABEL",
-							"var_name": "label1"
-						}
-					]
-				},
-			"token": "routine",
-			"children": [
-				{
-					"node_type": "Routine body",
-					"token": "do",
-					"children": [
-						{
-							"node_type": "Statement",
-							"block_position": "1",
-							"token": "<",
-							"children": [
-								{
-									"node_type": "Label",
-									"var_type": "LABEL",
-									"token": "<",
-									"children": [
-										{
-											"node_type": "IDENTIFIER",
-											"token": "label1",
-											"children": []
-										}
-									]
+									"node_type": "IDENTIFIER",
+									"var_type": "INT",
+									"token": "i",
+									"children": []
 								},
 								{
-									"node_type": "Assembly block",
-									"token": "asm",
+									"node_type": "Loop body",
+									"token": "loop",
 									"children": [
-										{
-											"node_type": "< Identifier >",
-											"token": "<",
-											"children": [
-												{
-													"node_type": "OPERATOR",
-													"token": "<",
-													"children": []
-												},
-												{
-													"node_type": "IDENTIFIER",
-													"token": "label1",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ">",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "KEYWORD",
-											"token": "skip",
-											"children": []
-										},
-										{
-											"node_type": "KEYWORD",
-											"token": "stop",
-											"children": []
-										},
-										{
-											"node_type": "format ( 8 | 16 | 32 )",
-											"token": "format",
-											"children": [
-												{
-													"node_type": "KEYWORD",
-													"token": "format",
-													"children": []
-												},
-												{
-													"node_type": "NUMBER",
-													"var_value": "32",
-													"token": "32",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register := Identifier",
-											"token": "r0",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r0",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "IDENTIFIER",
-													"token": "label1",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register := Register + Expression",
-											"token": "r0",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r0",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r0",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "+",
-													"children": []
-												},
-												{
-													"node_type": "Expression",
-													"token": "1000",
-													"children": [
-														{
-															"node_type": "NUMBER",
-															"var_value": "1000",
-															"token": "1000",
-															"children": []
-														}
-													]
-												}
-											]
-										},
-										{
-											"node_type": "Register := -> Register",
-											"token": "r0",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r0",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "->",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r1",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "-> Register := Register",
-											"token": "->",
-											"children": [
-												{
-													"node_type": "OPERATOR",
-													"token": "->",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r2",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r3",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register := Register",
-											"token": "r4",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r4",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r5",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register := Expression",
-											"token": "r6",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r6",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "Expression",
-													"token": "31",
-													"children": [
-														{
-															"node_type": "NUMBER",
-															"var_value": "31",
-															"token": "31",
-															"children": []
-														}
-													]
-												}
-											]
-										},
-										{
-											"node_type": "Register += Register",
-											"token": "r7",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r7",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "+=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r8",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register -= Register",
-											"token": "r9",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r9",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "-=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r10",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register >>= Register",
-											"token": "r11",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r11",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ">>=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r12",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register <<= Register",
-											"token": "r13",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r13",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "<<=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r14",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register |= Register",
-											"token": "r15",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r15",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "|=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r16",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register &= Register",
-											"token": "r17",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r17",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "&=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r18",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register ^= Register",
-											"token": "r19",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r19",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "^=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r20",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register <= Register",
-											"token": "r21",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r21",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "<=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r22",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register >= Register",
-											"token": "r23",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r23",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ">=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r24",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register ?= Register",
-											"token": "r25",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "r25",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "?=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "r26",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Register := Register",
-											"token": "sb",
-											"children": [
-												{
-													"node_type": "REGISTER",
-													"token": "sb",
-													"children": []
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": ":=",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "sp",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "if Register goto Register",
-											"token": "if",
-											"children": [
-												{
-													"node_type": "KEYWORD",
-													"token": "if",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "pc",
-													"children": []
-												},
-												{
-													"node_type": "KEYWORD",
-													"token": "goto",
-													"children": []
-												},
-												{
-													"node_type": "REGISTER",
-													"token": "fp",
-													"children": []
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "2",
-							"token": "goto",
-							"children": [
-								{
-									"node_type": "Goto",
-									"token": "goto",
-									"children": [
-										{
-											"node_type": "IDENTIFIER",
-											"token": "label1",
-											"children": []
-										}
-									]
-								}
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			"node_type": "Routine",
-			"var_type": "NO_TYPE routine, ()",
-			"context": 
-				{
-					"name": "routine_ext",
-					"symbol_table": [
-						{
-							"var_type": "INT",
-							"var_name": "a",
-							"li_start": "1",
-							"li_end": "12"
-						},
-						{
-							"var_type": "INT",
-							"var_name": "b",
-							"var_frame_offset": "4",
-							"li_start": "1",
-							"li_end": "12"
-						},
-						{
-							"var_type": "SHORT",
-							"var_name": "ff",
-							"var_frame_offset": "8",
-							"li_start": "4",
-							"li_end": "4"
-						},
-						{
-							"var_type": "CONST_INT",
-							"var_name": "fff",
-							"var_frame_offset": "12",
-							"li_start": "10",
-							"li_end": "10",
-							"var_value": "1"
-						},
-						{
-							"var_type": "CONST_INT",
-							"var_name": "cnst",
-							"var_frame_offset": "12",
-							"li_start": "11",
-							"li_end": "11",
-							"var_value": "11"
-						},
-						{
-							"var_type": "INT",
-							"var_name": "af",
-							"var_frame_offset": "12",
-							"li_start": "12",
-							"li_end": "12"
-						}
-					]
-				},
-			"token": "routine",
-			"children": [
-				{
-					"node_type": "Routine body",
-					"token": "do",
-					"children": [
-						{
-							"node_type": "Statement",
-							"block_position": "1",
-							"token": "int",
-							"children": [
-								{
-									"node_type": "Variable declaration",
-									"token": "int",
-									"children": [
-										{
-											"node_type": "Variable definition",
-											"var_type": "INT",
-											"token": "a",
-											"children": []
-										},
-										{
-											"node_type": "Variable definition",
-											"var_type": "INT",
-											"token": "b",
-											"children": []
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "2",
-							"token": "a",
-							"children": [
-								{
-									"node_type": "Assignment",
-									"token": "a",
-									"children": [
-										{
-											"node_type": "Primary",
-											"token": "a",
-											"children": [
-												{
-													"node_type": "IDENTIFIER",
-													"token": "a",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Expression",
-											"token": "b",
-											"children": [
-												{
-													"node_type": "Primary",
-													"token": "b",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "b",
-															"children": []
-														}
-													]
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "+",
-													"children": []
-												},
-												{
-													"node_type": "NUMBER",
-													"token": "0",
-													"children": []
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "3",
-							"token": "a",
-							"children": [
-								{
-									"node_type": "Swap",
-									"token": "a",
-									"children": [
-										{
-											"node_type": "Primary",
-											"token": "a",
-											"children": [
-												{
-													"node_type": "IDENTIFIER",
-													"token": "a",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "OPERATOR",
-											"token": "<=>",
-											"children": []
-										},
-										{
-											"node_type": "Primary",
-											"token": "b",
-											"children": [
-												{
-													"node_type": "IDENTIFIER",
-													"token": "b",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "DELIMITER",
-											"token": ";",
-											"children": []
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "4",
-							"token": "short",
-							"children": [
-								{
-									"node_type": "Variable declaration",
-									"token": "short",
-									"children": [
-										{
-											"node_type": "Variable definition",
-											"var_type": "SHORT",
-											"token": "ff",
-											"children": [
-												{
-													"node_type": "Expression",
-													"token": "routine_2",
-													"children": [
-														{
-															"node_type": "Primary",
-															"token": "routine_2",
-															"children": [
-																{
-																	"node_type": "IDENTIFIER",
-																	"token": "routine_2",
-																	"children": []
-																},
-																{
-																	"node_type": "Call arguments",
-																	"token": "(",
-																	"children": [
-																		{
-																			"node_type": "Expression",
-																			"token": "a",
-																			"children": [
-																				{
-																					"node_type": "Primary",
-																					"token": "a",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "a",
-																							"children": []
-																						}
-																					]
-																				}
-																			]
-																		}
-																	]
-																}
-															]
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "5",
-							"token": "if",
-							"children": [
-								{
-									"node_type": "If",
-									"token": "if",
-									"children": [
-										{
-											"node_type": "Expression",
-											"token": "a",
-											"children": [
-												{
-													"node_type": "Primary",
-													"token": "a",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "a",
-															"children": []
-														}
-													]
-												}
-											]
-										},
 										{
 											"node_type": "Block body",
 											"context": 
 												{
-													"name": "BlockBody_1",
-													"symbol_table": []
+													"name": "BlockBody_name",
+													"symbol_table": [
+														{
+															"var_type": "INT",
+															"var_name": "i",
+															"li_start": "1",
+															"li_end": "2"
+														}
+													]
 												},
-											"token": "if",
+											"token": "for",
 											"children": [
 												{
 													"node_type": "Statement",
 													"block_position": "1",
-													"token": "if",
+													"token": "for",
 													"children": [
 														{
-															"node_type": "If",
-															"token": "if",
+															"node_type": "For",
+															"token": "for",
 															"children": [
 																{
-																	"node_type": "Expression",
-																	"token": "b",
-																	"children": [
-																		{
-																			"node_type": "Primary",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "b",
-																					"children": []
-																				}
-																			]
-																		}
-																	]
-																},
-																{
-																	"node_type": "Block body",
-																	"context": 
-																		{
-																			"name": "BlockBody_2",
-																			"symbol_table": []
-																		},
-																	"token": "a",
-																	"children": [
-																		{
-																			"node_type": "Statement",
-																			"block_position": "1",
-																			"token": "a",
-																			"children": [
-																				{
-																					"node_type": "Assignment",
-																					"token": "a",
-																					"children": [
-																						{
-																							"node_type": "Primary",
-																							"token": "a",
-																							"children": [
-																								{
-																									"node_type": "IDENTIFIER",
-																									"token": "a",
-																									"children": []
-																								}
-																							]
-																						},
-																						{
-																							"node_type": "Expression",
-																							"token": "b",
-																							"children": [
-																								{
-																									"node_type": "Primary",
-																									"token": "b",
-																									"children": [
-																										{
-																											"node_type": "IDENTIFIER",
-																											"token": "b",
-																											"children": []
-																										}
-																									]
-																								}
-																							]
-																						}
-																					]
-																				}
-																			]
-																		}
-																	]
-																},
-																{
-																	"node_type": "Block body",
-																	"context": 
-																		{
-																			"name": "BlockBody_3",
-																			"symbol_table": []
-																		},
-																	"token": "b",
-																	"children": [
-																		{
-																			"node_type": "Statement",
-																			"block_position": "1",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "Assignment",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "Primary",
-																							"token": "b",
-																							"children": [
-																								{
-																									"node_type": "IDENTIFIER",
-																									"token": "b",
-																									"children": []
-																								}
-																							]
-																						},
-																						{
-																							"node_type": "Expression",
-																							"token": "a",
-																							"children": [
-																								{
-																									"node_type": "Primary",
-																									"token": "a",
-																									"children": [
-																										{
-																											"node_type": "IDENTIFIER",
-																											"token": "a",
-																											"children": []
-																										}
-																									]
-																								}
-																							]
-																						}
-																					]
-																				}
-																			]
-																		}
-																	]
-																}
-															]
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "6",
-							"token": "for",
-							"children": [
-								{
-									"node_type": "For",
-									"token": "for",
-									"children": [
-										{
-											"node_type": "IDENTIFIER",
-											"var_type": "INT",
-											"token": "i",
-											"children": []
-										},
-										{
-											"node_type": "Expression",
-											"var_value": "1",
-											"token": "0",
-											"children": [
-												{
-													"node_type": "NUMBER",
-													"token": "0",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Expression",
-											"var_value": "2",
-											"token": "10",
-											"children": [
-												{
-													"node_type": "NUMBER",
-													"var_value": "10",
-													"token": "10",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Expression",
-											"var_value": "3",
-											"token": "1",
-											"children": [
-												{
-													"node_type": "NUMBER",
-													"var_value": "1",
-													"token": "1",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "Loop body",
-											"token": "loop",
-											"children": [
-												{
-													"node_type": "Block body",
-													"context": 
-														{
-															"name": "BlockBody_4",
-															"symbol_table": [
-																{
+																	"node_type": "IDENTIFIER",
 																	"var_type": "INT",
-																	"var_name": "i",
-																	"li_start": "1",
-																	"li_end": "1"
-																}
-															]
-														},
-													"token": "a",
-													"children": [
-														{
-															"node_type": "Statement",
-															"block_position": "1",
-															"token": "a",
-															"children": [
-																{
-																	"node_type": "Assignment",
-																	"token": "a",
-																	"children": [
-																		{
-																			"node_type": "Primary",
-																			"token": "a",
-																			"children": [
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "a",
-																					"children": []
-																				}
-																			]
-																		},
-																		{
-																			"node_type": "Expression",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "Primary",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "b",
-																							"children": []
-																						}
-																					]
-																				}
-																			]
-																		}
-																	]
-																}
-															]
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "7",
-							"token": "while",
-							"children": [
-								{
-									"node_type": "While",
-									"token": "while",
-									"children": [
-										{
-											"node_type": "Expression",
-											"token": "a",
-											"children": [
-												{
-													"node_type": "Primary",
-													"token": "a",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "a",
-															"children": []
-														}
-													]
-												},
-												{
-													"node_type": "OPERATOR",
-													"token": "/=",
-													"children": []
-												},
-												{
-													"node_type": "Primary",
-													"token": "b",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "b",
-															"children": []
-														}
-													]
-												}
-											]
-										},
-										{
-											"node_type": "Loop body",
-											"token": "loop",
-											"children": [
-												{
-													"node_type": "Block body",
-													"context": 
-														{
-															"name": "BlockBody_5",
-															"symbol_table": []
-														},
-													"token": "a",
-													"children": [
-														{
-															"node_type": "Statement",
-															"block_position": "1",
-															"token": "a",
-															"children": [
-																{
-																	"node_type": "Assignment",
-																	"token": "a",
-																	"children": [
-																		{
-																			"node_type": "Primary",
-																			"token": "a",
-																			"children": [
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "a",
-																					"children": []
-																				}
-																			]
-																		},
-																		{
-																			"node_type": "Expression",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "Primary",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "b",
-																							"children": []
-																						}
-																					]
-																				}
-																			]
-																		}
-																	]
-																}
-															]
-														},
-														{
-															"node_type": "Statement",
-															"block_position": "2",
-															"token": "break",
-															"children": [
-																{
-																	"node_type": "Break",
-																	"token": "break",
-																	"children": []
-																}
-															]
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "8",
-							"token": "loop",
-							"children": [
-								{
-									"node_type": "Loop While",
-									"token": "loop",
-									"children": [
-										{
-											"node_type": "Loop body",
-											"token": "loop",
-											"children": [
-												{
-													"node_type": "Block body",
-													"context": 
-														{
-															"name": "BlockBody_6",
-															"symbol_table": []
-														},
-													"token": "a",
-													"children": [
-														{
-															"node_type": "Statement",
-															"block_position": "1",
-															"token": "a",
-															"children": [
-																{
-																	"node_type": "Assignment",
-																	"token": "a",
-																	"children": [
-																		{
-																			"node_type": "Primary",
-																			"token": "a",
-																			"children": [
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "a",
-																					"children": []
-																				}
-																			]
-																		},
-																		{
-																			"node_type": "Expression",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "Primary",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "b",
-																							"children": []
-																						}
-																					]
-																				}
-																			]
-																		}
-																	]
-																}
-															]
-														}
-													]
-												}
-											]
-										},
-										{
-											"node_type": "Expression",
-											"token": "a",
-											"children": [
-												{
-													"node_type": "Primary",
-													"token": "a",
-													"children": [
-														{
-															"node_type": "IDENTIFIER",
-															"token": "a",
-															"children": []
-														}
-													]
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "9",
-							"token": "return",
-							"children": [
-								{
-									"node_type": "Return",
-									"token": "return",
-									"children": []
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "10",
-							"token": "int",
-							"children": [
-								{
-									"node_type": "Variable declaration",
-									"token": "int",
-									"children": [
-										{
-											"node_type": "Constant definition",
-											"var_type": "CONST_INT",
-											"var_value": "1",
-											"token": "fff",
-											"children": []
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "11",
-							"token": "int",
-							"children": [
-								{
-									"node_type": "Variable declaration",
-									"token": "int",
-									"children": [
-										{
-											"node_type": "Constant definition",
-											"var_type": "CONST_INT",
-											"var_value": "11",
-											"token": "cnst",
-											"children": []
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "12",
-							"token": "int",
-							"children": [
-								{
-									"node_type": "Variable declaration",
-									"token": "int",
-									"children": [
-										{
-											"node_type": "Variable definition",
-											"var_type": "INT",
-											"token": "af",
-											"children": [
-												{
-													"node_type": "Expression",
-													"token": "a",
-													"children": [
-														{
-															"node_type": "Expression",
-															"token": "a",
-															"children": [
-																{
-																	"node_type": "Primary",
-																	"token": "a",
-																	"children": [
-																		{
-																			"node_type": "IDENTIFIER",
-																			"token": "a",
-																			"children": []
-																		}
-																	]
-																},
-																{
-																	"node_type": "OPERATOR",
-																	"token": "+",
+																	"token": "j",
 																	"children": []
 																},
 																{
-																	"node_type": "Expression",
-																	"token": "a",
+																	"node_type": "Loop body",
+																	"token": "loop",
 																	"children": [
 																		{
-																			"node_type": "Primary",
-																			"token": "a",
-																			"children": [
+																			"node_type": "Block body",
+																			"context": 
 																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "a",
-																					"children": []
-																				}
-																			]
-																		},
-																		{
-																			"node_type": "OPERATOR",
-																			"token": "-",
-																			"children": []
-																		},
-																		{
-																			"node_type": "Expression",
-																			"token": "a",
-																			"children": [
-																				{
-																					"node_type": "Expression",
-																					"token": "a",
-																					"children": [
+																					"name": "BlockBody_name",
+																					"symbol_table": [
 																						{
-																							"node_type": "Primary",
-																							"token": "a",
-																							"children": [
-																								{
-																									"node_type": "IDENTIFIER",
-																									"token": "a",
-																									"children": []
-																								}
-																							]
-																						},
-																						{
-																							"node_type": "OPERATOR",
-																							"token": "*",
-																							"children": []
-																						},
-																						{
-																							"node_type": "Primary",
-																							"token": "b",
-																							"children": [
-																								{
-																									"node_type": "IDENTIFIER",
-																									"token": "b",
-																									"children": []
-																								}
-																							]
+																							"var_type": "INT",
+																							"var_name": "j",
+																							"li_start": "1",
+																							"li_end": "2"
 																						}
 																					]
 																				},
+																			"token": "if",
+																			"children": [
 																				{
-																					"node_type": "OPERATOR",
-																					"token": "+",
-																					"children": []
-																				},
-																				{
-																					"node_type": "Expression",
-																					"token": "2",
+																					"node_type": "Statement",
+																					"block_position": "1",
+																					"token": "if",
 																					"children": [
 																						{
-																							"node_type": "NUMBER",
-																							"var_value": "2",
-																							"token": "2",
-																							"children": []
-																						},
-																						{
-																							"node_type": "OPERATOR",
-																							"token": "*",
-																							"children": []
-																						},
-																						{
-																							"node_type": "Primary",
-																							"token": "a",
+																							"node_type": "If",
+																							"token": "if",
 																							"children": [
 																								{
-																									"node_type": "IDENTIFIER",
-																									"token": "a",
-																									"children": []
+																									"node_type": "Expression",
+																									"token": "i",
+																									"children": [
+																										{
+																											"node_type": "Primary",
+																											"token": "i",
+																											"children": [
+																												{
+																													"node_type": "IDENTIFIER",
+																													"token": "i",
+																													"children": []
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "OPERATOR",
+																											"token": "=",
+																											"children": []
+																										},
+																										{
+																											"node_type": "Primary",
+																											"token": "j",
+																											"children": [
+																												{
+																													"node_type": "IDENTIFIER",
+																													"token": "j",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
+																								},
+																								{
+																									"node_type": "Block body",
+																									"context": 
+																										{
+																											"name": "BlockBody_name",
+																											"symbol_table": []
+																										},
+																									"token": "r0",
+																									"children": [
+																										{
+																											"node_type": "Statement",
+																											"block_position": "1",
+																											"token": "r0",
+																											"children": [
+																												{
+																													"node_type": "Assignment",
+																													"token": "r0",
+																													"children": [
+																														{
+																															"node_type": "REGISTER",
+																															"token": "r0",
+																															"children": []
+																														},
+																														{
+																															"node_type": "Expression",
+																															"token": "i",
+																															"children": [
+																																{
+																																	"node_type": "Primary",
+																																	"token": "i",
+																																	"children": [
+																																		{
+																																			"node_type": "IDENTIFIER",
+																																			"token": "i",
+																																			"children": []
+																																		}
+																																	]
+																																},
+																																{
+																																	"node_type": "OPERATOR",
+																																	"token": "+",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "Primary",
+																																	"token": "j",
+																																	"children": [
+																																		{
+																																			"node_type": "IDENTIFIER",
+																																			"token": "j",
+																																			"children": []
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										},
+																										{
+																											"node_type": "Statement",
+																											"block_position": "2",
+																											"token": "->",
+																											"children": [
+																												{
+																													"node_type": "Assignment",
+																													"token": "->",
+																													"children": [
+																														{
+																															"node_type": "Dereference",
+																															"token": "->",
+																															"children": [
+																																{
+																																	"node_type": "OPERATOR",
+																																	"token": "->",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "DELIMITER",
+																																	"token": "[",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "Expression",
+																																	"token": "r1",
+																																	"children": [
+																																		{
+																																			"node_type": "NUMBER",
+																																			"var_value": "-1",
+																																			"token": "r1",
+																																			"children": []
+																																		}
+																																	]
+																																},
+																																{
+																																	"node_type": "DELIMITER",
+																																	"token": "]",
+																																	"children": []
+																																}
+																															]
+																														},
+																														{
+																															"node_type": "Expression",
+																															"token": "i",
+																															"children": [
+																																{
+																																	"node_type": "Primary",
+																																	"token": "i",
+																																	"children": [
+																																		{
+																																			"node_type": "IDENTIFIER",
+																																			"token": "i",
+																																			"children": []
+																																		}
+																																	]
+																																},
+																																{
+																																	"node_type": "OPERATOR",
+																																	"token": "+",
+																																	"children": []
+																																},
+																																{
+																																	"node_type": "Expression",
+																																	"token": "i",
+																																	"children": [
+																																		{
+																																			"node_type": "NUMBER",
+																																			"var_value": "2",
+																																			"token": "2",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "OPERATOR",
+																																			"token": "*",
+																																			"children": []
+																																		},
+																																		{
+																																			"node_type": "Primary",
+																																			"token": "j",
+																																			"children": [
+																																				{
+																																					"node_type": "IDENTIFIER",
+																																					"token": "j",
+																																					"children": []
+																																				}
+																																			]
+																																		}
+																																	]
+																																}
+																															]
+																														}
+																													]
+																												}
+																											]
+																										}
+																									]
 																								}
 																							]
 																						}
@@ -1980,166 +302,10 @@
 																	]
 																}
 															]
-														},
-														{
-															"node_type": "OPERATOR",
-															"token": "-",
-															"children": []
-														},
-														{
-															"node_type": "Expression",
-															"token": "b",
-															"children": [
-																{
-																	"node_type": "Expression",
-																	"token": "b",
-																	"children": [
-																		{
-																			"node_type": "Expression",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "Primary",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "b",
-																							"children": []
-																						}
-																					]
-																				},
-																				{
-																					"node_type": "OPERATOR",
-																					"token": "*",
-																					"children": []
-																				},
-																				{
-																					"node_type": "Primary",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "b",
-																							"children": []
-																						}
-																					]
-																				}
-																			]
-																		},
-																		{
-																			"node_type": "OPERATOR",
-																			"token": "+",
-																			"children": []
-																		},
-																		{
-																			"node_type": "Primary",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "b",
-																					"children": []
-																				}
-																			]
-																		}
-																	]
-																},
-																{
-																	"node_type": "OPERATOR",
-																	"token": "-",
-																	"children": []
-																},
-																{
-																	"node_type": "Expression",
-																	"token": "b",
-																	"children": [
-																		{
-																			"node_type": "Expression",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "NUMBER",
-																					"var_value": "3",
-																					"token": "3",
-																					"children": []
-																				},
-																				{
-																					"node_type": "OPERATOR",
-																					"token": "*",
-																					"children": []
-																				},
-																				{
-																					"node_type": "Primary",
-																					"token": "b",
-																					"children": [
-																						{
-																							"node_type": "IDENTIFIER",
-																							"token": "b",
-																							"children": []
-																						}
-																					]
-																				}
-																			]
-																		},
-																		{
-																			"node_type": "OPERATOR",
-																			"token": "*",
-																			"children": []
-																		},
-																		{
-																			"node_type": "Primary",
-																			"token": "b",
-																			"children": [
-																				{
-																					"node_type": "IDENTIFIER",
-																					"token": "b",
-																					"children": []
-																				}
-																			]
-																		}
-																	]
-																}
-															]
 														}
 													]
 												}
 											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"node_type": "Statement",
-							"block_position": "13",
-							"token": "print",
-							"children": [
-								{
-									"node_type": "Print",
-									"token": "print",
-									"children": [
-										{
-											"node_type": "KEYWORD",
-											"token": "print",
-											"children": []
-										},
-										{
-											"node_type": "Expression",
-											"token": "fff",
-											"children": [
-												{
-													"node_type": "NUMBER",
-													"var_value": "12",
-													"token": "fff",
-													"children": []
-												}
-											]
-										},
-										{
-											"node_type": "DELIMITER",
-											"token": ";",
-											"children": []
 										}
 									]
 								}

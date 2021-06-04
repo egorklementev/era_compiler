@@ -1,0 +1,7 @@
+routine r (int a) : int
+do
+end
+
+code
+	int a := r(1);
+end

@@ -69,13 +69,12 @@
 ---
 * **Expression** : Operand { Operator Operand }
 * **Operator** : `+` | `-` | `*` | `&` | `|` | `^` | `?` | `=` | `/=` | `<` | `>` | `>=` | `<=`
-* **Operand** : Primary | Register | Dereference | Reference | Literal | ExplicitAddress | `(` Expression `)`
-* **Receiver** : Primary | Dereference | ExplicitAddress | Register
+* **Operand** : Primary | Register | Dereference | Reference | Literal | `(` Expression `)`
+* **Receiver** : Primary | Dereference | Register
 * **Primary** : Identifier { `.` Identifier } [ ArrayAccess | CallArgs ]
 * **ArrayAccess** : `[` Expression `]`
 * **Reference** : `<-` Primary
-* **Dereference** : `->` ( Primary | Register )
-* **ExplicitAddress** : `->` Literal
+* **Dereference** : `->` `[` Expression `]`
 ---
 * **Identifier** : *(_a-zA-Z0-9)+*
 * **Literal**: [ `-` ] *(0-9)+*

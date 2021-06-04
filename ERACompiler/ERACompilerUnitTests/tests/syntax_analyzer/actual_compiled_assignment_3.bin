@@ -45,7 +45,7 @@
 																			"token": "->",
 																			"children": [
 																				{
-																					"node_type": "Explicit address",
+																					"node_type": "Dereference",
 																					"token": "->",
 																					"children": [
 																						{
@@ -54,20 +54,47 @@
 																							"children": []
 																						},
 																						{
-																							"node_type": "NUMBER",
+																							"node_type": "DELIMITER",
+																							"token": "[",
+																							"children": []
+																						},
+																						{
+																							"node_type": "Expression",
 																							"token": "5",
 																							"children": [
 																								{
-																									"node_type": "[ - ]",
+																									"node_type": "Operand",
 																									"token": "5",
-																									"children": []
+																									"children": [
+																										{
+																											"node_type": "NUMBER",
+																											"token": "5",
+																											"children": [
+																												{
+																													"node_type": "[ - ]",
+																													"token": "5",
+																													"children": []
+																												},
+																												{
+																													"node_type": "NUMBER",
+																													"token": "5",
+																													"children": []
+																												}
+																											]
+																										}
+																									]
 																								},
 																								{
-																									"node_type": "NUMBER",
-																									"token": "5",
+																									"node_type": "{ Operator Operand }",
+																									"token": "]",
 																									"children": []
 																								}
 																							]
+																						},
+																						{
+																							"node_type": "DELIMITER",
+																							"token": "]",
+																							"children": []
 																						}
 																					]
 																				}

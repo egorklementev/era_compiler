@@ -206,23 +206,12 @@ namespace ERACompiler.Modules
                 .AddRule(opTakeAddrRule)
                 .AddRule(primaryRule);
 
-            SyntaxRule explicitAddrRule = new SyntaxRule()
-                .SetName("Explicit address")
-                .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
-                .AddRule(opTakeValRule)
-                .AddRule(literalRule);
-
             SyntaxRule dereferenceRule = new SyntaxRule()
                 .SetName("Dereference")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(opTakeValRule)
-                .AddRule(
-                    new SyntaxRule()
-                    .SetName("Primary | Register")
-                    .SetType(SyntaxRule.SyntaxRuleType.OR)
-                    .AddRule(primaryRule)
-                    .AddRule(registerRule)
-                );
+                .AddRule(leftBracketRule);
+            // other rules are added after 'Expression' rule
 
             SyntaxRule operandRule = new SyntaxRule()
                 .SetName("Operand")
@@ -230,8 +219,7 @@ namespace ERACompiler.Modules
                 .AddRule(primaryRule)
                 .AddRule(dereferenceRule)
                 .AddRule(referenceRule)
-                .AddRule(explicitAddrRule)                
-                .AddRule(registerRule)                
+                .AddRule(registerRule)
                 .AddRule(literalRule);
             // other rules are added after 'Expression' rule
 
@@ -246,6 +234,10 @@ namespace ERACompiler.Modules
                     .AddRule(operatorRule)
                     .AddRule(operandRule)
                 );
+
+            dereferenceRule
+                .AddRule(expressionRule)
+                .AddRule(rightBracketRule);
 
             SyntaxRule arrayAccessRule = new SyntaxRule()
                 .SetName("'[' Expression ']'")
@@ -421,19 +413,23 @@ namespace ERACompiler.Modules
                 )
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("Register := -> Register")
+                    .SetName("Register := -> [ Register ]")
                     .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                     .AddRule(registerRule)
                     .AddRule(opAssignRule)
                     .AddRule(opTakeValRule)
+                    .AddRule(leftBracketRule)
                     .AddRule(registerRule)
+                    .AddRule(rightBracketRule)
                 )
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("-> Register := Register")
+                    .SetName("-> [ Register ] := Register")
                     .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                     .AddRule(opTakeValRule)
+                    .AddRule(leftBracketRule)
                     .AddRule(registerRule)
+                    .AddRule(rightBracketRule)
                     .AddRule(opAssignRule)
                     .AddRule(registerRule)
                 )
@@ -552,8 +548,7 @@ namespace ERACompiler.Modules
                 .SetType(SyntaxRule.SyntaxRuleType.OR)
                 .AddRule(primaryRule)
                 .AddRule(dereferenceRule)
-                .AddRule(registerRule)
-                .AddRule(explicitAddrRule);
+                .AddRule(registerRule);
 
             SyntaxRule assignmentRule = new SyntaxRule()
                 .SetName("Assignment")

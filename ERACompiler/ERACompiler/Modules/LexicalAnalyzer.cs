@@ -8,7 +8,7 @@ namespace ERACompiler.Modules
     /// <summary>
     /// Contains functionality for conversion of source code of the program to the list of tokens.
     /// </summary>
-    class LexicalAnalyzer
+    public class LexicalAnalyzer
     {
         private string remembered; // Used for storing previously read characters
         private int lineChar; // Used for token position
