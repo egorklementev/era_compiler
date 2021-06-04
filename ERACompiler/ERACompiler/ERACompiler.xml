@@ -277,7 +277,7 @@
             The name of the context
             </summary>
         </member>
-        <member name="M:ERACompiler.Structures.Context.#ctor(System.String,ERACompiler.Structures.Context)">
+        <member name="M:ERACompiler.Structures.Context.#ctor(System.String,ERACompiler.Structures.Context,ERACompiler.Structures.AASTNode)">
             <summary>
             Creates a context instance.
             </summary>

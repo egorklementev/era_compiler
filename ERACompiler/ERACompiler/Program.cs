@@ -46,12 +46,9 @@ namespace ERACompiler
         {
             NativeMethods.AllocConsole();
 
-            //args = new string[] { "-s", "to_compile/fast_sort.era", "--sem", "--ignconf"};
-            //args = new string[] { "-s", "to_compile/fast_sort.era", "--asm", "--ignconf"};
-
-            //args = new string[] { "-s", "to_compile/merge_sort.era", "--syn", "--ignconf"};
-            //args = new string[] { "-s", "to_compile/merge_sort.era", "--sem", "--ignconf"};
-            //args = new string[] { "-s", "to_compile/merge_sort.era", "--asm", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/debug.era", "--syn", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/debug.era", "--sem", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/debug.era", "--asm", "--ignconf"};
 
             bool error = true;
             try

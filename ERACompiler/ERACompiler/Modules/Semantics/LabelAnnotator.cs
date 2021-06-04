@@ -12,6 +12,7 @@ namespace ERACompiler.Modules.Semantics
             // Add label to the context
             Context? ctx = SemanticAnalyzer.FindParentContext(parent);
             ctx?.AddVar(label, astNode.Children[1].Token.Value);
+            label.Token.Value = astNode.Children[1].Token.Value;
 
             // Put identifier
             label.Children.Add(base.Annotate(astNode.Children[1], label));

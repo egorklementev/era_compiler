@@ -29,7 +29,7 @@ namespace ERACompiler.Modules.Generation
                 codeBlockNode.Children.AddLast(GetRegisterDeallocationNode(statement, codeBlockNode));
             }
 
-            codeBlockNode.Children.AddLast(GetDynamicArrayDeallocationNode(aastNode, codeBlockNode));
+            codeBlockNode.Children.AddLast(GetDynamicMemoryDeallocationNode(aastNode, codeBlockNode));
 
             return codeBlockNode;
         }

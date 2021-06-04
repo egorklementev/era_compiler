@@ -9,6 +9,7 @@ namespace ERACompiler.Structures
 {
     public class CodeNode
     {
+        public AASTNode? AASTLink { get; } = null; // Used in 'goto' resolution
         public int Level { get; set; } = 0;
         public string Name { get; set; } = "no_name";
         public string Token { get; set; } = "no_token";
@@ -17,15 +18,18 @@ namespace ERACompiler.Structures
         public LinkedList<byte> Bytes { get; set; }
         public byte ByteToReturn { get; set; } = 255;
         public byte OperandByte { get; set; } = 255; // Used for recursion resolution
+        public int LabelAddress { get; set; } = -1; // Used for 'goto' resolution
 
         public CodeNode(AASTNode aastNode) : this(aastNode.ASTType, null) 
         { 
             Token = aastNode.Token.Value;
+            AASTLink = aastNode;
         }
 
         public CodeNode(AASTNode aastNode, CodeNode? parent) : this(aastNode.ASTType, parent) 
         {
             Token = aastNode.Token.Value;
+            AASTLink = aastNode;
         }
 
         public CodeNode(string name, CodeNode? parent)
@@ -34,7 +38,7 @@ namespace ERACompiler.Structures
             Parent = parent;
             Level = parent == null ? 0 : parent.Level + 1;
             Bytes = new LinkedList<byte>();
-            OperandByte = parent == null ? 255 : parent.OperandByte;
+            OperandByte = parent == null ? (byte)255 : parent.OperandByte;
             Children = new LinkedList<CodeNode>();
         }
 
@@ -53,12 +57,6 @@ namespace ERACompiler.Structures
             {
                 Bytes.AddLast(b);
             }
-            return this;
-        }
-
-        public CodeNode AddChild(CodeNode child)
-        {
-            Children.AddLast(child);
             return this;
         }
 

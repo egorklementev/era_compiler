@@ -37,7 +37,7 @@ namespace ERACompiler.Modules.Generation
                 bbNode.Children.AddLast(GetRegisterDeallocationNode((AASTNode)aastNode.Children[^1], bbNode, false));
             }
 
-            bbNode.Children.AddLast(GetDynamicArrayDeallocationNode(aastNode, bbNode));
+            bbNode.Children.AddLast(GetDynamicMemoryDeallocationNode(aastNode, bbNode));
 
             bbNode.Children.AddLast(new CodeNode("Block body cmds 2", bbNode)
                 .Add(GenerateLDA(FP, FP, -4))

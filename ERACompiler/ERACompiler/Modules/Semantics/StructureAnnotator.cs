@@ -11,7 +11,7 @@ namespace ERACompiler.Modules.Semantics
             AASTNode structure = new AASTNode(astNode, parent, new StructType(structName));
             Context? ctx = SemanticAnalyzer.FindParentContext(parent);
             ctx?.AddVar(structure, structName);
-            structure.Context = new Context(structName, ctx);
+            structure.Context = new Context(structName, ctx, structure);
             foreach (ASTNode child in astNode.Children[2].Children)
             {
                 structure.Children.Add(base.Annotate(child, structure));

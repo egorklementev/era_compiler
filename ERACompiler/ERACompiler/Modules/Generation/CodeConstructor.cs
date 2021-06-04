@@ -333,7 +333,7 @@ namespace ERACompiler.Modules.Generation
             return regDeallocNode;
         }
 
-        protected CodeNode GetDynamicArrayDeallocationNode(AASTNode aastNode, CodeNode? parent)
+        protected CodeNode GetDynamicMemoryDeallocationNode(AASTNode aastNode, CodeNode? parent)
         {
             Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
             Generator g = Program.currentCompiler.generator;
