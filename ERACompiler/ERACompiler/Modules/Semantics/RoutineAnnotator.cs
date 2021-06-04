@@ -24,7 +24,7 @@ namespace ERACompiler.Modules.Semantics
             }
             AASTNode routine = new AASTNode(astNode, parent, new RoutineType(paramTypes, returnType));
             ctx?.AddVar(routine, routineName);
-            routine.Context = new Context(routineName, ctx);
+            routine.Context = new Context(routineName, ctx, routine);
             // Add params to the context if any
             if (astNode.Children[3].Children.Count > 0)
             {

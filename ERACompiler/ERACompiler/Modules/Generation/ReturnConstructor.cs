@@ -42,7 +42,7 @@ namespace ERACompiler.Modules.Generation
                 }
                 if (mainContextNode.Context != null)
                 {
-                    returnNode.Children.AddLast(GetDynamicArrayDeallocationNode(mainContextNode, returnNode));
+                    returnNode.Children.AddLast(GetDynamicMemoryDeallocationNode(mainContextNode, returnNode));
                     if (mainContextNode.ASTType.Equals("For"))
                     {
                         returnNode.Children.AddLast(GetHeapTopChangeNode(returnNode, 16));

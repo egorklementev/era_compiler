@@ -8,10 +8,8 @@ namespace ERACompiler.Modules.Semantics
         public override AASTNode Annotate(ASTNode astNode, AASTNode? parent)
         {
             Context? ctx = SemanticAnalyzer.FindParentContext(parent);
-            AASTNode module = new AASTNode(astNode, parent, new VarType(VarType.ERAType.MODULE))
-            {
-                Context = new Context(astNode.Children[1].Token.Value, ctx)
-            };
+            AASTNode module = new AASTNode(astNode, parent, new VarType(VarType.ERAType.MODULE));
+            module.Context = new Context(astNode.Children[1].Token.Value, ctx, module);
             foreach (ASTNode child in astNode.Children[2].Children)
             {
                 module.Children.Add(base.Annotate(child, module));

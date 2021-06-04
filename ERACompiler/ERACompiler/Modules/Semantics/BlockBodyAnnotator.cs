@@ -8,10 +8,8 @@ namespace ERACompiler.Modules.Semantics
         {
             // TODO: name of the block body
             string bbName = "name";
-            AASTNode bb = new AASTNode(astNode, parent, SemanticAnalyzer.no_type)
-            {
-                Context = new Context("BlockBody_" + bbName, SemanticAnalyzer.FindParentContext(parent))
-            };
+            AASTNode bb = new AASTNode(astNode, parent, SemanticAnalyzer.no_type);
+            bb.Context = new Context("BlockBody_" + bbName, SemanticAnalyzer.FindParentContext(parent), bb);
             bool setLIEnd = false;
             string varName = "";
             if (Program.currentCompiler.semantics.varToAddToCtx != null)

@@ -22,6 +22,10 @@ namespace ERACompiler.Structures
         private readonly Dictionary<string, AASTNode> st; // Symbol Table
         private readonly Context? parent;
 
+        public Context? Parent { get => parent; }
+
+        public AASTNode AASTLink { get; }
+
         /// <summary>
         /// The name of the context
         /// </summary>
@@ -32,10 +36,11 @@ namespace ERACompiler.Structures
         /// </summary>
         /// <param name="name">The name of the context (may not be uniqie).</param>
         /// <param name="parent">Parent context (may be null).</param>
-        public Context(string name, Context? parent)
+        public Context(string name, Context? parent, AASTNode aastLink)
         {
             Name = name;
             this.parent = parent;
+            AASTLink = aastLink;
             st = new Dictionary<string, AASTNode>();
         }
 
@@ -333,7 +338,7 @@ namespace ERACompiler.Structures
 
             return null;
         }
-        
+
         private string SymbolTableToString(Dictionary<string, AASTNode> st)
         {
             StringBuilder sb = new StringBuilder();

@@ -47,7 +47,7 @@ namespace ERACompiler.Modules.Generation
             }
 
             // Deallocate dynamic arrays
-            rbNode.Children.AddLast(GetDynamicArrayDeallocationNode(aastNode, rbNode));
+            rbNode.Children.AddLast(GetDynamicMemoryDeallocationNode(aastNode, rbNode));
 
             rbNode.Children.AddLast(new CodeNode("Post routine body", rbNode)
                 .Add(GenerateLDA(FP, FP, -4))
