@@ -34,7 +34,7 @@ namespace ERACompiler.Structures
             Parent = parent;
             Level = parent == null ? 0 : parent.Level + 1;
             Bytes = new LinkedList<byte>();
-            OperandByte = parent == null ? 255 : parent.OperandByte;
+            OperandByte = parent == null ? (byte)255 : parent.OperandByte;
             Children = new LinkedList<CodeNode>();
         }
 
