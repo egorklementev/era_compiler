@@ -14,11 +14,11 @@ namespace ERACompiler.Structures
         public string Name { get; set; } = "no_name";
         public string Token { get; set; } = "no_token";
         public CodeNode? Parent { get; set; } = null;
+        public CodeNode? LabelDecl { get; set; } = null; // Used for label resolution
         public LinkedList<CodeNode> Children { get; set; }
         public LinkedList<byte> Bytes { get; set; }
         public byte ByteToReturn { get; set; } = 255;
         public byte OperandByte { get; set; } = 255; // Used for recursion resolution
-        public int LabelAddress { get; set; } = -1; // Used for 'goto' resolution
 
         public CodeNode(AASTNode aastNode) : this(aastNode.ASTType, null) 
         { 

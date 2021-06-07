@@ -107,17 +107,22 @@ namespace ERACompiler.Modules.Generation
             int[] freeRegsAddr = new int[] { 0, 4, 8, 12 };
 
             // Loop start label
-            CodeNode loopStartLabelNode = new CodeNode("Loop start label", forNode).Add(new byte[8]);
-            forNode.Children.AddLast(loopStartLabelNode); // to fr3
+            CodeNode loopStartLabelDeclNode = new CodeNode("Label declaration", forNode).Add(new byte[8]);
+            loopStartLabelDeclNode.ByteToReturn = fr3;
+            CodeNode loopStartLabelNode = new CodeNode("Label", forNode);
+            loopStartLabelNode.LabelDecl = loopStartLabelDeclNode;
+            forNode.Children.AddLast(loopStartLabelDeclNode); // to fr3
 
             // Loop end label
-            CodeNode loopEndLabelNode = new CodeNode("Loop end label", forNode).Add(new byte[8]);
-            forNode.Children.AddLast(loopEndLabelNode); // to fr4
+            CodeNode loopEndLabelDeclNode = new CodeNode("Label declaration", forNode).Add(new byte[8]);
+            loopEndLabelDeclNode.ByteToReturn = fr4;
+            CodeNode loopEndLabelNode = new CodeNode("Label", forNode);
+            loopEndLabelNode.LabelDecl = loopEndLabelDeclNode;
+            forNode.Children.AddLast(loopEndLabelDeclNode); // to fr4
 
             forNode.Children.AddLast(new CodeNode("fr5 := 6", forNode).Add(GenerateLDC(6, fr5)));
 
-            loopStartLabelNode.Bytes.Clear();
-            loopStartLabelNode.Add(GenerateLDL(fr3, GetCurrentBinarySize(loopStartLabelNode)));
+            forNode.Children.AddLast(loopStartLabelNode);
 
             /* 
              * --- 
@@ -266,8 +271,7 @@ namespace ERACompiler.Modules.Generation
                 .Add(GenerateST(freeRegs[0], fr6))
                 .Add(GenerateLDC(1, fr6)) // Since we do not want to override FR3
                 .Add(GenerateCBR(fr6, freeRegs[1])));
-            loopEndLabelNode.Bytes.Clear();
-            loopEndLabelNode.Add(GenerateLDL(fr4, GetCurrentBinarySize(loopEndLabelNode)));
+            forNode.Children.AddLast(loopEndLabelNode);
             g.FreeReg(fr6);
 
             // Deallocate heap & free registers

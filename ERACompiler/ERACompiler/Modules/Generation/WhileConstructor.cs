@@ -28,15 +28,26 @@ namespace ERACompiler.Modules.Generation
             byte[] freeRegs = new byte[] { fr1, fr2, fr3 };
             int[] freeRegsAddr = new int[] { 0, 4, 8 };
 
-            CodeNode loopStartLabelNode = new CodeNode("Loop start label", whileNode).Add(new byte[8]); // fr1
-            CodeNode loopBodyLabelNode = new CodeNode("Loop body label", whileNode).Add(new byte[8]); // fr2
-            CodeNode loopEndLabelNode = new CodeNode("Loop end label", whileNode).Add(new byte[8]); // fr3
-            whileNode.Children.AddLast(loopStartLabelNode);
-            whileNode.Children.AddLast(loopBodyLabelNode);
-            whileNode.Children.AddLast(loopEndLabelNode);
+            CodeNode loopStartLabelDeclNode = new CodeNode("Label declaration", whileNode).Add(new byte[8]); // fr1
+            loopStartLabelDeclNode.ByteToReturn = fr1;
+            CodeNode loopStartLabelNode = new CodeNode("Label", whileNode);
+            loopStartLabelNode.LabelDecl = loopStartLabelDeclNode;
 
-            loopStartLabelNode.Bytes.Clear();
-            loopStartLabelNode.Add(GenerateLDL(fr1, GetCurrentBinarySize(loopStartLabelNode)));
+            CodeNode loopBodyLabelDeclNode = new CodeNode("Label declaration", whileNode).Add(new byte[8]); // fr2
+            loopBodyLabelDeclNode.ByteToReturn = fr2;
+            CodeNode loopBodyLabelNode = new CodeNode("Label", whileNode);
+            loopBodyLabelNode.LabelDecl = loopBodyLabelDeclNode;
+
+            CodeNode loopEndLabelDeclNode = new CodeNode("Label declaration", whileNode).Add(new byte[8]); // fr3
+            loopEndLabelDeclNode.ByteToReturn = fr3;
+            CodeNode loopEndLabelNode = new CodeNode("Label", whileNode);
+            loopEndLabelNode.LabelDecl = loopEndLabelDeclNode;
+
+            whileNode.Children.AddLast(loopStartLabelDeclNode);
+            whileNode.Children.AddLast(loopBodyLabelDeclNode);
+            whileNode.Children.AddLast(loopEndLabelDeclNode);
+
+            whileNode.Children.AddLast(loopStartLabelNode);
 
             whileNode.Children.AddLast(GetHeapTopChangeNode(whileNode, -12));
 
@@ -68,8 +79,7 @@ namespace ERACompiler.Modules.Generation
             whileNode.Children.AddLast(new CodeNode("fr1 ldc, if fr0 cbr", whileNode)
                 .Add(GenerateLDC(1, fr0))
                 .Add(GenerateCBR(fr0, freeRegs[2])));
-            loopBodyLabelNode.Bytes.Clear();
-            loopBodyLabelNode.Add(GenerateLDL(fr2, GetCurrentBinarySize(loopBodyLabelNode)));
+            whileNode.Children.AddLast(loopBodyLabelNode);
             g.FreeReg(fr0);
 
             whileNode.Children.AddLast(GetHeapTopChangeNode(whileNode, -12));
@@ -95,8 +105,8 @@ namespace ERACompiler.Modules.Generation
             whileNode.Children.AddLast(new CodeNode("fr0 ldc, if fr0 cbr", whileNode)
                 .Add(GenerateLDC(1, fr0))
                 .Add(GenerateCBR(fr0, freeRegs[0])));
-            loopEndLabelNode.Bytes.Clear();
-            loopEndLabelNode.Add(GenerateLDL(fr3, GetCurrentBinarySize(loopEndLabelNode)));
+
+            whileNode.Children.AddLast(loopEndLabelNode);
 
             for (int i = 0; i < freeRegs.Length; i++)
             {

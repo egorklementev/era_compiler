@@ -23,8 +23,8 @@
 				"1A",
 				"00",
 				"00",
-				"07",
-				"97"
+				"08",
+				"04"
 			],
 			"children": []
 		},
@@ -337,7 +337,7 @@
 											"children": []
 										},
 										{
-											"name": "Loop start label",
+											"name": "Label declaration",
 											"token": "no_token",
 											"bytes": [
 												"{000116} [f32] R0 := 0",
@@ -347,7 +347,7 @@
 											"children": []
 										},
 										{
-											"name": "Loop body label",
+											"name": "Label declaration",
 											"token": "no_token",
 											"bytes": [
 												"{000124} [f32] R1 := 0",
@@ -357,13 +357,19 @@
 											"children": []
 										},
 										{
-											"name": "Loop end label",
+											"name": "Label declaration",
 											"token": "no_token",
 											"bytes": [
 												"{000132} [f32] R2 := 0",
 												"{000134} [f08] R2 := R2 + const",
-												"{000136} [f32] 0000 0F1A"
+												"{000136} [f32] 0000 0FF4"
 											],
+											"children": []
+										},
+										{
+											"name": "Label",
+											"token": "no_token",
+											"bytes": [],
 											"children": []
 										},
 										{
@@ -478,7 +484,7 @@
 															"children": []
 														},
 														{
-															"name": "PreLabel",
+															"name": "cond cmds 1",
 															"token": "no_token",
 															"bytes": [
 																"{000204} [f32] R2 := 2",
@@ -489,7 +495,7 @@
 															"children": []
 														},
 														{
-															"name": "fr1 label",
+															"name": "Label declaration",
 															"token": "no_token",
 															"bytes": [
 																"{000212} [f32] R1 := 0",
@@ -499,12 +505,18 @@
 															"children": []
 														},
 														{
-															"name": "PostLabel",
+															"name": "cond cmds 2",
 															"token": "no_token",
 															"bytes": [
 																"{000220} [f32] if R2 goto R1",
 																"{000222} [f32] R0 := 0"
 															],
+															"children": []
+														},
+														{
+															"name": "Label",
+															"token": "no_token",
+															"bytes": [],
 															"children": []
 														}
 													]
@@ -600,6 +612,12 @@
 												"{000278} [f32] R4 := 1",
 												"{000280} [f32] if R4 goto R3"
 											],
+											"children": []
+										},
+										{
+											"name": "Label",
+											"token": "no_token",
+											"bytes": [],
 											"children": []
 										},
 										{
@@ -850,7 +868,7 @@
 																			"children": []
 																		},
 																		{
-																			"name": "Loop start label",
+																			"name": "Label declaration",
 																			"token": "no_token",
 																			"bytes": [
 																				"{000422} [f32] R1 := 0",
@@ -860,7 +878,7 @@
 																			"children": []
 																		},
 																		{
-																			"name": "Loop body label",
+																			"name": "Label declaration",
 																			"token": "no_token",
 																			"bytes": [
 																				"{000430} [f32] R2 := 0",
@@ -870,13 +888,19 @@
 																			"children": []
 																		},
 																		{
-																			"name": "Loop end label",
+																			"name": "Label declaration",
 																			"token": "no_token",
 																			"bytes": [
 																				"{000438} [f32] R3 := 0",
 																				"{000440} [f08] R3 := R3 + const",
-																				"{000442} [f32] 0000 0EAC"
+																				"{000442} [f32] 0000 0F74"
 																			],
+																			"children": []
+																		},
+																		{
+																			"name": "Label",
+																			"token": "no_token",
+																			"bytes": [],
 																			"children": []
 																		},
 																		{
@@ -991,7 +1015,7 @@
 																							"children": []
 																						},
 																						{
-																							"name": "PreLabel",
+																							"name": "cond cmds 1",
 																							"token": "no_token",
 																							"bytes": [
 																								"{000510} [f32] R3 := 2",
@@ -1002,7 +1026,7 @@
 																							"children": []
 																						},
 																						{
-																							"name": "fr1 label",
+																							"name": "Label declaration",
 																							"token": "no_token",
 																							"bytes": [
 																								"{000518} [f32] R2 := 0",
@@ -1012,12 +1036,18 @@
 																							"children": []
 																						},
 																						{
-																							"name": "PostLabel",
+																							"name": "cond cmds 2",
 																							"token": "no_token",
 																							"bytes": [
 																								"{000526} [f32] if R3 goto R2",
 																								"{000528} [f32] R1 := 0"
 																							],
+																							"children": []
+																						},
+																						{
+																							"name": "Label",
+																							"token": "no_token",
+																							"bytes": [],
 																							"children": []
 																						}
 																					]
@@ -1113,6 +1143,12 @@
 																				"{000584} [f32] R5 := 1",
 																				"{000586} [f32] if R5 goto R4"
 																			],
+																			"children": []
+																		},
+																		{
+																			"name": "Label",
+																			"token": "no_token",
+																			"bytes": [],
 																			"children": []
 																		},
 																		{
@@ -1369,7 +1405,7 @@
 																											"children": []
 																										},
 																										{
-																											"name": "Loop start label",
+																											"name": "Label declaration",
 																											"token": "no_token",
 																											"bytes": [
 																												"{000744} [f32] R2 := 0",
@@ -1379,7 +1415,7 @@
 																											"children": []
 																										},
 																										{
-																											"name": "Loop body label",
+																											"name": "Label declaration",
 																											"token": "no_token",
 																											"bytes": [
 																												"{000752} [f32] R3 := 0",
@@ -1389,13 +1425,19 @@
 																											"children": []
 																										},
 																										{
-																											"name": "Loop end label",
+																											"name": "Label declaration",
 																											"token": "no_token",
 																											"bytes": [
 																												"{000760} [f32] R4 := 0",
 																												"{000762} [f08] R4 := R4 + const",
-																												"{000764} [f32] 0000 0E3E"
+																												"{000764} [f32] 0000 0EF4"
 																											],
+																											"children": []
+																										},
+																										{
+																											"name": "Label",
+																											"token": "no_token",
+																											"bytes": [],
 																											"children": []
 																										},
 																										{
@@ -1510,7 +1552,7 @@
 																															"children": []
 																														},
 																														{
-																															"name": "PreLabel",
+																															"name": "cond cmds 1",
 																															"token": "no_token",
 																															"bytes": [
 																																"{000832} [f32] R4 := 2",
@@ -1521,7 +1563,7 @@
 																															"children": []
 																														},
 																														{
-																															"name": "fr1 label",
+																															"name": "Label declaration",
 																															"token": "no_token",
 																															"bytes": [
 																																"{000840} [f32] R3 := 0",
@@ -1531,12 +1573,18 @@
 																															"children": []
 																														},
 																														{
-																															"name": "PostLabel",
+																															"name": "cond cmds 2",
 																															"token": "no_token",
 																															"bytes": [
 																																"{000848} [f32] if R4 goto R3",
 																																"{000850} [f32] R2 := 0"
 																															],
+																															"children": []
+																														},
+																														{
+																															"name": "Label",
+																															"token": "no_token",
+																															"bytes": [],
 																															"children": []
 																														}
 																													]
@@ -1632,6 +1680,12 @@
 																												"{000906} [f32] R6 := 1",
 																												"{000908} [f32] if R6 goto R5"
 																											],
+																											"children": []
+																										},
+																										{
+																											"name": "Label",
+																											"token": "no_token",
+																											"bytes": [],
 																											"children": []
 																										},
 																										{
@@ -1894,7 +1948,7 @@
 																																			"children": []
 																																		},
 																																		{
-																																			"name": "Loop start label",
+																																			"name": "Label declaration",
 																																			"token": "no_token",
 																																			"bytes": [
 																																				"{001082} [f32] R3 := 0",
@@ -1904,7 +1958,7 @@
 																																			"children": []
 																																		},
 																																		{
-																																			"name": "Loop body label",
+																																			"name": "Label declaration",
 																																			"token": "no_token",
 																																			"bytes": [
 																																				"{001090} [f32] R4 := 0",
@@ -1914,13 +1968,19 @@
 																																			"children": []
 																																		},
 																																		{
-																																			"name": "Loop end label",
+																																			"name": "Label declaration",
 																																			"token": "no_token",
 																																			"bytes": [
 																																				"{001098} [f32] R5 := 0",
 																																				"{001100} [f08] R5 := R5 + const",
-																																				"{001102} [f32] 0000 0DD0"
+																																				"{001102} [f32] 0000 0E74"
 																																			],
+																																			"children": []
+																																		},
+																																		{
+																																			"name": "Label",
+																																			"token": "no_token",
+																																			"bytes": [],
 																																			"children": []
 																																		},
 																																		{
@@ -2035,7 +2095,7 @@
 																																							"children": []
 																																						},
 																																						{
-																																							"name": "PreLabel",
+																																							"name": "cond cmds 1",
 																																							"token": "no_token",
 																																							"bytes": [
 																																								"{001170} [f32] R5 := 2",
@@ -2046,7 +2106,7 @@
 																																							"children": []
 																																						},
 																																						{
-																																							"name": "fr1 label",
+																																							"name": "Label declaration",
 																																							"token": "no_token",
 																																							"bytes": [
 																																								"{001178} [f32] R4 := 0",
@@ -2056,12 +2116,18 @@
 																																							"children": []
 																																						},
 																																						{
-																																							"name": "PostLabel",
+																																							"name": "cond cmds 2",
 																																							"token": "no_token",
 																																							"bytes": [
 																																								"{001186} [f32] if R5 goto R4",
 																																								"{001188} [f32] R3 := 0"
 																																							],
+																																							"children": []
+																																						},
+																																						{
+																																							"name": "Label",
+																																							"token": "no_token",
+																																							"bytes": [],
 																																							"children": []
 																																						}
 																																					]
@@ -2157,6 +2223,12 @@
 																																				"{001244} [f32] R7 := 1",
 																																				"{001246} [f32] if R7 goto R6"
 																																			],
+																																			"children": []
+																																		},
+																																		{
+																																			"name": "Label",
+																																			"token": "no_token",
+																																			"bytes": [],
 																																			"children": []
 																																		},
 																																		{
@@ -2425,7 +2497,7 @@
 																																											"children": []
 																																										},
 																																										{
-																																											"name": "Loop start label",
+																																											"name": "Label declaration",
 																																											"token": "no_token",
 																																											"bytes": [
 																																												"{001436} [f32] R4 := 0",
@@ -2435,7 +2507,7 @@
 																																											"children": []
 																																										},
 																																										{
-																																											"name": "Loop body label",
+																																											"name": "Label declaration",
 																																											"token": "no_token",
 																																											"bytes": [
 																																												"{001444} [f32] R5 := 0",
@@ -2445,13 +2517,19 @@
 																																											"children": []
 																																										},
 																																										{
-																																											"name": "Loop end label",
+																																											"name": "Label declaration",
 																																											"token": "no_token",
 																																											"bytes": [
 																																												"{001452} [f32] R6 := 0",
 																																												"{001454} [f08] R6 := R6 + const",
-																																												"{001456} [f32] 0000 0D62"
+																																												"{001456} [f32] 0000 0DF4"
 																																											],
+																																											"children": []
+																																										},
+																																										{
+																																											"name": "Label",
+																																											"token": "no_token",
+																																											"bytes": [],
 																																											"children": []
 																																										},
 																																										{
@@ -2566,7 +2644,7 @@
 																																															"children": []
 																																														},
 																																														{
-																																															"name": "PreLabel",
+																																															"name": "cond cmds 1",
 																																															"token": "no_token",
 																																															"bytes": [
 																																																"{001524} [f32] R6 := 2",
@@ -2577,7 +2655,7 @@
 																																															"children": []
 																																														},
 																																														{
-																																															"name": "fr1 label",
+																																															"name": "Label declaration",
 																																															"token": "no_token",
 																																															"bytes": [
 																																																"{001532} [f32] R5 := 0",
@@ -2587,12 +2665,18 @@
 																																															"children": []
 																																														},
 																																														{
-																																															"name": "PostLabel",
+																																															"name": "cond cmds 2",
 																																															"token": "no_token",
 																																															"bytes": [
 																																																"{001540} [f32] if R6 goto R5",
 																																																"{001542} [f32] R4 := 0"
 																																															],
+																																															"children": []
+																																														},
+																																														{
+																																															"name": "Label",
+																																															"token": "no_token",
+																																															"bytes": [],
 																																															"children": []
 																																														}
 																																													]
@@ -2688,6 +2772,12 @@
 																																												"{001598} [f32] R8 := 1",
 																																												"{001600} [f32] if R8 goto R7"
 																																											],
+																																											"children": []
+																																										},
+																																										{
+																																											"name": "Label",
+																																											"token": "no_token",
+																																											"bytes": [],
 																																											"children": []
 																																										},
 																																										{
@@ -2962,7 +3052,7 @@
 																																																			"children": []
 																																																		},
 																																																		{
-																																																			"name": "Loop start label",
+																																																			"name": "Label declaration",
 																																																			"token": "no_token",
 																																																			"bytes": [
 																																																				"{001806} [f32] R5 := 0",
@@ -2972,7 +3062,7 @@
 																																																			"children": []
 																																																		},
 																																																		{
-																																																			"name": "Loop body label",
+																																																			"name": "Label declaration",
 																																																			"token": "no_token",
 																																																			"bytes": [
 																																																				"{001814} [f32] R6 := 0",
@@ -2982,13 +3072,19 @@
 																																																			"children": []
 																																																		},
 																																																		{
-																																																			"name": "Loop end label",
+																																																			"name": "Label declaration",
 																																																			"token": "no_token",
 																																																			"bytes": [
 																																																				"{001822} [f32] R7 := 0",
 																																																				"{001824} [f08] R7 := R7 + const",
-																																																				"{001826} [f32] 0000 0CF4"
+																																																				"{001826} [f32] 0000 0D74"
 																																																			],
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"name": "Label",
+																																																			"token": "no_token",
+																																																			"bytes": [],
 																																																			"children": []
 																																																		},
 																																																		{
@@ -3103,7 +3199,7 @@
 																																																							"children": []
 																																																						},
 																																																						{
-																																																							"name": "PreLabel",
+																																																							"name": "cond cmds 1",
 																																																							"token": "no_token",
 																																																							"bytes": [
 																																																								"{001894} [f32] R7 := 2",
@@ -3114,7 +3210,7 @@
 																																																							"children": []
 																																																						},
 																																																						{
-																																																							"name": "fr1 label",
+																																																							"name": "Label declaration",
 																																																							"token": "no_token",
 																																																							"bytes": [
 																																																								"{001902} [f32] R6 := 0",
@@ -3124,12 +3220,18 @@
 																																																							"children": []
 																																																						},
 																																																						{
-																																																							"name": "PostLabel",
+																																																							"name": "cond cmds 2",
 																																																							"token": "no_token",
 																																																							"bytes": [
 																																																								"{001910} [f32] if R7 goto R6",
 																																																								"{001912} [f32] R5 := 0"
 																																																							],
+																																																							"children": []
+																																																						},
+																																																						{
+																																																							"name": "Label",
+																																																							"token": "no_token",
+																																																							"bytes": [],
 																																																							"children": []
 																																																						}
 																																																					]
@@ -3225,6 +3327,12 @@
 																																																				"{001968} [f32] R9 := 1",
 																																																				"{001970} [f32] if R9 goto R8"
 																																																			],
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"name": "Label",
+																																																			"token": "no_token",
+																																																			"bytes": [],
 																																																			"children": []
 																																																		},
 																																																		{
@@ -3505,7 +3613,7 @@
 																																																											"children": []
 																																																										},
 																																																										{
-																																																											"name": "Loop start label",
+																																																											"name": "Label declaration",
 																																																											"token": "no_token",
 																																																											"bytes": [
 																																																												"{002192} [f32] R6 := 0",
@@ -3515,7 +3623,7 @@
 																																																											"children": []
 																																																										},
 																																																										{
-																																																											"name": "Loop body label",
+																																																											"name": "Label declaration",
 																																																											"token": "no_token",
 																																																											"bytes": [
 																																																												"{002200} [f32] R7 := 0",
@@ -3525,13 +3633,19 @@
 																																																											"children": []
 																																																										},
 																																																										{
-																																																											"name": "Loop end label",
+																																																											"name": "Label declaration",
 																																																											"token": "no_token",
 																																																											"bytes": [
 																																																												"{002208} [f32] R8 := 0",
 																																																												"{002210} [f08] R8 := R8 + const",
-																																																												"{002212} [f32] 0000 0C86"
+																																																												"{002212} [f32] 0000 0CF4"
 																																																											],
+																																																											"children": []
+																																																										},
+																																																										{
+																																																											"name": "Label",
+																																																											"token": "no_token",
+																																																											"bytes": [],
 																																																											"children": []
 																																																										},
 																																																										{
@@ -3646,7 +3760,7 @@
 																																																															"children": []
 																																																														},
 																																																														{
-																																																															"name": "PreLabel",
+																																																															"name": "cond cmds 1",
 																																																															"token": "no_token",
 																																																															"bytes": [
 																																																																"{002280} [f32] R8 := 2",
@@ -3657,7 +3771,7 @@
 																																																															"children": []
 																																																														},
 																																																														{
-																																																															"name": "fr1 label",
+																																																															"name": "Label declaration",
 																																																															"token": "no_token",
 																																																															"bytes": [
 																																																																"{002288} [f32] R7 := 0",
@@ -3667,12 +3781,18 @@
 																																																															"children": []
 																																																														},
 																																																														{
-																																																															"name": "PostLabel",
+																																																															"name": "cond cmds 2",
 																																																															"token": "no_token",
 																																																															"bytes": [
 																																																																"{002296} [f32] if R8 goto R7",
 																																																																"{002298} [f32] R6 := 0"
 																																																															],
+																																																															"children": []
+																																																														},
+																																																														{
+																																																															"name": "Label",
+																																																															"token": "no_token",
+																																																															"bytes": [],
 																																																															"children": []
 																																																														}
 																																																													]
@@ -3768,6 +3888,12 @@
 																																																												"{002354} [f32] R10 := 1",
 																																																												"{002356} [f32] if R10 goto R9"
 																																																											],
+																																																											"children": []
+																																																										},
+																																																										{
+																																																											"name": "Label",
+																																																											"token": "no_token",
+																																																											"bytes": [],
 																																																											"children": []
 																																																										},
 																																																										{
@@ -4054,7 +4180,7 @@
 																																																																			"children": []
 																																																																		},
 																																																																		{
-																																																																			"name": "Loop start label",
+																																																																			"name": "Label declaration",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
 																																																																				"{002594} [f32] R7 := 0",
@@ -4064,7 +4190,7 @@
 																																																																			"children": []
 																																																																		},
 																																																																		{
-																																																																			"name": "Loop body label",
+																																																																			"name": "Label declaration",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
 																																																																				"{002602} [f32] R8 := 0",
@@ -4074,13 +4200,19 @@
 																																																																			"children": []
 																																																																		},
 																																																																		{
-																																																																			"name": "Loop end label",
+																																																																			"name": "Label declaration",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
 																																																																				"{002610} [f32] R9 := 0",
 																																																																				"{002612} [f08] R9 := R9 + const",
-																																																																				"{002614} [f32] 0000 0C18"
+																																																																				"{002614} [f32] 0000 0C74"
 																																																																			],
+																																																																			"children": []
+																																																																		},
+																																																																		{
+																																																																			"name": "Label",
+																																																																			"token": "no_token",
+																																																																			"bytes": [],
 																																																																			"children": []
 																																																																		},
 																																																																		{
@@ -4195,7 +4327,7 @@
 																																																																							"children": []
 																																																																						},
 																																																																						{
-																																																																							"name": "PreLabel",
+																																																																							"name": "cond cmds 1",
 																																																																							"token": "no_token",
 																																																																							"bytes": [
 																																																																								"{002682} [f32] R9 := 2",
@@ -4206,7 +4338,7 @@
 																																																																							"children": []
 																																																																						},
 																																																																						{
-																																																																							"name": "fr1 label",
+																																																																							"name": "Label declaration",
 																																																																							"token": "no_token",
 																																																																							"bytes": [
 																																																																								"{002690} [f32] R8 := 0",
@@ -4216,12 +4348,18 @@
 																																																																							"children": []
 																																																																						},
 																																																																						{
-																																																																							"name": "PostLabel",
+																																																																							"name": "cond cmds 2",
 																																																																							"token": "no_token",
 																																																																							"bytes": [
 																																																																								"{002698} [f32] if R9 goto R8",
 																																																																								"{002700} [f32] R7 := 0"
 																																																																							],
+																																																																							"children": []
+																																																																						},
+																																																																						{
+																																																																							"name": "Label",
+																																																																							"token": "no_token",
+																																																																							"bytes": [],
 																																																																							"children": []
 																																																																						}
 																																																																					]
@@ -4317,6 +4455,12 @@
 																																																																				"{002756} [f32] R11 := 1",
 																																																																				"{002758} [f32] if R11 goto R10"
 																																																																			],
+																																																																			"children": []
+																																																																		},
+																																																																		{
+																																																																			"name": "Label",
+																																																																			"token": "no_token",
+																																																																			"bytes": [],
 																																																																			"children": []
 																																																																		},
 																																																																		{
@@ -4515,6 +4659,41 @@
 																																																																												"{002910} [f32] R8 := R9"
 																																																																											],
 																																																																											"children": []
+																																																																										},
+																																																																										{
+																																																																											"name": "Store variable 'check' from R9",
+																																																																											"token": "no_token",
+																																																																											"bytes": [
+																																																																												"{002912} [f32] R27 := FP",
+																																																																												"{002914} [f08] R27 := R27 + const",
+																																																																												"{002916} [f32] FFFF FFFC",
+																																																																												"{002920} [f32] R27 := ->R27",
+																																																																												"{002922} [f08] R27 := R27 + const",
+																																																																												"{002924} [f32] FFFF FFFC",
+																																																																												"{002928} [f32] R27 := ->R27",
+																																																																												"{002930} [f08] R27 := R27 + const",
+																																																																												"{002932} [f32] FFFF FFFC",
+																																																																												"{002936} [f32] R27 := ->R27",
+																																																																												"{002938} [f08] R27 := R27 + const",
+																																																																												"{002940} [f32] FFFF FFFC",
+																																																																												"{002944} [f32] R27 := ->R27",
+																																																																												"{002946} [f08] R27 := R27 + const",
+																																																																												"{002948} [f32] FFFF FFFC",
+																																																																												"{002952} [f32] R27 := ->R27",
+																																																																												"{002954} [f08] R27 := R27 + const",
+																																																																												"{002956} [f32] FFFF FFFC",
+																																																																												"{002960} [f32] R27 := ->R27",
+																																																																												"{002962} [f08] R27 := R27 + const",
+																																																																												"{002964} [f32] FFFF FFFC",
+																																																																												"{002968} [f32] R27 := ->R27",
+																																																																												"{002970} [f08] R27 := R27 + const",
+																																																																												"{002972} [f32] FFFF FFFC",
+																																																																												"{002976} [f32] R27 := ->R27",
+																																																																												"{002978} [f08] R27 := R27 + const",
+																																																																												"{002980} [f32] 0000 0000",
+																																																																												"{002984} [f32] ->R27 := R9"
+																																																																											],
+																																																																											"children": []
 																																																																										}
 																																																																									]
 																																																																								}
@@ -4535,13 +4714,13 @@
 																																																																									"name": "Load variable 'i8' into R9",
 																																																																									"token": "no_token",
 																																																																									"bytes": [
-																																																																										"{002912} [f32] R27 := FP",
-																																																																										"{002914} [f08] R27 := R27 + const",
-																																																																										"{002916} [f32] FFFF FFFC",
-																																																																										"{002920} [f32] R27 := ->R27",
-																																																																										"{002922} [f08] R27 := R27 + const",
-																																																																										"{002924} [f32] 0000 0000",
-																																																																										"{002928} [f32] R9 := ->R27"
+																																																																										"{002986} [f32] R27 := FP",
+																																																																										"{002988} [f08] R27 := R27 + const",
+																																																																										"{002990} [f32] FFFF FFFC",
+																																																																										"{002994} [f32] R27 := ->R27",
+																																																																										"{002996} [f08] R27 := R27 + const",
+																																																																										"{002998} [f32] 0000 0000",
+																																																																										"{003002} [f32] R9 := ->R27"
 																																																																									],
 																																																																									"children": []
 																																																																								}
@@ -4577,7 +4756,7 @@
 																																																																															"name": "Copy for right value",
 																																																																															"token": "no_token",
 																																																																															"bytes": [
-																																																																																"{002930} [f32] R10 := R9"
+																																																																																"{003004} [f32] R10 := R9"
 																																																																															],
 																																																																															"children": []
 																																																																														}
@@ -4598,7 +4777,7 @@
 																																																																															"name": "Load LDC constant",
 																																																																															"token": "no_token",
 																																																																															"bytes": [
-																																																																																"{002932} [f32] R11 := 1"
+																																																																																"{003006} [f32] R11 := 1"
 																																																																															],
 																																																																															"children": []
 																																																																														}
@@ -4608,7 +4787,7 @@
 																																																																													"name": "Operation '+'",
 																																																																													"token": "no_token",
 																																																																													"bytes": [
-																																																																														"{002934} [f32] R10 += R11"
+																																																																														"{003008} [f32] R10 += R11"
 																																																																													],
 																																																																													"children": []
 																																																																												}
@@ -4624,7 +4803,21 @@
 																																																																											"name": "Assignment mov",
 																																																																											"token": "no_token",
 																																																																											"bytes": [
-																																																																												"{002936} [f32] R9 := R10"
+																																																																												"{003010} [f32] R9 := R10"
+																																																																											],
+																																																																											"children": []
+																																																																										},
+																																																																										{
+																																																																											"name": "Store variable 'i8' from R10",
+																																																																											"token": "no_token",
+																																																																											"bytes": [
+																																																																												"{003012} [f32] R27 := FP",
+																																																																												"{003014} [f08] R27 := R27 + const",
+																																																																												"{003016} [f32] FFFF FFFC",
+																																																																												"{003020} [f32] R27 := ->R27",
+																																																																												"{003022} [f08] R27 := R27 + const",
+																																																																												"{003024} [f32] 0000 0000",
+																																																																												"{003028} [f32] ->R27 := R10"
 																																																																											],
 																																																																											"children": []
 																																																																										}
@@ -4647,13 +4840,13 @@
 																																																																									"name": "Store variable 'i8' from R9",
 																																																																									"token": "no_token",
 																																																																									"bytes": [
-																																																																										"{002938} [f32] R27 := FP",
-																																																																										"{002940} [f08] R27 := R27 + const",
-																																																																										"{002942} [f32] FFFF FFFC",
-																																																																										"{002946} [f32] R27 := ->R27",
-																																																																										"{002948} [f08] R27 := R27 + const",
-																																																																										"{002950} [f32] 0000 0000",
-																																																																										"{002954} [f32] ->R27 := R9"
+																																																																										"{003030} [f32] R27 := FP",
+																																																																										"{003032} [f08] R27 := R27 + const",
+																																																																										"{003034} [f32] FFFF FFFC",
+																																																																										"{003038} [f32] R27 := ->R27",
+																																																																										"{003040} [f08] R27 := R27 + const",
+																																																																										"{003042} [f32] 0000 0000",
+																																																																										"{003046} [f32] ->R27 := R9"
 																																																																									],
 																																																																									"children": []
 																																																																								},
@@ -4661,34 +4854,34 @@
 																																																																									"name": "Store variable 'check' from R8",
 																																																																									"token": "no_token",
 																																																																									"bytes": [
-																																																																										"{002956} [f32] R27 := FP",
-																																																																										"{002958} [f08] R27 := R27 + const",
-																																																																										"{002960} [f32] FFFF FFFC",
-																																																																										"{002964} [f32] R27 := ->R27",
-																																																																										"{002966} [f08] R27 := R27 + const",
-																																																																										"{002968} [f32] FFFF FFFC",
-																																																																										"{002972} [f32] R27 := ->R27",
-																																																																										"{002974} [f08] R27 := R27 + const",
-																																																																										"{002976} [f32] FFFF FFFC",
-																																																																										"{002980} [f32] R27 := ->R27",
-																																																																										"{002982} [f08] R27 := R27 + const",
-																																																																										"{002984} [f32] FFFF FFFC",
-																																																																										"{002988} [f32] R27 := ->R27",
-																																																																										"{002990} [f08] R27 := R27 + const",
-																																																																										"{002992} [f32] FFFF FFFC",
-																																																																										"{002996} [f32] R27 := ->R27",
-																																																																										"{002998} [f08] R27 := R27 + const",
-																																																																										"{003000} [f32] FFFF FFFC",
-																																																																										"{003004} [f32] R27 := ->R27",
-																																																																										"{003006} [f08] R27 := R27 + const",
-																																																																										"{003008} [f32] FFFF FFFC",
-																																																																										"{003012} [f32] R27 := ->R27",
-																																																																										"{003014} [f08] R27 := R27 + const",
-																																																																										"{003016} [f32] FFFF FFFC",
-																																																																										"{003020} [f32] R27 := ->R27",
-																																																																										"{003022} [f08] R27 := R27 + const",
-																																																																										"{003024} [f32] 0000 0000",
-																																																																										"{003028} [f32] ->R27 := R8"
+																																																																										"{003048} [f32] R27 := FP",
+																																																																										"{003050} [f08] R27 := R27 + const",
+																																																																										"{003052} [f32] FFFF FFFC",
+																																																																										"{003056} [f32] R27 := ->R27",
+																																																																										"{003058} [f08] R27 := R27 + const",
+																																																																										"{003060} [f32] FFFF FFFC",
+																																																																										"{003064} [f32] R27 := ->R27",
+																																																																										"{003066} [f08] R27 := R27 + const",
+																																																																										"{003068} [f32] FFFF FFFC",
+																																																																										"{003072} [f32] R27 := ->R27",
+																																																																										"{003074} [f08] R27 := R27 + const",
+																																																																										"{003076} [f32] FFFF FFFC",
+																																																																										"{003080} [f32] R27 := ->R27",
+																																																																										"{003082} [f08] R27 := R27 + const",
+																																																																										"{003084} [f32] FFFF FFFC",
+																																																																										"{003088} [f32] R27 := ->R27",
+																																																																										"{003090} [f08] R27 := R27 + const",
+																																																																										"{003092} [f32] FFFF FFFC",
+																																																																										"{003096} [f32] R27 := ->R27",
+																																																																										"{003098} [f08] R27 := R27 + const",
+																																																																										"{003100} [f32] FFFF FFFC",
+																																																																										"{003104} [f32] R27 := ->R27",
+																																																																										"{003106} [f08] R27 := R27 + const",
+																																																																										"{003108} [f32] FFFF FFFC",
+																																																																										"{003112} [f32] R27 := ->R27",
+																																																																										"{003114} [f08] R27 := R27 + const",
+																																																																										"{003116} [f32] 0000 0000",
+																																																																										"{003120} [f32] ->R27 := R8"
 																																																																									],
 																																																																									"children": []
 																																																																								}
@@ -4711,10 +4904,10 @@
 																																																																							"name": "Block body cmds 2",
 																																																																							"token": "no_token",
 																																																																							"bytes": [
-																																																																								"{003030} [f08] FP := FP + const",
-																																																																								"{003032} [f32] FFFF FFFC",
-																																																																								"{003036} [f32] SP := FP",
-																																																																								"{003038} [f32] FP := ->FP"
+																																																																								"{003122} [f08] FP := FP + const",
+																																																																								"{003124} [f32] FFFF FFFC",
+																																																																								"{003128} [f32] SP := FP",
+																																																																								"{003130} [f32] FP := ->FP"
 																																																																							],
 																																																																							"children": []
 																																																																						}
@@ -4726,11 +4919,11 @@
 																																																																			"name": "Load from heap at 0",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
-																																																																				"{003040} [f32] R7 := 0",
-																																																																				"{003042} [f32] R7 := ->R7",
-																																																																				"{003044} [f08] R7 := R7 + const",
-																																																																				"{003046} [f32] 0000 0000",
-																																																																				"{003050} [f32] R7 := ->R7"
+																																																																				"{003132} [f32] R7 := 0",
+																																																																				"{003134} [f32] R7 := ->R7",
+																																																																				"{003136} [f08] R7 := R7 + const",
+																																																																				"{003138} [f32] 0000 0000",
+																																																																				"{003142} [f32] R7 := ->R7"
 																																																																			],
 																																																																			"children": []
 																																																																		},
@@ -4738,11 +4931,11 @@
 																																																																			"name": "Load from heap at 4",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
-																																																																				"{003052} [f32] R8 := 0",
-																																																																				"{003054} [f32] R8 := ->R8",
-																																																																				"{003056} [f08] R8 := R8 + const",
-																																																																				"{003058} [f32] 0000 0004",
-																																																																				"{003062} [f32] R8 := ->R8"
+																																																																				"{003144} [f32] R8 := 0",
+																																																																				"{003146} [f32] R8 := ->R8",
+																																																																				"{003148} [f08] R8 := R8 + const",
+																																																																				"{003150} [f32] 0000 0004",
+																																																																				"{003154} [f32] R8 := ->R8"
 																																																																			],
 																																																																			"children": []
 																																																																		},
@@ -4750,11 +4943,11 @@
 																																																																			"name": "Load from heap at 8",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
-																																																																				"{003064} [f32] R9 := 0",
-																																																																				"{003066} [f32] R9 := ->R9",
-																																																																				"{003068} [f08] R9 := R9 + const",
-																																																																				"{003070} [f32] 0000 0008",
-																																																																				"{003074} [f32] R9 := ->R9"
+																																																																				"{003156} [f32] R9 := 0",
+																																																																				"{003158} [f32] R9 := ->R9",
+																																																																				"{003160} [f08] R9 := R9 + const",
+																																																																				"{003162} [f32] 0000 0008",
+																																																																				"{003166} [f32] R9 := ->R9"
 																																																																			],
 																																																																			"children": []
 																																																																		},
@@ -4762,13 +4955,13 @@
 																																																																			"name": "Heap top change by 12 bytes",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
-																																																																				"{003076} [f32] R27 := 0",
-																																																																				"{003078} [f32] R27 := ->R27",
-																																																																				"{003080} [f08] R27 := R27 + const",
-																																																																				"{003082} [f32] 0000 000C",
-																																																																				"{003086} [f32] SB := 0",
-																																																																				"{003088} [f32] ->SB := R27",
-																																																																				"{003090} [f32] SB := 4"
+																																																																				"{003168} [f32] R27 := 0",
+																																																																				"{003170} [f32] R27 := ->R27",
+																																																																				"{003172} [f08] R27 := R27 + const",
+																																																																				"{003174} [f32] 0000 000C",
+																																																																				"{003178} [f32] SB := 0",
+																																																																				"{003180} [f32] ->SB := R27",
+																																																																				"{003182} [f32] SB := 4"
 																																																																			],
 																																																																			"children": []
 																																																																		},
@@ -4776,9 +4969,15 @@
 																																																																			"name": "fr0 ldc, if fr0 cbr",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
-																																																																				"{003092} [f32] R11 := 1",
-																																																																				"{003094} [f32] if R11 goto R7"
+																																																																				"{003184} [f32] R11 := 1",
+																																																																				"{003186} [f32] if R11 goto R7"
 																																																																			],
+																																																																			"children": []
+																																																																		},
+																																																																		{
+																																																																			"name": "Label",
+																																																																			"token": "no_token",
+																																																																			"bytes": [],
 																																																																			"children": []
 																																																																		}
 																																																																	]
@@ -4800,13 +4999,13 @@
 																																																																	"name": "Load variable 'i7' into R7",
 																																																																	"token": "no_token",
 																																																																	"bytes": [
-																																																																		"{003096} [f32] R27 := FP",
-																																																																		"{003098} [f08] R27 := R27 + const",
-																																																																		"{003100} [f32] FFFF FFFC",
-																																																																		"{003104} [f32] R27 := ->R27",
-																																																																		"{003106} [f08] R27 := R27 + const",
-																																																																		"{003108} [f32] 0000 0000",
-																																																																		"{003112} [f32] R7 := ->R27"
+																																																																		"{003188} [f32] R27 := FP",
+																																																																		"{003190} [f08] R27 := R27 + const",
+																																																																		"{003192} [f32] FFFF FFFC",
+																																																																		"{003196} [f32] R27 := ->R27",
+																																																																		"{003198} [f08] R27 := R27 + const",
+																																																																		"{003200} [f32] 0000 0000",
+																																																																		"{003204} [f32] R7 := ->R27"
 																																																																	],
 																																																																	"children": []
 																																																																}
@@ -4842,7 +5041,7 @@
 																																																																							"name": "Copy for right value",
 																																																																							"token": "no_token",
 																																																																							"bytes": [
-																																																																								"{003114} [f32] R8 := R7"
+																																																																								"{003206} [f32] R8 := R7"
 																																																																							],
 																																																																							"children": []
 																																																																						}
@@ -4863,7 +5062,7 @@
 																																																																							"name": "Load LDC constant",
 																																																																							"token": "no_token",
 																																																																							"bytes": [
-																																																																								"{003116} [f32] R9 := 1"
+																																																																								"{003208} [f32] R9 := 1"
 																																																																							],
 																																																																							"children": []
 																																																																						}
@@ -4873,7 +5072,7 @@
 																																																																					"name": "Operation '+'",
 																																																																					"token": "no_token",
 																																																																					"bytes": [
-																																																																						"{003118} [f32] R8 += R9"
+																																																																						"{003210} [f32] R8 += R9"
 																																																																					],
 																																																																					"children": []
 																																																																				}
@@ -4889,7 +5088,21 @@
 																																																																			"name": "Assignment mov",
 																																																																			"token": "no_token",
 																																																																			"bytes": [
-																																																																				"{003120} [f32] R7 := R8"
+																																																																				"{003212} [f32] R7 := R8"
+																																																																			],
+																																																																			"children": []
+																																																																		},
+																																																																		{
+																																																																			"name": "Store variable 'i7' from R8",
+																																																																			"token": "no_token",
+																																																																			"bytes": [
+																																																																				"{003214} [f32] R27 := FP",
+																																																																				"{003216} [f08] R27 := R27 + const",
+																																																																				"{003218} [f32] FFFF FFFC",
+																																																																				"{003222} [f32] R27 := ->R27",
+																																																																				"{003224} [f08] R27 := R27 + const",
+																																																																				"{003226} [f32] 0000 0000",
+																																																																				"{003230} [f32] ->R27 := R8"
 																																																																			],
 																																																																			"children": []
 																																																																		}
@@ -4912,13 +5125,13 @@
 																																																																	"name": "Store variable 'i7' from R7",
 																																																																	"token": "no_token",
 																																																																	"bytes": [
-																																																																		"{003122} [f32] R27 := FP",
-																																																																		"{003124} [f08] R27 := R27 + const",
-																																																																		"{003126} [f32] FFFF FFFC",
-																																																																		"{003130} [f32] R27 := ->R27",
-																																																																		"{003132} [f08] R27 := R27 + const",
-																																																																		"{003134} [f32] 0000 0000",
-																																																																		"{003138} [f32] ->R27 := R7"
+																																																																		"{003232} [f32] R27 := FP",
+																																																																		"{003234} [f08] R27 := R27 + const",
+																																																																		"{003236} [f32] FFFF FFFC",
+																																																																		"{003240} [f32] R27 := ->R27",
+																																																																		"{003242} [f08] R27 := R27 + const",
+																																																																		"{003244} [f32] 0000 0000",
+																																																																		"{003248} [f32] ->R27 := R7"
 																																																																	],
 																																																																	"children": []
 																																																																}
@@ -4941,10 +5154,10 @@
 																																																															"name": "Block body cmds 2",
 																																																															"token": "no_token",
 																																																															"bytes": [
-																																																																"{003140} [f08] FP := FP + const",
-																																																																"{003142} [f32] FFFF FFFC",
-																																																																"{003146} [f32] SP := FP",
-																																																																"{003148} [f32] FP := ->FP"
+																																																																"{003250} [f08] FP := FP + const",
+																																																																"{003252} [f32] FFFF FFFC",
+																																																																"{003256} [f32] SP := FP",
+																																																																"{003258} [f32] FP := ->FP"
 																																																															],
 																																																															"children": []
 																																																														}
@@ -4956,11 +5169,11 @@
 																																																											"name": "Load from heap at 0",
 																																																											"token": "no_token",
 																																																											"bytes": [
-																																																												"{003150} [f32] R6 := 0",
-																																																												"{003152} [f32] R6 := ->R6",
-																																																												"{003154} [f08] R6 := R6 + const",
-																																																												"{003156} [f32] 0000 0000",
-																																																												"{003160} [f32] R6 := ->R6"
+																																																												"{003260} [f32] R6 := 0",
+																																																												"{003262} [f32] R6 := ->R6",
+																																																												"{003264} [f08] R6 := R6 + const",
+																																																												"{003266} [f32] 0000 0000",
+																																																												"{003270} [f32] R6 := ->R6"
 																																																											],
 																																																											"children": []
 																																																										},
@@ -4968,11 +5181,11 @@
 																																																											"name": "Load from heap at 4",
 																																																											"token": "no_token",
 																																																											"bytes": [
-																																																												"{003162} [f32] R7 := 0",
-																																																												"{003164} [f32] R7 := ->R7",
-																																																												"{003166} [f08] R7 := R7 + const",
-																																																												"{003168} [f32] 0000 0004",
-																																																												"{003172} [f32] R7 := ->R7"
+																																																												"{003272} [f32] R7 := 0",
+																																																												"{003274} [f32] R7 := ->R7",
+																																																												"{003276} [f08] R7 := R7 + const",
+																																																												"{003278} [f32] 0000 0004",
+																																																												"{003282} [f32] R7 := ->R7"
 																																																											],
 																																																											"children": []
 																																																										},
@@ -4980,11 +5193,11 @@
 																																																											"name": "Load from heap at 8",
 																																																											"token": "no_token",
 																																																											"bytes": [
-																																																												"{003174} [f32] R8 := 0",
-																																																												"{003176} [f32] R8 := ->R8",
-																																																												"{003178} [f08] R8 := R8 + const",
-																																																												"{003180} [f32] 0000 0008",
-																																																												"{003184} [f32] R8 := ->R8"
+																																																												"{003284} [f32] R8 := 0",
+																																																												"{003286} [f32] R8 := ->R8",
+																																																												"{003288} [f08] R8 := R8 + const",
+																																																												"{003290} [f32] 0000 0008",
+																																																												"{003294} [f32] R8 := ->R8"
 																																																											],
 																																																											"children": []
 																																																										},
@@ -4992,13 +5205,13 @@
 																																																											"name": "Heap top change by 12 bytes",
 																																																											"token": "no_token",
 																																																											"bytes": [
-																																																												"{003186} [f32] R27 := 0",
-																																																												"{003188} [f32] R27 := ->R27",
-																																																												"{003190} [f08] R27 := R27 + const",
-																																																												"{003192} [f32] 0000 000C",
-																																																												"{003196} [f32] SB := 0",
-																																																												"{003198} [f32] ->SB := R27",
-																																																												"{003200} [f32] SB := 4"
+																																																												"{003296} [f32] R27 := 0",
+																																																												"{003298} [f32] R27 := ->R27",
+																																																												"{003300} [f08] R27 := R27 + const",
+																																																												"{003302} [f32] 0000 000C",
+																																																												"{003306} [f32] SB := 0",
+																																																												"{003308} [f32] ->SB := R27",
+																																																												"{003310} [f32] SB := 4"
 																																																											],
 																																																											"children": []
 																																																										},
@@ -5006,9 +5219,15 @@
 																																																											"name": "fr0 ldc, if fr0 cbr",
 																																																											"token": "no_token",
 																																																											"bytes": [
-																																																												"{003202} [f32] R10 := 1",
-																																																												"{003204} [f32] if R10 goto R6"
+																																																												"{003312} [f32] R10 := 1",
+																																																												"{003314} [f32] if R10 goto R6"
 																																																											],
+																																																											"children": []
+																																																										},
+																																																										{
+																																																											"name": "Label",
+																																																											"token": "no_token",
+																																																											"bytes": [],
 																																																											"children": []
 																																																										}
 																																																									]
@@ -5030,13 +5249,13 @@
 																																																									"name": "Load variable 'i6' into R6",
 																																																									"token": "no_token",
 																																																									"bytes": [
-																																																										"{003206} [f32] R27 := FP",
-																																																										"{003208} [f08] R27 := R27 + const",
-																																																										"{003210} [f32] FFFF FFFC",
-																																																										"{003214} [f32] R27 := ->R27",
-																																																										"{003216} [f08] R27 := R27 + const",
-																																																										"{003218} [f32] 0000 0000",
-																																																										"{003222} [f32] R6 := ->R27"
+																																																										"{003316} [f32] R27 := FP",
+																																																										"{003318} [f08] R27 := R27 + const",
+																																																										"{003320} [f32] FFFF FFFC",
+																																																										"{003324} [f32] R27 := ->R27",
+																																																										"{003326} [f08] R27 := R27 + const",
+																																																										"{003328} [f32] 0000 0000",
+																																																										"{003332} [f32] R6 := ->R27"
 																																																									],
 																																																									"children": []
 																																																								}
@@ -5072,7 +5291,7 @@
 																																																															"name": "Copy for right value",
 																																																															"token": "no_token",
 																																																															"bytes": [
-																																																																"{003224} [f32] R7 := R6"
+																																																																"{003334} [f32] R7 := R6"
 																																																															],
 																																																															"children": []
 																																																														}
@@ -5093,7 +5312,7 @@
 																																																															"name": "Load LDC constant",
 																																																															"token": "no_token",
 																																																															"bytes": [
-																																																																"{003226} [f32] R8 := 1"
+																																																																"{003336} [f32] R8 := 1"
 																																																															],
 																																																															"children": []
 																																																														}
@@ -5103,7 +5322,7 @@
 																																																													"name": "Operation '+'",
 																																																													"token": "no_token",
 																																																													"bytes": [
-																																																														"{003228} [f32] R7 += R8"
+																																																														"{003338} [f32] R7 += R8"
 																																																													],
 																																																													"children": []
 																																																												}
@@ -5119,7 +5338,21 @@
 																																																											"name": "Assignment mov",
 																																																											"token": "no_token",
 																																																											"bytes": [
-																																																												"{003230} [f32] R6 := R7"
+																																																												"{003340} [f32] R6 := R7"
+																																																											],
+																																																											"children": []
+																																																										},
+																																																										{
+																																																											"name": "Store variable 'i6' from R7",
+																																																											"token": "no_token",
+																																																											"bytes": [
+																																																												"{003342} [f32] R27 := FP",
+																																																												"{003344} [f08] R27 := R27 + const",
+																																																												"{003346} [f32] FFFF FFFC",
+																																																												"{003350} [f32] R27 := ->R27",
+																																																												"{003352} [f08] R27 := R27 + const",
+																																																												"{003354} [f32] 0000 0000",
+																																																												"{003358} [f32] ->R27 := R7"
 																																																											],
 																																																											"children": []
 																																																										}
@@ -5142,13 +5375,13 @@
 																																																									"name": "Store variable 'i6' from R6",
 																																																									"token": "no_token",
 																																																									"bytes": [
-																																																										"{003232} [f32] R27 := FP",
-																																																										"{003234} [f08] R27 := R27 + const",
-																																																										"{003236} [f32] FFFF FFFC",
-																																																										"{003240} [f32] R27 := ->R27",
-																																																										"{003242} [f08] R27 := R27 + const",
-																																																										"{003244} [f32] 0000 0000",
-																																																										"{003248} [f32] ->R27 := R6"
+																																																										"{003360} [f32] R27 := FP",
+																																																										"{003362} [f08] R27 := R27 + const",
+																																																										"{003364} [f32] FFFF FFFC",
+																																																										"{003368} [f32] R27 := ->R27",
+																																																										"{003370} [f08] R27 := R27 + const",
+																																																										"{003372} [f32] 0000 0000",
+																																																										"{003376} [f32] ->R27 := R6"
 																																																									],
 																																																									"children": []
 																																																								}
@@ -5171,10 +5404,10 @@
 																																																							"name": "Block body cmds 2",
 																																																							"token": "no_token",
 																																																							"bytes": [
-																																																								"{003250} [f08] FP := FP + const",
-																																																								"{003252} [f32] FFFF FFFC",
-																																																								"{003256} [f32] SP := FP",
-																																																								"{003258} [f32] FP := ->FP"
+																																																								"{003378} [f08] FP := FP + const",
+																																																								"{003380} [f32] FFFF FFFC",
+																																																								"{003384} [f32] SP := FP",
+																																																								"{003386} [f32] FP := ->FP"
 																																																							],
 																																																							"children": []
 																																																						}
@@ -5186,11 +5419,11 @@
 																																																			"name": "Load from heap at 0",
 																																																			"token": "no_token",
 																																																			"bytes": [
-																																																				"{003260} [f32] R5 := 0",
-																																																				"{003262} [f32] R5 := ->R5",
-																																																				"{003264} [f08] R5 := R5 + const",
-																																																				"{003266} [f32] 0000 0000",
-																																																				"{003270} [f32] R5 := ->R5"
+																																																				"{003388} [f32] R5 := 0",
+																																																				"{003390} [f32] R5 := ->R5",
+																																																				"{003392} [f08] R5 := R5 + const",
+																																																				"{003394} [f32] 0000 0000",
+																																																				"{003398} [f32] R5 := ->R5"
 																																																			],
 																																																			"children": []
 																																																		},
@@ -5198,11 +5431,11 @@
 																																																			"name": "Load from heap at 4",
 																																																			"token": "no_token",
 																																																			"bytes": [
-																																																				"{003272} [f32] R6 := 0",
-																																																				"{003274} [f32] R6 := ->R6",
-																																																				"{003276} [f08] R6 := R6 + const",
-																																																				"{003278} [f32] 0000 0004",
-																																																				"{003282} [f32] R6 := ->R6"
+																																																				"{003400} [f32] R6 := 0",
+																																																				"{003402} [f32] R6 := ->R6",
+																																																				"{003404} [f08] R6 := R6 + const",
+																																																				"{003406} [f32] 0000 0004",
+																																																				"{003410} [f32] R6 := ->R6"
 																																																			],
 																																																			"children": []
 																																																		},
@@ -5210,11 +5443,11 @@
 																																																			"name": "Load from heap at 8",
 																																																			"token": "no_token",
 																																																			"bytes": [
-																																																				"{003284} [f32] R7 := 0",
-																																																				"{003286} [f32] R7 := ->R7",
-																																																				"{003288} [f08] R7 := R7 + const",
-																																																				"{003290} [f32] 0000 0008",
-																																																				"{003294} [f32] R7 := ->R7"
+																																																				"{003412} [f32] R7 := 0",
+																																																				"{003414} [f32] R7 := ->R7",
+																																																				"{003416} [f08] R7 := R7 + const",
+																																																				"{003418} [f32] 0000 0008",
+																																																				"{003422} [f32] R7 := ->R7"
 																																																			],
 																																																			"children": []
 																																																		},
@@ -5222,13 +5455,13 @@
 																																																			"name": "Heap top change by 12 bytes",
 																																																			"token": "no_token",
 																																																			"bytes": [
-																																																				"{003296} [f32] R27 := 0",
-																																																				"{003298} [f32] R27 := ->R27",
-																																																				"{003300} [f08] R27 := R27 + const",
-																																																				"{003302} [f32] 0000 000C",
-																																																				"{003306} [f32] SB := 0",
-																																																				"{003308} [f32] ->SB := R27",
-																																																				"{003310} [f32] SB := 4"
+																																																				"{003424} [f32] R27 := 0",
+																																																				"{003426} [f32] R27 := ->R27",
+																																																				"{003428} [f08] R27 := R27 + const",
+																																																				"{003430} [f32] 0000 000C",
+																																																				"{003434} [f32] SB := 0",
+																																																				"{003436} [f32] ->SB := R27",
+																																																				"{003438} [f32] SB := 4"
 																																																			],
 																																																			"children": []
 																																																		},
@@ -5236,9 +5469,15 @@
 																																																			"name": "fr0 ldc, if fr0 cbr",
 																																																			"token": "no_token",
 																																																			"bytes": [
-																																																				"{003312} [f32] R9 := 1",
-																																																				"{003314} [f32] if R9 goto R5"
+																																																				"{003440} [f32] R9 := 1",
+																																																				"{003442} [f32] if R9 goto R5"
 																																																			],
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"name": "Label",
+																																																			"token": "no_token",
+																																																			"bytes": [],
 																																																			"children": []
 																																																		}
 																																																	]
@@ -5260,13 +5499,13 @@
 																																																	"name": "Load variable 'i5' into R5",
 																																																	"token": "no_token",
 																																																	"bytes": [
-																																																		"{003316} [f32] R27 := FP",
-																																																		"{003318} [f08] R27 := R27 + const",
-																																																		"{003320} [f32] FFFF FFFC",
-																																																		"{003324} [f32] R27 := ->R27",
-																																																		"{003326} [f08] R27 := R27 + const",
-																																																		"{003328} [f32] 0000 0000",
-																																																		"{003332} [f32] R5 := ->R27"
+																																																		"{003444} [f32] R27 := FP",
+																																																		"{003446} [f08] R27 := R27 + const",
+																																																		"{003448} [f32] FFFF FFFC",
+																																																		"{003452} [f32] R27 := ->R27",
+																																																		"{003454} [f08] R27 := R27 + const",
+																																																		"{003456} [f32] 0000 0000",
+																																																		"{003460} [f32] R5 := ->R27"
 																																																	],
 																																																	"children": []
 																																																}
@@ -5302,7 +5541,7 @@
 																																																							"name": "Copy for right value",
 																																																							"token": "no_token",
 																																																							"bytes": [
-																																																								"{003334} [f32] R6 := R5"
+																																																								"{003462} [f32] R6 := R5"
 																																																							],
 																																																							"children": []
 																																																						}
@@ -5323,7 +5562,7 @@
 																																																							"name": "Load LDC constant",
 																																																							"token": "no_token",
 																																																							"bytes": [
-																																																								"{003336} [f32] R7 := 1"
+																																																								"{003464} [f32] R7 := 1"
 																																																							],
 																																																							"children": []
 																																																						}
@@ -5333,7 +5572,7 @@
 																																																					"name": "Operation '+'",
 																																																					"token": "no_token",
 																																																					"bytes": [
-																																																						"{003338} [f32] R6 += R7"
+																																																						"{003466} [f32] R6 += R7"
 																																																					],
 																																																					"children": []
 																																																				}
@@ -5349,7 +5588,21 @@
 																																																			"name": "Assignment mov",
 																																																			"token": "no_token",
 																																																			"bytes": [
-																																																				"{003340} [f32] R5 := R6"
+																																																				"{003468} [f32] R5 := R6"
+																																																			],
+																																																			"children": []
+																																																		},
+																																																		{
+																																																			"name": "Store variable 'i5' from R6",
+																																																			"token": "no_token",
+																																																			"bytes": [
+																																																				"{003470} [f32] R27 := FP",
+																																																				"{003472} [f08] R27 := R27 + const",
+																																																				"{003474} [f32] FFFF FFFC",
+																																																				"{003478} [f32] R27 := ->R27",
+																																																				"{003480} [f08] R27 := R27 + const",
+																																																				"{003482} [f32] 0000 0000",
+																																																				"{003486} [f32] ->R27 := R6"
 																																																			],
 																																																			"children": []
 																																																		}
@@ -5372,13 +5625,13 @@
 																																																	"name": "Store variable 'i5' from R5",
 																																																	"token": "no_token",
 																																																	"bytes": [
-																																																		"{003342} [f32] R27 := FP",
-																																																		"{003344} [f08] R27 := R27 + const",
-																																																		"{003346} [f32] FFFF FFFC",
-																																																		"{003350} [f32] R27 := ->R27",
-																																																		"{003352} [f08] R27 := R27 + const",
-																																																		"{003354} [f32] 0000 0000",
-																																																		"{003358} [f32] ->R27 := R5"
+																																																		"{003488} [f32] R27 := FP",
+																																																		"{003490} [f08] R27 := R27 + const",
+																																																		"{003492} [f32] FFFF FFFC",
+																																																		"{003496} [f32] R27 := ->R27",
+																																																		"{003498} [f08] R27 := R27 + const",
+																																																		"{003500} [f32] 0000 0000",
+																																																		"{003504} [f32] ->R27 := R5"
 																																																	],
 																																																	"children": []
 																																																}
@@ -5401,10 +5654,10 @@
 																																															"name": "Block body cmds 2",
 																																															"token": "no_token",
 																																															"bytes": [
-																																																"{003360} [f08] FP := FP + const",
-																																																"{003362} [f32] FFFF FFFC",
-																																																"{003366} [f32] SP := FP",
-																																																"{003368} [f32] FP := ->FP"
+																																																"{003506} [f08] FP := FP + const",
+																																																"{003508} [f32] FFFF FFFC",
+																																																"{003512} [f32] SP := FP",
+																																																"{003514} [f32] FP := ->FP"
 																																															],
 																																															"children": []
 																																														}
@@ -5416,11 +5669,11 @@
 																																											"name": "Load from heap at 0",
 																																											"token": "no_token",
 																																											"bytes": [
-																																												"{003370} [f32] R4 := 0",
-																																												"{003372} [f32] R4 := ->R4",
-																																												"{003374} [f08] R4 := R4 + const",
-																																												"{003376} [f32] 0000 0000",
-																																												"{003380} [f32] R4 := ->R4"
+																																												"{003516} [f32] R4 := 0",
+																																												"{003518} [f32] R4 := ->R4",
+																																												"{003520} [f08] R4 := R4 + const",
+																																												"{003522} [f32] 0000 0000",
+																																												"{003526} [f32] R4 := ->R4"
 																																											],
 																																											"children": []
 																																										},
@@ -5428,11 +5681,11 @@
 																																											"name": "Load from heap at 4",
 																																											"token": "no_token",
 																																											"bytes": [
-																																												"{003382} [f32] R5 := 0",
-																																												"{003384} [f32] R5 := ->R5",
-																																												"{003386} [f08] R5 := R5 + const",
-																																												"{003388} [f32] 0000 0004",
-																																												"{003392} [f32] R5 := ->R5"
+																																												"{003528} [f32] R5 := 0",
+																																												"{003530} [f32] R5 := ->R5",
+																																												"{003532} [f08] R5 := R5 + const",
+																																												"{003534} [f32] 0000 0004",
+																																												"{003538} [f32] R5 := ->R5"
 																																											],
 																																											"children": []
 																																										},
@@ -5440,11 +5693,11 @@
 																																											"name": "Load from heap at 8",
 																																											"token": "no_token",
 																																											"bytes": [
-																																												"{003394} [f32] R6 := 0",
-																																												"{003396} [f32] R6 := ->R6",
-																																												"{003398} [f08] R6 := R6 + const",
-																																												"{003400} [f32] 0000 0008",
-																																												"{003404} [f32] R6 := ->R6"
+																																												"{003540} [f32] R6 := 0",
+																																												"{003542} [f32] R6 := ->R6",
+																																												"{003544} [f08] R6 := R6 + const",
+																																												"{003546} [f32] 0000 0008",
+																																												"{003550} [f32] R6 := ->R6"
 																																											],
 																																											"children": []
 																																										},
@@ -5452,13 +5705,13 @@
 																																											"name": "Heap top change by 12 bytes",
 																																											"token": "no_token",
 																																											"bytes": [
-																																												"{003406} [f32] R27 := 0",
-																																												"{003408} [f32] R27 := ->R27",
-																																												"{003410} [f08] R27 := R27 + const",
-																																												"{003412} [f32] 0000 000C",
-																																												"{003416} [f32] SB := 0",
-																																												"{003418} [f32] ->SB := R27",
-																																												"{003420} [f32] SB := 4"
+																																												"{003552} [f32] R27 := 0",
+																																												"{003554} [f32] R27 := ->R27",
+																																												"{003556} [f08] R27 := R27 + const",
+																																												"{003558} [f32] 0000 000C",
+																																												"{003562} [f32] SB := 0",
+																																												"{003564} [f32] ->SB := R27",
+																																												"{003566} [f32] SB := 4"
 																																											],
 																																											"children": []
 																																										},
@@ -5466,9 +5719,15 @@
 																																											"name": "fr0 ldc, if fr0 cbr",
 																																											"token": "no_token",
 																																											"bytes": [
-																																												"{003422} [f32] R8 := 1",
-																																												"{003424} [f32] if R8 goto R4"
+																																												"{003568} [f32] R8 := 1",
+																																												"{003570} [f32] if R8 goto R4"
 																																											],
+																																											"children": []
+																																										},
+																																										{
+																																											"name": "Label",
+																																											"token": "no_token",
+																																											"bytes": [],
 																																											"children": []
 																																										}
 																																									]
@@ -5490,13 +5749,13 @@
 																																									"name": "Load variable 'i4' into R4",
 																																									"token": "no_token",
 																																									"bytes": [
-																																										"{003426} [f32] R27 := FP",
-																																										"{003428} [f08] R27 := R27 + const",
-																																										"{003430} [f32] FFFF FFFC",
-																																										"{003434} [f32] R27 := ->R27",
-																																										"{003436} [f08] R27 := R27 + const",
-																																										"{003438} [f32] 0000 0000",
-																																										"{003442} [f32] R4 := ->R27"
+																																										"{003572} [f32] R27 := FP",
+																																										"{003574} [f08] R27 := R27 + const",
+																																										"{003576} [f32] FFFF FFFC",
+																																										"{003580} [f32] R27 := ->R27",
+																																										"{003582} [f08] R27 := R27 + const",
+																																										"{003584} [f32] 0000 0000",
+																																										"{003588} [f32] R4 := ->R27"
 																																									],
 																																									"children": []
 																																								}
@@ -5532,7 +5791,7 @@
 																																															"name": "Copy for right value",
 																																															"token": "no_token",
 																																															"bytes": [
-																																																"{003444} [f32] R5 := R4"
+																																																"{003590} [f32] R5 := R4"
 																																															],
 																																															"children": []
 																																														}
@@ -5553,7 +5812,7 @@
 																																															"name": "Load LDC constant",
 																																															"token": "no_token",
 																																															"bytes": [
-																																																"{003446} [f32] R6 := 1"
+																																																"{003592} [f32] R6 := 1"
 																																															],
 																																															"children": []
 																																														}
@@ -5563,7 +5822,7 @@
 																																													"name": "Operation '+'",
 																																													"token": "no_token",
 																																													"bytes": [
-																																														"{003448} [f32] R5 += R6"
+																																														"{003594} [f32] R5 += R6"
 																																													],
 																																													"children": []
 																																												}
@@ -5579,7 +5838,21 @@
 																																											"name": "Assignment mov",
 																																											"token": "no_token",
 																																											"bytes": [
-																																												"{003450} [f32] R4 := R5"
+																																												"{003596} [f32] R4 := R5"
+																																											],
+																																											"children": []
+																																										},
+																																										{
+																																											"name": "Store variable 'i4' from R5",
+																																											"token": "no_token",
+																																											"bytes": [
+																																												"{003598} [f32] R27 := FP",
+																																												"{003600} [f08] R27 := R27 + const",
+																																												"{003602} [f32] FFFF FFFC",
+																																												"{003606} [f32] R27 := ->R27",
+																																												"{003608} [f08] R27 := R27 + const",
+																																												"{003610} [f32] 0000 0000",
+																																												"{003614} [f32] ->R27 := R5"
 																																											],
 																																											"children": []
 																																										}
@@ -5602,13 +5875,13 @@
 																																									"name": "Store variable 'i4' from R4",
 																																									"token": "no_token",
 																																									"bytes": [
-																																										"{003452} [f32] R27 := FP",
-																																										"{003454} [f08] R27 := R27 + const",
-																																										"{003456} [f32] FFFF FFFC",
-																																										"{003460} [f32] R27 := ->R27",
-																																										"{003462} [f08] R27 := R27 + const",
-																																										"{003464} [f32] 0000 0000",
-																																										"{003468} [f32] ->R27 := R4"
+																																										"{003616} [f32] R27 := FP",
+																																										"{003618} [f08] R27 := R27 + const",
+																																										"{003620} [f32] FFFF FFFC",
+																																										"{003624} [f32] R27 := ->R27",
+																																										"{003626} [f08] R27 := R27 + const",
+																																										"{003628} [f32] 0000 0000",
+																																										"{003632} [f32] ->R27 := R4"
 																																									],
 																																									"children": []
 																																								}
@@ -5631,10 +5904,10 @@
 																																							"name": "Block body cmds 2",
 																																							"token": "no_token",
 																																							"bytes": [
-																																								"{003470} [f08] FP := FP + const",
-																																								"{003472} [f32] FFFF FFFC",
-																																								"{003476} [f32] SP := FP",
-																																								"{003478} [f32] FP := ->FP"
+																																								"{003634} [f08] FP := FP + const",
+																																								"{003636} [f32] FFFF FFFC",
+																																								"{003640} [f32] SP := FP",
+																																								"{003642} [f32] FP := ->FP"
 																																							],
 																																							"children": []
 																																						}
@@ -5646,11 +5919,11 @@
 																																			"name": "Load from heap at 0",
 																																			"token": "no_token",
 																																			"bytes": [
-																																				"{003480} [f32] R3 := 0",
-																																				"{003482} [f32] R3 := ->R3",
-																																				"{003484} [f08] R3 := R3 + const",
-																																				"{003486} [f32] 0000 0000",
-																																				"{003490} [f32] R3 := ->R3"
+																																				"{003644} [f32] R3 := 0",
+																																				"{003646} [f32] R3 := ->R3",
+																																				"{003648} [f08] R3 := R3 + const",
+																																				"{003650} [f32] 0000 0000",
+																																				"{003654} [f32] R3 := ->R3"
 																																			],
 																																			"children": []
 																																		},
@@ -5658,11 +5931,11 @@
 																																			"name": "Load from heap at 4",
 																																			"token": "no_token",
 																																			"bytes": [
-																																				"{003492} [f32] R4 := 0",
-																																				"{003494} [f32] R4 := ->R4",
-																																				"{003496} [f08] R4 := R4 + const",
-																																				"{003498} [f32] 0000 0004",
-																																				"{003502} [f32] R4 := ->R4"
+																																				"{003656} [f32] R4 := 0",
+																																				"{003658} [f32] R4 := ->R4",
+																																				"{003660} [f08] R4 := R4 + const",
+																																				"{003662} [f32] 0000 0004",
+																																				"{003666} [f32] R4 := ->R4"
 																																			],
 																																			"children": []
 																																		},
@@ -5670,11 +5943,11 @@
 																																			"name": "Load from heap at 8",
 																																			"token": "no_token",
 																																			"bytes": [
-																																				"{003504} [f32] R5 := 0",
-																																				"{003506} [f32] R5 := ->R5",
-																																				"{003508} [f08] R5 := R5 + const",
-																																				"{003510} [f32] 0000 0008",
-																																				"{003514} [f32] R5 := ->R5"
+																																				"{003668} [f32] R5 := 0",
+																																				"{003670} [f32] R5 := ->R5",
+																																				"{003672} [f08] R5 := R5 + const",
+																																				"{003674} [f32] 0000 0008",
+																																				"{003678} [f32] R5 := ->R5"
 																																			],
 																																			"children": []
 																																		},
@@ -5682,13 +5955,13 @@
 																																			"name": "Heap top change by 12 bytes",
 																																			"token": "no_token",
 																																			"bytes": [
-																																				"{003516} [f32] R27 := 0",
-																																				"{003518} [f32] R27 := ->R27",
-																																				"{003520} [f08] R27 := R27 + const",
-																																				"{003522} [f32] 0000 000C",
-																																				"{003526} [f32] SB := 0",
-																																				"{003528} [f32] ->SB := R27",
-																																				"{003530} [f32] SB := 4"
+																																				"{003680} [f32] R27 := 0",
+																																				"{003682} [f32] R27 := ->R27",
+																																				"{003684} [f08] R27 := R27 + const",
+																																				"{003686} [f32] 0000 000C",
+																																				"{003690} [f32] SB := 0",
+																																				"{003692} [f32] ->SB := R27",
+																																				"{003694} [f32] SB := 4"
 																																			],
 																																			"children": []
 																																		},
@@ -5696,9 +5969,15 @@
 																																			"name": "fr0 ldc, if fr0 cbr",
 																																			"token": "no_token",
 																																			"bytes": [
-																																				"{003532} [f32] R7 := 1",
-																																				"{003534} [f32] if R7 goto R3"
+																																				"{003696} [f32] R7 := 1",
+																																				"{003698} [f32] if R7 goto R3"
 																																			],
+																																			"children": []
+																																		},
+																																		{
+																																			"name": "Label",
+																																			"token": "no_token",
+																																			"bytes": [],
 																																			"children": []
 																																		}
 																																	]
@@ -5720,13 +5999,13 @@
 																																	"name": "Load variable 'i3' into R3",
 																																	"token": "no_token",
 																																	"bytes": [
-																																		"{003536} [f32] R27 := FP",
-																																		"{003538} [f08] R27 := R27 + const",
-																																		"{003540} [f32] FFFF FFFC",
-																																		"{003544} [f32] R27 := ->R27",
-																																		"{003546} [f08] R27 := R27 + const",
-																																		"{003548} [f32] 0000 0000",
-																																		"{003552} [f32] R3 := ->R27"
+																																		"{003700} [f32] R27 := FP",
+																																		"{003702} [f08] R27 := R27 + const",
+																																		"{003704} [f32] FFFF FFFC",
+																																		"{003708} [f32] R27 := ->R27",
+																																		"{003710} [f08] R27 := R27 + const",
+																																		"{003712} [f32] 0000 0000",
+																																		"{003716} [f32] R3 := ->R27"
 																																	],
 																																	"children": []
 																																}
@@ -5762,7 +6041,7 @@
 																																							"name": "Copy for right value",
 																																							"token": "no_token",
 																																							"bytes": [
-																																								"{003554} [f32] R4 := R3"
+																																								"{003718} [f32] R4 := R3"
 																																							],
 																																							"children": []
 																																						}
@@ -5783,7 +6062,7 @@
 																																							"name": "Load LDC constant",
 																																							"token": "no_token",
 																																							"bytes": [
-																																								"{003556} [f32] R5 := 1"
+																																								"{003720} [f32] R5 := 1"
 																																							],
 																																							"children": []
 																																						}
@@ -5793,7 +6072,7 @@
 																																					"name": "Operation '+'",
 																																					"token": "no_token",
 																																					"bytes": [
-																																						"{003558} [f32] R4 += R5"
+																																						"{003722} [f32] R4 += R5"
 																																					],
 																																					"children": []
 																																				}
@@ -5809,7 +6088,21 @@
 																																			"name": "Assignment mov",
 																																			"token": "no_token",
 																																			"bytes": [
-																																				"{003560} [f32] R3 := R4"
+																																				"{003724} [f32] R3 := R4"
+																																			],
+																																			"children": []
+																																		},
+																																		{
+																																			"name": "Store variable 'i3' from R4",
+																																			"token": "no_token",
+																																			"bytes": [
+																																				"{003726} [f32] R27 := FP",
+																																				"{003728} [f08] R27 := R27 + const",
+																																				"{003730} [f32] FFFF FFFC",
+																																				"{003734} [f32] R27 := ->R27",
+																																				"{003736} [f08] R27 := R27 + const",
+																																				"{003738} [f32] 0000 0000",
+																																				"{003742} [f32] ->R27 := R4"
 																																			],
 																																			"children": []
 																																		}
@@ -5832,13 +6125,13 @@
 																																	"name": "Store variable 'i3' from R3",
 																																	"token": "no_token",
 																																	"bytes": [
-																																		"{003562} [f32] R27 := FP",
-																																		"{003564} [f08] R27 := R27 + const",
-																																		"{003566} [f32] FFFF FFFC",
-																																		"{003570} [f32] R27 := ->R27",
-																																		"{003572} [f08] R27 := R27 + const",
-																																		"{003574} [f32] 0000 0000",
-																																		"{003578} [f32] ->R27 := R3"
+																																		"{003744} [f32] R27 := FP",
+																																		"{003746} [f08] R27 := R27 + const",
+																																		"{003748} [f32] FFFF FFFC",
+																																		"{003752} [f32] R27 := ->R27",
+																																		"{003754} [f08] R27 := R27 + const",
+																																		"{003756} [f32] 0000 0000",
+																																		"{003760} [f32] ->R27 := R3"
 																																	],
 																																	"children": []
 																																}
@@ -5861,10 +6154,10 @@
 																															"name": "Block body cmds 2",
 																															"token": "no_token",
 																															"bytes": [
-																																"{003580} [f08] FP := FP + const",
-																																"{003582} [f32] FFFF FFFC",
-																																"{003586} [f32] SP := FP",
-																																"{003588} [f32] FP := ->FP"
+																																"{003762} [f08] FP := FP + const",
+																																"{003764} [f32] FFFF FFFC",
+																																"{003768} [f32] SP := FP",
+																																"{003770} [f32] FP := ->FP"
 																															],
 																															"children": []
 																														}
@@ -5876,11 +6169,11 @@
 																											"name": "Load from heap at 0",
 																											"token": "no_token",
 																											"bytes": [
-																												"{003590} [f32] R2 := 0",
-																												"{003592} [f32] R2 := ->R2",
-																												"{003594} [f08] R2 := R2 + const",
-																												"{003596} [f32] 0000 0000",
-																												"{003600} [f32] R2 := ->R2"
+																												"{003772} [f32] R2 := 0",
+																												"{003774} [f32] R2 := ->R2",
+																												"{003776} [f08] R2 := R2 + const",
+																												"{003778} [f32] 0000 0000",
+																												"{003782} [f32] R2 := ->R2"
 																											],
 																											"children": []
 																										},
@@ -5888,11 +6181,11 @@
 																											"name": "Load from heap at 4",
 																											"token": "no_token",
 																											"bytes": [
-																												"{003602} [f32] R3 := 0",
-																												"{003604} [f32] R3 := ->R3",
-																												"{003606} [f08] R3 := R3 + const",
-																												"{003608} [f32] 0000 0004",
-																												"{003612} [f32] R3 := ->R3"
+																												"{003784} [f32] R3 := 0",
+																												"{003786} [f32] R3 := ->R3",
+																												"{003788} [f08] R3 := R3 + const",
+																												"{003790} [f32] 0000 0004",
+																												"{003794} [f32] R3 := ->R3"
 																											],
 																											"children": []
 																										},
@@ -5900,11 +6193,11 @@
 																											"name": "Load from heap at 8",
 																											"token": "no_token",
 																											"bytes": [
-																												"{003614} [f32] R4 := 0",
-																												"{003616} [f32] R4 := ->R4",
-																												"{003618} [f08] R4 := R4 + const",
-																												"{003620} [f32] 0000 0008",
-																												"{003624} [f32] R4 := ->R4"
+																												"{003796} [f32] R4 := 0",
+																												"{003798} [f32] R4 := ->R4",
+																												"{003800} [f08] R4 := R4 + const",
+																												"{003802} [f32] 0000 0008",
+																												"{003806} [f32] R4 := ->R4"
 																											],
 																											"children": []
 																										},
@@ -5912,13 +6205,13 @@
 																											"name": "Heap top change by 12 bytes",
 																											"token": "no_token",
 																											"bytes": [
-																												"{003626} [f32] R27 := 0",
-																												"{003628} [f32] R27 := ->R27",
-																												"{003630} [f08] R27 := R27 + const",
-																												"{003632} [f32] 0000 000C",
-																												"{003636} [f32] SB := 0",
-																												"{003638} [f32] ->SB := R27",
-																												"{003640} [f32] SB := 4"
+																												"{003808} [f32] R27 := 0",
+																												"{003810} [f32] R27 := ->R27",
+																												"{003812} [f08] R27 := R27 + const",
+																												"{003814} [f32] 0000 000C",
+																												"{003818} [f32] SB := 0",
+																												"{003820} [f32] ->SB := R27",
+																												"{003822} [f32] SB := 4"
 																											],
 																											"children": []
 																										},
@@ -5926,9 +6219,15 @@
 																											"name": "fr0 ldc, if fr0 cbr",
 																											"token": "no_token",
 																											"bytes": [
-																												"{003642} [f32] R6 := 1",
-																												"{003644} [f32] if R6 goto R2"
+																												"{003824} [f32] R6 := 1",
+																												"{003826} [f32] if R6 goto R2"
 																											],
+																											"children": []
+																										},
+																										{
+																											"name": "Label",
+																											"token": "no_token",
+																											"bytes": [],
 																											"children": []
 																										}
 																									]
@@ -5950,13 +6249,13 @@
 																									"name": "Load variable 'i2' into R2",
 																									"token": "no_token",
 																									"bytes": [
-																										"{003646} [f32] R27 := FP",
-																										"{003648} [f08] R27 := R27 + const",
-																										"{003650} [f32] FFFF FFFC",
-																										"{003654} [f32] R27 := ->R27",
-																										"{003656} [f08] R27 := R27 + const",
-																										"{003658} [f32] 0000 0000",
-																										"{003662} [f32] R2 := ->R27"
+																										"{003828} [f32] R27 := FP",
+																										"{003830} [f08] R27 := R27 + const",
+																										"{003832} [f32] FFFF FFFC",
+																										"{003836} [f32] R27 := ->R27",
+																										"{003838} [f08] R27 := R27 + const",
+																										"{003840} [f32] 0000 0000",
+																										"{003844} [f32] R2 := ->R27"
 																									],
 																									"children": []
 																								}
@@ -5992,7 +6291,7 @@
 																															"name": "Copy for right value",
 																															"token": "no_token",
 																															"bytes": [
-																																"{003664} [f32] R3 := R2"
+																																"{003846} [f32] R3 := R2"
 																															],
 																															"children": []
 																														}
@@ -6013,7 +6312,7 @@
 																															"name": "Load LDC constant",
 																															"token": "no_token",
 																															"bytes": [
-																																"{003666} [f32] R4 := 1"
+																																"{003848} [f32] R4 := 1"
 																															],
 																															"children": []
 																														}
@@ -6023,7 +6322,7 @@
 																													"name": "Operation '+'",
 																													"token": "no_token",
 																													"bytes": [
-																														"{003668} [f32] R3 += R4"
+																														"{003850} [f32] R3 += R4"
 																													],
 																													"children": []
 																												}
@@ -6039,7 +6338,21 @@
 																											"name": "Assignment mov",
 																											"token": "no_token",
 																											"bytes": [
-																												"{003670} [f32] R2 := R3"
+																												"{003852} [f32] R2 := R3"
+																											],
+																											"children": []
+																										},
+																										{
+																											"name": "Store variable 'i2' from R3",
+																											"token": "no_token",
+																											"bytes": [
+																												"{003854} [f32] R27 := FP",
+																												"{003856} [f08] R27 := R27 + const",
+																												"{003858} [f32] FFFF FFFC",
+																												"{003862} [f32] R27 := ->R27",
+																												"{003864} [f08] R27 := R27 + const",
+																												"{003866} [f32] 0000 0000",
+																												"{003870} [f32] ->R27 := R3"
 																											],
 																											"children": []
 																										}
@@ -6062,13 +6375,13 @@
 																									"name": "Store variable 'i2' from R2",
 																									"token": "no_token",
 																									"bytes": [
-																										"{003672} [f32] R27 := FP",
-																										"{003674} [f08] R27 := R27 + const",
-																										"{003676} [f32] FFFF FFFC",
-																										"{003680} [f32] R27 := ->R27",
-																										"{003682} [f08] R27 := R27 + const",
-																										"{003684} [f32] 0000 0000",
-																										"{003688} [f32] ->R27 := R2"
+																										"{003872} [f32] R27 := FP",
+																										"{003874} [f08] R27 := R27 + const",
+																										"{003876} [f32] FFFF FFFC",
+																										"{003880} [f32] R27 := ->R27",
+																										"{003882} [f08] R27 := R27 + const",
+																										"{003884} [f32] 0000 0000",
+																										"{003888} [f32] ->R27 := R2"
 																									],
 																									"children": []
 																								}
@@ -6091,10 +6404,10 @@
 																							"name": "Block body cmds 2",
 																							"token": "no_token",
 																							"bytes": [
-																								"{003690} [f08] FP := FP + const",
-																								"{003692} [f32] FFFF FFFC",
-																								"{003696} [f32] SP := FP",
-																								"{003698} [f32] FP := ->FP"
+																								"{003890} [f08] FP := FP + const",
+																								"{003892} [f32] FFFF FFFC",
+																								"{003896} [f32] SP := FP",
+																								"{003898} [f32] FP := ->FP"
 																							],
 																							"children": []
 																						}
@@ -6106,11 +6419,11 @@
 																			"name": "Load from heap at 0",
 																			"token": "no_token",
 																			"bytes": [
-																				"{003700} [f32] R1 := 0",
-																				"{003702} [f32] R1 := ->R1",
-																				"{003704} [f08] R1 := R1 + const",
-																				"{003706} [f32] 0000 0000",
-																				"{003710} [f32] R1 := ->R1"
+																				"{003900} [f32] R1 := 0",
+																				"{003902} [f32] R1 := ->R1",
+																				"{003904} [f08] R1 := R1 + const",
+																				"{003906} [f32] 0000 0000",
+																				"{003910} [f32] R1 := ->R1"
 																			],
 																			"children": []
 																		},
@@ -6118,11 +6431,11 @@
 																			"name": "Load from heap at 4",
 																			"token": "no_token",
 																			"bytes": [
-																				"{003712} [f32] R2 := 0",
-																				"{003714} [f32] R2 := ->R2",
-																				"{003716} [f08] R2 := R2 + const",
-																				"{003718} [f32] 0000 0004",
-																				"{003722} [f32] R2 := ->R2"
+																				"{003912} [f32] R2 := 0",
+																				"{003914} [f32] R2 := ->R2",
+																				"{003916} [f08] R2 := R2 + const",
+																				"{003918} [f32] 0000 0004",
+																				"{003922} [f32] R2 := ->R2"
 																			],
 																			"children": []
 																		},
@@ -6130,11 +6443,11 @@
 																			"name": "Load from heap at 8",
 																			"token": "no_token",
 																			"bytes": [
-																				"{003724} [f32] R3 := 0",
-																				"{003726} [f32] R3 := ->R3",
-																				"{003728} [f08] R3 := R3 + const",
-																				"{003730} [f32] 0000 0008",
-																				"{003734} [f32] R3 := ->R3"
+																				"{003924} [f32] R3 := 0",
+																				"{003926} [f32] R3 := ->R3",
+																				"{003928} [f08] R3 := R3 + const",
+																				"{003930} [f32] 0000 0008",
+																				"{003934} [f32] R3 := ->R3"
 																			],
 																			"children": []
 																		},
@@ -6142,13 +6455,13 @@
 																			"name": "Heap top change by 12 bytes",
 																			"token": "no_token",
 																			"bytes": [
-																				"{003736} [f32] R27 := 0",
-																				"{003738} [f32] R27 := ->R27",
-																				"{003740} [f08] R27 := R27 + const",
-																				"{003742} [f32] 0000 000C",
-																				"{003746} [f32] SB := 0",
-																				"{003748} [f32] ->SB := R27",
-																				"{003750} [f32] SB := 4"
+																				"{003936} [f32] R27 := 0",
+																				"{003938} [f32] R27 := ->R27",
+																				"{003940} [f08] R27 := R27 + const",
+																				"{003942} [f32] 0000 000C",
+																				"{003946} [f32] SB := 0",
+																				"{003948} [f32] ->SB := R27",
+																				"{003950} [f32] SB := 4"
 																			],
 																			"children": []
 																		},
@@ -6156,9 +6469,15 @@
 																			"name": "fr0 ldc, if fr0 cbr",
 																			"token": "no_token",
 																			"bytes": [
-																				"{003752} [f32] R5 := 1",
-																				"{003754} [f32] if R5 goto R1"
+																				"{003952} [f32] R5 := 1",
+																				"{003954} [f32] if R5 goto R1"
 																			],
+																			"children": []
+																		},
+																		{
+																			"name": "Label",
+																			"token": "no_token",
+																			"bytes": [],
 																			"children": []
 																		}
 																	]
@@ -6180,13 +6499,13 @@
 																	"name": "Load variable 'i1' into R1",
 																	"token": "no_token",
 																	"bytes": [
-																		"{003756} [f32] R27 := FP",
-																		"{003758} [f08] R27 := R27 + const",
-																		"{003760} [f32] FFFF FFFC",
-																		"{003764} [f32] R27 := ->R27",
-																		"{003766} [f08] R27 := R27 + const",
-																		"{003768} [f32] 0000 0004",
-																		"{003772} [f32] R1 := ->R27"
+																		"{003956} [f32] R27 := FP",
+																		"{003958} [f08] R27 := R27 + const",
+																		"{003960} [f32] FFFF FFFC",
+																		"{003964} [f32] R27 := ->R27",
+																		"{003966} [f08] R27 := R27 + const",
+																		"{003968} [f32] 0000 0004",
+																		"{003972} [f32] R1 := ->R27"
 																	],
 																	"children": []
 																}
@@ -6222,7 +6541,7 @@
 																							"name": "Copy for right value",
 																							"token": "no_token",
 																							"bytes": [
-																								"{003774} [f32] R2 := R1"
+																								"{003974} [f32] R2 := R1"
 																							],
 																							"children": []
 																						}
@@ -6243,7 +6562,7 @@
 																							"name": "Load LDC constant",
 																							"token": "no_token",
 																							"bytes": [
-																								"{003776} [f32] R3 := 1"
+																								"{003976} [f32] R3 := 1"
 																							],
 																							"children": []
 																						}
@@ -6253,7 +6572,7 @@
 																					"name": "Operation '+'",
 																					"token": "no_token",
 																					"bytes": [
-																						"{003778} [f32] R2 += R3"
+																						"{003978} [f32] R2 += R3"
 																					],
 																					"children": []
 																				}
@@ -6269,7 +6588,21 @@
 																			"name": "Assignment mov",
 																			"token": "no_token",
 																			"bytes": [
-																				"{003780} [f32] R1 := R2"
+																				"{003980} [f32] R1 := R2"
+																			],
+																			"children": []
+																		},
+																		{
+																			"name": "Store variable 'i1' from R2",
+																			"token": "no_token",
+																			"bytes": [
+																				"{003982} [f32] R27 := FP",
+																				"{003984} [f08] R27 := R27 + const",
+																				"{003986} [f32] FFFF FFFC",
+																				"{003990} [f32] R27 := ->R27",
+																				"{003992} [f08] R27 := R27 + const",
+																				"{003994} [f32] 0000 0004",
+																				"{003998} [f32] ->R27 := R2"
 																			],
 																			"children": []
 																		}
@@ -6292,13 +6625,13 @@
 																	"name": "Store variable 'i1' from R1",
 																	"token": "no_token",
 																	"bytes": [
-																		"{003782} [f32] R27 := FP",
-																		"{003784} [f08] R27 := R27 + const",
-																		"{003786} [f32] FFFF FFFC",
-																		"{003790} [f32] R27 := ->R27",
-																		"{003792} [f08] R27 := R27 + const",
-																		"{003794} [f32] 0000 0004",
-																		"{003798} [f32] ->R27 := R1"
+																		"{004000} [f32] R27 := FP",
+																		"{004002} [f08] R27 := R27 + const",
+																		"{004004} [f32] FFFF FFFC",
+																		"{004008} [f32] R27 := ->R27",
+																		"{004010} [f08] R27 := R27 + const",
+																		"{004012} [f32] 0000 0004",
+																		"{004016} [f32] ->R27 := R1"
 																	],
 																	"children": []
 																}
@@ -6321,10 +6654,10 @@
 															"name": "Block body cmds 2",
 															"token": "no_token",
 															"bytes": [
-																"{003800} [f08] FP := FP + const",
-																"{003802} [f32] FFFF FFFC",
-																"{003806} [f32] SP := FP",
-																"{003808} [f32] FP := ->FP"
+																"{004018} [f08] FP := FP + const",
+																"{004020} [f32] FFFF FFFC",
+																"{004024} [f32] SP := FP",
+																"{004026} [f32] FP := ->FP"
 															],
 															"children": []
 														}
@@ -6336,11 +6669,11 @@
 											"name": "Load from heap at 0",
 											"token": "no_token",
 											"bytes": [
-												"{003810} [f32] R0 := 0",
-												"{003812} [f32] R0 := ->R0",
-												"{003814} [f08] R0 := R0 + const",
-												"{003816} [f32] 0000 0000",
-												"{003820} [f32] R0 := ->R0"
+												"{004028} [f32] R0 := 0",
+												"{004030} [f32] R0 := ->R0",
+												"{004032} [f08] R0 := R0 + const",
+												"{004034} [f32] 0000 0000",
+												"{004038} [f32] R0 := ->R0"
 											],
 											"children": []
 										},
@@ -6348,11 +6681,11 @@
 											"name": "Load from heap at 4",
 											"token": "no_token",
 											"bytes": [
-												"{003822} [f32] R1 := 0",
-												"{003824} [f32] R1 := ->R1",
-												"{003826} [f08] R1 := R1 + const",
-												"{003828} [f32] 0000 0004",
-												"{003832} [f32] R1 := ->R1"
+												"{004040} [f32] R1 := 0",
+												"{004042} [f32] R1 := ->R1",
+												"{004044} [f08] R1 := R1 + const",
+												"{004046} [f32] 0000 0004",
+												"{004050} [f32] R1 := ->R1"
 											],
 											"children": []
 										},
@@ -6360,11 +6693,11 @@
 											"name": "Load from heap at 8",
 											"token": "no_token",
 											"bytes": [
-												"{003834} [f32] R2 := 0",
-												"{003836} [f32] R2 := ->R2",
-												"{003838} [f08] R2 := R2 + const",
-												"{003840} [f32] 0000 0008",
-												"{003844} [f32] R2 := ->R2"
+												"{004052} [f32] R2 := 0",
+												"{004054} [f32] R2 := ->R2",
+												"{004056} [f08] R2 := R2 + const",
+												"{004058} [f32] 0000 0008",
+												"{004062} [f32] R2 := ->R2"
 											],
 											"children": []
 										},
@@ -6372,13 +6705,13 @@
 											"name": "Heap top change by 12 bytes",
 											"token": "no_token",
 											"bytes": [
-												"{003846} [f32] R27 := 0",
-												"{003848} [f32] R27 := ->R27",
-												"{003850} [f08] R27 := R27 + const",
-												"{003852} [f32] 0000 000C",
-												"{003856} [f32] SB := 0",
-												"{003858} [f32] ->SB := R27",
-												"{003860} [f32] SB := 4"
+												"{004064} [f32] R27 := 0",
+												"{004066} [f32] R27 := ->R27",
+												"{004068} [f08] R27 := R27 + const",
+												"{004070} [f32] 0000 000C",
+												"{004074} [f32] SB := 0",
+												"{004076} [f32] ->SB := R27",
+												"{004078} [f32] SB := 4"
 											],
 											"children": []
 										},
@@ -6386,9 +6719,15 @@
 											"name": "fr0 ldc, if fr0 cbr",
 											"token": "no_token",
 											"bytes": [
-												"{003862} [f32] R4 := 1",
-												"{003864} [f32] if R4 goto R0"
+												"{004080} [f32] R4 := 1",
+												"{004082} [f32] if R4 goto R0"
 											],
+											"children": []
+										},
+										{
+											"name": "Label",
+											"token": "no_token",
+											"bytes": [],
 											"children": []
 										}
 									]
@@ -6410,10 +6749,10 @@
 									"name": "Load variable 'check' into R0",
 									"token": "no_token",
 									"bytes": [
-										"{003866} [f32] R27 := FP",
-										"{003868} [f08] R27 := R27 + const",
-										"{003870} [f32] 0000 0000",
-										"{003874} [f32] R0 := ->R27"
+										"{004084} [f32] R27 := FP",
+										"{004086} [f08] R27 := R27 + const",
+										"{004088} [f32] 0000 0000",
+										"{004092} [f32] R0 := ->R27"
 									],
 									"children": []
 								}
@@ -6449,7 +6788,7 @@
 															"name": "Copy for right value",
 															"token": "no_token",
 															"bytes": [
-																"{003876} [f32] R1 := R0"
+																"{004094} [f32] R1 := R0"
 															],
 															"children": []
 														}
@@ -6461,7 +6800,7 @@
 											"name": "Print",
 											"token": "no_token",
 											"bytes": [
-												"{003878} [f02] PRINT R1"
+												"{004096} [f02] PRINT R1"
 											],
 											"children": []
 										}
@@ -6478,10 +6817,10 @@
 									"name": "Store variable 'check' from R0",
 									"token": "no_token",
 									"bytes": [
-										"{003880} [f32] R27 := FP",
-										"{003882} [f08] R27 := R27 + const",
-										"{003884} [f32] 0000 0000",
-										"{003888} [f32] ->R27 := R0"
+										"{004098} [f32] R27 := FP",
+										"{004100} [f08] R27 := R27 + const",
+										"{004102} [f32] 0000 0000",
+										"{004106} [f32] ->R27 := R0"
 									],
 									"children": []
 								}
@@ -6508,8 +6847,8 @@
 			"name": "Skip/Stop",
 			"token": "no_token",
 			"bytes": [
-				"{003890} [f16] skip",
-				"{003892} [f08] stop"
+				"{004108} [f16] skip",
+				"{004110} [f08] stop"
 			],
 			"children": []
 		}

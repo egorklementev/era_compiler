@@ -24,7 +24,7 @@
 											"token": "for",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "for",
 													"children": []
 												},
@@ -87,7 +87,7 @@
 																									"token": "for",
 																									"children": [
 																										{
-																											"node_type": "[ Label ]",
+																											"node_type": "[ Goto label ]",
 																											"token": "for",
 																											"children": []
 																										},
@@ -150,7 +150,7 @@
 																																							"token": "if",
 																																							"children": [
 																																								{
-																																									"node_type": "[ Label ]",
+																																									"node_type": "[ Goto label ]",
 																																									"token": "if",
 																																									"children": []
 																																								},
@@ -262,7 +262,7 @@
 																																																	"token": "r0",
 																																																	"children": [
 																																																		{
-																																																			"node_type": "[ Label ]",
+																																																			"node_type": "[ Goto label ]",
 																																																			"token": "r0",
 																																																			"children": []
 																																																		},
@@ -389,7 +389,7 @@
 																																																	"token": "->",
 																																																	"children": [
 																																																		{
-																																																			"node_type": "[ Label ]",
+																																																			"node_type": "[ Goto label ]",
 																																																			"token": "->",
 																																																			"children": []
 																																																		},

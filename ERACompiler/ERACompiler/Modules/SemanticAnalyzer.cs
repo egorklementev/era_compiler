@@ -46,7 +46,7 @@ namespace ERACompiler.Modules
                 { "Return", new ReturnAnnotator() },
                 { "Statement", new StatementAnnotator() },
                 { "Goto", new GotoAnnotator() },
-                { "Label", new LabelAnnotator() },
+                { "Goto label", new GotoLabelAnnotator() },
                 { "KEYWORD", new NoProcessingAnnotator() },
                 { "OPERATOR", new NoProcessingAnnotator() },
                 { "REGISTER", new NoProcessingAnnotator() },
@@ -806,7 +806,7 @@ namespace ERACompiler.Modules
         {
             string type = node.Children[0].ASTType; // The child of Operand
             
-            if (type.Equals("Explicit address") || type.Equals("Dereference") || type.Equals("Reference"))
+            if (type.Equals("Explicit address") || type.Equals("Dereference") || type.Equals("Reference") || type.Equals("REGISTER"))
             {
                 return false;
             }

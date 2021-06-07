@@ -1,0 +1,9 @@
+code
+	int a := 10;
+	<l>
+	a := a + 1;
+	if a < 20 do
+		goto l;
+	end
+	print a;
+end

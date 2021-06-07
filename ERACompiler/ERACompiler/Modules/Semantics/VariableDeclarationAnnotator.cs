@@ -65,7 +65,7 @@ namespace ERACompiler.Modules.Semantics
                         {
                             throw new SemanticErrorException(
                                 "Expression for a constant definition is not constant!!!\r\n" +
-                                "\t At (Line: " + node.Children[1].Children[2].Token.Position.Line.ToString() +
+                                "  At (Line: " + node.Children[1].Children[2].Token.Position.Line.ToString() +
                                 ", Char: " + node.Children[1].Children[2].Token.Position.Char.ToString() + ")."
                                 );
                         }
@@ -83,7 +83,7 @@ namespace ERACompiler.Modules.Semantics
                                 {
                                     throw new SemanticErrorException(
                                         "Expression for a constant definition is not constant!!!\r\n" +
-                                        "\t At (Line: " + varDef.Children[2].Token.Position.Line.ToString() +
+                                        "  At (Line: " + varDef.Children[2].Token.Position.Line.ToString() +
                                         ", Char: " + varDef.Children[2].Token.Position.Char.ToString() + ")."
                                         );
                                 }
@@ -107,7 +107,7 @@ namespace ERACompiler.Modules.Semantics
                             if (arrSize <= 0) 
                                 throw new SemanticErrorException(
                                 "Incorrect array size!!!\r\n" +
-                                "\t At (Line: " + node.Children[2].Children[2].Token.Position.Line.ToString() +
+                                "  At (Line: " + node.Children[2].Children[2].Token.Position.Line.ToString() +
                                     ", Char: " + node.Children[2].Children[2].Token.Position.Char.ToString() + ")."
                                 );
                             ((ArrayType)type).Size = arrSize;
@@ -134,7 +134,7 @@ namespace ERACompiler.Modules.Semantics
                                     if (_arrSize <= 0) 
                                         throw new SemanticErrorException(
                                         "Incorrect array size!!!\r\n" +
-                                        "\t At (Line: " + arrDef.Children[2].Token.Position.Line.ToString() +
+                                        "  At (Line: " + arrDef.Children[2].Token.Position.Line.ToString() +
                                             ", Char: " + arrDef.Children[2].Token.Position.Char.ToString() + ")."
                                         );
                                     arrType.Size = _arrSize;

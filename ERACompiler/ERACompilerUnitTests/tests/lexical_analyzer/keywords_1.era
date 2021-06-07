@@ -11,8 +11,6 @@ byte
 const
 routine
 do
-start
-entry
 skip
 stop
 format

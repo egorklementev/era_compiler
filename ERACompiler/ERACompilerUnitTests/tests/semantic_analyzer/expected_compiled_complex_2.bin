@@ -430,9 +430,9 @@
 							"token": "<",
 							"children": [
 								{
-									"node_type": "Label",
+									"node_type": "Goto label",
 									"var_type": "LABEL",
-									"token": "<",
+									"token": "label1",
 									"children": [
 										{
 											"node_type": "IDENTIFIER",

@@ -132,67 +132,67 @@
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "start",
+			"value": "skip",
 			"position": "Line: 14, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 14, Char: 6"
+			"position": "Line: 14, Char: 5"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "entry",
+			"value": "stop",
 			"position": "Line: 15, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 15, Char: 6"
+			"position": "Line: 15, Char: 5"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "skip",
+			"value": "format",
 			"position": "Line: 16, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 16, Char: 5"
+			"position": "Line: 16, Char: 7"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "stop",
+			"value": "for",
 			"position": "Line: 17, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 17, Char: 5"
+			"position": "Line: 17, Char: 4"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "format",
+			"value": "from",
 			"position": "Line: 18, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 18, Char: 7"
+			"position": "Line: 18, Char: 5"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "for",
+			"value": "to",
 			"position": "Line: 19, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 19, Char: 4"
+			"position": "Line: 19, Char: 3"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "from",
+			"value": "step",
 			"position": "Line: 20, Char: 1"
 		},
 		{
@@ -202,17 +202,17 @@
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "to",
+			"value": "while",
 			"position": "Line: 21, Char: 1"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 21, Char: 3"
+			"position": "Line: 21, Char: 6"
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "step",
+			"value": "loop",
 			"position": "Line: 22, Char: 1"
 		},
 		{
@@ -222,7 +222,7 @@
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "while",
+			"value": "break",
 			"position": "Line: 23, Char: 1"
 		},
 		{
@@ -232,7 +232,7 @@
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "loop",
+			"value": "goto",
 			"position": "Line: 24, Char: 1"
 		},
 		{
@@ -242,28 +242,8 @@
 		},
 		{
 			"token_type": "KEYWORD",
-			"value": "break",
-			"position": "Line: 25, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 25, Char: 6"
-		},
-		{
-			"token_type": "KEYWORD",
-			"value": "goto",
-			"position": "Line: 26, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 26, Char: 5"
-		},
-		{
-			"token_type": "KEYWORD",
 			"value": "print",
-			"position": "Line: 27, Char: 1"
+			"position": "Line: 25, Char: 1"
 		}
 	]
 }

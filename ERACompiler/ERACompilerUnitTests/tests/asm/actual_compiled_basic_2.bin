@@ -400,7 +400,7 @@
 															"children": []
 														},
 														{
-															"name": "fr3 label",
+															"name": "Label declaration",
 															"token": "no_token",
 															"bytes": [
 																"{000108} [f32] R5 := 0",
@@ -410,7 +410,7 @@
 															"children": []
 														},
 														{
-															"name": "fr4 label",
+															"name": "Label declaration",
 															"token": "no_token",
 															"bytes": [
 																"{000116} [f32] R6 := 0",
@@ -420,7 +420,7 @@
 															"children": []
 														},
 														{
-															"name": "fr5 label",
+															"name": "Label declaration",
 															"token": "no_token",
 															"bytes": [
 																"{000124} [f32] R7 := 0",
@@ -440,6 +440,12 @@
 															"children": []
 														},
 														{
+															"name": "Label",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
 															"name": "mult 3",
 															"token": "no_token",
 															"bytes": [
@@ -451,11 +457,23 @@
 															"children": []
 														},
 														{
+															"name": "Label",
+															"token": "no_token",
+															"bytes": [],
+															"children": []
+														},
+														{
 															"name": "mult 4",
 															"token": "no_token",
 															"bytes": [
 																"{000146} [f32] R9 += R2"
 															],
+															"children": []
+														},
+														{
+															"name": "Label",
+															"token": "no_token",
+															"bytes": [],
 															"children": []
 														},
 														{

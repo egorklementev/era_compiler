@@ -70,23 +70,99 @@ namespace ERACompiler.Modules.Generation
             CodeNode? gotoNode = FindNextGotoNode(programNode);
             while (gotoNode != null)
             {
+                int ctxNum = -1; // minus one since Program context does not have a stack allocated
                 string labelName = gotoNode.AASTLink.Children[0].Token.Value;
-                CodeNode? labelNode = GetLabelToJump(programNode, labelName);
-                if (labelNode == null)
+                AASTNode mainContextNode = gotoNode.AASTLink;
+                while (true)
                 {
-                    throw new CompilationErrorException("No \'" + labelName + "\' label found in the project!!!");
+                    if (mainContextNode.Parent == null)
+                    {
+                        throw new CompilationErrorException("No label \'" + labelName + "\' found in the current context!!!\r\n" +
+                            "  At (Line: " + gotoNode.AASTLink.Token.Position.Line +
+                            ", Char: " + gotoNode.AASTLink.Token.Position.Char + ").");
+                    }
+                    if (mainContextNode.Context != null)
+                    {
+                        ctxNum++;
+                        if (mainContextNode.Context.IsVarDeclaredInThisContext(labelName))
+                        {
+                            break;
+                        }
+                        gotoNode.Children.AddLast(GetDynamicMemoryDeallocationNode(mainContextNode, gotoNode));
+                        if (mainContextNode.ASTType.Equals("For"))
+                        {
+                            gotoNode.Children.AddLast(GetHeapTopChangeNode(gotoNode, 16));
+                        }
+                        if (mainContextNode.ASTType.Equals("While"))
+                        {
+                            gotoNode.Children.AddLast(GetHeapTopChangeNode(gotoNode, 12));
+                        }
+                        if (mainContextNode.ASTType.Equals("Loop While"))
+                        {
+                            gotoNode.Children.AddLast(GetHeapTopChangeNode(gotoNode, 4));
+                        }
+                    }
+                    mainContextNode = (AASTNode)mainContextNode.Parent;
+                }
+                for (int i = 0; i < ctxNum; i++)
+                {
+                    gotoNode.Children.AddLast(new CodeNode("Return stack back", gotoNode)
+                        .Add(GenerateLDA(FP, FP, -4))
+                        .Add(GenerateMOV(FP, SP))
+                        .Add(GenerateLD(FP, FP)));
                 }
 
-                // Garbage collector will automatically deal with the all 
-                // allocated heap memory at the place we are jumping to.
-                byte fr = 27; // We are restricted to the number of bytes, so using 27th register
-                gotoNode.Children.Last.Value.Bytes.Clear();
-                gotoNode.Children.Last.Value
-                    .Add(GenerateLDC(0, fr))
-                    .Add(GenerateLDA(fr, fr, labelNode.LabelAddress))
-                    .Add(GenerateCBR(fr, fr));
+                CodeNode? gotoLabelNode = gotoNode;
+                while (true)
+                {
+                    if (gotoLabelNode == null)
+                    {
+                        throw new CompilationErrorException("No label \'" + labelName + "\' found in the current context!!!\r\n" +
+                            "  At (Line: " + gotoNode.AASTLink.Token.Position.Line +
+                            ", Char: " + gotoNode.AASTLink.Token.Position.Char + ").");
+                    }
+                    bool found = false;
+                    foreach (CodeNode child in gotoLabelNode.Children)
+                    {
+                        if (child.Name.Equals("Statement") && child.Children.First.Value.Name.Equals("Goto label") && 
+                            child.Children.First.Value.AASTLink.Children[0].Token.Value.Equals(labelName))
+                        {
+                            gotoLabelNode = child.Children.First.Value;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found)
+                    {
+                        break;
+                    }
+                    gotoLabelNode = gotoLabelNode.Parent;
+                }
+
+                CodeNode labelDecl = new CodeNode("Label declaration", gotoNode).Add(new byte[8]);
+                labelDecl.ByteToReturn = 27;
+                gotoNode.Children.AddLast(labelDecl);
+                gotoNode.Children.AddLast(new CodeNode("goto jump", gotoNode).Add(GenerateCBR(27, 27)));
+
+                CodeNode labelNode = new CodeNode("Label", gotoLabelNode);
+                labelNode.LabelDecl = labelDecl;
+                gotoLabelNode.Children.AddLast(labelNode);
+                gotoLabelNode.Children.AddLast(GetRegisterAllocationNode((AASTNode)gotoLabelNode.AASTLink.Parent, gotoLabelNode));
 
                 gotoNode = FindNextGotoNode(programNode);
+            }
+            #endregion
+
+
+            #region Label resolution
+            CodeNode? label = FindNextLabel(programNode);
+            while (label != null)
+            {
+                int labelAddr = GetCurrentBinarySize(label); // Always the first child
+                int diff = labelAddr - GetCurrentBinarySize(label.LabelDecl);
+                label.LabelDecl.Bytes.Clear();
+                label.LabelDecl.Add(GenerateLDL(label.LabelDecl.ByteToReturn, labelAddr));
+                label = FindNextLabel(programNode);
             }
             #endregion
 
@@ -108,9 +184,9 @@ namespace ERACompiler.Modules.Generation
 
         private CodeNode? FindNextGotoNode(CodeNode node)
         {
-            if (node.Name.Equals("Goto") && node.LabelAddress == -1) 
+            if (node.Name.Equals("Goto") && node.ByteToReturn > 0)
             {
-                node.LabelAddress = 1; // Mark label address as 1 so that we do not return this CodeNode again
+                node.ByteToReturn = 0; // Mark it as resolved
                 return node;
             }
 
@@ -126,18 +202,20 @@ namespace ERACompiler.Modules.Generation
             return null;
         }
 
-        // ATTENTION: Finds only the first occurrence of the label node with a given name in the CodeNode tree.
-        // Adviced not to use labels with the same name in a single program.
-        private CodeNode? GetLabelToJump(CodeNode node, string labelName)
+        private CodeNode? FindNextLabel(CodeNode node)
         {
-            if (node.Name.Equals("Label") && node.AASTLink.Children[0].Token.Value.Equals(labelName))
+            if (node.Name.Equals("Label"))
             {
-                return node;
+                if (node.LabelDecl.Bytes.First.Value == 0 &&
+                    node.LabelDecl.Bytes.First.Next.Value == 0)
+                {
+                    return node;
+                }
             }
 
             foreach (CodeNode child in node.Children)
             {
-                CodeNode? label = GetLabelToJump(child, labelName);
+                CodeNode? label = FindNextLabel(child);
                 if (label != null)
                 {
                     return label;

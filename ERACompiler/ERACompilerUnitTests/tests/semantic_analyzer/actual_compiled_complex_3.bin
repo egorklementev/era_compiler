@@ -192,8 +192,7 @@
 													"token": "r0",
 													"children": [
 														{
-															"node_type": "NUMBER",
-															"var_value": "-1",
+															"node_type": "REGISTER",
 															"token": "r0",
 															"children": []
 														}

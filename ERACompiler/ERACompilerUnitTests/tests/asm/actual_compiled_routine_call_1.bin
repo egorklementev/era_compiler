@@ -202,7 +202,7 @@
 																	"children": []
 																},
 																{
-																	"name": "PreLabel",
+																	"name": "cond cmds 1",
 																	"token": "no_token",
 																	"bytes": [
 																		"{000110} [f32] R4 := 1",
@@ -213,7 +213,7 @@
 																	"children": []
 																},
 																{
-																	"name": "fr1 label",
+																	"name": "Label declaration",
 																	"token": "no_token",
 																	"bytes": [
 																		"{000118} [f32] R3 := 0",
@@ -223,12 +223,18 @@
 																	"children": []
 																},
 																{
-																	"name": "PostLabel",
+																	"name": "cond cmds 2",
 																	"token": "no_token",
 																	"bytes": [
 																		"{000126} [f32] if R4 goto R3",
 																		"{000128} [f32] R2 := 0"
 																	],
+																	"children": []
+																},
+																{
+																	"name": "Label",
+																	"token": "no_token",
+																	"bytes": [],
 																	"children": []
 																}
 															]
@@ -242,7 +248,7 @@
 													"children": []
 												},
 												{
-													"name": "L1 label",
+													"name": "Label declaration",
 													"token": "no_token",
 													"bytes": [
 														"{000130} [f32] R3 := 0",
@@ -412,7 +418,7 @@
 													]
 												},
 												{
-													"name": "L2 label",
+													"name": "Label declaration",
 													"token": "no_token",
 													"bytes": [
 														"{000202} [f32] R3 := 0",
@@ -427,6 +433,12 @@
 													"bytes": [
 														"{000210} [f32] if R3 goto R3"
 													],
+													"children": []
+												},
+												{
+													"name": "Label",
+													"token": "no_token",
+													"bytes": [],
 													"children": []
 												},
 												{
@@ -595,6 +607,12 @@
 															"children": []
 														}
 													]
+												},
+												{
+													"name": "Label",
+													"token": "no_token",
+													"bytes": [],
+													"children": []
 												}
 											]
 										}

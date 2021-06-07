@@ -24,7 +24,7 @@
 				"00",
 				"00",
 				"00",
-				"48"
+				"4D"
 			],
 			"children": []
 		},
@@ -362,6 +362,17 @@
 												"{000110} [f32] R0 := R2"
 											],
 											"children": []
+										},
+										{
+											"name": "Store variable 'a' from R2",
+											"token": "no_token",
+											"bytes": [
+												"{000112} [f32] R27 := FP",
+												"{000114} [f08] R27 := R27 + const",
+												"{000116} [f32] 0000 0000",
+												"{000120} [f32] ->R27 := R2"
+											],
+											"children": []
 										}
 									]
 								}
@@ -376,10 +387,10 @@
 									"name": "Store variable 'a' from R0",
 									"token": "no_token",
 									"bytes": [
-										"{000112} [f32] R27 := FP",
-										"{000114} [f08] R27 := R27 + const",
-										"{000116} [f32] 0000 0000",
-										"{000120} [f32] ->R27 := R0"
+										"{000122} [f32] R27 := FP",
+										"{000124} [f08] R27 := R27 + const",
+										"{000126} [f32] 0000 0000",
+										"{000130} [f32] ->R27 := R0"
 									],
 									"children": []
 								}
@@ -431,7 +442,7 @@
 																			"name": "Copy for right value",
 																			"token": "no_token",
 																			"bytes": [
-																				"{000122} [f32] R0 := R1"
+																				"{000132} [f32] R0 := R1"
 																			],
 																			"children": []
 																		}
@@ -443,10 +454,10 @@
 															"name": "Store variable 'b' from R1",
 															"token": "no_token",
 															"bytes": [
-																"{000124} [f32] R27 := FP",
-																"{000126} [f08] R27 := R27 + const",
-																"{000128} [f32] 0000 0004",
-																"{000132} [f32] ->R27 := R1"
+																"{000134} [f32] R27 := FP",
+																"{000136} [f08] R27 := R27 + const",
+																"{000138} [f32] 0000 0004",
+																"{000142} [f32] ->R27 := R1"
 															],
 															"children": []
 														},
@@ -454,7 +465,7 @@
 															"name": "Dereference load",
 															"token": "no_token",
 															"bytes": [
-																"{000134} [f32] R0 := ->R0"
+																"{000144} [f32] R0 := ->R0"
 															],
 															"children": []
 														}
@@ -466,7 +477,7 @@
 											"name": "Print",
 											"token": "no_token",
 											"bytes": [
-												"{000136} [f02] PRINT R0"
+												"{000146} [f02] PRINT R0"
 											],
 											"children": []
 										}
@@ -483,10 +494,10 @@
 									"name": "Store variable 'b' from R1",
 									"token": "no_token",
 									"bytes": [
-										"{000138} [f32] R27 := FP",
-										"{000140} [f08] R27 := R27 + const",
-										"{000142} [f32] 0000 0004",
-										"{000146} [f32] ->R27 := R1"
+										"{000148} [f32] R27 := FP",
+										"{000150} [f08] R27 := R27 + const",
+										"{000152} [f32] 0000 0004",
+										"{000156} [f32] ->R27 := R1"
 									],
 									"children": []
 								}
@@ -513,8 +524,8 @@
 			"name": "Skip/Stop",
 			"token": "no_token",
 			"bytes": [
-				"{000148} [f16] skip",
-				"{000150} [f08] stop"
+				"{000158} [f16] skip",
+				"{000160} [f08] stop"
 			],
 			"children": []
 		}

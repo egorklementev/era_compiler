@@ -763,7 +763,7 @@ namespace ERACompiler.Modules
                 .AddRule(printRule);
 
             SyntaxRule labelRule = new SyntaxRule()
-                .SetName("Label")
+                .SetName("Goto label")
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(opLessRule)
                 .AddRule(identifierRule)
@@ -774,7 +774,7 @@ namespace ERACompiler.Modules
                 .SetType(SyntaxRule.SyntaxRuleType.SEQUENCE)
                 .AddRule(
                     new SyntaxRule()
-                    .SetName("[ Label ]")
+                    .SetName("[ Goto label ]")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                     .AddRule(labelRule)
                     )

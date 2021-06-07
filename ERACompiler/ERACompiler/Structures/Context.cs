@@ -184,7 +184,12 @@ namespace ERACompiler.Structures
 
         public bool IsVarLabel(Token identifier)
         {
-            return LocateVar(identifier.Value).AASTType.Type == VarType.ERAType.LABEL;
+            return IsVarLabel(identifier.Value);
+        }
+
+        public bool IsVarLabel(string identifier)
+        {
+            return LocateVar(identifier).AASTType.Type == VarType.ERAType.LABEL;
         }
 
         public bool IsVarConstant(Token identifier)

@@ -149,7 +149,7 @@
 													"token": "r0",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "r0",
 															"children": []
 														},
@@ -237,7 +237,7 @@
 													"token": "asm",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "asm",
 															"children": []
 														},
@@ -393,7 +393,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -522,7 +522,7 @@
 													"token": "return",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "return",
 															"children": []
 														},
@@ -783,7 +783,7 @@
 													"token": "if",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "if",
 															"children": []
 														},
@@ -890,7 +890,7 @@
 																							"token": "return",
 																							"children": [
 																								{
-																									"node_type": "[ Label ]",
+																									"node_type": "[ Goto label ]",
 																									"token": "return",
 																									"children": []
 																								},
@@ -961,7 +961,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -1189,7 +1189,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -1379,7 +1379,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -1562,7 +1562,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -1702,7 +1702,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -1842,7 +1842,7 @@
 													"token": "for",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "for",
 															"children": []
 														},
@@ -1949,7 +1949,7 @@
 																											"token": "int",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "int",
 																													"children": []
 																												},
@@ -2139,7 +2139,7 @@
 																											"token": "if",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "if",
 																													"children": []
 																												},
@@ -2289,7 +2289,7 @@
 																																					"token": "less",
 																																					"children": [
 																																						{
-																																							"node_type": "[ Label ]",
+																																							"node_type": "[ Goto label ]",
 																																							"token": "less",
 																																							"children": []
 																																						},
@@ -2446,7 +2446,7 @@
 																																									"token": "greater",
 																																									"children": [
 																																										{
-																																											"node_type": "[ Label ]",
+																																											"node_type": "[ Goto label ]",
 																																											"token": "greater",
 																																											"children": []
 																																										},
@@ -2622,7 +2622,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -2770,7 +2770,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -2952,7 +2952,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -3159,7 +3159,7 @@
 													"token": "for",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "for",
 															"children": []
 														},
@@ -3266,7 +3266,7 @@
 																											"token": "int",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "int",
 																													"children": []
 																												},
@@ -3456,7 +3456,7 @@
 																											"token": "if",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "if",
 																													"children": []
 																												},
@@ -3606,7 +3606,7 @@
 																																					"token": "left",
 																																					"children": [
 																																						{
-																																							"node_type": "[ Label ]",
+																																							"node_type": "[ Goto label ]",
 																																							"token": "left",
 																																							"children": []
 																																						},
@@ -3828,7 +3828,7 @@
 																																									"token": "if",
 																																									"children": [
 																																										{
-																																											"node_type": "[ Label ]",
+																																											"node_type": "[ Goto label ]",
 																																											"token": "if",
 																																											"children": []
 																																										},
@@ -3940,7 +3940,7 @@
 																																																			"token": "right",
 																																																			"children": [
 																																																				{
-																																																					"node_type": "[ Label ]",
+																																																					"node_type": "[ Goto label ]",
 																																																					"token": "right",
 																																																					"children": []
 																																																				},
@@ -4202,7 +4202,7 @@
 													"token": "fast_sort",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "fast_sort",
 															"children": []
 														},
@@ -4356,7 +4356,7 @@
 													"token": "fast_sort",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "fast_sort",
 															"children": []
 														},
@@ -4544,7 +4544,7 @@
 													"token": "for",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "for",
 															"children": []
 														},
@@ -4651,7 +4651,7 @@
 																											"token": "int",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "int",
 																													"children": []
 																												},
@@ -4841,7 +4841,7 @@
 																											"token": "->",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "->",
 																													"children": []
 																												},
@@ -5063,7 +5063,7 @@
 													"token": "int",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "int",
 															"children": []
 														},
@@ -5253,7 +5253,7 @@
 													"token": "->",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "->",
 															"children": []
 														},
@@ -5395,7 +5395,7 @@
 													"token": "for",
 													"children": [
 														{
-															"node_type": "[ Label ]",
+															"node_type": "[ Goto label ]",
 															"token": "for",
 															"children": []
 														},
@@ -5536,7 +5536,7 @@
 																											"token": "int",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "int",
 																													"children": []
 																												},
@@ -5726,7 +5726,7 @@
 																											"token": "->",
 																											"children": [
 																												{
-																													"node_type": "[ Label ]",
+																													"node_type": "[ Goto label ]",
 																													"token": "->",
 																													"children": []
 																												},
@@ -5978,7 +5978,7 @@
 											"token": "int",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "int",
 													"children": []
 												},
@@ -6111,7 +6111,7 @@
 											"token": "int",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "int",
 													"children": []
 												},
@@ -6259,7 +6259,7 @@
 											"token": "arr",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "arr",
 													"children": []
 												},
@@ -6414,7 +6414,7 @@
 											"token": "arr",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "arr",
 													"children": []
 												},
@@ -6569,7 +6569,7 @@
 											"token": "arr",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "arr",
 													"children": []
 												},
@@ -6724,7 +6724,7 @@
 											"token": "arr",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "arr",
 													"children": []
 												},
@@ -6879,7 +6879,7 @@
 											"token": "fast_sort",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "fast_sort",
 													"children": []
 												},

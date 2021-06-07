@@ -29,6 +29,8 @@ namespace ERACompiler.Modules.Generation
                             if (g.regAllocVTR.ContainsKey(aastNode.Children[0].Children[^1].Token.Value))
                             {
                                 asgmntNode.Children.AddLast(new CodeNode("Assignment mov", asgmntNode).Add(GenerateMOV(fr0, fr1)));
+                                // We have to store new variable value to the stack every time to overcome some strange 'goto' artifacts that may occur
+                                asgmntNode.Children.AddLast(GetStoreVariableNode(asgmntNode, aastNode.Children[0].Children[^1].Token.Value, fr0, ctx));
                             }
                             else
                             {

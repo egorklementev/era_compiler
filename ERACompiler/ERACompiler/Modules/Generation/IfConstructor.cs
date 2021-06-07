@@ -19,38 +19,46 @@ namespace ERACompiler.Modules.Generation
 
             if (aastNode.Children.Count < 3) // No "else" block
             {
-                CodeNode l1Node = new CodeNode("L1 label", ifNode).Add(new byte[8]);
-                CodeNode l2Node = new CodeNode("L2 label", ifNode).Add(new byte[8]);
+                CodeNode l1DeclNode = new CodeNode("Label declaration", ifNode).Add(new byte[8]);
+                l1DeclNode.ByteToReturn = fr1;
+                CodeNode l1Node = new CodeNode("Label", ifNode);
+                l1Node.LabelDecl = l1DeclNode;
+                CodeNode l2DeclNode = new CodeNode("Label declaration", ifNode).Add(new byte[8]);
+                l2DeclNode.ByteToReturn = fr1;
+                CodeNode l2Node = new CodeNode("Label", ifNode);
+                l2Node.LabelDecl = l2DeclNode;
 
-                ifNode.Children.AddLast(l1Node);
+                ifNode.Children.AddLast(l1DeclNode);
                 ifNode.Children.AddLast(new CodeNode("CBR if true", ifNode).Add(GenerateCBR(fr0, fr1)));
-                ifNode.Children.AddLast(l2Node);
+                ifNode.Children.AddLast(l2DeclNode);
                 ifNode.Children.AddLast(new CodeNode("CBR if false", ifNode).Add(GenerateCBR(fr1, fr1)));
                 g.FreeReg(fr0);
                 g.FreeReg(fr1);
-                l1Node.Bytes.Clear();
-                l1Node.Add(GenerateLDL(fr1, GetCurrentBinarySize(l1Node)));
+                ifNode.Children.AddLast(l1Node);
                 ifNode.Children.AddLast(base.Construct((AASTNode)aastNode.Children[1], ifNode));
-                l2Node.Bytes.Clear();
-                l2Node.Add(GenerateLDL(fr1, GetCurrentBinarySize(l2Node)));
+                ifNode.Children.AddLast(l2Node);
             }
             else // With "else" block
             {
-                CodeNode l1Node = new CodeNode("L1 label", ifNode).Add(new byte[8]);
-                CodeNode l2Node = new CodeNode("L2 label", ifNode).Add(new byte[8]);
+                CodeNode l1DeclNode = new CodeNode("Label declaration", ifNode).Add(new byte[8]);
+                l1DeclNode.ByteToReturn = fr1;
+                CodeNode l1Node = new CodeNode("Label", ifNode);
+                l1Node.LabelDecl = l1DeclNode;
+                CodeNode l2DeclNode = new CodeNode("Label declaration", ifNode).Add(new byte[8]);
+                l2DeclNode.ByteToReturn = fr1;
+                CodeNode l2Node = new CodeNode("Label", ifNode);
+                l2Node.LabelDecl = l2DeclNode;
 
-                ifNode.Children.AddLast(l1Node);
+                ifNode.Children.AddLast(l1DeclNode);
                 ifNode.Children.AddLast(new CodeNode("CBR if true", ifNode).Add(GenerateCBR(fr0, fr1)));
                 g.FreeReg(fr0);
                 g.FreeReg(fr1);
                 ifNode.Children.AddLast(base.Construct((AASTNode)aastNode.Children[2], ifNode));
-                ifNode.Children.AddLast(l2Node);
+                ifNode.Children.AddLast(l2DeclNode);
                 ifNode.Children.AddLast(new CodeNode("CBR if false", ifNode).Add(GenerateCBR(fr1, fr1)));
-                l1Node.Bytes.Clear();
-                l1Node.Add(GenerateLDL(fr1, GetCurrentBinarySize(l1Node)));
+                ifNode.Children.AddLast(l1Node);
                 ifNode.Children.AddLast(base.Construct((AASTNode)aastNode.Children[1], ifNode));
-                l2Node.Bytes.Clear();
-                l2Node.Add(GenerateLDL(fr1, GetCurrentBinarySize(l2Node)));
+                ifNode.Children.AddLast(l2Node);
             }
 
             return ifNode;

@@ -138,11 +138,10 @@ namespace ERACompiler.Modules.Generation
             return GenerateCommand(32, 3, regI, regJ);
         }
 
-        protected LinkedList<byte> GenerateLDL(int reg, int offset)
+        protected LinkedList<byte> GenerateLDL(int reg, int address)
         {
             LinkedList<byte> toReturn = new LinkedList<byte>(GenerateLDC(0, reg));
-            // 8 bytes here are LDL itself that we should jump over 
-            foreach (byte b in GenerateLDA(reg, reg, offset + 8)) 
+            foreach (byte b in GenerateLDA(reg, reg, address)) 
             {
                 toReturn.AddLast(b);
             }
@@ -276,7 +275,7 @@ namespace ERACompiler.Modules.Generation
 
             foreach (string var in vars)
             {
-                if (ctx.IsVarDeclared(var) && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var))
+                if (ctx.IsVarDeclared(var) && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var) && !ctx.IsVarLabel(var))
                 {
                     int liStart = ctx.GetLIStart(var);
 
@@ -316,7 +315,7 @@ namespace ERACompiler.Modules.Generation
             foreach (string var in g.regAllocVTR.Keys)
             {
                 if ((ctx.IsVarDeclared(var) && !dependOnStatementNum || ctx.IsVarDeclaredInThisContext(var) && dependOnStatementNum) 
-                    && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var))
+                    && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var) && !ctx.IsVarLabel(var))
                 {
                     int liEnd = ctx.GetLIEnd(var);
 
@@ -439,19 +438,26 @@ namespace ERACompiler.Modules.Generation
         public static int GetCurrentBinarySize(CodeNode node)
         {
             int count = 0;
-            while (node != null)
+            if (node != null)
             {
                 count += node.Bytes.Count;
-                foreach (CodeNode child in node.Children)
+                if (node.Parent != null)
                 {
-                    if (!child.Name.Equals("Actual program code"))
+                    foreach (CodeNode sibling in node.Parent.Children)
                     {
-                        count += child.Count();
+                        if (sibling == node)
+                        {
+                            break;
+                        }
+                        count += sibling.Count();
                     }
                 }
-                node = node.Parent;
             }
-            return count;
+            else
+            {
+                return count;
+            }
+            return count + GetCurrentBinarySize(node.Parent);
         }
 
         private HashSet<string> GetAllUsedVars(AASTNode node)

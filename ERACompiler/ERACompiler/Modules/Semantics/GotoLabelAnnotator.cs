@@ -3,7 +3,7 @@ using ERACompiler.Structures.Types;
 
 namespace ERACompiler.Modules.Semantics
 {
-    class LabelAnnotator : NodeAnnotator
+    class GotoLabelAnnotator : NodeAnnotator
     {
         public override AASTNode Annotate(ASTNode astNode, AASTNode? parent)
         {

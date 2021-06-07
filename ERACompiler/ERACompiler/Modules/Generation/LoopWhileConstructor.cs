@@ -16,9 +16,13 @@ namespace ERACompiler.Modules.Generation
             byte fr1 = fr1Node.ByteToReturn;
             loopWhileNode.Children.AddLast(fr1Node);
 
-            CodeNode loopStartLabelNode = new CodeNode("Loop start label", loopWhileNode); // fr1
+            CodeNode loopStartLabelDeclNode = new CodeNode("Label declaration", loopWhileNode).Add(new byte[8]);
+            loopStartLabelDeclNode.ByteToReturn = fr1;
+            CodeNode loopStartLabelNode = new CodeNode("Label", loopWhileNode);
+            loopStartLabelNode.LabelDecl = loopStartLabelDeclNode;
+
+            loopWhileNode.Children.AddLast(loopStartLabelDeclNode);
             loopWhileNode.Children.AddLast(loopStartLabelNode);
-            loopStartLabelNode.Add(GenerateLDL(fr1, GetCurrentBinarySize(loopStartLabelNode)));
 
             loopWhileNode.Children.AddLast(GetHeapTopChangeNode(loopWhileNode, -4));
 

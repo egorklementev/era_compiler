@@ -24,7 +24,7 @@
 											"token": "for",
 											"children": [
 												{
-													"node_type": "[ Label ]",
+													"node_type": "[ Goto label ]",
 													"token": "for",
 													"children": []
 												},

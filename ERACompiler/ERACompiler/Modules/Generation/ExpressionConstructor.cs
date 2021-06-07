@@ -61,14 +61,22 @@ namespace ERACompiler.Modules.Generation
                             CodeNode fr3Node = GetFreeRegisterNode(aastNode, operationNode);
                             operationNode.Children.AddLast(fr3Node);
                             byte fr3 = fr3Node.ByteToReturn;
-                            CodeNode lsrNode = new CodeNode("LSR", operationNode)
+                            CodeNode lsrNode1 = new CodeNode("LSR cmds 1", operationNode)
                                 .Add(GenerateLDC(1, fr2));
-                            lsrNode
-                                .Add(GenerateLDL(fr3, GetCurrentBinarySize(lsrNode)))
+                            CodeNode lsrNode2 = new CodeNode("LSR cmds 2", operationNode)
                                 .Add(GenerateLSR(fr0, fr0))
                                 .Add(GenerateSUB(fr2, fr1))
                                 .Add(GenerateCBR(fr1, fr3));
-                            operationNode.Children.AddLast(lsrNode);
+
+                            CodeNode lsrLabelDecl = new CodeNode("Label declaration", operationNode).Add(new byte[8]);
+                            lsrLabelDecl.ByteToReturn = fr3;
+                            CodeNode lsrLabel = new CodeNode("Label", operationNode);
+                            lsrLabel.LabelDecl = lsrLabelDecl;
+
+                            operationNode.Children.AddLast(lsrNode1);
+                            operationNode.Children.AddLast(lsrLabelDecl);
+                            operationNode.Children.AddLast(lsrLabel);
+                            operationNode.Children.AddLast(lsrNode2);
 
                             exprNode.ByteToReturn = fr0;
                             g.FreeReg(fr2);
@@ -90,14 +98,21 @@ namespace ERACompiler.Modules.Generation
                             CodeNode fr3Node = GetFreeRegisterNode(aastNode, operationNode);
                             operationNode.Children.AddLast(fr3Node);
                             byte fr3 = fr3Node.ByteToReturn;
-                            CodeNode lslNode = new CodeNode("LSL", operationNode)
+                            CodeNode lslNode1 = new CodeNode("LSL cmds 1", operationNode)
                                 .Add(GenerateLDC(1, fr2));
-                            lslNode
-                                .Add(GenerateLDL(fr3, GetCurrentBinarySize(lslNode)))
+                            CodeNode lslNode2 = new CodeNode("LSL cmds 2", operationNode)
                                 .Add(GenerateLSL(fr0, fr0))
                                 .Add(GenerateSUB(fr2, fr1))
                                 .Add(GenerateCBR(fr1, fr3));
-                            operationNode.Children.AddLast(lslNode);
+                            CodeNode lslLabelDecl = new CodeNode("Label declaration", operationNode).Add(new byte[8]);
+                            lslLabelDecl.ByteToReturn = fr3;
+                            CodeNode lslLabel = new CodeNode("Label", operationNode);
+                            lslLabel.LabelDecl = lslLabelDecl;
+
+                            operationNode.Children.AddLast(lslNode1);
+                            operationNode.Children.AddLast(lslLabelDecl);
+                            operationNode.Children.AddLast(lslLabel);
+                            operationNode.Children.AddLast(lslNode2);
 
                             exprNode.ByteToReturn = fr0;
                             g.FreeReg(fr2);
@@ -146,21 +161,26 @@ namespace ERACompiler.Modules.Generation
                             // FR2 &= FR1;
                             // FR0 = 1;
                             // FR1 = <true>;
-                            // if FR2 goto FR0;
+                            // if FR2 goto FR1;
                             // FR0 := 0;
                             // <true>
                             // fr0
-                            operationNode.Children.AddLast(new CodeNode("PreLabel", operationNode)
+                            operationNode.Children.AddLast(new CodeNode("cond cmds 1", operationNode)
                                 .Add(GenerateLDC(mask, fr2))
                                 .Add(GenerateCND(fr0, fr1))
                                 .Add(GenerateAND(fr1, fr2))
                                 .Add(GenerateLDC(1, fr0)));
-                            CodeNode labelNode = new CodeNode("fr1 label", operationNode);
-                            operationNode.Children.AddLast(labelNode);
-                            operationNode.Children.AddLast(new CodeNode("PostLabel", operationNode)
+
+                            CodeNode labelDeclNode = new CodeNode("Label declaration", operationNode).Add(new byte[8]);
+                            labelDeclNode.ByteToReturn = fr1;
+                            CodeNode labelNode = new CodeNode("Label", operationNode);
+                            labelNode.LabelDecl = labelDeclNode;
+
+                            operationNode.Children.AddLast(labelDeclNode);
+                            operationNode.Children.AddLast(new CodeNode("cond cmds 2", operationNode)
                                 .Add(GenerateCBR(fr2, fr1))
                                 .Add(GenerateLDC(0, fr0)));
-                            labelNode.Add(GenerateLDL(fr1, GetCurrentBinarySize(labelNode)));
+                            operationNode.Children.AddLast(labelNode);
                             exprNode.ByteToReturn = fr0;
                             g.FreeReg(fr2);
                             break;
@@ -232,20 +252,31 @@ namespace ERACompiler.Modules.Generation
                                 .Add(GenerateLDC(0, fr2))
                                 .Add(GenerateLDA(fr2, fr2, 32)));
 
-                            CodeNode fr3LabelNode = new CodeNode("fr3 label", operationNode);
-                            CodeNode fr4LabelNode = new CodeNode("fr4 label", operationNode);
-                            CodeNode fr5LabelNode = new CodeNode("fr5 label", operationNode);
-                            operationNode.Children.AddLast(fr3LabelNode.Add(new byte[8]));
-                            operationNode.Children.AddLast(fr4LabelNode.Add(new byte[8]));
-                            operationNode.Children.AddLast(fr5LabelNode.Add(new byte[8]));
+                            CodeNode fr3LabelDeclNode = new CodeNode("Label declaration", operationNode).Add(new byte[8]);
+                            fr3LabelDeclNode.ByteToReturn = fr3;
+                            CodeNode fr3LabelNode = new CodeNode("Label", operationNode);
+                            fr3LabelNode.LabelDecl = fr3LabelDeclNode;
+
+                            CodeNode fr4LabelDeclNode = new CodeNode("Label declaration", operationNode).Add(new byte[8]);
+                            fr4LabelDeclNode.ByteToReturn = fr4;
+                            CodeNode fr4LabelNode = new CodeNode("Label", operationNode);
+                            fr4LabelNode.LabelDecl = fr4LabelDeclNode;
+
+                            CodeNode fr5LabelDeclNode = new CodeNode("Label declaration", operationNode).Add(new byte[8]);
+                            fr5LabelDeclNode.ByteToReturn = fr5;
+                            CodeNode fr5LabelNode = new CodeNode("Label", operationNode);
+                            fr5LabelNode.LabelDecl = fr5LabelDeclNode;
+
+                            operationNode.Children.AddLast(fr3LabelDeclNode);
+                            operationNode.Children.AddLast(fr4LabelDeclNode);
+                            operationNode.Children.AddLast(fr5LabelDeclNode);
 
                             operationNode.Children.AddLast(new CodeNode("mult 2", operationNode)
                                 .Add(GenerateLDC(1, fr6))
                                 .Add(GenerateLDC(0, fr7))
                                 .Add(GenerateLDC(1, fr8)));
 
-                            fr3LabelNode.Bytes.Clear();
-                            fr3LabelNode.Add(GenerateLDL(fr3, GetCurrentBinarySize(fr3LabelNode)));
+                            operationNode.Children.AddLast(fr3LabelNode);
 
                             operationNode.Children.AddLast(new CodeNode("mult 3", operationNode)
                                 .Add(GenerateLDC(0, fr9))
@@ -253,14 +284,12 @@ namespace ERACompiler.Modules.Generation
                                 .Add(GenerateCBR(fr6, fr4))
                                 .Add(GenerateCBR(fr8, fr5)));
 
-                            fr4LabelNode.Bytes.Clear();
-                            fr4LabelNode.Add(GenerateLDL(fr4, GetCurrentBinarySize(fr4LabelNode)));
+                            operationNode.Children.AddLast(fr4LabelNode);
 
                             operationNode.Children.AddLast(new CodeNode("mult 4", operationNode)
                                 .Add(GenerateADD(fr0, fr7)));
 
-                            fr5LabelNode.Bytes.Clear();
-                            fr5LabelNode.Add(GenerateLDL(fr5, GetCurrentBinarySize(fr5LabelNode)));
+                            operationNode.Children.AddLast(fr5LabelNode);
 
                             operationNode.Children.AddLast(new CodeNode("mult 5", operationNode)
                                 .Add(GenerateLDC(1, fr6))

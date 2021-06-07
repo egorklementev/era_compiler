@@ -49,7 +49,7 @@ namespace ERACompiler.Modules
                 { "Reference", new ReferenceConstructor() },
                 { "Dereference", new DereferenceConstructor() },
                 { "Primary", new PrimaryConstructor() },
-                { "Label", new LabelConstructor() },
+                { "Goto label", new GotoLabelConstructor() },
                 { "Goto", new GotoConstructor() },
                 { "REGISTER", new RegisterConstructor() },
                 { "NUMBER", new LiteralConstructor() },
