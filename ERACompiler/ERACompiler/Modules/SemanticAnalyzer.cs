@@ -47,11 +47,13 @@ namespace ERACompiler.Modules
                 { "Statement", new StatementAnnotator() },
                 { "Goto", new GotoAnnotator() },
                 { "Goto label", new GotoLabelAnnotator() },
+                { "Pragma declaration", new PragmaDeclarationAnnotator() },
                 { "KEYWORD", new NoProcessingAnnotator() },
                 { "OPERATOR", new NoProcessingAnnotator() },
                 { "REGISTER", new NoProcessingAnnotator() },
                 { "DELIMITER", new NoProcessingAnnotator() },
                 { "IDENTIFIER", new NoProcessingAnnotator() },
+                { "TEXT", new NoProcessingAnnotator() },
                 { "Loop", new FirstChildAnnotator() },
                 { "Call ;", new FirstChildAnnotator() },
                 { "Operand", new FirstChildAnnotator() },
@@ -415,7 +417,7 @@ namespace ERACompiler.Modules
                             }
                             break;
                         case VarType.ERAType.DATA:
-                            // TODO: what to do with this stuff???
+                            i += lword * (var.Children.Count - 1); // Allocate integers and thats it
                             break;
                         default:
                             break;

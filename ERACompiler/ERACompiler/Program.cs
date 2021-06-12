@@ -225,7 +225,10 @@ namespace ERACompiler
                                     string[] files = Directory.GetFiles(args[i]); 
                                     foreach (string filename in files)
                                     {
-                                        sourceFilenames.Add(filename);
+                                        if (filename.EndsWith(".era"))
+                                        {
+                                            sourceFilenames.Add(filename);
+                                        }
                                     }
                                     i++;
                                 }

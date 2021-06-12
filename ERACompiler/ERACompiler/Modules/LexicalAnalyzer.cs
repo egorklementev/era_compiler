@@ -59,6 +59,8 @@ namespace ERACompiler.Modules
 
                 remembered = sourceCode[0] + ""; // Will start traversal from the second character
 
+                bool quoteOccurred = false;
+
                 // Traversing through the characters of the source code
                 for (int i = 1; i < sourceCode.Length; i++)
                 {
@@ -88,6 +90,32 @@ namespace ERACompiler.Modules
                             }
                             i--;
                             remembered = "\r\n";
+                        }
+                        else if (t.Type == TokenType.DELIMITER && t.Value.Equals("\""))
+                        {
+                            t.Value = "\\\"";
+                            if (!quoteOccurred)
+                            {
+                                quoteOccurred = true;
+                                string text = "";
+                                int lc = i;
+                                finalList.Add(t);
+                                c = sourceCode[i++];
+                                while (c != '\"' && i < sourceCode.Length)
+                                {
+                                    text += c;
+                                    c = sourceCode[i++];
+                                }
+                                finalList.Add(new Token(TokenType.TEXT, text, new TokenPosition(lineNumber, lc)));
+                                i--;
+                                remembered = c.ToString();
+                            }
+                            else
+                            {
+                                quoteOccurred = false;
+                                finalList.Add(t);
+                                remembered = c.ToString();
+                            }
                         }
                         else
                         {

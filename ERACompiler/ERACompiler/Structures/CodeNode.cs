@@ -60,6 +60,21 @@ namespace ERACompiler.Structures
             return this;
         }
 
+        public CodeNode Replace(int startIndex, LinkedList<byte> newBytes)
+        {
+            var anchor = Bytes.First;
+            for (int i = 0; i < startIndex; i++)
+            {
+                anchor = anchor.Next;
+            }
+            foreach (byte b in newBytes)
+            {
+                anchor.Value = b;
+                anchor = anchor.Next;
+            }
+            return this;
+        }
+
         public bool IsLeaf()
         {
             return Children.Count == 0;

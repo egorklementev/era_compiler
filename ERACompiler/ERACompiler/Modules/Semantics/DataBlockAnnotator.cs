@@ -8,7 +8,8 @@ namespace ERACompiler.Modules.Semantics
         public override AASTNode Annotate(ASTNode astNode, AASTNode? parent)
         {
             Context ctx = SemanticAnalyzer.FindParentContext(parent);
-            AASTNode data = new AASTNode(astNode, parent, new VarType(VarType.ERAType.DATA));
+            AASTNode data = new AASTNode(astNode, parent, new DataType());
+            ((DataType)data.AASTType).Size = astNode.Children[3].Children.Count + 1;
             data.Children.Add(base.Annotate(astNode.Children[1], data)); // Identifier
             data.Children.Add(base.Annotate(astNode.Children[2], data)); // The first literal
             foreach (ASTNode child in astNode.Children[3].Children)

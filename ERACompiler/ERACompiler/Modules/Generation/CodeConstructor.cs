@@ -275,7 +275,7 @@ namespace ERACompiler.Modules.Generation
 
             foreach (string var in vars)
             {
-                if (ctx.IsVarDeclared(var) && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var) && !ctx.IsVarLabel(var))
+                if (ctx.IsVarDeclared(var) && !ctx.IsVarRoutine(var) && !ctx.IsVarConstant(var) && !ctx.IsVarLabel(var) && !ctx.IsVarData(var))
                 {
                     int liStart = ctx.GetLIStart(var);
 

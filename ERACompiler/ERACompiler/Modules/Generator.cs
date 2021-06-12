@@ -54,6 +54,7 @@ namespace ERACompiler.Modules
                 { "Assembly block", new AssemblyBlockConstructor() },
                 { "REGISTER", new RegisterConstructor() },
                 { "NUMBER", new LiteralConstructor() },
+                { "Data", new NoChildrenConstructor() },
                 { "AllChildren", new AllChildrenConstructor() }
             };
         }
