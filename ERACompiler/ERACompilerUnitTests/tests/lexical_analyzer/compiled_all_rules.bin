@@ -72,28 +72,28 @@
 		},
 		{
 			"token_type": "DELIMITER",
-			"value": """,
+			"value": "\"",
 			"position": "Line: 6, Char: 16"
 		},
 		{
-			"token_type": "IDENTIFIER",
+			"token_type": "TEXT",
 			"value": "text",
+			"position": "Line: 6, Char: 113"
+		},
+		{
+			"token_type": "DELIMITER",
+			"value": "\"",
 			"position": "Line: 6, Char: 17"
 		},
 		{
 			"token_type": "DELIMITER",
-			"value": """,
-			"position": "Line: 6, Char: 21"
-		},
-		{
-			"token_type": "DELIMITER",
 			"value": ")",
-			"position": "Line: 6, Char: 22"
+			"position": "Line: 6, Char: 18"
 		},
 		{
 			"token_type": "WHITESPACE",
 			"value": "\r\n",
-			"position": "Line: 6, Char: 23"
+			"position": "Line: 6, Char: 19"
 		},
 		{
 			"token_type": "KEYWORD",

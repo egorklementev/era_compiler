@@ -62,7 +62,7 @@ namespace ERACompiler.Modules.Semantics
                     }
                     else
                     {
-                        if (!ctx.IsVarArray(idLink.Token))
+                        if (!ctx.IsVarArray(idLink.Token) && !ctx.IsVarData(idLink.Token.Value))
                         {
                             throw new SemanticErrorException(
                                 "Trying to access non-array variable via \'[]\' notation!!!\r\n" +

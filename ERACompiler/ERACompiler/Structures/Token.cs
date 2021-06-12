@@ -60,6 +60,8 @@ namespace ERACompiler.Structures
                 finalValue = "\\r\\n";
             if (finalValue.Equals(" "))
                 finalValue = "\" \"";
+            if (finalValue.Equals("\""))
+                finalValue = "\\\"";
 
             StringBuilder sb = new StringBuilder();
             sb
@@ -90,7 +92,8 @@ namespace ERACompiler.Structures
         REGISTER,
         IDENTIFIER,        
         NUMBER,
-        NO_TOKEN
+        NO_TOKEN,
+        TEXT
     }
 
     /// <summary>

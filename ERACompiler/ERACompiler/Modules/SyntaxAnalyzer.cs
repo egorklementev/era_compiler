@@ -54,6 +54,7 @@ namespace ERACompiler.Modules
             Token tIdentifier = new Token(TokenType.IDENTIFIER, "SOME_IDENTIFIER", new TokenPosition(0, 0));
             Token tLiteral = new Token(TokenType.NUMBER, "SOME_LITERAL", new TokenPosition(0, 0));
             Token tRegister = new Token(TokenType.REGISTER, "SOME_REGISTER", new TokenPosition(0, 0));
+            Token tText = new Token(TokenType.TEXT, "SOME_TEXT", new TokenPosition(0, 0));
 
             // Delimiters
             Token tAt = new Token(TokenType.DELIMITER, "@", new TokenPosition(0, 0));
@@ -65,7 +66,7 @@ namespace ERACompiler.Modules
             Token tRightBracket = new Token(TokenType.DELIMITER, "]", new TokenPosition(0, 0));
             Token tRightParen = new Token(TokenType.DELIMITER, ")", new TokenPosition(0, 0));
             Token tSemicolon = new Token(TokenType.DELIMITER, ";", new TokenPosition(0, 0));
-            Token tQuote = new Token(TokenType.DELIMITER, "\"", new TokenPosition(0, 0));
+            Token tQuote = new Token(TokenType.DELIMITER, "\\\"", new TokenPosition(0, 0));
 
             // Operators
             Token tAnd = new Token(TokenType.OPERATOR, "&", new TokenPosition(0, 0));
@@ -127,6 +128,7 @@ namespace ERACompiler.Modules
             RuleTerminal identifierRule = new RuleTerminal(tIdentifier);
             RuleTerminal numberRule = new RuleTerminal(tLiteral);
             RuleTerminal registerRule = new RuleTerminal(tRegister);
+            RuleTerminal textRule = new RuleTerminal(tText);
 
             RuleTerminal atRule = new RuleTerminal(tAt);
             RuleTerminal colonRule = new RuleTerminal(tColon);
@@ -898,7 +900,7 @@ namespace ERACompiler.Modules
                     .SetName("Pragma parameter")
                     .SetType(SyntaxRule.SyntaxRuleType.ZERO_OR_ONE)
                     .AddRule(quoteRule)
-                    .AddRule(identifierRule)
+                    .AddRule(textRule)
                     .AddRule(quoteRule)
                 )
                 .AddRule(rightParenRule);

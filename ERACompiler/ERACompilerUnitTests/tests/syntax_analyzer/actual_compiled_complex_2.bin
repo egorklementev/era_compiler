@@ -61,21 +61,21 @@
 												},
 												{
 													"node_type": "Pragma parameter",
-													"token": """,
+													"token": "\"",
 													"children": [
 														{
 															"node_type": "DELIMITER",
-															"token": """,
+															"token": "\"",
 															"children": []
 														},
 														{
-															"node_type": "IDENTIFIER",
+															"node_type": "TEXT",
 															"token": "text",
 															"children": []
 														},
 														{
 															"node_type": "DELIMITER",
-															"token": """,
+															"token": "\"",
 															"children": []
 														}
 													]

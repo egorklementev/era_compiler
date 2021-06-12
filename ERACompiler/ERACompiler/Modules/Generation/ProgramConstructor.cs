@@ -1,5 +1,6 @@
 ﻿using ERACompiler.Structures;
 using ERACompiler.Utilities.Errors;
+using System.Collections.Generic;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -23,7 +24,24 @@ namespace ERACompiler.Modules.Generation
             staticNode.Add(GetConstBytes(Program.config.MemorySize))
                 .Add(GetLList(new byte[aastNode.AASTValue]));
 
-            int staticLength = (staticNode.Count() + staticNode.Count() % 2) / 2; // We count in words (2 bytes)
+            int staticLength = (staticNode.Count() + staticNode.Count() % 2) / 2; // We count in words (2 bytes) (???)
+
+            // Identify all data blocks
+            foreach (AASTNode child in aastNode.Children)
+            {
+                if (child.ASTType.Equals("Data"))
+                {
+                    LinkedList<byte> data = new LinkedList<byte>();
+                    for (int i = 1; i < child.Children.Count; i++)
+                    {
+                        foreach (byte b in GetConstBytes(((AASTNode)child.Children[i]).AASTValue))
+                        {
+                            data.AddLast(b);
+                        }
+                    }
+                    staticNode.Replace(aastNode.Context.GetStaticOffset(child.Children[0].Token.Value) + 4, data);
+                }
+            }
 
             // First unit offset - to store correct addresses inside static frame
             int techOffset = 16; // LDA(SB), LDA(SB + codeOffset), 27 = ->27, if 27 goto 27
@@ -52,6 +70,7 @@ namespace ERACompiler.Modules.Generation
                         .Add(GenerateLDA(26, 26, staticNode.Count() + techOffset + codeNode.Count()))
                         .Add(GenerateST(26, 27));
                 }
+
                 codeNode.Children.AddLast(base.Construct(child, codeNode));
             }
 

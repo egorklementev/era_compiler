@@ -1,52 +1,53 @@
 {
 	"node_type": "Program",
-	"var_value": "28",
+	"var_value": "60",
 	"context": 
 		{
 			"name": "Program",
 			"symbol_table": [
 				{
-					"var_type": "DATA",
+					"var_type": "Data block of size 8",
 					"var_name": "data_1"
 				},
 				{
 					"var_type": "MODULE",
-					"var_name": "module_1"
+					"var_name": "module_1",
+					"var_static_offset": "32"
 				},
 				{
 					"var_type": "MODULE",
 					"var_name": "code",
-					"var_static_offset": "4"
+					"var_static_offset": "36"
 				},
 				{
 					"var_type": "struct_1",
 					"var_name": "struct_1",
-					"var_static_offset": "8"
+					"var_static_offset": "40"
 				},
 				{
 					"var_type": "NO_TYPE routine, ()",
 					"var_name": "routine_1",
-					"var_static_offset": "8"
+					"var_static_offset": "40"
 				},
 				{
 					"var_type": "SHORT routine, (INT)",
 					"var_name": "routine_2",
-					"var_static_offset": "12"
+					"var_static_offset": "44"
 				},
 				{
 					"var_type": "MODULE",
 					"var_name": "module_var_decl",
-					"var_static_offset": "16"
+					"var_static_offset": "48"
 				},
 				{
 					"var_type": "NO_TYPE routine, ()",
 					"var_name": "routine_asm",
-					"var_static_offset": "20"
+					"var_static_offset": "52"
 				},
 				{
 					"var_type": "NO_TYPE routine, ()",
 					"var_name": "routine_ext",
-					"var_static_offset": "24"
+					"var_static_offset": "56"
 				}
 			]
 		},
@@ -56,21 +57,21 @@
 			"node_type": "Annotations",
 			"token": "pragma",
 			"children": [
-{
-	"node_type": "Pragma declaration",
-	"token": "some_pargma_1",
-	"children": []
-},
-{
-	"node_type": "Pragma declaration",
-	"token": "some_pargma_2",
-	"children": []
-}
+				{
+					"node_type": "Pragma declaration",
+					"token": "some_pargma_1",
+					"children": []
+				},
+				{
+					"node_type": "Pragma declaration",
+					"token": "some_pargma_2",
+					"children": []
+				}
 			]
 		},
 		{
 			"node_type": "Data",
-			"var_type": "DATA",
+			"var_type": "Data block of size 8",
 			"token": "data",
 			"children": [
 				{

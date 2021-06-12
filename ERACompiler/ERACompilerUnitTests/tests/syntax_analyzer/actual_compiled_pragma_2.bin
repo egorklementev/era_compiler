@@ -31,21 +31,21 @@
 										},
 										{
 											"node_type": "Pragma parameter",
-											"token": """,
+											"token": "\"",
 											"children": [
 												{
 													"node_type": "DELIMITER",
-													"token": """,
+													"token": "\"",
 													"children": []
 												},
 												{
-													"node_type": "IDENTIFIER",
+													"node_type": "TEXT",
 													"token": "testtext1",
 													"children": []
 												},
 												{
 													"node_type": "DELIMITER",
-													"token": """,
+													"token": "\"",
 													"children": []
 												}
 											]
@@ -103,21 +103,21 @@
 												},
 												{
 													"node_type": "Pragma parameter",
-													"token": """,
+													"token": "\"",
 													"children": [
 														{
 															"node_type": "DELIMITER",
-															"token": """,
+															"token": "\"",
 															"children": []
 														},
 														{
-															"node_type": "IDENTIFIER",
+															"node_type": "TEXT",
 															"token": "testtext2",
 															"children": []
 														},
 														{
 															"node_type": "DELIMITER",
-															"token": """,
+															"token": "\"",
 															"children": []
 														}
 													]

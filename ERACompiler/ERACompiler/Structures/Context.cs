@@ -109,7 +109,16 @@ namespace ERACompiler.Structures
 
         public int GetArrSize(Token identifier)
         {
-            return ((ArrayType) LocateVar(identifier.Value).AASTType).Size;
+            AASTNode? var = LocateVar(identifier.Value);
+            if (var?.AASTType is ArrayType a_type)
+            {
+                return a_type.Size;
+            }
+            else if (var?.AASTType is DataType d_type)
+            {
+                return d_type.Size;
+            }
+            throw new SemanticErrorException("Incorrect array check!!! Ask developers.");
         }
 
         /// <summary>
@@ -149,6 +158,11 @@ namespace ERACompiler.Structures
                 }
             }
             return -1;
+        }
+
+        public bool IsVarData(string identifier)
+        {
+            return LocateVar(identifier).AASTType.IsData();
         }
 
         public bool IsVarStruct(Token identifier)

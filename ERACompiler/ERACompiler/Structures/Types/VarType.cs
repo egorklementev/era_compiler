@@ -14,6 +14,11 @@ namespace ERACompiler.Structures.Types
             Type = type;
         }
 
+        public bool IsData()
+        {
+            return Type == ERAType.DATA;
+        }
+
         public bool IsArray()
         {
             return Type == ERAType.ARRAY;
