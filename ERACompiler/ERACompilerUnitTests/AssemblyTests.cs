@@ -62,6 +62,12 @@ namespace ERACompilerUnitTests
         }
 
         [TestMethod]
+        public void LabelTest()
+        {
+            Assert.IsTrue(CompileFiles("label"));
+        }
+
+        [TestMethod]
         public void AsmTest()
         {
             Assert.IsTrue(CompileFiles("asm", true));
@@ -83,6 +89,8 @@ namespace ERACompilerUnitTests
                 Program.currentCompiler = new Compiler();
                 if (toAsm)
                     Program.config.ConvertToAsmCode = true;
+                else
+                    Program.config.ConvertToAsmCode = false;
                 string sourceCode = File.ReadAllText(pathPrefix + test_name + "_" + i + ".era");
                 byte[] expectedOutput = File.ReadAllBytes(pathPrefix + "expected_simulated_" + test_name + "_" + i + ".eralog");
                 byte[] actualCode = Program.currentCompiler.Compile(sourceCode, Compiler.CompilationMode.GENERATION);

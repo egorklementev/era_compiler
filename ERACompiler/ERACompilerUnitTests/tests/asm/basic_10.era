@@ -5,5 +5,5 @@ code
 	if a < 20 do
 		goto l;
 	end
-	print a;
+	print a; // 20
 end

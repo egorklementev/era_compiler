@@ -153,13 +153,11 @@ namespace ERACompiler.Modules.Generation
             }
             #endregion
 
-
             #region Label resolution
             CodeNode? label = FindNextLabel(programNode);
             while (label != null)
             {
                 int labelAddr = GetCurrentBinarySize(label); // Always the first child
-                int diff = labelAddr - GetCurrentBinarySize(label.LabelDecl);
                 label.LabelDecl.Bytes.Clear();
                 label.LabelDecl.Add(GenerateLDL(label.LabelDecl.ByteToReturn, labelAddr));
                 label = FindNextLabel(programNode);

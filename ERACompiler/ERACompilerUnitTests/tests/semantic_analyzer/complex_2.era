@@ -54,11 +54,11 @@ routine routine_asm ()
 do
 	<label1>
 	asm
-		<label1>;
+		<label2>;
 		skip;
 		stop;
 		format 32;
-		r0 := label1;
+		r0 := label2;
 		r0 := r0 + 1000;
 		r0 := ->[r1];
 		->[r2] := r3;

@@ -3,5 +3,5 @@ code
 	for i loop
 		a := a + 1;
 	end
-	print a;
+	print a; // 10
 end

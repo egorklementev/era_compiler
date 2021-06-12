@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Structures.Types;
 using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Modules.Semantics
@@ -51,23 +52,24 @@ namespace ERACompiler.Modules.Semantics
             {
                 // Check if identifier is label
                 Context ctx = SemanticAnalyzer.FindParentContext(parent);
-                if (!ctx.IsVarDeclared(astNode.Children[2].Token))
+                if (ctx.IsVarDeclared(astNode.Children[2].Token) && !ctx.IsVarLabel(astNode.Children[2].Token))
                 {
-                    throw new SemanticErrorException(
-                        "Label is not declared!!!\r\n" +
-                        "  At (Line: " + astNode.Children[2].Token.Position.Line.ToString() +
-                        ", Char: " + astNode.Children[2].Token.Position.Char.ToString() + ")."
-                        );
-                }
-                if (!ctx.IsVarLabel(astNode.Children[2].Token))
-                {
-                    throw new SemanticErrorException(
-                        "Label expected!!!\r\n" +
-                        "  At (Line: " + astNode.Children[2].Token.Position.Line.ToString() +
-                        ", Char: " + astNode.Children[2].Token.Position.Char.ToString() + ")."
-                        );
+                    if (!ctx.IsVarConstant(astNode.Children[2].Token))
+                    {
+                        throw new SemanticErrorException(
+                            "Label expected!!!\r\n" +
+                            "  At (Line: " + astNode.Children[2].Token.Position.Line.ToString() +
+                            ", Char: " + astNode.Children[2].Token.Position.Char.ToString() + ")."
+                            );
+                    }
                 }
             }
+            else if (astNode.ASTType.Equals("< Identifier >"))
+            {
+                Context? ctx = SemanticAnalyzer.FindParentContext(parent);
+                ctx?.AddVar(new AASTNode(astNode.Children[1], parent, new VarType(VarType.ERAType.LABEL)), astNode.Children[1].Token.Value);
+            }
+
             foreach (ASTNode child in astNode.Children)
             {
                 asmStmnt.Children.Add(base.Annotate(child, asmStmnt)); // Just pass everything down

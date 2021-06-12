@@ -415,6 +415,10 @@
 						{
 							"var_type": "LABEL",
 							"var_name": "label1"
+						},
+						{
+							"var_type": "LABEL",
+							"var_name": "label2"
 						}
 					]
 				},
@@ -456,7 +460,7 @@
 												},
 												{
 													"node_type": "IDENTIFIER",
-													"token": "label1",
+													"token": "label2",
 													"children": []
 												},
 												{
@@ -509,7 +513,7 @@
 												},
 												{
 													"node_type": "IDENTIFIER",
-													"token": "label1",
+													"token": "label2",
 													"children": []
 												}
 											]
