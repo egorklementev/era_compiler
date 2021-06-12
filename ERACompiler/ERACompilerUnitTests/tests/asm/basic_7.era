@@ -5,5 +5,5 @@ code
 	else
 		a := 3;
 	end
-	print a;
+	print a; // 2
 end

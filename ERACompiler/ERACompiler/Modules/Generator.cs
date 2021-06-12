@@ -51,6 +51,7 @@ namespace ERACompiler.Modules
                 { "Primary", new PrimaryConstructor() },
                 { "Goto label", new GotoLabelConstructor() },
                 { "Goto", new GotoConstructor() },
+                { "Assembly block", new AssemblyBlockConstructor() },
                 { "REGISTER", new RegisterConstructor() },
                 { "NUMBER", new LiteralConstructor() },
                 { "AllChildren", new AllChildrenConstructor() }

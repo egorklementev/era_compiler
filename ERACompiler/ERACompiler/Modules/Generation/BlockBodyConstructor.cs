@@ -11,11 +11,9 @@ namespace ERACompiler.Modules.Generation
             CodeNode bbNode = new CodeNode(aastNode, parent);
 
             int frameSize = 0;
-            if (ctx.GetDeclaredVars().Count > 0)
+            foreach (AASTNode variable in ctx.GetDeclaredVars())
             {
-                frameSize =
-                    ctx.GetFrameOffset(ctx.GetDeclaredVars().Last().Token.Value) +
-                    ctx.GetDeclaredVars().Last().AASTType.GetSize();
+                frameSize += variable.AASTType.GetSize();
             }
 
             bbNode.Children.AddLast(new CodeNode("Block body cmds 1", bbNode)

@@ -5,5 +5,5 @@ code
 			a := a + 1;
 		end
 	end
-	print a;
+	print a; // 100
 end

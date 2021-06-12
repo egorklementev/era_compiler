@@ -325,7 +325,7 @@ namespace ERACompiler.Modules
                             }
                             break;
                         case VarType.ERAType.LABEL:
-                            // TODO: get the statement number and generate... (?) question mark
+                            var.FrameOffset = 0; // No memory allocation for labels is needed
                             break;
                         case VarType.ERAType.NO_TYPE:
                             break;

@@ -1,0 +1,11 @@
+code
+	asm
+		r0 := 10;
+		r1 := label;
+		if r0 goto r1;
+		r0 := 20;
+		<label>;
+		r0 := 30;
+	end
+	print r0;
+end

@@ -15,9 +15,11 @@ namespace ERACompiler.Modules.Generation
 
             if (ctx?.GetDeclaredVars().Count > 0)
             {
-                int frameSize =
-                    ctx.GetFrameOffset(ctx.GetDeclaredVars().Last().Token.Value) +
-                    ctx.GetDeclaredVars().Last().AASTType.GetSize();
+                int frameSize = 0;
+                foreach (AASTNode variable in ctx.GetDeclaredVars())
+                {
+                    frameSize += variable.AASTType.GetSize();
+                }
                 codeBlockNode.Children.AddLast(
                     new CodeNode("Stack allocation", codeBlockNode).Add(GenerateLDA(SP, SP, frameSize)));
             }
