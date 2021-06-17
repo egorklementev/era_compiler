@@ -1,0 +1,9 @@
+code
+	byte a := 50;
+	byte b := 1;
+	byte@ a_addr := <-a;
+	byte@ b_addr := <-b;
+	->[a_addr + ->[b_addr]] := 20;
+	print a; // 50
+	print b; // 20 since 'b' is located exactly 1 byte after 'a'
+end

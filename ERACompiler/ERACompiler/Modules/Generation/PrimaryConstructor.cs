@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using System;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -86,8 +87,18 @@ namespace ERACompiler.Modules.Generation
 
                 if (!parent.Name.Equals("Assignment")) // Right value
                 {
+                    CodeNode fr2Node = GetFreeRegisterNode(aastNode, primNode);
+                    byte fr2 = fr2Node.ByteToReturn;
+                    primNode.Children.AddLast(fr2Node);
+                    int mask = ctx.GetArrayOffsetSize(varName) == 4 ? -1 : (int)Math.Pow(256, ctx.GetArrayOffsetSize(varName)) - 1;  // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
                     primNode.Children.AddLast(new CodeNode("Array element value load", primNode)
-                        .Add(GenerateLD(fr1, fr1)));
+                        .Add(GenerateLDC(4 - ctx.GetArrayOffsetSize(varName), fr2))
+                        .Add(GenerateSUB(fr2, fr1))
+                        .Add(GenerateLD(fr1, fr1))
+                        .Add(GenerateLDC(0, fr2))
+                        .Add(GenerateLDA(fr2, fr2, mask))
+                        .Add(GenerateAND(fr1, fr2)));
+                    g.FreeReg(fr2);
                 }
 
                 g.FreeReg(fr0);

@@ -1,0 +1,4 @@
+code
+	r0 := 20;
+	print r0;
+end

@@ -980,6 +980,14 @@
 							"var_frame_offset": "4",
 							"li_start": "1",
 							"li_end": "8"
+						},
+						{
+							"var_type": "CONST_INT",
+							"var_name": "cnst_odin",
+							"var_frame_offset": "8",
+							"li_start": "10",
+							"li_end": "10",
+							"var_value": "2"
 						}
 					]
 				},
@@ -1684,6 +1692,26 @@
 									"node_type": "Return",
 									"token": "return",
 									"children": []
+								}
+							]
+						},
+						{
+							"node_type": "Statement",
+							"block_position": "10",
+							"token": "int",
+							"children": [
+								{
+									"node_type": "Variable declaration",
+									"token": "int",
+									"children": [
+										{
+											"node_type": "Constant definition",
+											"var_type": "CONST_INT",
+											"var_value": "2",
+											"token": "cnst_odin",
+											"children": []
+										}
+									]
 								}
 							]
 						}

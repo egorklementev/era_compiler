@@ -59,7 +59,7 @@ namespace ERACompiler.Structures
             if (finalValue.Equals("\r\n"))
                 finalValue = "\\r\\n";
             if (finalValue.Equals(" "))
-                finalValue = "\" \"";
+                finalValue = " ";
             if (finalValue.Equals("\""))
                 finalValue = "\\\"";
 

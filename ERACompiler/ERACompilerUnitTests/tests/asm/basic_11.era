@@ -1,0 +1,6 @@
+code
+	byte var1 := 5;
+	short var2 := 10;
+	int var3 := 15;
+	print var2; // 10
+end
