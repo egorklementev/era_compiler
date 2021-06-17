@@ -74,10 +74,24 @@ namespace ERACompilerUnitTests
         }
 
         [TestMethod]
+        public void AsmBlockTest()
+        {
+            Assert.IsTrue(CompileFiles("asm_block"));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(CompilationErrorException), "Compilation error occured.")]
         public void RoutineAssignmentTest()
         {
             string sourceCode = File.ReadAllText(pathPrefix + "compilation_error_1.era");
+            Program.currentCompiler.Compile(sourceCode, Compiler.CompilationMode.GENERATION);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(CompilationErrorException), "Compilation error occured.")]
+        public void DynamicLDCTest()
+        {
+            string sourceCode = File.ReadAllText(pathPrefix + "compilation_error_2.era");
             Program.currentCompiler.Compile(sourceCode, Compiler.CompilationMode.GENERATION);
         }
 

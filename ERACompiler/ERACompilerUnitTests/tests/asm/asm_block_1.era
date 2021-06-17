@@ -1,0 +1,18 @@
+code
+	asm
+		format 16;
+		r0 := r1;
+		r0 := r0 + 45;
+		r0 := ->[r0];
+		->[sp] := r0;
+		r0 += r0;
+		r0 >>= r0;
+		r0 |= r0;
+		r0 &= r0;
+		r0 ^= r0;
+		r0 >= r0;
+		r0 <= r0;
+		r0 ?= r0;
+	end
+	print r0; // 4 since r0 == r0
+end

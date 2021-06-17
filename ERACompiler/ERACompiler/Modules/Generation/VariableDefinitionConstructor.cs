@@ -11,24 +11,12 @@ namespace ERACompiler.Modules.Generation
             CodeNode varDefNode = new CodeNode(aastNode, parent);
             Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
 
-            byte format = 0xc0;
-            switch (aastNode.AASTType.Type)
-            {
-                case VarType.ERAType.INT:
-                    format = 0xc0;
-                    break;
-                case VarType.ERAType.SHORT:
-                    format = 0x40;
-                    break;
-                case VarType.ERAType.BYTE:
-                    format = 0x00;
-                    break;
-            }
-
             switch (aastNode.AASTType.Type)
             {
                 case VarType.ERAType.INT:
                 case VarType.ERAType.INT_ADDR:
+                case VarType.ERAType.SHORT_ADDR:
+                case VarType.ERAType.BYTE_ADDR:
                 case VarType.ERAType.SHORT:
                 case VarType.ERAType.BYTE:
                     {

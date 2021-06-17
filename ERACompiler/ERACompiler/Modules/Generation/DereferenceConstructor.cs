@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using System;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -24,7 +25,19 @@ namespace ERACompiler.Modules.Generation
                         derefNode.Children.AddLast(GetStoreVariableNode(derefNode, varName, g.regAllocVTR[varName], ctx));
                     }
                 }
-                derefNode.Children.AddLast(new CodeNode("Dereference load", derefNode).Add(GenerateLD(fr0, fr0)));
+                int bytesToLoad = GetExpressionSizeInBytes((AASTNode)aastNode.Children[2]);
+                int mask = bytesToLoad == 4 ? -1 : (int)Math.Pow(256, bytesToLoad) - 1; // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
+                CodeNode frNode = GetFreeRegisterNode(ctx, derefNode);
+                byte fr1 = frNode.ByteToReturn;
+                derefNode.Children.AddLast(frNode);
+                derefNode.Children.AddLast(new CodeNode("load deref cmds 1", derefNode)
+                    .Add(GenerateLDC(4 - bytesToLoad, fr1))
+                    .Add(GenerateSUB(fr1, fr0))
+                    .Add(GenerateLD(fr0, fr0))
+                    .Add(GenerateLDC(0, fr1))
+                    .Add(GenerateLDA(fr1, fr1, mask))
+                    .Add(GenerateAND(fr1, fr0)));
+                g.FreeReg(fr1);
             }
             derefNode.ByteToReturn = fr0;
 

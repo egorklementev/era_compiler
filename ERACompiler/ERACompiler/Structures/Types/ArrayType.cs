@@ -14,7 +14,7 @@
         public override int GetSize()
         {
             if (Size == 0) return base.GetSize();
-            return base.GetSize() * Size;
+            return ElementType.GetSize() * Size;
         }
 
         public override string ToString()

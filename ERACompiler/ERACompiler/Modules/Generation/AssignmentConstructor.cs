@@ -1,5 +1,7 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Structures.Types;
 using ERACompiler.Utilities.Errors;
+using System;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -24,34 +26,109 @@ namespace ERACompiler.Modules.Generation
             {
                 case "Primary": // Array or variable (TODO: dot-notation)
                     {
-                        if (aastNode.Children[0].Children[^1].ASTType.Equals("IDENTIFIER"))
+                        AASTNode prim = (AASTNode)aastNode.Children[0];
+                        if (prim.Children[^1].ASTType.Equals("IDENTIFIER"))
                         {
-                            if (g.regAllocVTR.ContainsKey(aastNode.Children[0].Children[^1].Token.Value))
+                            if (g.regAllocVTR.ContainsKey(prim.Children[^1].Token.Value))
                             {
                                 asgmntNode.Children.AddLast(new CodeNode("Assignment mov", asgmntNode).Add(GenerateMOV(fr0, fr1)));
                                 // We have to store new variable value to the stack every time to overcome some strange 'goto' artifacts that may occur
-                                asgmntNode.Children.AddLast(GetStoreVariableNode(asgmntNode, aastNode.Children[0].Children[^1].Token.Value, fr0, ctx));
+                                asgmntNode.Children.AddLast(GetStoreVariableNode(asgmntNode, prim.Children[^1].Token.Value, fr0, ctx));
                             }
                             else
                             {
-                                asgmntNode.Children.AddLast(new CodeNode("Assignment store", asgmntNode).Add(GenerateST(fr0, fr1)));
+                                int bytesToStore = ctx.GetVarType(prim.Children[^1].Token).GetSize();
+                                int mask = bytesToStore == 4 ? 0 : ((int)Math.Pow(256, 4) - 1) << (8 * bytesToStore); // ff ff ff 00 or ff ff 00 00 or 00 00 00 00
+                                int mask2 = bytesToStore == 4 ? -1 : (int)Math.Pow(256, bytesToStore) - 1; // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
+                                CodeNode fr2Node = GetFreeRegisterNode(ctx, asgmntNode);
+                                byte fr2 = fr2Node.ByteToReturn;
+                                asgmntNode.Children.AddLast(fr2Node);
+                                CodeNode fr3Node = GetFreeRegisterNode(ctx, asgmntNode);
+                                byte fr3 = fr3Node.ByteToReturn;
+                                asgmntNode.Children.AddLast(fr3Node);
+                                asgmntNode.Children.AddLast(new CodeNode("asgmnt store cmds 1", asgmntNode)
+                                    .Add(GenerateLDC(4 - bytesToStore, fr2))
+                                    .Add(GenerateSUB(fr2, fr1))
+                                    .Add(GenerateLD(fr1, fr2))
+                                    .Add(GenerateLDC(0, fr3))
+                                    .Add(GenerateLDA(fr3, fr3, mask))
+                                    .Add(GenerateAND(fr3, fr2))
+                                    .Add(GenerateLDC(0, fr3))
+                                    .Add(GenerateLDA(fr3, fr3, mask2))
+                                    .Add(GenerateAND(fr3, fr0))
+                                    .Add(GenerateOR(fr2, fr0))
+                                    .Add(GenerateST(fr0, fr1)));
+                                g.FreeReg(fr2);
+                                g.FreeReg(fr3);
                             }
                         }
-                        else if (aastNode.Children[0].Children[^1].ASTType.Equals("Expression"))
+                        else if (prim.Children[^1].ASTType.Equals("Expression"))
                         {
-                            asgmntNode.Children.AddLast(new CodeNode("Assignment store", asgmntNode).Add(GenerateST(fr0, fr1)));
+                            int bytesToStore = ((ArrayType)ctx.GetVarType(prim.Children[^2].Token)).ElementType.GetSize(); // ATTENTION: careful here
+                            int mask = bytesToStore == 4 ? 0 : ((int)Math.Pow(256, 4) - 1) << (8 * bytesToStore); // ff ff ff 00 or ff ff 00 00 or 00 00 00 00
+                            int mask2 = bytesToStore == 4 ? -1 : (int)Math.Pow(256, bytesToStore) - 1; // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
+                            CodeNode fr2Node = GetFreeRegisterNode(ctx, asgmntNode);
+                            byte fr2 = fr2Node.ByteToReturn;
+                            asgmntNode.Children.AddLast(fr2Node);
+                            CodeNode fr3Node = GetFreeRegisterNode(ctx, asgmntNode);
+                            byte fr3 = fr3Node.ByteToReturn;
+                            asgmntNode.Children.AddLast(fr3Node);
+                            asgmntNode.Children.AddLast(new CodeNode("asgmnt store cmds 1", asgmntNode)
+                                .Add(GenerateLDC(4 - bytesToStore, fr2))
+                                .Add(GenerateSUB(fr2, fr1))
+                                .Add(GenerateLD(fr1, fr2))
+                                .Add(GenerateLDC(0, fr3))
+                                .Add(GenerateLDA(fr3, fr3, mask))
+                                .Add(GenerateAND(fr3, fr2))
+                                .Add(GenerateLDC(0, fr3))
+                                .Add(GenerateLDA(fr3, fr3, mask2))
+                                .Add(GenerateAND(fr3, fr0))
+                                .Add(GenerateOR(fr2, fr0))
+                                .Add(GenerateST(fr0, fr1)));
+                            g.FreeReg(fr2);
+                            g.FreeReg(fr3);
                         }
                         else
                         {
                             throw new CompilationErrorException("Attempt to assign a routine call!!!\r\n" +
-                                "At (Line: " + aastNode.Children[0].Children[0].Token.Position.Line.ToString() + ", Char: " +
-                                aastNode.Children[0].Children[0].Token.Position.Char.ToString() + ").");
+                                "At (Line: " + prim.Children[0].Token.Position.Line.ToString() + ", Char: " +
+                                prim.Children[0].Token.Position.Char.ToString() + ").");
                         }
                         break;
                     }
                 case "Dereference":
                     {
-                        asgmntNode.Children.AddLast(new CodeNode("Assignment store", asgmntNode).Add(GenerateST(fr0, fr1)));
+                        int bytesToStore = GetExpressionSizeInBytes((AASTNode)aastNode.Children[0].Children[2]); 
+                        int mask = bytesToStore == 4 ? 0 : ((int)Math.Pow(256, 4) - 1) << (8 * bytesToStore); // ff ff ff 00 or ff ff 00 00 or 00 00 00 00
+                        int mask2 = bytesToStore == 4 ? -1 : (int)Math.Pow(256, bytesToStore) - 1; // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
+                        CodeNode fr2Node = GetFreeRegisterNode(ctx, asgmntNode);
+                        byte fr2 = fr2Node.ByteToReturn;
+                        asgmntNode.Children.AddLast(fr2Node);
+                        CodeNode fr3Node = GetFreeRegisterNode(ctx, asgmntNode);
+                        byte fr3 = fr3Node.ByteToReturn;
+                        asgmntNode.Children.AddLast(fr3Node);
+                        asgmntNode.Children.AddLast(new CodeNode("asgmnt store cmds 1", asgmntNode)
+                            .Add(GenerateLDC(4 - bytesToStore, fr2))
+                            .Add(GenerateSUB(fr2, fr1))
+                            .Add(GenerateLD(fr1, fr2))
+                            .Add(GenerateLDC(0, fr3))
+                            .Add(GenerateLDA(fr3, fr3, mask))
+                            .Add(GenerateAND(fr3, fr2))
+                            .Add(GenerateLDC(0, fr3))
+                            .Add(GenerateLDA(fr3, fr3, mask2))
+                            .Add(GenerateAND(fr3, fr0))
+                            .Add(GenerateOR(fr2, fr0))
+                            .Add(GenerateST(fr0, fr1)));
+                        g.FreeReg(fr2);
+                        g.FreeReg(fr3);
+                        // Update all visible variable since we do not know what has been updated using dereference
+                        foreach (string varName in ctx.GetAllVisibleVars())
+                        {
+                            if (g.regAllocVTR.ContainsKey(varName))
+                            {
+                                asgmntNode.Children.AddLast(GetLoadVariableNode(asgmntNode, varName, g.regAllocVTR[varName], ctx));
+                            }
+                        }
                         break;
                     }
                 case "REGISTER":

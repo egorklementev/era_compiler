@@ -288,14 +288,19 @@ namespace ERACompiler.Structures
 
         public VarType GetVarType(Token identifier)
         {
-            return LocateVar(identifier.Value).AASTType;
+            return GetVarType(identifier.Value);
+        }
+
+        public VarType GetVarType(string identifier)
+        {
+            return LocateVar(identifier).AASTType;
         }
 
         public int GetArrayOffsetSize(string identifier)
         {
             int lword = 4;
-            int word = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
-            int sword = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
+            int word = 2;
+            int sword = 1;
             switch (((ArrayType)LocateVar(identifier).AASTType).ElementType.Type)
             {
                 case VarType.ERAType.INT:

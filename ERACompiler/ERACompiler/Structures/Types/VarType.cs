@@ -4,7 +4,7 @@ namespace ERACompiler.Structures.Types
 {
     public class VarType
     {
-        // Used to get type sizes for all ERA types. Arrays and structures have only 4 bytes that is their address basically.
+        // Used to get type sizes for all ERA types. Arrays and structures have only 4 bytes that is their address on the stack basically.
         private int[] typeSizes = new int[] { 4, 2, 1, 4, 4, 4, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 4, 0, 0 };
 
         public ERAType Type { get; set; }

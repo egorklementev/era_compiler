@@ -218,8 +218,8 @@ namespace ERACompiler.Modules
         private void PostChecks(AASTNode node, Context? ctx)
         {
             int lword = 4;
-            int word = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
-            int sword = 4; // ATTENTION: Since ST rewrites the whole 32-bit word
+            int word = 2; 
+            int sword = 1;
 
             if (node.Context != null) ctx = node.Context;
 
@@ -300,31 +300,7 @@ namespace ERACompiler.Modules
                             // TODO: compute the structure size and put it to the stack
                             break;
                         case VarType.ERAType.ARRAY:
-                            ArrayType arrType = (ArrayType)var.AASTType;
-                            if (arrType.Size == 0) // Dynamic allocation
-                            {
-                                i += lword;
-                            }
-                            else
-                            {
-                                switch (arrType.ElementType.Type)
-                                {
-                                    case VarType.ERAType.INT:
-                                    case VarType.ERAType.INT_ADDR:
-                                    case VarType.ERAType.SHORT_ADDR:
-                                    case VarType.ERAType.BYTE_ADDR:
-                                        i += lword * arrType.Size;
-                                        break;
-                                    case VarType.ERAType.SHORT:
-                                        i += word * arrType.Size;
-                                        break;
-                                    case VarType.ERAType.BYTE:
-                                        i += sword * arrType.Size;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
+                            i += ((ArrayType)var.AASTType).GetSize();
                             break;
                         case VarType.ERAType.LABEL:
                             var.FrameOffset = 0; // No memory allocation for labels is needed
@@ -377,7 +353,6 @@ namespace ERACompiler.Modules
                         case VarType.ERAType.BYTE_ADDR:
                         case VarType.ERAType.ROUTINE:
                         case VarType.ERAType.MODULE:
-                            //if (!var.Token.Value.Equals("code")) // ATTENTION: may cause troubles
                             i += lword;
                             break;
                         case VarType.ERAType.SHORT:
@@ -390,31 +365,7 @@ namespace ERACompiler.Modules
                             // TODO: compute the structure size and put it to the stack
                             break;
                         case VarType.ERAType.ARRAY:
-                            ArrayType arrType = (ArrayType)var.AASTType;
-                            if (arrType.Size == 0) // Dynamic allocation
-                            {
-                                i += lword;
-                            }
-                            else
-                            {
-                                switch (arrType.ElementType.Type)
-                                {
-                                    case VarType.ERAType.INT:
-                                    case VarType.ERAType.INT_ADDR:
-                                    case VarType.ERAType.SHORT_ADDR:
-                                    case VarType.ERAType.BYTE_ADDR:
-                                        i += lword * arrType.Size;
-                                        break;
-                                    case VarType.ERAType.SHORT:
-                                        i += word * arrType.Size;
-                                        break;
-                                    case VarType.ERAType.BYTE:
-                                        i += sword * arrType.Size;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
+                            i += ((ArrayType)var.AASTType).GetSize();
                             break;
                         case VarType.ERAType.DATA:
                             i += lword * (var.Children.Count - 1); // Allocate integers and thats it
@@ -424,7 +375,7 @@ namespace ERACompiler.Modules
                     }
                 }
 
-                // Store the length of the Static Data inside Program node
+                // Store the length of the Static Data inside the Program node
                 node.AASTValue = i;
             }
             else if (node.ASTType.Equals("Routine"))

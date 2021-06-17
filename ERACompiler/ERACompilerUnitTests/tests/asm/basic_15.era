@@ -1,0 +1,26 @@
+code
+	int a := 1;
+	short b := 2;
+	byte c := 3;
+	int const d := 4;
+	short const e := 5;
+	byte const f := 6;
+	int@ g := <-a;
+	short@ h := <-b;
+	byte@ i := <-c;
+	int@ const j := d;
+	short@ const k := e;
+	byte@ const l := f;
+	print a;
+	print b;
+	print c;
+	print d;
+	print e;
+	print f;
+	print g;
+	print h;
+	print i;
+	print j;
+	print k;
+	print l;
+end

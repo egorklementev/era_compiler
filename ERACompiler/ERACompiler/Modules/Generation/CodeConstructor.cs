@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Structures.Types;
 using ERACompiler.Utilities.Errors;
 using System;
 using System.Collections.Generic;
@@ -177,25 +178,54 @@ namespace ERACompiler.Modules.Generation
         {
             CodeNode loadVarNode = new CodeNode("Load variable \'" + varName + "\' into R" + reg.ToString(), parent);
 
+            int bytesToLoad = ctx.GetVarType(varName).GetSize();
+
             if (ctx.IsVarGlobal(varName))
             {
-                loadVarNode
-                    .Add(GenerateLDA(SB, 27, ctx.GetStaticOffset(varName)))
-                    .Add(GenerateLD(27, reg));
+                loadVarNode.Children.AddLast(
+                    new CodeNode("load var cmds 1", loadVarNode)
+                    .Add(GenerateLDA(SB, 27, ctx.GetStaticOffset(varName) - 4 + bytesToLoad))
+                    .Add(GenerateLD(27, reg)));
+                if (bytesToLoad < 4)
+                {
+                    int mask = (int) Math.Pow(256, bytesToLoad) - 1;
+                    CodeNode frNode = GetFreeRegisterNode(ctx, loadVarNode);
+                    byte fr = frNode.ByteToReturn;
+                    loadVarNode.Children.AddLast(frNode);
+                    loadVarNode.Children.AddLast(
+                        new CodeNode("load var cmds 2", loadVarNode)
+                        .Add(GenerateLDC(0, fr))
+                        .Add(GenerateLDA(fr, fr, mask))
+                        .Add(GenerateAND(fr, reg)));
+                    Program.currentCompiler.generator.FreeReg(fr);
+                }
             }
             else
             {
                 int blockOffset = ctx.GetVarDeclarationBlockOffset(varName);
-                loadVarNode.Add(GenerateMOV(FP, 27));          
+                loadVarNode.Children.AddLast(new CodeNode("load var cmds 1", loadVarNode).Add(GenerateMOV(FP, 27)));          
                 for (int i = 0; i < blockOffset; i++)
                 {
-                    loadVarNode
+                    loadVarNode.Children.AddLast(new CodeNode("load var cmds block offset", loadVarNode)
                         .Add(GenerateLDA(27, 27, -4))
-                        .Add(GenerateLD(27, 27));
+                        .Add(GenerateLD(27, 27)));
                 }
-                loadVarNode
-                    .Add(GenerateLDA(27, 27, ctx.GetFrameOffset(varName)))
-                    .Add(GenerateLD(27, reg));
+                loadVarNode.Children.AddLast(new CodeNode("load var cmds 2", loadVarNode)
+                    .Add(GenerateLDA(27, 27, ctx.GetFrameOffset(varName) - 4 + bytesToLoad))
+                    .Add(GenerateLD(27, reg)));
+                if (bytesToLoad < 4)
+                {
+                    int mask = (int) Math.Pow(256, bytesToLoad) - 1;
+                    CodeNode frNode = GetFreeRegisterNode(ctx, loadVarNode);
+                    byte fr = frNode.ByteToReturn;
+                    loadVarNode.Children.AddLast(frNode);
+                    loadVarNode.Children.AddLast(
+                        new CodeNode("load var cmds 3", loadVarNode)
+                        .Add(GenerateLDC(0, fr))
+                        .Add(GenerateLDA(fr, fr, mask))
+                        .Add(GenerateAND(fr, reg)));
+                    Program.currentCompiler.generator.FreeReg(fr);
+                }
             }
             
             return loadVarNode;
@@ -233,31 +263,76 @@ namespace ERACompiler.Modules.Generation
         {
             CodeNode storeVarNode = new CodeNode("Store variable \'" + varName + "\' from R" + reg.ToString(), parent);
 
+            int bytesToLoad = ctx.GetVarType(varName).GetSize();
+
             if (ctx.IsVarGlobal(varName))
             {
                 // R27 := SB + staticOffset;
                 // ->R27 := reg;
-                storeVarNode
-                    .Add(GenerateLDA(SB, 27, ctx.GetStaticOffset(varName)))
-                    .Add(GenerateST(reg, 27));
+                storeVarNode.Children.AddLast(new CodeNode("store var cmds 1", storeVarNode)
+                    .Add(GenerateLDA(SB, 27, ctx.GetStaticOffset(varName) - 4 + bytesToLoad)));
+                if (bytesToLoad < 4)
+                {
+                    int mask = ((int) Math.Pow(256, 4) - 1) << (bytesToLoad * 8); // ff ff ff 00 or ff ff 00 00
+                    int mask2 = (int) Math.Pow(256, bytesToLoad) - 1; // 00 00 00 ff or 00 00 ff ff
+                    CodeNode fr0Node = GetFreeRegisterNode(ctx, storeVarNode);
+                    byte fr0 = fr0Node.ByteToReturn;
+                    storeVarNode.Children.AddLast(fr0Node);
+                    CodeNode fr1Node = GetFreeRegisterNode(ctx, storeVarNode);
+                    byte fr1 = fr1Node.ByteToReturn;
+                    storeVarNode.Children.AddLast(fr1Node);
+                    storeVarNode.Children.AddLast(new CodeNode("store var cmds 2", storeVarNode)
+                        .Add(GenerateLD(27, fr0))
+                        .Add(GenerateLDC(0, fr1))
+                        .Add(GenerateLDA(fr1, fr1, mask))
+                        .Add(GenerateAND(fr1, fr0))
+                        .Add(GenerateLDC(0, fr1))
+                        .Add(GenerateLDA(fr1, fr1, mask2))
+                        .Add(GenerateAND(fr1, reg))
+                        .Add(GenerateOR(fr0, reg)));
+                    Program.currentCompiler.generator.FreeReg(fr0);
+                    Program.currentCompiler.generator.FreeReg(fr1);
+                }
+                storeVarNode.Children.AddLast(new CodeNode("store var cmds 3", storeVarNode)
+                    .Add(GenerateST(reg, 27)));
             }
             else
             {
                 int blockOffset = ctx.GetVarDeclarationBlockOffset(varName);
-                storeVarNode.Add(GenerateMOV(FP, 27)); // R27 := FP;                
+                storeVarNode.Children.AddLast(new CodeNode("store var cmds 1", storeVarNode)
+                    .Add(GenerateMOV(FP, 27)));
                 for (int i = 0; i < blockOffset; i++)
                 {                        
-                    // R27 := R27 - 4; # ATTENTION: May be optimized
-                    // R27 := ->R27;
-                    storeVarNode
+                    storeVarNode.Children.AddLast(new CodeNode("store var block offset", storeVarNode)
                         .Add(GenerateLDA(27, 27, -4))
-                        .Add(GenerateLD(27, 27));
+                        .Add(GenerateLD(27, 27)));
                 }
-                // R27 := R27 + frameOffset;
-                // ->R27 := reg;
-                storeVarNode
-                    .Add(GenerateLDA(27, 27, ctx.GetFrameOffset(varName)))
-                    .Add(GenerateST(reg, 27));
+                storeVarNode.Children.AddLast(new CodeNode("store var cmds 2", storeVarNode)
+                    .Add(GenerateLDA(27, 27, ctx.GetFrameOffset(varName) - 4 + bytesToLoad)));
+                if (bytesToLoad < 4)
+                {
+                    int mask = ((int) Math.Pow(256, 4) - 1) << (bytesToLoad * 8); // ff ff ff 00 or ff ff 00 00
+                    int mask2 = (int) Math.Pow(256, bytesToLoad) - 1; // 00 00 00 ff or 00 00 ff ff
+                    CodeNode fr0Node = GetFreeRegisterNode(ctx, storeVarNode);
+                    byte fr0 = fr0Node.ByteToReturn;
+                    storeVarNode.Children.AddLast(fr0Node);
+                    CodeNode fr1Node = GetFreeRegisterNode(ctx, storeVarNode);
+                    byte fr1 = fr1Node.ByteToReturn;
+                    storeVarNode.Children.AddLast(fr1Node);
+                    storeVarNode.Children.AddLast(new CodeNode("store var cmds 2", storeVarNode)
+                        .Add(GenerateLD(27, fr0))
+                        .Add(GenerateLDC(0, fr1))
+                        .Add(GenerateLDA(fr1, fr1, mask))
+                        .Add(GenerateAND(fr1, fr0))
+                        .Add(GenerateLDC(0, fr1))
+                        .Add(GenerateLDA(fr1, fr1, mask2))
+                        .Add(GenerateAND(fr1, reg))
+                        .Add(GenerateOR(fr0, reg)));
+                    Program.currentCompiler.generator.FreeReg(fr0);
+                    Program.currentCompiler.generator.FreeReg(fr1);
+                }
+                storeVarNode.Children.AddLast(new CodeNode("store var cmds 3", storeVarNode)
+                    .Add(GenerateST(reg, 27)));
             }
             return storeVarNode;
         }
@@ -288,10 +363,10 @@ namespace ERACompiler.Modules.Generation
                                 bool arrayCheck = !ctx.IsVarDynamicArray(var) && !ctx.IsVarArray(var);
                                 if (arrayCheck)
                                 {
-                                    regAllocNode.Children.AddLast(GetLoadVariableNode(regAllocNode, var, ri, ctx));
                                     g.regAllocVTR.Add(var, ri);
                                     g.regAllocRTV.Add(ri, var);
                                     g.OccupateReg(ri);
+                                    regAllocNode.Children.AddLast(GetLoadVariableNode(regAllocNode, var, ri, ctx));
                                 }
                                 break;
                             }
@@ -354,6 +429,11 @@ namespace ERACompiler.Modules.Generation
 
         protected CodeNode GetFreeRegisterNode(AASTNode aastNode, CodeNode? parent)
         {
+            return GetFreeRegisterNode(SemanticAnalyzer.FindParentContext(aastNode), parent);
+        }
+
+        protected CodeNode GetFreeRegisterNode(Context? ctx, CodeNode? parent)
+        {
             Generator g = Program.currentCompiler.generator;
             CodeNode frNode = new CodeNode("Get free register", parent);
 
@@ -368,7 +448,6 @@ namespace ERACompiler.Modules.Generation
 
             // If all are occupated, load out one of them (the first suitable one).
             // ATTENTION: Is it ok, or am I stupid?            
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
             byte regToFree = 0;
             while (regToFree < 27) // God bless this while to not loop forever! NOTE: It won't
             {
@@ -433,6 +512,83 @@ namespace ERACompiler.Modules.Generation
                 .Add(GenerateST(27, SB))
                 .Add(GenerateLDC(4, SB)); // Tricky trick 
             return heapTopNode;
+        }
+
+        protected int GetExpressionSizeInBytes(AASTNode aastNode)
+        {
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            int size = 0;
+            if (aastNode.ASTType.Equals("Dereference"))
+            {
+                // Careful here
+                if (aastNode.Children[2].Children.Count == 1 && 
+                    aastNode.Children[2].Children[0].ASTType.Equals("Primary") &&
+                    aastNode.Children[2].Children[0].Children[^1].ASTType.Equals("IDENTIFIER"))
+                {
+                    switch (ctx.GetVarType(aastNode.Children[2].Children[0].Children[^1].Token).Type)
+                    {
+                        case VarType.ERAType.BYTE_ADDR:
+                        case VarType.ERAType.CONST_BYTE_ADDR:
+                            {
+                                return 1;
+                            }
+                        case VarType.ERAType.SHORT_ADDR:
+                        case VarType.ERAType.CONST_SHORT_ADDR:
+                            {
+                                return 2;
+                            }
+                        default:
+                            {
+                                return 4;
+                            }
+                    }
+                }
+            }
+            if (aastNode.ASTType.Equals("Reference"))
+            {
+                return 4; // Any address is an integer
+            }
+            if (aastNode.ASTType.Equals("IDENTIFIER"))
+            {
+                    switch (ctx.GetVarType(aastNode.Token).Type)
+                    {
+                        case VarType.ERAType.BYTE_ADDR:
+                        case VarType.ERAType.CONST_BYTE_ADDR:
+                            {
+                                return 1;
+                            }
+                        case VarType.ERAType.SHORT_ADDR:
+                        case VarType.ERAType.CONST_SHORT_ADDR:
+                            {
+                                return 2;
+                            }
+                        default:
+                            {
+                                return 4;
+                            }
+                    }
+            }
+            if (aastNode.ASTType.Equals("NUMBER"))
+            {
+                int value = aastNode.AASTValue;
+                if (value < 256)
+                {
+                    return 1;
+                }
+                else if (value < 256 * 256)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 4;
+                }
+            }
+            foreach (AASTNode child in aastNode.Children)
+            {
+                size = Math.Max(size, GetExpressionSizeInBytes(child));
+            }
+            return size;
         }
 
         public static int GetCurrentBinarySize(CodeNode node)
