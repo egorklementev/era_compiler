@@ -1,121 +1,405 @@
-// Program
-// Annotations
-pragma
-	// PragmaDeclaration
-	some_option1("some_flag1")
-	some_option2()
-end
 
 
-//Data
-data data_block
-	3
-	14
-	15
-end
+///----------
+///  This file represents all tokens that may occur in the ERA program,
+///  all syntactic rules that ERA language has, and all semantic mechanisms
+///  that are executed under the hood. The purpose of this file is to 
+///  give the most comprehensive description of the ERA language to the 
+///  person who is completely unfamiliar with it.
+///  ---
+///  @author - Egor Klementev (@egorklementev)
+///  @date - 17/06/2021
+///  @institution - Innopolis University
+///----------
 
 
-// Module
-module example_module
 
-	// VarDeclaration
-	// Variable
-	// Type
-	int var1; 
-	structure_in_module var2;
-	// ArrayDeclaration
-	int[] var3[5];
-	int@ var4;
-	// VarDefinition
-	int var5 := 0;
-	int@ var6 := <-var1;
-	// Constant
-	const var7 := 0, var8 := 0;
+// Small remarks:
+//
+// ATTENTION: Do not even try (well, I cannot stop you, of course) to send this file (compiled)
+// to the ERA simulator. It will definitely raise some errors that are hard to find and repair.
+// 
+// Compiled version of this file (human readable) you can find on GitHub repo 
+// (the file is called 'compiled_example_asm.bin').
+//
+// This is only the allowed comment feature in the ERA language by the way.
+//
+// The ERA language is case INsensitive, so you can write in CAPS IF YOU WANT.
+
+
+
+// Code block
+//
+// Code block is an entry point of any ERA program.
+// For now, ERA language supports only one-file programs, and
+// only one occurrence of the Code block is allowed in a single file.
+code
+
+	// This is the first statement of the program to be executed 
+	// (although it's assembly code is not at the beginning of the binary file.
+	// More on that later).
+	int var1; // This is a simple variable declaration. Variable 'var1' lives till the end of the Code block.
+
+	// 'int' type occupies 32 bits of memory on the stack. Variables 'var2' and 'var3' are of
+	// 'short' type and they occupy 16 bits on the stack. Position of these variable is right after
+	// variable 'var1' on the stack.
+	short var2, var3;
+	
+	// Previously we did not assing anything to variable 'var1', 'var2' & 'var3', so they may contain
+	// any possible value. Generally, value of such variable is undefined and unexpected.
+	// Here, we assing 0 and 6 to the 'var4' & 'var5' correspondingly. 
+	// Needless to say that 'byte' type occupies a single byte on the stack (which is exactly 8 bits).
+	byte var4 := 0, var5 := 6;
+
+	// That were all simple "native" types that act as you expect in C or C++.
+	// All 'int', 'short' & 'byte' types are singed, so, for example, you can write
+	// something like this (and compiler should not be angry):
+	var4 := -50;
+	
+
+
+	// Similarly to the C/C++, ERA language has pointers in it:
+	//
+	int@ ptr1 := <-var1;
+	short@ ptr2 := <-var2;
+//  byte@ ptr3 := <-var3;  
+	// ATTENTION: the line above WOULD work, however NOT as you expect it to. The reason for that is
+	// that when dereferenced 'byte@' type indicates to the compiler that the 'ptr3'
+	// (in this case) is the address of some 'byte' variable, so compiler would generate
+	// commands that are loading a single byte instead of two bytes in case of 'short'.
+	// However, this is valid line of code but be carefull with the memory.
+
+	byte@ ptr3 := <-var4; 
+	// As you can see, here the '<-' (reference) operator is used which returns the address of a variable on the stack.
+	// There are special cases with the arrays, more on that later.
+
+
+
+	// ERA language also has a constants:
+	//
+	int const cnst1 := 5;
+	short const cnst2 := 10;
+//  byte const cnst3;	// Constants have to be defined right when they are declared.
+	byte const cnst3 := -1;
+	int@ const cnst_addr1 := 1000;   // Addresses can be also constant.
+//  int@ const cnst_addr2 := <-ptr3; // References (<-) are not considered as constants for now. [SUBJECT TO CHANGE]
+	// You are not allowed to modify any of these constants later in the code.
+//  cnst2 := 50;  // This line would produce compilation error
+	// No constant is stored anywhere besides compilation-time storage that you do not have access to
+	// and just converted by the compiler to a raw number. So, 'cnst1' would be substituted with 5 anywhere it is used.
+
+
+
+	// ERA language has arrays language mechanism:
+	//
+	int[] arr1[10]; // 10 here is the size of array 'arr1'. So, there are 10 'int's which is 40 bytes.
+	short[] arr2[20]; // This is CONSTANT-size array.
+//	byte[] arr3[0];  // Zero-size constant arrays are not allowed.
+	int size1 := 0;
+	byte[] arr3[size1]; // However, zero-size dynamic arrays are allowed. This is DYNAMIC-size array.
+
+	// ERA language expressions (for example, 1 + 2; 10 * 5; var1 - var2) are divided onto two categories:
+	//   1) Constant expressions - that can be precalculated and converted to a raw number by the compiler.
+	//   2) Dynamic expressions - that are directly translated to the ERA assembly code since they cannot be precalculated.
+	// An expression that has ONLY constants access and/or raw number in it with any kind of operation performed (+,-.*,&...)
+	// counts as constant since ERA compiler can examine its value before generating assembly code. Any constant
+	// expression present in a program is precalculated and converted to a raw number which appear in the final binary file.
+	// ---
+	// In the example above, it can be seen that there are two types of arrays: constant & dynamic arrays.
+	// In case of constant arrays, ERA compiler knows exactly how many elements are in the array.
+	// In case of dymanic arrays, ERA compiler does not know about array size.
+	// --
+	// The differences between them is the following:
+	// - Elements of the constant arrays are located at the stack alongside other variable (such as 'prt3' in this case.
+	//   REMEMBER: constants are not stored to the stack and only converted to the raw numbers by the compiler.)
+	// - Elements of the dymanic arrays are located at the heap (more on heap later) and only the address of the
+	//   first array element is located at the stack.
+	// - Compiler performs a set of checks when you declare a constant array, so you cannot declare an array with
+	//   negative or zero number of elements.
+	// - Compiler does not perform any checks when you declare a dynamic array, so God bless you if you have negative o
+	//   zero number of element. It would probably broke either compiler or simulator.
+
+	// There can be also arrays of addresses:
+	int@[] arr_addr1[10];
+	short@[] arr_addr2[20];
+	byte@[] arr_addr3[var5 * (2 + 10)];
+
+	// ATTENTION: this language feature has to be tested. I (Egor Klementev) am not sure whether it works properly or not.
 
 	
-	// Routine, Parameters, Parameter
-	routine routine_in_module (int param1, byte@ param2, short[] param3) : short
-		// RoutineBody
-		// AssemblyBlock, AssemblyStatement
-		asm
-			skip
-			stop
-			format(32)
-			R0 := ->R1
-			->R2 := R3
-			R4 := R5
-			R6 := 0
-			R7 += R8
-			R9 -= R10
-			R11 >>= R12
-			R13 <<= R14
-			R15 |= R16
-			R17 &= R18
-			R19 ^= R20
-			R21 <= R22
-			R23 >= R24
-			R25 ?= R26
-			if R27 goto R28
-		end
 
-		// ExtensionStatement
-		// Loop, LoopBody
-		// For
-		for i from 0 to 10 step 1 loop
-			param1 := param1 + 1;
-		end
-		
-		// While, Break
-		while 1 loop
-			break;
-		end
-		
-		// Assignment
-		param1 := param1 + 1;
-		
-		// Swap
-		int temp := 0;
-		temp <=> param1;
-		
-		// If
-		if temp > param1 do
-			param1 := temp;
-		else
-			temp := param1;
-		end
+	// One of the key ERA language features are assembly blocks:
+	//
+	asm
+		<label>;
+		format 8; 
+		format 16; 
+		format 32;
+		r0 := r1;		 // MOV
+		r0 := ->[r1];    // LD
+		r0 := 5;         // LDC
+		r0 := r0 + 100;  // LDA
+		r0 := label;     // LDL
+		->[r0] := r1;	 // ST
+		r0 += r1;		 // ADD
+		r0 -= r1;		 // SUB  
+		r0 &= r1;		 // AND  
+		r0 |= r1;		 // OR
+		r0 ^= r1;		 // XOR
+		r0 ?= r1;		 // CND  
+		r0 <<= r1;		 // ASL
+		r0 >>= r1;		 // ASR
+		r0 <= r1;		 // LSL
+		r0 >= r1;		 // LSR
+		if r0 goto r1;	 // CBR
+	end
+	//
+	// These 'asm' blocks support all ERA assembly language commands with pseudo-commands as well.
+	// All assembly commands inside these 'asm' blocks are just converted directly into bytes without any change.
+	// (r0 & r1 here are used just as an example. More on registers later).
+	// ---
+	// Assembly commands above tend to break a program completely.
+	// However, if to compile a program and analyze it's assembly code (you can compile a program using '--asm' flag
+	// which gives you a nice JSON file with all human-readable assembly commands in it with all connections to 
+	// the actual program statement (such as array access or routine call, for example)) you can use these 'asm' blocks
+	// to optimize some language statements and/or do something that is impossible when writing a regular ERA code.
+	// So, only when you are familiar with how the compiler actually compiles the ERA code it makes sense to 
+	// use this language feature.
+	// ---
+	// More on these assembly commands and how they work you can find in the GitHub repo of the compiler.
 
-		// Call
-		example_routine1(<-param1)
 
-		// Expressions
-		int var := param3[5] - 20 + param1 * 3;
-		->var := ->param2;
-		param2 := <-var;
-		->param2 := ->50;
-		example_structure s;
-		s.var1 := 2;
-
-		// Return
-		return 0;
+	
+	// This is the 'if' statement. It works as you expect it in C/C++.
+	//
+	// Only exception is that there is no 'else if' structure. [SUBJECT TO CHANGE]
+	if var1 > 2 do
+		var1 := 0;
+	end
+	if var1 = 0 do
+		byte a; // This variable lives only inside true block of this 'if'
+		var1 := var1 + 1;
+		// Variable 'a' dies here
+	else
+		var1 := var1 - 1;
 	end
 
-	struct structure_in_module
+
+
+	// This is 'while' loop. It works as you expect it in C/C++.
+	while 1 < 0 loop
+		int a;
+		int b;
+		a := a + b;
+		// 'a' & 'b' die here
 	end
 
+
+
+	// This is 'loop while' loop. It works as 'do while' basically.
+	loop
+		int a;
+		int b;
+		a := a + b;
+		// 'a' & 'b' die here
+	while 1 < 0 end
+
+
+
+	// This is 'for' loop. 
+	//
+	// It has special default values when you do not specify
+	// its range and ending condition.
+	// By default, iterator starts from 0 to 10 with the step of 1. So, 10 iterations 0, 1, ..., 9 by default.
+	for i loop
+		int a := i * 2;
+	end
+	for iterator from 0 to 10 step 1 loop
+		int a := iterator * 2;
+	end
+	// Above loops are identical. 
+	// Order of 'from', 'to', and 'step' can be changed as you want. [CHECK NEEDED]
+	// The 'break' feature is not implemented yet. It should only appear inside 'while', 'loop while', or 'for' loops.
+
+
+
+	// This is the only way to debug ERA programs.
+	// 
+	// 'print's allow only one value to be printed by the simulator.
+	// Basically, if expression is constant, the simulator just prints it as it is.
+	// If an expression is dynamic, the simulator evaluates it, stores the result to some register
+	// and prints the result.
+	// I know, print is ugly, but it is the only convenient way of getting at least something without
+	// boring memory dump exploration when you can lose your soul, apparently.
+	// Better prints will come with either better simulator (and so better memory conventions) or
+	// ERA processor in a flesh. On the moment of writing this, I cannot find any better print solution
+	// and, for me, it is enough when writing simple programs in ERA language such as fast sort or something
+	// like that.
+	print 128;
+	print sp; // You can see exact register content.
+	print arr1[var2];
+
+
+
+	// This is a routine call. Since routine is NO_TYPE (or 'void') we do not assign it to anything.
+	// It has no parameters as well.
+	test_rtn1();
+	// The following routine receives two parameters and returns 'short' type.
+	var3 := test_rtn2(1, 2);
+//  test_rtn2(1, 2);  // We cannot write it like that. If function returns something, it has to be assinged to something. [SUBJECT TO CHANGE]
+
+
+	
+	// ERA language has label feature.
+	//
+	// Any statement can be marked by some unique (in a single branch of contexts) label in the following way:
+	<some_unique_label>
+	var1 := 40;
+	// After that you can jump to this statement using the following line of code:
+	goto some_unique_label;
+	// You can only jump within a single branch of contexts. It means that, for example, you can jump out of 'for' loops or 'if's
+	// and compiler will deal with all memory issues (I want to believe [I did testing, and it works, however I am sure I did not test everything]).
+	// You can jump in any direction with the one condition explaned before.
+	// If you jump over some statements, you can expect wierd "features" sometimes, so do it carefully. And do some testing.
+
+
+
+	// ERA expressions
+	//
+	// As disscussed earlier, there are two types of expressions: constant and dynamic.
+	// All constant expressions are precalculated beforehand and converted to a raw number.
+	// All expressions that have only raw numbers and constants accesses in it are considered as constant expressions.
+	// The following expression is precalculated by the ERA compiler and converted to a single number which is the 
+	// result of this expression basically:
+	if (cnst1 * cnst2 + 50 - 90 & 4 ? 2) do
+		print 10;
+	end
+
+	// Operators
+	//
+	// Here is the list of all supported operators in the ERA language (no division, I know, I know...).
+	// Operators are ordered with decsending priority, so operations that are ABOVE are calculated before 
+	// operations that are BELOW.
+	// 
+	// a * b
+	// a + b
+	// a - b
+	// a <= b  -  logical left shift
+	// a >= b  -  logical right shift
+	// a > b
+	// a < b
+	// a = b
+	// a /= b  -  (not equal)
+	// a & b  -  bitwise AND
+	// a ^ b  -  bitwise XOR 
+	// a | b  -  bitwise OR
+	// a ? b  -  CND (see documents on GitHub repo)
+
+	// References
+	//
+	// References are the part of expressions. They are only 'right-value'.
+	// REMEMBER: 'right-value' is something that has value in it but you cannot assing anything to it.
+	// For example, just a raw number (5, 10, -1), references (<-a, <-b), array addresses (arr1, arr2),
+	// constants (cnst1, cnst2), etc.
+	// REMEMBER: 'left-value' is something that has value in it and you CAN assing it to something.
+	// For example, variables (a, var1, var3), array accesses (arr[i], arr1[3]), dereferences (->[var_addr1]), etc.
+
+//	<-a := 10;  // You cannot write it like that since reference is only 'right-value'.
+	->[var1] := <-var1; // This is allowed. However, be careful with the memory (this line is a mess, valid mess, by the way).
+	
+	// Dereferences
+	//
+	// Dereferences are the part of expressions. Apparently, you can compute any number inside brackets and assing some
+	// value to that address. However, be VERY careful with the memory since you can easily override even the program code
+	// itself. Compiler does not perform ANY checks on where you are writing using dereferences.
+	// Here are examples of dereferences:
+	->[0] := 20;  // Oh my god
+	->[test_rtn2(1, 1) + 7] := 21;  // NEVER do that 
+	int var6 := ->[10]; // This is okay, however
+	int@ ptr4 := <-var6;
+	var6 := ->[ptr4]; // 'var6' is equal to '->[ptr4]' here
+
+	// Registers
+	// 
+	// There are 32 registers in the ERA architecture.
+	// Basically, all 32 are allowed to be used, however, to make ERA processor simulator work, 4 of them are reserved by the system.
+	// Register 28 is reserved for Frame Pointer (FP or fp) 
+	// Register 29 is reserved for Stack Pointer (SP or sp)
+	// Register 30 is reserved for Static Base (SB or sb)
+	// Register 31 is reserved for Program Counter (PC or pc)
+	//
+	// In your code you can use any register that you want. Problems start when you want to execute compiled code using ERA simulator.
+	// FP register is used by the compiler to locate current frame start address (in other words, do not touch it, just check it if you want)
+	// SP register is used by the compiler to locate current stack top (in other words, do not touch it, just check it if you want)
+	// SB register is used by the compiler to locate the static block start address (in other words, do not touch it, just check it if you want)
+	// PC register is incremented by 2 after each command execution (since each assembly command occupies 2 bytes) in simulator. You will recieve an
+	// error if you use PC anywhere in the program, even in 'print' statement.
+	//
+	// So, any use of these 4 registers would not break the compiler and would not produce any compilation errors, however, 
+	// resulting binary code is highly likely to be broken and in some cases ERA simulator would not want to execute it at all.
+	//
+	// It is important to know that register 27 (R27 or r27) sometimes can be used by the compiler when loading or storing variables or in other 
+	// places, so it would not be "productive" to heavily rely on it in your program.
+	// Also, when returning a value from a routine, compiler uses register 26 (R26 or r26) for a moment, so be aware of that.
+	//
+	// Here is how you can use registers in your code:
+	r0 := r1;
+	r0 := 52 * 43;
+	print r0;
+	print arr1[r0 * r0]; // this is a complete mess, hope you understand that
+
+
+	
+	// Swap
+	//
+	// Swap is not implemented yet. Here is how it should work:
+	// a <=> b;
+	// a[i] <=> a[i];
+	// r0 <=> r1;
+	//
+	// In the language syntax terms:
+	//
+	// Receiver <=> Receiver ;
+
 end
 
 
-// Code
-code
-	int var1;
+// This is 'data' ERA language structure
+// 
+// This is convenient way of defining global [SUBJECT TO CHANGE] arrays.
+// You can use these data as a regular arrays using [] notation.
+// The thing is, since they are global, you can use it anywhere in the program.
+//
+data test_data
+	3 1 4 1 5 9 2 6 5 3 5
 end
 
 
-// Struct
-struct example_structure
-	int var1;
+// This is routine declaration with its definition.
+routine test_rtn1 () do end
+
+routine test_rtn2 (byte a, int c) : short 
+do
+	// Return
+	//
+	// Return statements should appear in all routines that returns some value.
+	// HOWEVER, it is responsibility of a programmer to check whether all code
+	// branches have 'return' in it. Compiler checks only for absense of 'return'
+	// and that's it.
+	//
+	// You can return another routine call and if it happens that a routine returns
+	// a call to itself or just calls it inside its body, such situations 
+	// are called 'RECURSION' and ERA language has support for them. 
+	return 0;
 end
 
-
-routine example_routine1 (int@ param1)
+// This is 'pragma' or Annotation feature of ERA language
+// 
+// Basically, this set of annotations allows you to configure the compiler from the program itself.
+// So, in this case, I tell compiler how much memory to allocate on the stack and the heap combined.
+// The compiler configuration is done entirely in the SemanticAnalyzer module, so there is no way
+// to confifure some lexical checks or syntactical checks. However, I believe, it is enough freedom
+// for programmers and there can be added a lot more annotations than are currently exists in ERA.
+pragma
+	memory("mb 16") // Allocate 16 megabytes (16 * 2 ^ 20 bytes) for stack and heap 
 end

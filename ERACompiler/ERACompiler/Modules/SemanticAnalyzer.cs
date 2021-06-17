@@ -6,12 +6,19 @@ using System.Collections.Generic;
 
 namespace ERACompiler.Modules
 {
+    /// <summary>
+    /// Performs all semantics checks and prepares AST to be transfered to the Generator.
+    /// Contains some necessary static methods used in node annotators.
+    /// </summary>
     public class SemanticAnalyzer
     {
         public static readonly VarType no_type = new VarType(VarType.ERAType.NO_TYPE); // Placeholder
-        public readonly Dictionary<string, NodeAnnotator> nodeAnnotators;
+        public readonly Dictionary<string, NodeAnnotator> nodeAnnotators; // All the AST annotators
         public AASTNode varToAddToCtx = null; // For "for" loops
 
+        /// <summary>
+        /// Initializes all node annotators
+        /// </summary>
         public SemanticAnalyzer()
         {
             nodeAnnotators = new Dictionary<string, NodeAnnotator>
@@ -70,6 +77,12 @@ namespace ERACompiler.Modules
             };
         }
 
+        /// <summary>
+        /// Builds annotated AST which is basically reduced AST with some changes and additional information
+        /// that is needed for the Generator
+        /// </summary>
+        /// <param name="ASTRoot">The root node of the AST from SyntaxAnalyzer</param>
+        /// <returns>The root node of the annotated AST</returns>
         public AASTNode BuildAAST(ASTNode ASTRoot)
         {
             AASTNode program = nodeAnnotators[ASTRoot.ASTType].Annotate(ASTRoot, null);
@@ -87,6 +100,12 @@ namespace ERACompiler.Modules
             return program;
         }
 
+        /// <summary>
+        /// Identifies a variable type given a type AST node.
+        /// </summary>
+        /// <param name="node">Type AST node</param>
+        /// <param name="isConst">Is type constant or not.</param>
+        /// <returns>A new VarType object identified from a given AST Type node.</returns>
         public static VarType IdentifyType(ASTNode node, bool isConst = false)
         {
             VarType vt;
@@ -147,6 +166,11 @@ namespace ERACompiler.Modules
             return vt;           
         }
         
+        /// <summary>
+        /// DFS that identifies all used variables (in fact, identifiers) starting from a given AAST node.
+        /// </summary>
+        /// <param name="node">An AAST root node from where DFS starts.</param>
+        /// <returns>A set of unique variables (identifiers) that are appearing down the AAST tree.</returns>
         public static HashSet<string> GetAllUsedVars(AASTNode node)
         {
             HashSet<string> set = new HashSet<string>();
@@ -159,6 +183,15 @@ namespace ERACompiler.Modules
             return set;
         }
         
+        /// <summary>
+        /// Evaluates the maximum depth of a Block Bodies down the AAST tree. Maximum depth in this sense is the maximum number of children that can have
+        /// some Block Body down the AAST tree starting from a given AAST node. It is used when calculating the Live Interval end for, for example, 'for' loop
+        /// iterators (know as 'i' usually). Some inner Block Bodies may have more Statements inside them, than the 'for' loop Block Body, so we do not
+        /// want the Register Allocation algorithm to deallocate our 'i' iterator before we reach the end of the most outer (or 'for') Block Body.
+        /// Therefore, we use this DFS that tells us the number of children of a Block Body with maximum number of children (Statements basically).
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public static int GetMaxDepth(AASTNode node)
         {            
             int maxDepth = 1;
@@ -192,6 +225,11 @@ namespace ERACompiler.Modules
             return null;
         }
 
+        /// <summary>
+        /// Retrieves all parameter types from a given Parameters AST node.
+        /// </summary>
+        /// <param name="node">A Paramters AST node.</param>
+        /// <returns>A list of VarType objects representing types of the routine parameters.</returns>
         public static List<VarType> RetrieveParamTypes(ASTNode node)
         {
             List<VarType> lst = new List<VarType>
@@ -755,6 +793,12 @@ namespace ERACompiler.Modules
             return true;
         }
         
+        /// <summary>
+        /// Checks whether an operand is constant or not.
+        /// </summary>
+        /// <param name="node">And operand AST node</param>
+        /// <param name="ctx">The current context the node belongs to.</param>
+        /// <returns>True if operand is constant, false otherwise.</returns>
         public static bool IsOperandConstant(ASTNode node, Context ctx)
         {
             string type = node.Children[0].ASTType; // The child of Operand

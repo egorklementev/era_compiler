@@ -109,6 +109,11 @@ namespace ERACompiler.Modules
             return Compile(sourceCode, CompilationMode.GENERATION);
         }
 
+        /// <summary>
+        /// Simple DFS to convert the CodeNode tree to the flat linked list of bytes
+        /// </summary>
+        /// <param name="cn"></param>
+        /// <returns></returns>
         private LinkedList<byte> CollectBytes(CodeNode cn)
         {
             if (cn.IsLeaf())

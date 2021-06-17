@@ -73,19 +73,32 @@ namespace ERACompiler.Modules
             Helper functions
         */
 
+        /// <summary>
+        /// Marks given register as "occupied", so that, for example, GetFreeRegisterNode() does not consider this register until it is free.
+        /// </summary>
+        /// <param name="regNum">The number of a register to be occupied.</param>
         public void OccupateReg(byte regNum)
         {
             regOccup[regNum] = true;
         }
         
+        /// <summary>
+        /// Frees a given register.
+        /// </summary>
+        /// <param name="regNum">The number of a register to be freed.</param>
         public void FreeReg(byte regNum)
         {
             // If register is allocated to a variable - do not free it
             // It will be swapped if needed when calling GetFreeReg()
-            if (!regAllocRTV.ContainsKey(regNum))
+            if (!regAllocRTV.ContainsKey(regNum) && regNum < regOccup.Length)
                 regOccup[regNum] = false;
         }
 
+        /// <summary>
+        /// Returns a byte representing the register number.
+        /// </summary>
+        /// <param name="reg">A string formatted in the following way: "r0", "r25", "pc", "sb", etc.</param>
+        /// <returns>The number of a register represented in a string.</returns>
         public static byte IdentifyRegister(string reg)
         {
             if (reg[0] == 'r')
@@ -103,15 +116,22 @@ namespace ERACompiler.Modules
             {
                 return reg switch
                 {
-                    "pc" => 0xFF,
-                    "sb" => 0xFE,
-                    "sp" => 0xFD,
-                    "fp" => 0xFC,
-                    _ => 0x00,
+                    "pc" => 0x0000001F,
+                    "sb" => 0x0000001E,
+                    "sp" => 0x0000001D,
+                    "fp" => 0x0000001C,
+                    _ => 0x00000000,
                 };
             }
         }
 
+        /// <summary>
+        /// Converts given list of bytes to the string (JSON) representation which is ERA assembly language apparently.
+        /// </summary>
+        /// <param name="bincode">The list of bytes to be converted.</param>
+        /// <param name="offset">Command address parameter. Used for marking an asm command with its address within the binary file.</param>
+        /// <param name="padding">Tabulation parameter. Used for fancy JSON output.</param>
+        /// <returns>A string formatted in JSON representing asm commands in ERA assembly language.</returns>
         public static string ConvertToAssemblyCode(LinkedList<byte> bincode, int offset, int padding = 0)
         {
             int i = -1;
