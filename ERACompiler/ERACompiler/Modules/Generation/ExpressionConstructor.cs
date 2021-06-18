@@ -31,7 +31,7 @@ namespace ERACompiler.Modules.Generation
                 CodeNode operationNode = new CodeNode("Operation \'" + op + "\'", exprNode);
                 switch (op)
                 {
-                    // ATTENTION: What about command "format"? I use 32 everywhere.
+                    // ATTENTION: What about command "format"? I use 32 everywhere. ANSWER: it's okay.
                     case "+":
                         {
                             // FR0 += FR1; FR0  # In this case order does not matter                        
@@ -215,6 +215,8 @@ namespace ERACompiler.Modules.Generation
                             // if FR9 goto FR3;
                             // FR0 := FR7;
                             // fr0
+                            // ---
+                            // Can be definitely optimized (in case of multiplying by power of 2, for example)
 
                             CodeNode fr2Node = GetFreeRegisterNode(aastNode, operationNode);
                             operationNode.Children.AddLast(fr2Node);
@@ -318,7 +320,7 @@ namespace ERACompiler.Modules.Generation
                 }
                 exprNode.Children.AddLast(operationNode);
 
-                // 4) Free the other register (the result register is freed upper in the call stack)
+                // 4) Free the other register (the resulting register is freed upper in the call stack)
                 g.FreeReg(fr1);
             }
 

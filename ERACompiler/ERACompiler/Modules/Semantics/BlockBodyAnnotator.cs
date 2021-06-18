@@ -6,7 +6,7 @@ namespace ERACompiler.Modules.Semantics
     {
         public override AASTNode Annotate(ASTNode astNode, AASTNode? parent)
         {
-            // TODO: name of the block body
+            // TODO: name of the block body (if we really need it)
             string bbName = "name";
             AASTNode bb = new AASTNode(astNode, parent, SemanticAnalyzer.no_type);
             bb.Context = new Context("BlockBody_" + bbName, SemanticAnalyzer.FindParentContext(parent), bb);

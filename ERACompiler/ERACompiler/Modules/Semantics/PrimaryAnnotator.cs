@@ -10,7 +10,8 @@ namespace ERACompiler.Modules.Semantics
         public override AASTNode Annotate(ASTNode astNode, AASTNode? parent)
         {
             AASTNode somePrim = new AASTNode(astNode, parent, SemanticAnalyzer.no_type);
-            Context? ctx = SemanticAnalyzer.FindParentContext(parent) ?? throw new SemanticErrorException("TODO");
+            Context? ctx = SemanticAnalyzer.FindParentContext(parent) 
+                ?? throw new SemanticErrorException("No parent context found!!!\r\n  At line " + astNode.Token.Position.Line);
 
             // Identifier
             somePrim.Children.Add(base.Annotate(astNode.Children[0], somePrim));

@@ -4,9 +4,19 @@ using System.Text;
 
 namespace ERACompiler.Structures.Types
 {
+    /// <summary>
+    /// Represents routine type of ERA language
+    /// </summary>
     public class RoutineType : VarType
     {
+        /// <summary>
+        /// The type of return value. Can be NO_TYPE.
+        /// </summary>
         public VarType ReturnType { get; }
+
+        /// <summary>
+        /// Parameter types.
+        /// </summary>
         public List<VarType> ParamTypes { get; }
 
         public RoutineType(List<VarType> paramTypes, VarType returnType) : base(ERAType.ROUTINE)

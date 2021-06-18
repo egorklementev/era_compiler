@@ -10,9 +10,9 @@ namespace ERACompiler.Modules.Generation
         {
             CodeNode programNode = new CodeNode(aastNode, parent);
 
-            CodeNode vptNode = new CodeNode("Version/padding/tech bytes", programNode);
-            CodeNode staticNode = new CodeNode("Static bytes", programNode);
-            CodeNode unitsNode = new CodeNode("Units' addresses node", programNode);
+            CodeNode vptNode = new CodeNode("Version/padding/tech bytes", programNode); // Used for simulator
+            CodeNode staticNode = new CodeNode("Static bytes", programNode); // All static data
+            CodeNode unitsNode = new CodeNode("Units' addresses node", programNode); // Code that puts proper unit addresses in static data
             CodeNode codeNode = new CodeNode("Actual program code", programNode);
             CodeNode skipStopNode = new CodeNode("Skip/Stop", programNode);
             programNode.Children.AddLast(vptNode);
@@ -24,9 +24,9 @@ namespace ERACompiler.Modules.Generation
             staticNode.Add(GetConstBytes(Program.config.MemorySize))
                 .Add(GetLList(new byte[aastNode.AASTValue]));
 
-            int staticLength = (staticNode.Count() + staticNode.Count() % 2) / 2; // We count in words (2 bytes) (???)
+            int staticLength = (staticNode.Count() + staticNode.Count() % 2) / 2; // We count in words (2 bytes) (???) DECISION: ok
 
-            // Identify all data blocks
+            // Identify all data blocks beforehand and populate static data with its values
             foreach (AASTNode child in aastNode.Children)
             {
                 if (child.ASTType.Equals("Data"))
@@ -89,9 +89,10 @@ namespace ERACompiler.Modules.Generation
             CodeNode? gotoNode = FindNextGotoNode(programNode);
             while (gotoNode != null)
             {
-                int ctxNum = -1; // minus one since Program context does not have a stack allocated
+                int ctxNum = -1; // minus one since Program context does not have a stack allocated. It is static or global.
                 string labelName = gotoNode.AASTLink.Children[0].Token.Value;
                 AASTNode mainContextNode = gotoNode.AASTLink;
+                // If we jump from some contexts, we have to deallocate stack, heap, and other related memory
                 while (true)
                 {
                     if (mainContextNode.Parent == null)

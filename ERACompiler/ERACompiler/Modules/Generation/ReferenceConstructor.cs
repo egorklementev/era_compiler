@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -6,7 +7,8 @@ namespace ERACompiler.Modules.Generation
     {
         public override CodeNode Construct(AASTNode aastNode, CodeNode? parent)
         {
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
             CodeNode refNode = new CodeNode(aastNode, parent);
             string varName = aastNode.Children[1].Token.Value;
             CodeNode frNode = GetFreeRegisterNode(aastNode, refNode);
@@ -14,7 +16,7 @@ namespace ERACompiler.Modules.Generation
             refNode.Children.AddLast(frNode);
             if (ctx.IsVarDynamicArray(varName))
             {
-                refNode.Children.AddLast(GetLoadVariableNode(refNode, varName, fr0, ctx));
+                refNode.Children.AddLast(GetLoadVariableNode(refNode, varName, fr0, ctx)); // Address to the heap lies on the stack, so we load
             }
             else
             {

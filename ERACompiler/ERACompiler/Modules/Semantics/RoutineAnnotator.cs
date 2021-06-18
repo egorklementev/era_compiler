@@ -10,7 +10,8 @@ namespace ERACompiler.Modules.Semantics
         public override AASTNode Annotate(ASTNode astNode, AASTNode? parent)
         {
             string routineName = astNode.Children[1].Token.Value;
-            Context? ctx = SemanticAnalyzer.FindParentContext(parent);
+            Context? ctx = SemanticAnalyzer.FindParentContext(parent)
+                ?? throw new SemanticErrorException("No parent context found!!!\r\n  At line " + astNode.Token.Position.Line);
             List<VarType> paramTypes = new List<VarType>();
             VarType returnType = SemanticAnalyzer.no_type; // Default value
             // Determine parameter types and return type

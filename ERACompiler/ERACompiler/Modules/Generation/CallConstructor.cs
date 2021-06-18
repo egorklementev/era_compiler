@@ -12,7 +12,8 @@ namespace ERACompiler.Modules.Generation
         {
             // prim [ iden, call args ]
             // 
-            // Generate call bytes TODO: Dot notation (routines in modules)
+            // Generate call bytes. 
+            // TODO: Dot notation (routines in modules)
             //
             // Construct parameters and put them in the stack
             // Deallocate everything
@@ -22,7 +23,8 @@ namespace ERACompiler.Modules.Generation
             // Manage return value (if any) 
 
             Generator g = Program.currentCompiler.generator;
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
             CodeNode callNode = new CodeNode(aastNode, parent);
 
             int i = 0;
@@ -42,6 +44,7 @@ namespace ERACompiler.Modules.Generation
                 byte fr2 = fr2Node.ByteToReturn;
                 callNode.Children.AddLast(fr2Node);
 
+                // Store parameters depending on their size on the stack before we enter a routine.
                 int mask = paramTypes[i].GetSize() == 4 ? 0 : ((int)Math.Pow(256, 4) - 1) << (8 * paramTypes[i].GetSize()); // ff ff ff 00 or ff ff 00 00 or 00 00 00 00
                 int mask2 = paramTypes[i].GetSize() == 4 ? -1 : (int)Math.Pow(256, paramTypes[i].GetSize()) - 1; // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
 
@@ -65,6 +68,7 @@ namespace ERACompiler.Modules.Generation
                 g.FreeReg(fr2);
             }
 
+            // Recursively deallocate (statement-unaware) evertything, basically, up the AAST tree since we change our context completely.
             AASTNode mainContextNode = aastNode;
             while (!mainContextNode.ASTType.Equals("Program") && !mainContextNode.ASTType.Equals("Module"))
             {
@@ -79,10 +83,11 @@ namespace ERACompiler.Modules.Generation
                 mainContextNode = (AASTNode)mainContextNode.Parent;
             }
             callNode.Children.AddLast(new CodeNode("Call jump", callNode)
-                .Add(GenerateLDA(SB, 27, ctx.GetStaticOffset(aastNode.Children[0].Token.Value)))
+                .Add(GenerateLDA(SB, 27, ctx.GetStaticOffset(aastNode.Children[0].Token.Value))) // TODO: module routine jumps. Here are only pure static routines.
                 .Add(GenerateLD(27, 27))
                 .Add(GenerateCBR(27, 27)));
 
+            // If routine is not NO_TYPE, then it has returned something and this return value is always in R26.
             if (ctx.GetRoutineReturnType(aastNode.Children[0].Token).Type != VarType.ERAType.NO_TYPE) // Return value is in R26
             {
                 CodeNode fr0Node = GetFreeRegisterNode(aastNode, callNode);

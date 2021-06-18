@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Utilities.Errors;
 using System;
 
 namespace ERACompiler.Modules.Generation
@@ -8,7 +9,8 @@ namespace ERACompiler.Modules.Generation
         public override CodeNode Construct(AASTNode aastNode, CodeNode? parent)
         {
             Generator g = Program.currentCompiler.generator;
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
             CodeNode derefNode = new CodeNode(aastNode, parent);
 
             CodeNode exprNode = base.Construct((AASTNode)aastNode.Children[2], derefNode);
@@ -25,7 +27,7 @@ namespace ERACompiler.Modules.Generation
                         derefNode.Children.AddLast(GetStoreVariableNode(derefNode, varName, g.regAllocVTR[varName], ctx));
                     }
                 }
-                int bytesToLoad = GetExpressionSizeInBytes((AASTNode)aastNode.Children[2]);
+                int bytesToLoad = GetSizeOfExpressionAddressedVariable((AASTNode)aastNode.Children[2]);
                 int mask = bytesToLoad == 4 ? -1 : (int)Math.Pow(256, bytesToLoad) - 1; // 00 00 00 ff or 00 00 ff ff or ff ff ff ff
                 CodeNode frNode = GetFreeRegisterNode(ctx, derefNode);
                 byte fr1 = frNode.ByteToReturn;

@@ -9,16 +9,55 @@ namespace ERACompiler.Structures
 {
     public class CodeNode
     {
+        /// <summary>
+        /// Possible link to the AAST tree
+        /// </summary>
         public AASTNode? AASTLink { get; } = null; // Used in 'goto' resolution
+
+        /// <summary>
+        /// Tabulation level used for fancy JSON output
+        /// </summary>
         public int Level { get; set; } = 0;
+
+        /// <summary>
+        /// The name of this node (for usability)
+        /// </summary>
         public string Name { get; set; } = "no_name";
+
+        /// <summary>
+        /// Possible token value (for usability)
+        /// </summary>
         public string Token { get; set; } = "no_token";
+
+        /// <summary>
+        /// Possible Code Node parent
+        /// </summary>
         public CodeNode? Parent { get; set; } = null;
-        public CodeNode? LabelDecl { get; set; } = null; // Used for label resolution
+
+        /// <summary>
+        /// Possible label declaration link. Used for label resolution
+        /// </summary>
+        public CodeNode? LabelDecl { get; set; } = null; 
+
+        /// <summary>
+        /// The list of child Code Nodes. Can be empty.
+        /// </summary>
         public LinkedList<CodeNode> Children { get; set; }
+
+        /// <summary>
+        /// The list of bytes related to this Code Node. Can be empty.
+        /// </summary>
         public LinkedList<byte> Bytes { get; set; }
+
+        /// <summary>
+        /// Possible byte to return. Is needed, when returning some register information up the Code Node tree.
+        /// </summary>
         public byte ByteToReturn { get; set; } = 255;
-        public byte OperandByte { get; set; } = 255; // Used for recursion resolution
+
+        /// <summary>
+        /// Possible operand byte. Used for recursion resolution
+        /// </summary>
+        public byte OperandByte { get; set; } = 255; 
 
         public CodeNode(AASTNode aastNode) : this(aastNode.ASTType, null) 
         { 
@@ -42,6 +81,11 @@ namespace ERACompiler.Structures
             Children = new LinkedList<CodeNode>();
         }
 
+        /// <summary>
+        /// Adds given bytes to the list of bytes of this node.
+        /// </summary>
+        /// <param name="bytes">The list of bytes to add/append.</param>
+        /// <returns>This node itself.</returns>
         public CodeNode Add(LinkedList<byte> bytes)
         {
             foreach (byte b in bytes)
@@ -51,6 +95,11 @@ namespace ERACompiler.Structures
             return this;
         }
 
+        /// <summary>
+        /// Adds given bytes to the list of bytes of this node.
+        /// </summary>
+        /// <param name="bytes">The list of bytes to add/append.</param>
+        /// <returns>This node itself.</returns>
         public CodeNode Add(params byte[] bytes)
         {
             foreach (byte b in bytes)
@@ -60,6 +109,12 @@ namespace ERACompiler.Structures
             return this;
         }
 
+        /// <summary>
+        /// Replaces some bytes in the list of bytes of this Code Node.
+        /// </summary>
+        /// <param name="startIndex">From where to start replacement (inclusive).</param>
+        /// <param name="newBytes">The list of bytes to replace with.</param>
+        /// <returns>This node itself.</returns>
         public CodeNode Replace(int startIndex, LinkedList<byte> newBytes)
         {
             var anchor = Bytes.First;
@@ -75,6 +130,7 @@ namespace ERACompiler.Structures
             return this;
         }
 
+        /// <returns>Whether node is leaf in Code Node tree or not.</returns>
         public bool IsLeaf()
         {
             return Children.Count == 0;
@@ -86,6 +142,10 @@ namespace ERACompiler.Structures
             return this;
         }
 
+        /// <summary>
+        /// Recusively counts bytes number in this node and its children.
+        /// </summary>
+        /// <returns>The number of bytes.</returns>
         public int Count()
         {
             int count = Bytes.Count;
@@ -96,6 +156,10 @@ namespace ERACompiler.Structures
             return count;
         }
 
+        /// <summary>
+        /// Used somewhere in JSON generation, I do not remember.
+        /// </summary>
+        /// <returns></returns>
         public int GetNodeCommandOffset()
         {
             int offset = 0;

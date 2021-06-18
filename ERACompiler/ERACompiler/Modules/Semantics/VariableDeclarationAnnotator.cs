@@ -20,7 +20,8 @@ namespace ERACompiler.Modules.Semantics
         private List<AASTNode> IdentifyVarDecl(ASTNode node, AASTNode parent, VarType type)
         {
             List<AASTNode> lst = new List<AASTNode>();
-            Context? ctx = SemanticAnalyzer.FindParentContext(parent);
+            Context? ctx = SemanticAnalyzer.FindParentContext(parent)
+                ?? throw new SemanticErrorException("No parent context found!!!\r\n  At line " + node.Token.Position.Line);
 
             switch (node.ASTType)
             {

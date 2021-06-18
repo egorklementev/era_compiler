@@ -1,5 +1,6 @@
 ﻿using ERACompiler.Structures;
 using ERACompiler.Structures.Types;
+using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -9,9 +10,10 @@ namespace ERACompiler.Modules.Generation
         {
             Generator g = Program.currentCompiler.generator;
             CodeNode arrDefNode = new CodeNode(aastNode, parent);
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
 
-            if (((ArrayType)aastNode.AASTType).Size == 0) // We have to allocate it on the heap
+            if (((ArrayType)aastNode.AASTType).Size == 0) // We have to allocate it on the heap (dynamic arrays)
             {
                 int offsetSize = ctx.GetArrayOffsetSize(aastNode.Token.Value) / 2;
                 CodeNode exprNode = base.Construct((AASTNode)aastNode.Children[0], arrDefNode);
@@ -19,7 +21,7 @@ namespace ERACompiler.Modules.Generation
                 arrDefNode.Children.AddLast(exprNode);
                 while (offsetSize > 0)
                 {
-                    arrDefNode.Children.AddLast(new CodeNode("Arr def ASL", arrDefNode).Add(GenerateASL(fr0, fr0)));
+                    arrDefNode.Children.AddLast(new CodeNode("Arr def ASL", arrDefNode).Add(GenerateASL(fr0, fr0))); // For 'int' its 4 bytes, and so on
                     offsetSize /= 2;
                 }
                 CodeNode fr1Node = GetFreeRegisterNode(aastNode, arrDefNode);

@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Utilities.Errors;
 using System;
 
 namespace ERACompiler.Modules.Generation
@@ -9,9 +10,10 @@ namespace ERACompiler.Modules.Generation
         {
             Generator g = Program.currentCompiler.generator;
             CodeNode primNode = new CodeNode(aastNode, parent);
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
 
-            if (aastNode.Children[^1].ASTType.Equals("IDENTIFIER")) // Regular identifier access
+            if (aastNode.Children[^1].ASTType.Equals("IDENTIFIER")) // Regular identifier access. TODO: context descend using dot-notation
             {
                 string varName = aastNode.Children[^1].Token.Value;
                 if (g.regAllocVTR.ContainsKey(varName)) // If allocated to a register
@@ -105,7 +107,7 @@ namespace ERACompiler.Modules.Generation
             }
             else // Calling a routine
             {
-                // Load out to heap the first operand (due to recursion)
+                // Load out to heap the first operand (due to recursion since we may run out of free registers easily)
                 if (parent.OperandByte != 255)
                 {
                     primNode.Children.AddLast(GetHeapTopChangeNode(primNode, -4));

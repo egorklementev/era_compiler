@@ -8,7 +8,9 @@ namespace ERACompiler.Modules.Generation
     {
         public override CodeNode Construct(AASTNode aastNode, CodeNode? parent)
         {
-            int format = 32;
+            // Just identify registers and generate asm commands
+
+            int format = 32; // Default format
             CodeNode asmBlockNode = new CodeNode(aastNode, parent);
             Dictionary<string, CodeNode> labels = new Dictionary<string, CodeNode>();
             Dictionary<string, CodeNode> labelDecls = new Dictionary<string, CodeNode>();
@@ -19,9 +21,9 @@ namespace ERACompiler.Modules.Generation
                     case "< Identifier >":
                         {
                             CodeNode label = new CodeNode((AASTNode)asmStmnt.Children[1], asmBlockNode);
-                            label.Name = "Label";
+                            label.Name = "Label"; // These labels are resolved as any other labels in the code, in the Program Constructor
                             asmBlockNode.Children.AddLast(label);
-                            labels.Add(asmStmnt.Children[1].Token.Value, label);
+                            labels.Add(asmStmnt.Children[1].Token.Value, label); 
                             break;
                         }
                     case "Register := Identifier":
@@ -181,7 +183,7 @@ namespace ERACompiler.Modules.Generation
             }
             foreach (CodeNode label in labels.Values)
             {
-                label.LabelDecl = labelDecls[label.AASTLink.Token.Value];
+                label.LabelDecl = labelDecls[label.AASTLink.Token.Value]; // When 'asm' is constructed, we can resolve all labels and their declarations
             }
             return asmBlockNode;
         }

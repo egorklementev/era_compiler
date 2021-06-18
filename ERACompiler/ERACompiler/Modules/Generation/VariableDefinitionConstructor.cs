@@ -1,5 +1,6 @@
 ﻿using ERACompiler.Structures;
 using ERACompiler.Structures.Types;
+using ERACompiler.Utilities.Errors;
 
 namespace ERACompiler.Modules.Generation
 {
@@ -9,16 +10,17 @@ namespace ERACompiler.Modules.Generation
         {
             Generator g = Program.currentCompiler.generator;
             CodeNode varDefNode = new CodeNode(aastNode, parent);
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
 
             switch (aastNode.AASTType.Type)
             {
                 case VarType.ERAType.INT:
+                case VarType.ERAType.SHORT:
+                case VarType.ERAType.BYTE:
                 case VarType.ERAType.INT_ADDR:
                 case VarType.ERAType.SHORT_ADDR:
                 case VarType.ERAType.BYTE_ADDR:
-                case VarType.ERAType.SHORT:
-                case VarType.ERAType.BYTE:
                     {
                         // If we have initial assignment - store it to register/memory
                         if (aastNode.Children.Count > 0)

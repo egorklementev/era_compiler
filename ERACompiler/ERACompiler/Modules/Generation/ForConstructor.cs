@@ -11,9 +11,10 @@ namespace ERACompiler.Modules.Generation
             CodeNode forNode = new CodeNode(aastNode, parent);
 
             // Special deallocation since we do not know what have been deallocated inside the loop block body
-            // (basically, a block body leave deallocates everyting since we want to get rid of loop iterators),
+            // (basically, when leaving a block body, we deallocate everyting since we want to get rid of loop iterators),
             // so we have to have no allocated registers at all before entering the loop block body, so that
             // the loop block body has to allocate everyting.
+            // REASON: to resolve 'goto' artifacts and some other "features".
             forNode.Children.AddLast(GetRegisterDeallocationNode(aastNode, forNode, false)); 
 
             int defaultFrom = 0;
@@ -61,9 +62,7 @@ namespace ERACompiler.Modules.Generation
             }
 
             /* 
-             * --- 
              * Generate FROM expression bytes
-             * ---
              */
             byte fr0;
             if (hasFrom)
@@ -125,9 +124,7 @@ namespace ERACompiler.Modules.Generation
             forNode.Children.AddLast(loopStartLabelNode);
 
             /* 
-             * --- 
              * Generate TO expression bytes
-             * ---
              */
             forNode.Children.AddLast(GetHeapTopChangeNode(forNode, -16));
 
@@ -177,9 +174,7 @@ namespace ERACompiler.Modules.Generation
             g.FreeReg(fr2);
 
             /* 
-             * --- 
              * Generate FOR_BLOCK expression bytes
-             * ---
              */
             forNode.Children.AddLast(GetHeapTopChangeNode(forNode, -16));
 
@@ -192,31 +187,9 @@ namespace ERACompiler.Modules.Generation
             
             forNode.Children.AddLast(base.Construct((AASTNode)aastNode.Children[^1], forNode));
 
-            /*for (int j = 0; j < freeRegs.Length; j++)
-            {
-                CodeNode frNode = GetFreeRegisterNode(aastNode, forNode);
-                freeRegs[j] = frNode.ByteToReturn;
-                forNode.Children.AddLast(frNode);
-                forNode.Children.AddLast(GetLoadFromHeapNode(forNode, freeRegs[j], freeRegsAddr[j]));
-            }
-
-            forNode.Children.AddLast(GetHeapTopChangeNode(forNode, 16));*/
-            
-            // ---
-
             /* 
-             * --- 
              * Generate STEP expression bytes
-             * ---
              */
-
-            /*forNode.Children.AddLast(GetHeapTopChangeNode(forNode, -16));
-
-            for (int j = 0; j < freeRegs.Length; j++)
-            {
-                forNode.Children.AddLast(GetStoreToHeapNode(forNode, freeRegs[j], freeRegsAddr[j]));
-                g.FreeReg(freeRegs[j]);
-            }*/
 
             if (hasStep)
             {
@@ -263,6 +236,7 @@ namespace ERACompiler.Modules.Generation
             forNode.Children.AddLast(GetHeapTopChangeNode(forNode, 16));
 
             // Update iterator variable
+            // Iterator is always 'int'
             CodeNode frIterNode = GetFreeRegisterNode(aastNode, forNode);
             fr6 = frIterNode.ByteToReturn;
             forNode.Children.AddLast(frIterNode);

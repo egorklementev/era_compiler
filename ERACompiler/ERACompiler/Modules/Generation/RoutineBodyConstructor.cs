@@ -1,4 +1,5 @@
 ﻿using ERACompiler.Structures;
+using ERACompiler.Utilities.Errors;
 using System.Linq;
 
 namespace ERACompiler.Modules.Generation
@@ -8,7 +9,8 @@ namespace ERACompiler.Modules.Generation
         public override CodeNode Construct(AASTNode aastNode, CodeNode? parent)
         {
             Generator g = Program.currentCompiler.generator;
-            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
+            Context? ctx = SemanticAnalyzer.FindParentContext(aastNode)
+                ?? throw new CompilationErrorException("No parent context found!!!\r\n  At line " + aastNode.Token.Position.Line);
             CodeNode rbNode = new CodeNode(aastNode, parent);
 
             int frameSize = 0;

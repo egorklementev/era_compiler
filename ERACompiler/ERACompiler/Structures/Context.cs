@@ -141,6 +141,7 @@ namespace ERACompiler.Structures
             return LocateVar(identifier, true) != null;
         }
         
+        /// <returns>Returns how many context above this context given variable was declared.</returns>
         public int GetVarDeclarationBlockOffset(string identifier)
         {
             int distance = 0;

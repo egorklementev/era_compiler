@@ -42,6 +42,355 @@
             For example syntax means lexical analysis plus syntax analysis.
             </summary>
         </member>
+        <member name="M:ERACompiler.Modules.Generation.AssignmentConstructor.ResolveTypes(ERACompiler.Structures.CodeNode,ERACompiler.Structures.Context,System.Byte,System.Byte,System.Int32)">
+            <summary>
+            Resolves types since ST asm commands always rewrites 4 bytes on the stack, 
+            however, in case of 'short' or 'byte' we do not want that.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Modules.Generation.CodeConstructor">
+            <summary>
+            Main class used to construct the binary code (in a form of Code Nodes) from AAST nodes.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.Construct(ERACompiler.Structures.AASTNode,ERACompiler.Structures.CodeNode)">
+            <summary>
+            The main method that is usually overwritten in child classes (Code Constructors).
+            Given an AAST node and (possible) CodeNode parent constructs (recursively) Code Node 
+            that contains either other child Code Nodes or generated binary code inside.
+            </summary>
+            <param name="aastNode">An AAST node based on which CodeNode is constructed.</param>
+            <param name="parent">Possible CodeNode parent (is needed to build CodeNode tree).</param>
+            <returns>New constructed CodeNode.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetLList(System.Byte[])">
+            <summary>
+            Convenient way of getting Linked List of bytes from a regular set of bytes or array of bytes.
+            </summary>
+            <param name="bytes">Set of bytes, or array of bytes.</param>
+            <returns>Linked List containing the same given bytes.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateCommand(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates bytes (2 bytes) stored into Linked List given a format, operation code, and two register numbers.
+            ERA assembly command format is the same for all commands:
+            2 bits are format, 4 bits are operation code, 5 bits and 5 bits are two register numbers.
+            All in all, 16 bits or 2 bytes.
+            </summary>
+            <param name="format">Format of the command (32, 16, or 8)</param>
+            <param name="opCode">Operation code of the command (0-15)</param>
+            <param name="regI">i register (0-31)</param>
+            <param name="regJ">j register (0-31)</param>
+            <returns>A Linked List with two bytes generated using input data representing a single ERA assembly command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetConstBytes``1(``0)">
+            <summary>
+            Converts given constants of some type to the Linked List of bytes (4 bytes)
+            which represens given constant.
+            </summary>
+            <typeparam name="T">int, uint, or ulong</typeparam>
+            <param name="constant">Constant to covert to bytes</param>
+            <returns>A Linked List of bytes representing given constant.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateSTOP">
+            <summary>
+            Generates a STOP command.
+            </summary>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateSKIP">
+            <summary>
+            Generates a SKIP command.
+            </summary>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateCBR(System.Int32,System.Int32)">
+            <summary>
+            Generates a CBR command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateCND(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a CND command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateLSR(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a LSR command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateLSL(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a LSL command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateXOR(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a XOR command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateAND(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a AND command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateOR(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a OR command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateASL(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a ASL command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateASR(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a ASR command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateSUB(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a SUB command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateADD(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a ADD command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateMOV(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a MOV command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="format">Command format</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateST(System.Int32,System.Int32)">
+            <summary>
+            Generates a ST command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateLDL(System.Int32,System.Int32)">
+            <summary>
+            Generates a LDL pseudo-command.
+            </summary>
+            <param name="reg">register to store to a label address</param>
+            <param name="address">label address</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateLDA(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a LDA pseudo-command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <param name="constant">constant to load</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateLDC(System.Int32,System.Int32)">
+            <summary>
+            Generates a LDC command.
+            </summary>
+            <param name="constant">constant to load</param>
+            <param name="regJ">register to store to a constant</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GenerateLD(System.Int32,System.Int32)">
+            <summary>
+            Generates a LD command.
+            </summary>
+            <param name="regI">i register</param>
+            <param name="regJ">j register</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GeneratePRINT(System.Int32)">
+            <summary>
+            Generates a PRINT command.
+            </summary>
+            <param name="reg">register to be printed out</param>
+            <returns>A Linked List of 2 bytes representing a command.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetLoadVariableNode(ERACompiler.Structures.CodeNode,System.String,System.Byte,ERACompiler.Structures.Context)">
+            <summary>
+            Constructs a Code Node that has generated binary code of loading a given variable to the given register.
+            </summary>
+            <param name="parent">Parent Code Node.</param>
+            <param name="varName">Variable name to be loaded into register.</param>
+            <param name="reg">Register to load to given variable.</param>
+            <param name="ctx">Current context.</param>
+            <returns>Constructed Code Node that represents binary code that load from the stack given variable to the given register.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetLoadVariableAddressNode(ERACompiler.Structures.CodeNode,System.String,System.Byte,ERACompiler.Structures.Context)">
+            <summary>
+            Constructs a Code Node that has generated binary code of loading a given variable address (on the stack) to the given register.
+            </summary>
+            <param name="parent">Parent Code Node.</param>
+            <param name="varName">Variable name which address is to be loaded into register.</param>
+            <param name="reg">Register to load to given variable address.</param>
+            <param name="ctx">Current context.</param>
+            <returns>Constructed Code Node that represents binary code that loads given variable address to the given register.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetStoreVariableNode(ERACompiler.Structures.CodeNode,System.String,System.Byte,ERACompiler.Structures.Context)">
+            <summary>
+            Constructs a Code Node that has generated binary code of storing value from given register to the stack where given variable is located.
+            </summary>
+            <param name="parent">Parent Code Node.</param>
+            <param name="varName">Variable that is on the stack and where we want to store given register to.</param>
+            <param name="reg">A register with some value that we want to put on the stack where given variable is located.</param>
+            <param name="ctx">Current context.</param>
+            <returns>Constructed Code Node with generated strorage variable binary code commands.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetRegisterAllocationNode(ERACompiler.Structures.AASTNode,ERACompiler.Structures.CodeNode)">
+            <summary>
+            Constructs a Code Node that has generated asm commands that allocate (statement-aware) variables to register (if possible)
+            and vise versa.
+            </summary>
+            <param name="aastNode">Statement that we want to construct and before which we want to allocate registers.</param>
+            <param name="parent">Parent Code Node</param>
+            <returns>Constructed Code Node with register allocation asm commands.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetRegisterDeallocationNode(ERACompiler.Structures.AASTNode,ERACompiler.Structures.CodeNode,System.Boolean)">
+            <summary>
+            Constructs a Code Node that has generated asm commands that deallocates registers (if possible) after given statement has been already constructed.
+            </summary>
+            <param name="aastNode">Already constructed statement.</param>
+            <param name="parent">Parent Code Node</param>
+            <param name="dependOnStatementNum">Whether we deallocate only those variables that are never appear after given statement 
+            or just to deallocate everything what has been allocated (in current context branch).</param>
+            <returns>Constructed Code Node with asm commands representing register deallocation.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetDynamicMemoryDeallocationNode(ERACompiler.Structures.AASTNode,ERACompiler.Structures.CodeNode)">
+            <summary>
+            Constructs a Code Node that has generated asm commands representing deallocation of all dynamically allocated memory from the heap.
+            It is not connected to any statement number or live interval. Usually is called when current context has been constructed fully.
+            </summary>
+            <param name="aastNode">Some statement in current context.</param>
+            <param name="parent">Parent Code Node</param>
+            <returns>Constructed Code Node with asm commands representing a dynamic memory deallocation.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetFreeRegisterNode(ERACompiler.Structures.AASTNode,ERACompiler.Structures.CodeNode)">
+            <summary>
+            Constructs a Code Node that has asm commands representing a free register allocation (if all are allocated already).
+            Some variables could be deallocated randomly when calling this function.
+            </summary>
+            <param name="aastNode">Some statement in current context.</param>
+            <param name="parent">Parent Code Node</param>
+            <returns>Constructed Code Node with asm commands representing a free register allocation.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetFreeRegisterNode(ERACompiler.Structures.Context,ERACompiler.Structures.CodeNode)">
+            <summary>
+            Constructs a Code Node that has asm commands representing a free register allocation (if all are allocated already).
+            Some variables could be deallocated randomly when calling this function.
+            </summary>
+            <param name="ctx">Current context.</param>
+            <param name="parent">Parent Code Node</param>
+            <returns>Constructed Code Node with asm commands representing a free register allocation.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetLoadFromHeapNode(ERACompiler.Structures.CodeNode,System.Byte,System.Int32)">
+            <summary>
+            Constructs a Code Node with asm commands representing loading of 4 bytes from heap at given address to the given register.
+            Used in loops and 'if' statement.
+            </summary>
+            <param name="parent">Parent Code Node</param>
+            <param name="reg">Register where we want to load 4 bytes from heap</param>
+            <param name="address">Address from where we want to load 4 bytes</param>
+            <returns>Constructed Node with asm commands representing loading of 4 bytes from the heap.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetStoreToHeapNode(ERACompiler.Structures.CodeNode,System.Byte,System.Int32)">
+            <summary>
+            Constructs a Code Node with asm commands representing storing of 4 bytes to heap at given address from the given register.
+            Used in loops and 'if' statement.
+            </summary>
+            <param name="parent">Parent Code Node</param>
+            <param name="reg">Register from where we want to store 4 bytes to the heap</param>
+            <param name="address">Address to where we want to store 4 bytes</param>
+            <returns>Constructed Node with asm commands representing storing of 4 bytes to the heap.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetHeapTopChangeNode(ERACompiler.Structures.CodeNode,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Constructs a Code Node with asm commands representing a heap top modification on a given offset.
+            </summary>
+            <param name="parent">Parent Code Node</param>
+            <param name="offset">How much we can change heap top</param>
+            <param name="useAsReg">It this true, 'offset' would be considered as register number and 
+            instead of constant heap top change, execution-time change commands would be generated</param>
+            <param name="decrease">If 'useAsReg' is true, defines whether we allocating heap memory or deallocating ('decrease = true' means allocation)</param>
+            <returns></returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetSizeOfExpressionAddressedVariable(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Recursively calculates the size of an address represented by a given expression.
+            For example, if expression has some int pointers, then expression clearly points to some integer (or 4 bytes).
+            If expression has only byte pointers, the expression clearly points to some byte address (1 byte).
+            </summary>
+            <param name="aastNode">Expression AASTNode</param>
+            <returns>The size of a variable that given expression points to.</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetCurrentBinarySize(ERACompiler.Structures.CodeNode)">
+            <summary>
+            Traverses up the Code Node tree, collecting the number of bytes from all ancestors and left siblings.
+            Basically, gives exact address (in bytes) of given Code Node.
+            Works only when Code Node tree is fully constructed.
+            </summary>
+            <param name="node">Code Node from where to start traversal.</param>
+            <returns>Exact address (in bytes) of given Code Node</returns>
+        </member>
+        <member name="M:ERACompiler.Modules.Generation.CodeConstructor.GetAllUsedVars(ERACompiler.Structures.AASTNode)">
+            <summary>
+            Calculates a set of all unique variables (identifiers) used in a given AAST node.
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
         <member name="T:ERACompiler.Modules.Generator">
             <summary>
             Generates the actual assembly code
@@ -223,6 +572,20 @@
             <param name="node">And operand AST node</param>
             <param name="ctx">The current context the node belongs to.</param>
             <returns>True if operand is constant, false otherwise.</returns>
+        </member>
+        <member name="T:ERACompiler.Modules.Semantics.NodeAnnotator">
+            <summary>
+            Main class that annotates given AST node reducing overall tree making AAST smaller, but populating it with more 
+            valuable and important information such as contexts, live intervals, etc.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Modules.Semantics.NodeAnnotator.Annotate(ERACompiler.Structures.ASTNode,ERACompiler.Structures.AASTNode)">
+            <summary>
+            Main method that is usually being overwritten by child Node Annotators.
+            </summary>
+            <param name="astNode">AST node to be annotated.</param>
+            <param name="parent">Possible AAST parent node.</param>
+            <returns>Annotated AST node.</returns>
         </member>
         <member name="T:ERACompiler.Modules.SyntaxAnalyzer">
             <summary>

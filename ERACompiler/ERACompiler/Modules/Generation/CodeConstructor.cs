@@ -6,14 +6,23 @@ using System.Collections.Generic;
 
 namespace ERACompiler.Modules.Generation
 {
+    /// <summary>
+    /// Main class used to construct the binary code (in a form of Code Nodes) from AAST nodes.
+    /// </summary>
     public class CodeConstructor
     {
-
-        // The length of these blocks can be obtained by difference
-        protected int codeAddrBase = 18;
-        protected readonly int staticDataAddrBase = 18;
+        protected int codeAddrBase = 18; // Code is located right after static data
+        protected readonly int staticDataAddrBase = 18; // Always the same
         protected readonly int FP = 28, SP = 29, SB = 30, PC = 31; // Special registers
 
+        /// <summary>
+        /// The main method that is usually overwritten in child classes (Code Constructors).
+        /// Given an AAST node and (possible) CodeNode parent constructs (recursively) Code Node 
+        /// that contains either other child Code Nodes or generated binary code inside.
+        /// </summary>
+        /// <param name="aastNode">An AAST node based on which CodeNode is constructed.</param>
+        /// <param name="parent">Possible CodeNode parent (is needed to build CodeNode tree).</param>
+        /// <returns>New constructed CodeNode.</returns>
         public virtual CodeNode Construct(AASTNode aastNode, CodeNode? parent)
         {
             if (Program.currentCompiler.generator.codeConstructors.ContainsKey(aastNode.ASTType))
@@ -26,14 +35,31 @@ namespace ERACompiler.Modules.Generation
             }
         }
             
+        /// <summary>
+        /// Convenient way of getting Linked List of bytes from a regular set of bytes or array of bytes.
+        /// </summary>
+        /// <param name="bytes">Set of bytes, or array of bytes.</param>
+        /// <returns>Linked List containing the same given bytes.</returns>
         protected LinkedList<byte> GetLList(params byte[] bytes)
         {
             return new LinkedList<byte>(bytes);
         }
 
+        /// <summary>
+        /// Generates bytes (2 bytes) stored into Linked List given a format, operation code, and two register numbers.
+        /// ERA assembly command format is the same for all commands:
+        /// 2 bits are format, 4 bits are operation code, 5 bits and 5 bits are two register numbers.
+        /// All in all, 16 bits or 2 bytes.
+        /// </summary>
+        /// <param name="format">Format of the command (32, 16, or 8)</param>
+        /// <param name="opCode">Operation code of the command (0-15)</param>
+        /// <param name="regI">i register (0-31)</param>
+        /// <param name="regJ">j register (0-31)</param>
+        /// <returns>A Linked List with two bytes generated using input data representing a single ERA assembly command.</returns>
         protected LinkedList<byte> GenerateCommand(int format, int opCode, int regI, int regJ)
         {
-            // In LDL | PRINT case
+            // In LDL or PRINT case. Special case since they are pseudo-commands 
+            // and such format (format of 2) will not appear in the resulting binary file.
             if (format != 2)
             {
                 format = format == 32 ? 3 : format == 16 ? 1 : 0;                
@@ -44,6 +70,13 @@ namespace ERACompiler.Modules.Generation
                 );
         }
 
+        /// <summary>
+        /// Converts given constants of some type to the Linked List of bytes (4 bytes)
+        /// which represens given constant.
+        /// </summary>
+        /// <typeparam name="T">int, uint, or ulong</typeparam>
+        /// <param name="constant">Constant to covert to bytes</param>
+        /// <returns>A Linked List of bytes representing given constant.</returns>
         protected LinkedList<byte> GetConstBytes<T>(T constant)
         {
             if (constant is int _int)
@@ -64,81 +97,184 @@ namespace ERACompiler.Modules.Generation
             return new LinkedList<byte>();
         }
 
+        /// <summary>
+        /// Generates a STOP command.
+        /// </summary>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateSTOP()
         {
             return GenerateCommand(8, 0, 0, 0);
         }
 
+        /// <summary>
+        /// Generates a SKIP command.
+        /// </summary>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateSKIP()
         {
             return GenerateCommand(16, 0, 0, 0);
         }
 
+        /// <summary>
+        /// Generates a CBR command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateCBR(int regI, int regJ)
         {
             return GenerateCommand(32, 15, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a CND command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateCND(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 14, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a LSR command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateLSR(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 13, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a LSL command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateLSL(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 12, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a XOR command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateXOR(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 11, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a AND command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateAND(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 10, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a OR command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateOR(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 9, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a ASL command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateASL(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 8, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a ASR command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateASR(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 7, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a SUB command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateSUB(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 6, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a ADD command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateADD(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 5, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a MOV command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="format">Command format</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateMOV(int regI, int regJ, int format = 32)
         {
             return GenerateCommand(format, 4, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a ST command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateST(int regI, int regJ)
         {
             return GenerateCommand(32, 3, regI, regJ);
         }
-
+        
+        /// <summary>
+        /// Generates a LDL pseudo-command.
+        /// </summary>
+        /// <param name="reg">register to store to a label address</param>
+        /// <param name="address">label address</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateLDL(int reg, int address)
         {
             LinkedList<byte> toReturn = new LinkedList<byte>(GenerateLDC(0, reg));
@@ -149,6 +285,13 @@ namespace ERACompiler.Modules.Generation
             return toReturn;
         }
 
+        /// <summary>
+        /// Generates a LDA pseudo-command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <param name="constant">constant to load</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateLDA(int regI, int regJ, int constant)
         {
             LinkedList<byte> toReturn = new LinkedList<byte>(GenerateCommand(8, 2, regI, regJ));
@@ -159,21 +302,46 @@ namespace ERACompiler.Modules.Generation
             return toReturn;
         }
 
+        /// <summary>
+        /// Generates a LDC command.
+        /// </summary>
+        /// <param name="constant">constant to load</param>
+        /// <param name="regJ">register to store to a constant</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateLDC(int constant, int regJ) // Constant is in range [0..31]
         {
             return GenerateCommand(32, 2, constant, regJ);
         }
 
+        /// <summary>
+        /// Generates a LD command.
+        /// </summary>
+        /// <param name="regI">i register</param>
+        /// <param name="regJ">j register</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GenerateLD(int regI, int regJ)
         {
             return GenerateCommand(32, 1, regI, regJ);
         }
 
+        /// <summary>
+        /// Generates a PRINT command.
+        /// </summary>
+        /// <param name="reg">register to be printed out</param>
+        /// <returns>A Linked List of 2 bytes representing a command.</returns>
         protected LinkedList<byte> GeneratePRINT(int reg)
         {
             return GenerateCommand(2, 0, reg, 0);
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has generated binary code of loading a given variable to the given register.
+        /// </summary>
+        /// <param name="parent">Parent Code Node.</param>
+        /// <param name="varName">Variable name to be loaded into register.</param>
+        /// <param name="reg">Register to load to given variable.</param>
+        /// <param name="ctx">Current context.</param>
+        /// <returns>Constructed Code Node that represents binary code that load from the stack given variable to the given register.</returns>
         protected CodeNode GetLoadVariableNode(CodeNode? parent, string varName, byte reg, Context? ctx)
         {
             CodeNode loadVarNode = new CodeNode("Load variable \'" + varName + "\' into R" + reg.ToString(), parent);
@@ -231,6 +399,14 @@ namespace ERACompiler.Modules.Generation
             return loadVarNode;
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has generated binary code of loading a given variable address (on the stack) to the given register.
+        /// </summary>
+        /// <param name="parent">Parent Code Node.</param>
+        /// <param name="varName">Variable name which address is to be loaded into register.</param>
+        /// <param name="reg">Register to load to given variable address.</param>
+        /// <param name="ctx">Current context.</param>
+        /// <returns>Constructed Code Node that represents binary code that loads given variable address to the given register.</returns>
         protected CodeNode GetLoadVariableAddressNode(CodeNode? parent, string varName, byte reg, Context? ctx)
         {
             CodeNode loadVarNode = new CodeNode("Load variable address \'" + varName + "\' into R" + reg.ToString(), parent);
@@ -259,6 +435,14 @@ namespace ERACompiler.Modules.Generation
             return loadVarNode;
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has generated binary code of storing value from given register to the stack where given variable is located.
+        /// </summary>
+        /// <param name="parent">Parent Code Node.</param>
+        /// <param name="varName">Variable that is on the stack and where we want to store given register to.</param>
+        /// <param name="reg">A register with some value that we want to put on the stack where given variable is located.</param>
+        /// <param name="ctx">Current context.</param>
+        /// <returns>Constructed Code Node with generated strorage variable binary code commands.</returns>
         protected CodeNode GetStoreVariableNode(CodeNode? parent, string varName, byte reg, Context? ctx)
         {
             CodeNode storeVarNode = new CodeNode("Store variable \'" + varName + "\' from R" + reg.ToString(), parent);
@@ -337,6 +521,13 @@ namespace ERACompiler.Modules.Generation
             return storeVarNode;
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has generated asm commands that allocate (statement-aware) variables to register (if possible)
+        /// and vise versa.
+        /// </summary>
+        /// <param name="aastNode">Statement that we want to construct and before which we want to allocate registers.</param>
+        /// <param name="parent">Parent Code Node</param>
+        /// <returns>Constructed Code Node with register allocation asm commands.</returns>
         protected CodeNode GetRegisterAllocationNode(AASTNode aastNode, CodeNode? parent)
         {
             Generator g = Program.currentCompiler.generator;
@@ -377,6 +568,14 @@ namespace ERACompiler.Modules.Generation
             return regAllocNode;
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has generated asm commands that deallocates registers (if possible) after given statement has been already constructed.
+        /// </summary>
+        /// <param name="aastNode">Already constructed statement.</param>
+        /// <param name="parent">Parent Code Node</param>
+        /// <param name="dependOnStatementNum">Whether we deallocate only those variables that are never appear after given statement 
+        /// or just to deallocate everything what has been allocated (in current context branch).</param>
+        /// <returns>Constructed Code Node with asm commands representing register deallocation.</returns>
         protected CodeNode GetRegisterDeallocationNode(AASTNode aastNode, CodeNode? parent, bool dependOnStatementNum = true)
         {
             Generator g = Program.currentCompiler.generator;
@@ -407,6 +606,13 @@ namespace ERACompiler.Modules.Generation
             return regDeallocNode;
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has generated asm commands representing deallocation of all dynamically allocated memory from the heap.
+        /// It is not connected to any statement number or live interval. Usually is called when current context has been constructed fully.
+        /// </summary>
+        /// <param name="aastNode">Some statement in current context.</param>
+        /// <param name="parent">Parent Code Node</param>
+        /// <returns>Constructed Code Node with asm commands representing a dynamic memory deallocation.</returns>
         protected CodeNode GetDynamicMemoryDeallocationNode(AASTNode aastNode, CodeNode? parent)
         {
             Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
@@ -427,11 +633,25 @@ namespace ERACompiler.Modules.Generation
             return arrDeallocNode;
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has asm commands representing a free register allocation (if all are allocated already).
+        /// Some variables could be deallocated randomly when calling this function.
+        /// </summary>
+        /// <param name="aastNode">Some statement in current context.</param>
+        /// <param name="parent">Parent Code Node</param>
+        /// <returns>Constructed Code Node with asm commands representing a free register allocation.</returns>
         protected CodeNode GetFreeRegisterNode(AASTNode aastNode, CodeNode? parent)
         {
             return GetFreeRegisterNode(SemanticAnalyzer.FindParentContext(aastNode), parent);
         }
 
+        /// <summary>
+        /// Constructs a Code Node that has asm commands representing a free register allocation (if all are allocated already).
+        /// Some variables could be deallocated randomly when calling this function.
+        /// </summary>
+        /// <param name="ctx">Current context.</param>
+        /// <param name="parent">Parent Code Node</param>
+        /// <returns>Constructed Code Node with asm commands representing a free register allocation.</returns>
         protected CodeNode GetFreeRegisterNode(Context? ctx, CodeNode? parent)
         {
             Generator g = Program.currentCompiler.generator;
@@ -469,6 +689,14 @@ namespace ERACompiler.Modules.Generation
             }
         }
 
+        /// <summary>
+        /// Constructs a Code Node with asm commands representing loading of 4 bytes from heap at given address to the given register.
+        /// Used in loops and 'if' statement.
+        /// </summary>
+        /// <param name="parent">Parent Code Node</param>
+        /// <param name="reg">Register where we want to load 4 bytes from heap</param>
+        /// <param name="address">Address from where we want to load 4 bytes</param>
+        /// <returns>Constructed Node with asm commands representing loading of 4 bytes from the heap.</returns>
         protected CodeNode GetLoadFromHeapNode(CodeNode? parent, byte reg, int address)
         {
             return new CodeNode("Load from heap at " + address.ToString(), parent)
@@ -478,6 +706,14 @@ namespace ERACompiler.Modules.Generation
                 .Add(GenerateLD(reg, reg));
         }
 
+        /// <summary>
+        /// Constructs a Code Node with asm commands representing storing of 4 bytes to heap at given address from the given register.
+        /// Used in loops and 'if' statement.
+        /// </summary>
+        /// <param name="parent">Parent Code Node</param>
+        /// <param name="reg">Register from where we want to store 4 bytes to the heap</param>
+        /// <param name="address">Address to where we want to store 4 bytes</param>
+        /// <returns>Constructed Node with asm commands representing storing of 4 bytes to the heap.</returns>
         protected CodeNode GetStoreToHeapNode(CodeNode? parent, byte reg, int address)
         {
             return new CodeNode("Store to heap at " + address.ToString(), parent)
@@ -487,6 +723,15 @@ namespace ERACompiler.Modules.Generation
                 .Add(GenerateST(reg, 27));
         }
 
+        /// <summary>
+        /// Constructs a Code Node with asm commands representing a heap top modification on a given offset.
+        /// </summary>
+        /// <param name="parent">Parent Code Node</param>
+        /// <param name="offset">How much we can change heap top</param>
+        /// <param name="useAsReg">It this true, 'offset' would be considered as register number and 
+        /// instead of constant heap top change, execution-time change commands would be generated</param>
+        /// <param name="decrease">If 'useAsReg' is true, defines whether we allocating heap memory or deallocating ('decrease = true' means allocation)</param>
+        /// <returns></returns>
         protected CodeNode GetHeapTopChangeNode(CodeNode? parent, int offset, bool useAsReg = false, bool decrease = true)
         {
             CodeNode heapTopNode = new CodeNode("Heap top change by " + (useAsReg ? (decrease ? ("-R" + offset) : ("+R" + offset)) : offset.ToString()) + " bytes", parent)
@@ -514,7 +759,14 @@ namespace ERACompiler.Modules.Generation
             return heapTopNode;
         }
 
-        protected int GetExpressionSizeInBytes(AASTNode aastNode)
+        /// <summary>
+        /// Recursively calculates the size of an address represented by a given expression.
+        /// For example, if expression has some int pointers, then expression clearly points to some integer (or 4 bytes).
+        /// If expression has only byte pointers, the expression clearly points to some byte address (1 byte).
+        /// </summary>
+        /// <param name="aastNode">Expression AASTNode</param>
+        /// <returns>The size of a variable that given expression points to.</returns>
+        protected int GetSizeOfExpressionAddressedVariable(AASTNode aastNode)
         {
             Context? ctx = SemanticAnalyzer.FindParentContext(aastNode);
             int size = 0;
@@ -544,10 +796,6 @@ namespace ERACompiler.Modules.Generation
                     }
                 }
             }
-            if (aastNode.ASTType.Equals("Reference"))
-            {
-                return 4; // Any address is an integer
-            }
             if (aastNode.ASTType.Equals("IDENTIFIER"))
             {
                     switch (ctx.GetVarType(aastNode.Token).Type)
@@ -568,29 +816,20 @@ namespace ERACompiler.Modules.Generation
                             }
                     }
             }
-            if (aastNode.ASTType.Equals("NUMBER"))
-            {
-                int value = aastNode.AASTValue;
-                if (value < 256)
-                {
-                    return 1;
-                }
-                else if (value < 256 * 256)
-                {
-                    return 2;
-                }
-                else
-                {
-                    return 4;
-                }
-            }
             foreach (AASTNode child in aastNode.Children)
             {
-                size = Math.Max(size, GetExpressionSizeInBytes(child));
+                size = Math.Max(size, GetSizeOfExpressionAddressedVariable(child));
             }
             return size;
         }
 
+        /// <summary>
+        /// Traverses up the Code Node tree, collecting the number of bytes from all ancestors and left siblings.
+        /// Basically, gives exact address (in bytes) of given Code Node.
+        /// Works only when Code Node tree is fully constructed.
+        /// </summary>
+        /// <param name="node">Code Node from where to start traversal.</param>
+        /// <returns>Exact address (in bytes) of given Code Node</returns>
         public static int GetCurrentBinarySize(CodeNode node)
         {
             int count = 0;
@@ -616,6 +855,11 @@ namespace ERACompiler.Modules.Generation
             return count + GetCurrentBinarySize(node.Parent);
         }
 
+        /// <summary>
+        /// Calculates a set of all unique variables (identifiers) used in a given AAST node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private HashSet<string> GetAllUsedVars(AASTNode node)
         {
             HashSet<string> set = new HashSet<string>();

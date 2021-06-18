@@ -25,7 +25,7 @@ namespace ERACompiler.Modules.Semantics
                         string[] args = pragmaParam.Split(' ');
                         if (args.Length != 2 || !expectedArgs.Contains(args[0]))
                         {
-                            throw new SemanticErrorException("TODO: ");
+                            throw new SemanticErrorException("Wrong 'memory' pragma usage!!!\r\nUsage: (b | kb | mb | gb) (number (ulong)). Example: memory(\"mb 16\")");
                         }
                         ulong mem;
                         try
@@ -34,7 +34,7 @@ namespace ERACompiler.Modules.Semantics
                         } 
                         catch (Exception)
                         {
-                            throw new SemanticErrorException("TODO: ");
+                            throw new SemanticErrorException("Wrong 'memory' pragma number!!! 'ulong' expected!!!");
                         }
                         Program.config.MemorySize = mem;
                         break;

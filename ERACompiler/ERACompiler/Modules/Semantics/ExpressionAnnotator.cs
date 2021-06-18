@@ -12,7 +12,7 @@ namespace ERACompiler.Modules.Semantics
             Context ctx = SemanticAnalyzer.FindParentContext(parent);
 
             // Special case -1: if we have constant expression - calculate it and return literal instead
-            // ATTENTION: need to be tested
+            // ATTENTION: need to be tested. UPD: it's okay
             if (SemanticAnalyzer.IsExprConstant(astNode, ctx))
             {
                 int exprValue = SemanticAnalyzer.CalculateConstExpr(astNode, ctx);             
@@ -53,7 +53,8 @@ namespace ERACompiler.Modules.Semantics
             }
 
             // If more, we need to rearrange the operands and operators to follow the operation priority
-            // --  Gospod' dast - srabotaet  -- 
+            // --  Gospod' dast - srabotaet  --   
+            // UPD: Gospod' smilovilsya nado mnoy, spasibo emu
             // Priority list
             List<string> ops = new List<string>() { "*", "+", "-", ">=", "<=", ">", "<", "=", "/=", "&", "^", "|", "?" };
 
