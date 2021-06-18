@@ -42,3 +42,11 @@ Here is the link to the ERA Simulator GitHub repo:
 [https://github.com/egorklementev/era_simulator ](https://github.com/egorklementev/era_simulator)  
   
 It is aslo a Windows x64 command-line application with similar arguments and way of usage.  
+
+
+## ATTENTION:
+
+It is highly recommended to read `example.era` file which gives basic understanding of the ERA language.  
+[example.era](../blob/master/ERACompiler/ERACompilerUnitTests/example.era)
+  
+Also, read documentation files in ../DOCS folder for more information about ERA language.

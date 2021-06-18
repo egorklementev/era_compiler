@@ -719,6 +719,93 @@
             </summary>
             <returns>A string in JSON format of the node and its children (works recursively).</returns>
         </member>
+        <member name="P:ERACompiler.Structures.CodeNode.AASTLink">
+            <summary>
+            Possible link to the AAST tree
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.Level">
+            <summary>
+            Tabulation level used for fancy JSON output
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.Name">
+            <summary>
+            The name of this node (for usability)
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.Token">
+            <summary>
+            Possible token value (for usability)
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.Parent">
+            <summary>
+            Possible Code Node parent
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.LabelDecl">
+            <summary>
+            Possible label declaration link. Used for label resolution
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.Children">
+            <summary>
+            The list of child Code Nodes. Can be empty.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.Bytes">
+            <summary>
+            The list of bytes related to this Code Node. Can be empty.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.ByteToReturn">
+            <summary>
+            Possible byte to return. Is needed, when returning some register information up the Code Node tree.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.CodeNode.OperandByte">
+            <summary>
+            Possible operand byte. Used for recursion resolution
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.CodeNode.Add(System.Collections.Generic.LinkedList{System.Byte})">
+            <summary>
+            Adds given bytes to the list of bytes of this node.
+            </summary>
+            <param name="bytes">The list of bytes to add/append.</param>
+            <returns>This node itself.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.CodeNode.Add(System.Byte[])">
+            <summary>
+            Adds given bytes to the list of bytes of this node.
+            </summary>
+            <param name="bytes">The list of bytes to add/append.</param>
+            <returns>This node itself.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.CodeNode.Replace(System.Int32,System.Collections.Generic.LinkedList{System.Byte})">
+            <summary>
+            Replaces some bytes in the list of bytes of this Code Node.
+            </summary>
+            <param name="startIndex">From where to start replacement (inclusive).</param>
+            <param name="newBytes">The list of bytes to replace with.</param>
+            <returns>This node itself.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.CodeNode.IsLeaf">
+            <returns>Whether node is leaf in Code Node tree or not.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.CodeNode.Count">
+            <summary>
+            Recusively counts bytes number in this node and its children.
+            </summary>
+            <returns>The number of bytes.</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.CodeNode.GetNodeCommandOffset">
+            <summary>
+            Used somewhere in JSON generation, I do not remember.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ERACompiler.Structures.Context">
             <summary>
             Represents a single context in the program.
@@ -769,6 +856,9 @@
             </summary>
             <param name="identifier">The name of a variable.</param>
             <returns>True if it exists, false otherwise</returns>
+        </member>
+        <member name="M:ERACompiler.Structures.Context.GetVarDeclarationBlockOffset(System.String)">
+            <returns>Returns how many context above this context given variable was declared.</returns>
         </member>
         <member name="M:ERACompiler.Structures.Context.SetLIStart(ERACompiler.Structures.Token,System.Int32)">
             <summary>
@@ -911,6 +1001,62 @@
         <member name="T:ERACompiler.Structures.TokenPosition">
             <summary>
             Position (in terms of line and characters on the line) of the token in the source code.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.Types.ArrayType">
+            <summary>
+            Represents array type of ERA language.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Types.ArrayType.ElementType">
+            <summary>
+            The type of elements inside the array.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Types.ArrayType.Size">
+            <summary>
+            The size of the array.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Types.ArrayType.GetSize">
+            <summary>
+            Returns array size on the stack (in bytes)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ERACompiler.Structures.Types.DataType">
+            <summary>
+            Represents data type of ERA language.
+            </summary>
+        </member>
+        <member name="M:ERACompiler.Structures.Types.DataType.#ctor">
+            <summary>
+            Data block is basically a global integere array.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.Types.RoutineType">
+            <summary>
+            Represents routine type of ERA language
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Types.RoutineType.ReturnType">
+            <summary>
+            The type of return value. Can be NO_TYPE.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Types.RoutineType.ParamTypes">
+            <summary>
+            Parameter types.
+            </summary>
+        </member>
+        <member name="T:ERACompiler.Structures.Types.VarType">
+            <summary>
+            Represents a primitive type of ERA language.
+            </summary>
+        </member>
+        <member name="P:ERACompiler.Structures.Types.VarType.Type">
+            <summary>
+            Defines the type itself.
             </summary>
         </member>
         <member name="M:ERACompiler.Structures.Types.VarType.GetSize">
