@@ -47,6 +47,6 @@ It is aslo a Windows x64 command-line application with similar arguments and way
 ## ATTENTION:
 
 It is highly recommended to read `example.era` file which gives basic understanding of the ERA language.  
-[example.era](../blob/master/ERACompiler/ERACompilerUnitTests/example.era)
+[example.era](../master/ERACompiler/ERACompilerUnitTests/example.era)
   
 Also, read documentation files in ../DOCS folder for more information about ERA language.
