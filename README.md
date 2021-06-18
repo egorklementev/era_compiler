@@ -35,3 +35,10 @@ Examples of commands:
 `ERACompiler -h`  -  get help message  
 `ERACompiler -s test.txt folder1/file1.java`  -  will compile source files to `compiled_test.txt` and `folder1/compiled_file1.java`  
 `ERACompiler --lex -o out.a`  -  will compile default `code.era` file to the `out.a` using only tokenization
+
+### ERA Simulator
+
+Here is the link to the ERA Simulator GitHub repo:  
+[https://github.com/egorklementev/era_simulator ](https://github.com/egorklementev/era_simulator)  
+  
+It is aslo a Windows x64 command-line application with similar arguments and way of usage.  
