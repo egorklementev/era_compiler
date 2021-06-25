@@ -52,6 +52,6 @@ The support for VS/VSCode, Intellij IDEA, and etc. will be added later.
 ## ATTENTION:
 
 It is highly recommended to read `example.era` file which gives basic understanding of the ERA language.  
-[example.era](../blob/master/ERACompiler/ERACompilerUnitTests/example.era)
+[example.era](../master/ERACompiler/ERACompilerUnitTests/example.era)
   
 Also, read documentation files in ../DOCS folder for more information about ERA language.
