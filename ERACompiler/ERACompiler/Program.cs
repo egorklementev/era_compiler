@@ -49,6 +49,7 @@ namespace ERACompiler
             //args = new string[] { "-s", "to_compile/debug.era", "--syn", "--ignconf"};
             //args = new string[] { "-s", "to_compile/debug.era", "--sem", "--ignconf"};
             //args = new string[] { "-s", "to_compile/debug.era", "--asm", "--ignconf"};
+            //args = new string[] { "-s", "to_compile/debug.era", "--ignconf"};
 
             bool error = true;
             try

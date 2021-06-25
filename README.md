@@ -43,6 +43,11 @@ Here is the link to the ERA Simulator GitHub repo:
   
 It is aslo a Windows x64 command-line application with similar arguments and way of usage.  
 
+### Vim syntax highlight
+Since no one want to program in the "notepad.exe" (why not?), there is a special `era.vim` file that adds a support of 
+ERA language syntax highlighting. You may find it in the ../DOCS folder. How to use Vim and its syntax highlighting, you may find in Google.  
+  
+The support for VS/VSCode, Intellij IDEA, and etc. will be added later.  
 
 ## ATTENTION:
 
