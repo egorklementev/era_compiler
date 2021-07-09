@@ -46,10 +46,12 @@ namespace ERACompiler
         {
             NativeMethods.AllocConsole();
 
+#if DEBUG
             //args = new string[] { "-s", "to_compile/debug.era", "--syn", "--ignconf"};
             //args = new string[] { "-s", "to_compile/debug.era", "--sem", "--ignconf"};
             //args = new string[] { "-s", "to_compile/debug.era", "--asm", "--ignconf"};
             //args = new string[] { "-s", "to_compile/debug.era", "--ignconf"};
+#endif
 
             bool error = true;
             try
