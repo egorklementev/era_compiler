@@ -86,8 +86,9 @@ namespace ERACompiler.Modules.Generation
                 .Add(GenerateCBR(27, 27));
 
             #region GOTO resolution
-            CodeNode? gotoNode = FindNextGotoNode(programNode);
-            while (gotoNode != null)
+            List<CodeNode> gotoNodes = new List<CodeNode>(); 
+            FindAllCodeNodesWithName(programNode, "Goto", gotoNodes);
+            foreach (CodeNode gotoNode in gotoNodes)
             {
                 int ctxNum = -1; // minus one since Program context does not have a stack allocated. It is static or global.
                 string labelName = gotoNode.AASTLink.Children[0].Token.Value;
@@ -168,19 +169,17 @@ namespace ERACompiler.Modules.Generation
                 labelNode.LabelDecl = labelDecl;
                 gotoLabelNode.Children.AddLast(labelNode);
                 gotoLabelNode.Children.AddLast(GetRegisterAllocationNode((AASTNode)gotoLabelNode.AASTLink.Parent, gotoLabelNode));
-
-                gotoNode = FindNextGotoNode(programNode);
             }
             #endregion
 
             #region Label resolution
-            CodeNode? label = FindNextLabel(programNode);
-            while (label != null)
+            List<CodeNode> labels = new List<CodeNode>(); 
+            FindAllCodeNodesWithName(programNode, "Label", labels);
+            foreach (CodeNode label in labels)
             {
                 int labelAddr = GetCurrentBinarySize(label); // Always the first child
                 label.LabelDecl.Bytes.Clear();
                 label.LabelDecl.Add(GenerateLDL(label.LabelDecl.ByteToReturn, labelAddr));
-                label = FindNextLabel(programNode);
             }
             #endregion
 
@@ -200,47 +199,17 @@ namespace ERACompiler.Modules.Generation
             return programNode;
         }
 
-        private CodeNode? FindNextGotoNode(CodeNode node)
+        private void FindAllCodeNodesWithName(CodeNode root, string nodeName, List<CodeNode> resultingList)
         {
-            if (node.Name.Equals("Goto") && node.ByteToReturn > 0)
+            if (root.Name.Equals(nodeName))
             {
-                node.ByteToReturn = 0; // Mark it as resolved
-                return node;
+                resultingList.Add(root);
             }
 
-            foreach (CodeNode child in node.Children)
+            foreach (CodeNode child in root.Children)
             {
-                CodeNode? gotoNode = FindNextGotoNode(child);
-                if (gotoNode != null)
-                {
-                    return gotoNode;
-                }
+                FindAllCodeNodesWithName(child, nodeName, resultingList);
             }
-
-            return null;
-        }
-
-        private CodeNode? FindNextLabel(CodeNode node)
-        {
-            if (node.Name.Equals("Label"))
-            {
-                if (node.LabelDecl.Bytes.First.Value == 0 &&
-                    node.LabelDecl.Bytes.First.Next.Value == 0)
-                {
-                    return node;
-                }
-            }
-
-            foreach (CodeNode child in node.Children)
-            {
-                CodeNode? label = FindNextLabel(child);
-                if (label != null)
-                {
-                    return label;
-                }
-            }
-
-            return null;
         }
 
     }
