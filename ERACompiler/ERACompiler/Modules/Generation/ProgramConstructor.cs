@@ -61,17 +61,20 @@ namespace ERACompiler.Modules.Generation
             unitsNode.Add(new byte[techOffset]); // Just fill bytes with zeros for a while (due to label resolution).
 
             // Identify all code data
+            int staticSize = staticNode.Count();
+            int codeSize = 0;
             foreach (AASTNode child in aastNode.Children)
             {
                 if (child.ASTType.Equals("Routine") || child.ASTType.Equals("Module") || child.ASTType.Equals("Code"))
                 {
                     dummyNode.Add(GenerateLDA(SB, 27, aastNode.Context.GetStaticOffset(child.Context.Name)))
                         .Add(GenerateLDC(0, 26))
-                        .Add(GenerateLDA(26, 26, staticNode.Count() + techOffset + codeNode.Count()))
+                        .Add(GenerateLDA(26, 26, staticSize + techOffset + codeSize))
                         .Add(GenerateST(26, 27));
                 }
 
                 codeNode.Children.AddLast(base.Construct(child, codeNode));
+                codeSize += codeNode.Children.Last.Value.Count();
             }
 
             unitsNode.Bytes.Clear();
@@ -173,18 +176,19 @@ namespace ERACompiler.Modules.Generation
             #endregion
 
             #region Label resolution
-            List<CodeNode> labels = new List<CodeNode>(); 
+            /*List<CodeNode> labels = new List<CodeNode>(); 
             FindAllCodeNodesWithName(programNode, "Label", labels);
             foreach (CodeNode label in labels)
             {
                 int labelAddr = GetCurrentBinarySize(label); // Always the first child
                 label.LabelDecl.Bytes.Clear();
                 label.LabelDecl.Add(GenerateLDL(label.LabelDecl.ByteToReturn, labelAddr));
-            }
+            }*/
+            ResolveLabels(programNode);
             #endregion
 
             // Move code data by the static data length
-            codeAddrBase += staticNode.Count();
+            codeAddrBase += staticSize;
             int codeLength = (unitsNode.Count() + codeNode.Count() + codeNode.Count() % 2) / 2 + 2;
 
             // Convert static data and code lengths to chunks of four bytes
@@ -209,6 +213,21 @@ namespace ERACompiler.Modules.Generation
             foreach (CodeNode child in root.Children)
             {
                 FindAllCodeNodesWithName(child, nodeName, resultingList);
+            }
+        }
+
+        private int curBinSize = 0;
+        private void ResolveLabels(CodeNode root)
+        {
+            if (root.Name.Equals("Label"))
+            {
+                root.LabelDecl.Bytes.Clear();
+                root.LabelDecl.Add(GenerateLDL(root.LabelDecl.ByteToReturn, curBinSize));
+            }
+            curBinSize += root.Bytes.Count;
+            foreach (CodeNode child in root.Children)
+            {
+                ResolveLabels(child);
             }
         }
 

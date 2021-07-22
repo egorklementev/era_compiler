@@ -11,11 +11,6 @@
 			"position": "Line: 1, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 1, Char: 3"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 2, Char: 1"
@@ -24,11 +19,6 @@
 			"token_type": "OPERATOR",
 			"value": "-",
 			"position": "Line: 2, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 2, Char: 3"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -41,11 +31,6 @@
 			"position": "Line: 3, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 3, Char: 3"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 4, Char: 1"
@@ -54,11 +39,6 @@
 			"token_type": "OPERATOR",
 			"value": "&",
 			"position": "Line: 4, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 4, Char: 3"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -71,11 +51,6 @@
 			"position": "Line: 5, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 5, Char: 3"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 6, Char: 1"
@@ -84,11 +59,6 @@
 			"token_type": "OPERATOR",
 			"value": "^",
 			"position": "Line: 6, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 6, Char: 3"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -101,11 +71,6 @@
 			"position": "Line: 7, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 7, Char: 3"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 8, Char: 1"
@@ -114,11 +79,6 @@
 			"token_type": "OPERATOR",
 			"value": "<",
 			"position": "Line: 8, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 8, Char: 3"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -131,11 +91,6 @@
 			"position": "Line: 9, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 9, Char: 3"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 10, Char: 1"
@@ -143,12 +98,7 @@
 		{
 			"token_type": "OPERATOR",
 			"value": "/=",
-			"position": "Line: 10, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 10, Char: 4"
+			"position": "Line: 10, Char: 1"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -158,12 +108,7 @@
 		{
 			"token_type": "OPERATOR",
 			"value": ":=",
-			"position": "Line: 11, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 11, Char: 4"
+			"position": "Line: 11, Char: 1"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -176,11 +121,6 @@
 			"position": "Line: 12, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 12, Char: 4"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 13, Char: 1"
@@ -189,11 +129,6 @@
 			"token_type": "OPERATOR",
 			"value": "-=",
 			"position": "Line: 13, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 13, Char: 4"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -206,11 +141,6 @@
 			"position": "Line: 14, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 14, Char: 5"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 15, Char: 1"
@@ -219,11 +149,6 @@
 			"token_type": "OPERATOR",
 			"value": "<<=",
 			"position": "Line: 15, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 15, Char: 5"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -236,11 +161,6 @@
 			"position": "Line: 16, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 16, Char: 4"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 17, Char: 1"
@@ -249,11 +169,6 @@
 			"token_type": "OPERATOR",
 			"value": "&=",
 			"position": "Line: 17, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 17, Char: 4"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -266,11 +181,6 @@
 			"position": "Line: 18, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 18, Char: 4"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 19, Char: 1"
@@ -279,11 +189,6 @@
 			"token_type": "OPERATOR",
 			"value": "<=",
 			"position": "Line: 19, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 19, Char: 4"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -296,11 +201,6 @@
 			"position": "Line: 20, Char: 2"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 20, Char: 4"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_",
 			"position": "Line: 21, Char: 1"
@@ -309,11 +209,6 @@
 			"token_type": "OPERATOR",
 			"value": "?=",
 			"position": "Line: 21, Char: 2"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 21, Char: 4"
 		},
 		{
 			"token_type": "IDENTIFIER",

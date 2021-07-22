@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ERACompiler.Structures;
 using ERACompiler.Utilities;
 using ERACompiler.Utilities.Errors;
@@ -10,32 +11,58 @@ namespace ERACompiler.Modules
     /// </summary>
     public class LexicalAnalyzer
     {
+        private const uint IDENTIFIER = 1;
+        private const uint LITERAL = 2;
+        private const uint OPERATOR = 4;
+        private const uint DELIMITER = 8;
+        private const uint WHITESPACE = 16;
+
+        private uint lastGuess = 0; // By comparing last token type guess with the current one, we can decide on the exact token type
+
         private string remembered; // Used for storing previously read characters
         private int lineChar; // Used for token position
         private int lineNumber; // Used for token position
 
-        // Lists that contain terminals
-        private readonly List<string> registers; // Used separately since registers are initially identified as 
-                                                 // identifiers and then are converted to registers
-        private readonly List<List<string>> allLists;
+        private HashSet<char> identifierSymbols;
+        private HashSet<char> literalSymbols;
+        private HashSet<char> operatorSymbols;
+        private HashSet<char> delimiterSymbols;
+        private HashSet<char> whitespaceSymbols;
 
         public LexicalAnalyzer()
         {
             remembered = "";
-            lineChar = 1;
+            lineChar = 0;
             lineNumber = 1;
 
-            registers = RegistersInitialization();
-            List<string> keywords = KeywordsInitialization();
-            List<string> operators = OperatorsInitialization();
-            List<string> delimiters = DelimitersInitialization();
-            List<string> whitespaces = WhitespacesInitialization();
+            identifierSymbols = new HashSet<char>();
+            for (char c = 'a'; c <= 'z'; c++)
+            {
+                identifierSymbols.Add(c);
+            }
 
-            allLists = new List<List<string>>() {
-                keywords,
-                operators,
-                delimiters,
-                whitespaces
+            literalSymbols = new HashSet<char>();
+            for (char c = '0'; c <= '9'; c++)
+            {
+                identifierSymbols.Add(c);
+                literalSymbols.Add(c);
+            }
+
+            identifierSymbols.Add('_');
+
+            operatorSymbols = new HashSet<char>
+            { 
+                '+', '-', '*', ':', '&', '|', '^', '<', '>', '?', '/', '='
+            };
+
+            delimiterSymbols = new HashSet<char>
+            {
+                ':', ';', ',', '.', '(', ')', '[', ']', '\"', '/', '@'
+            };
+
+            whitespaceSymbols = new HashSet<char>
+            {
+                ' ', '\t', '\n', '\r'
             };
         }
 
@@ -46,290 +73,215 @@ namespace ERACompiler.Modules
         /// <returns>A list of tokens constructed from the source code.</returns>
         public List<Token> GetTokenList(string sourceCode)
         {
-            try
-            {
-                List<Token> finalList = new List<Token>();
+            List<Token> finalList = new List<Token>();
 
-                if (sourceCode.Length <= 2)
+            sourceCode = sourceCode.ToLower();
+            sourceCode += Environment.NewLine; // For convenience
+
+            if (sourceCode.Length <= 2)
+            {
+                throw new LexicalErrorException("Empty file received!!!");
+            }
+
+            int rememberedLineNum = 0;
+            int rememberedCharNum = 0;
+            bool startQuoteFound = false;
+            bool commentLineSkip = false;
+            foreach (char c in sourceCode)
+            {
+                lineChar++;
+
+                if (commentLineSkip)
                 {
-                    throw new LexicalErrorException("The source code length should be at least more than two characters!!!");
+                    if (c == '\n')
+                    {
+                        lineNumber++;
+                        lineChar = 0;
+                        commentLineSkip = false;
+                        lastGuess = 0;
+                        remembered = "";
+                    }
+                    continue;
                 }
 
-                sourceCode = sourceCode.ToLower();
-
-                remembered = sourceCode[0] + ""; // Will start traversal from the second character
-
-                bool quoteOccurred = false;
-
-                // Traversing through the characters of the source code
-                for (int i = 1; i < sourceCode.Length; i++)
+                if (startQuoteFound)
                 {
-                    char c = sourceCode[i]; // Current character
-
-                    if (IsAbleToDetermineToken(c))
+                    rememberedCharNum++;
+                    if (c == '\n')
                     {
-                        Token t = DetermineToken(c);
-
-                        // Determine line and character numbers
-                        if (t.Type == TokenType.WHITESPACE)
-                        {
-                            if (t.Value == "\n" || t.Value == "\r\n")
-                            {
-                                lineChar = 0;
-                                lineNumber++;
-                            }
-                        }
-
-                        // Special case for comments
-                        if (t.Type == TokenType.DELIMITER && t.Value.Equals("//"))
-                        {
-                            lineChar = 0;
-                            while (c != '\n' && i < sourceCode.Length)
-                            {
-                                c = sourceCode[i++];
-                            }
-                            i--;
-                            remembered = "\r\n";
-                        }
-                        else if (t.Type == TokenType.DELIMITER && t.Value.Equals("\""))
-                        {
-                            t.Value = "\\\"";
-                            if (!quoteOccurred)
-                            {
-                                quoteOccurred = true;
-                                string text = "";
-                                int lc = i;
-                                finalList.Add(t);
-                                c = sourceCode[i++];
-                                while (c != '\"' && i < sourceCode.Length)
-                                {
-                                    text += c;
-                                    c = sourceCode[i++];
-                                }
-                                finalList.Add(new Token(TokenType.TEXT, text, new TokenPosition(lineNumber, lc)));
-                                i--;
-                                remembered = c.ToString();
-                            }
-                            else
-                            {
-                                quoteOccurred = false;
-                                finalList.Add(t);
-                                remembered = c.ToString();
-                            }
-                        }
-                        else
-                        {
-                            finalList.Add(t);
-                            remembered = c.ToString();
-                        }
+                        lineNumber++;
+                        lineChar = 0;
+                        remembered += " ";
+                        rememberedCharNum -= 2; // ??? donknowwhy
+                    }
+                    if (c == '\"')
+                    {
+                        finalList.Add(new Token(TokenType.TEXT, remembered[1..], new TokenPosition(rememberedLineNum, rememberedCharNum - remembered.Length + 1)));
+                        finalList.Add(new Token(TokenType.DELIMITER, "\\\"", new TokenPosition(lineNumber, lineChar)));
+                        startQuoteFound = false;
+                        remembered = "";
+                        lastGuess = 0;
+                        continue;
                     }
                     else
                     {
-                        remembered += c;
-                    }
-                    lineChar++;
-                }
-
-                finalList = Analyze(finalList);
-
-                return new List<Token>(finalList);
-            }
-            catch (System.NullReferenceException)
-            {
-                throw new LexicalErrorException("In file \"" + Program.currentFile + "\": input file malformed!");
-            }
-        }
-
-        /// <summary>
-        /// Used for correction and analysis of the token list.
-        /// </summary>
-        /// <param name="list">List with tokens to be analyzed.</param>
-        /// <returns>Compressed and improved token list.</returns>
-        private List<Token> Analyze(List<Token> list)
-        {
-            LinkedList<Token> llist = new LinkedList<Token>(list);
-            var anchor = llist.First;
-
-            while(true)
-            {
-                if (anchor == null) break;
-
-                Token ti = anchor.Value;                     
-
-                // Special case for ':=' operator.
-                if (anchor.Next != null && ti.Type == TokenType.DELIMITER && ti.Value.Equals(":"))
-                {
-                    if (anchor.Next.Value.Type == TokenType.OPERATOR && anchor.Next.Value.Value.Equals("="))
-                    {
-                        TokenPosition pos = ti.Position;
-                        llist.AddAfter(anchor.Next, new Token(TokenType.OPERATOR, ":=", pos));
-                        var next_anchor = anchor.Next.Next;
-                        llist.Remove(anchor.Next);
-                        llist.Remove(anchor);
-                        anchor = next_anchor;
-                    }
-                }
-
-                // Combine identifier/register/keyword/number tokens into a single token if any
-                if (ti.Type == TokenType.IDENTIFIER || ti.Type == TokenType.KEYWORD)
-                {
-                    var ti_node_iter = anchor;
-                    TokenPosition pos = ti_node_iter.Value.Position;
-                    TokenType savedType = ti_node_iter.Value.Type;
-                    int n = 0;
-                    string value = "";
-                    while (ti_node_iter != null &&
-                        (ti_node_iter.Value.Type == TokenType.NUMBER ||
-                        ti_node_iter.Value.Type == TokenType.IDENTIFIER ||
-                        ti_node_iter.Value.Type == TokenType.KEYWORD))
-                    {
-                        value += ti_node_iter.Value.Value;
-                        n++;
-                        ti_node_iter = ti_node_iter.Next;
-                    }
-                    for (int k = 0; k < n - 1; k++)
-                    {
-                        llist.Remove(anchor.Next);
-                    }
-
-                    // Special case for registers
-                    bool regFound = false;
-                    foreach (string reg in registers)
-                    {
-                        if (value.Equals(reg))
+                        if (c != '\n' && c != '\r' && c != '\t')
                         {
-                            regFound = true;
-                            savedType = TokenType.REGISTER;
+                            remembered += c;
                         }
+                        continue;
                     }
-
-                    llist.AddAfter(anchor, new Token(n > 1 && !regFound ? TokenType.IDENTIFIER : savedType, value, pos));
-                    var next_anchor = anchor.Next;
-                    llist.Remove(anchor);
-                    anchor = next_anchor;
                 }
 
-                // Special case for numbers
-                if (ti.Type == TokenType.NUMBER)
+                if (!literalSymbols.Contains(c) && 
+                    !identifierSymbols.Contains(c) && 
+                    ((lastGuess & LITERAL) > 0 || 
+                    (lastGuess & IDENTIFIER) > 0))
                 {
-                    var ti_node_iter = anchor;
-                    TokenPosition pos = ti_node_iter.Value.Position;
-                    TokenType savedType = ti_node_iter.Value.Type;
-                    int n = 0;
-                    string value = "";
-                    while (ti_node_iter != null && ti_node_iter.Value.Type == TokenType.NUMBER)
+                    if (literalSymbols.Contains(remembered[0]))
                     {
-                        value += ti_node_iter.Value.Value;
-                        n++;
-                        ti_node_iter = ti_node_iter.Next;
+                        finalList.Add(new Token(TokenType.NUMBER, remembered, new TokenPosition(lineNumber, lineChar - remembered.Length)));
+                        remembered = "";
+                        lastGuess = 0;
+                    } 
+                    else
+                    {
+                        finalList.Add(new Token(TokenType.IDENTIFIER, remembered, new TokenPosition(lineNumber, lineChar - remembered.Length)));
+                        remembered = "";
+                        lastGuess = 0;
                     }
-                    for (int k = 0; k < n - 1; k++)
+                }
+
+                if (!whitespaceSymbols.Contains(c) && (lastGuess & WHITESPACE) > 0)
+                {
+                    // We do not need whitespace tokens
+                    //finalList.Add(new Token(TokenType.WHITESPACE, remembered, new TokenPosition(lineNumber, lineChar)));
+                    /*if (remembered == Environment.NewLine)
                     {
-                        llist.Remove(anchor.Next);
+                        lineNumber++;
+                        lineChar = 1;
+                    }*/
+                    remembered = "";
+                    lastGuess = 0;
+                }
+
+                if (!delimiterSymbols.Contains(c) && (lastGuess & DELIMITER) > 0)
+                {
+                    if (remembered + c == "/=" || remembered + c == ":=")
+                    {
+                        finalList.Add(new Token(TokenType.OPERATOR, remembered + c, new TokenPosition(lineNumber, lineChar - remembered.Length - 1)));
+                        remembered = "";
+                        lastGuess = 0;
+                        continue;
+                    } 
+                    else if (remembered == ":")
+                    {
+                        finalList.Add(new Token(TokenType.DELIMITER, remembered, new TokenPosition(lineNumber, lineChar)));
+                        remembered = "";
+                        lastGuess = 0;
                     }
-                    llist.AddAfter(anchor, new Token(n > 1 ? TokenType.NUMBER : savedType, value, pos));
-                    var next_anchor = anchor.Next;
-                    llist.Remove(anchor);
-                    anchor = next_anchor;
-                }
-
-                // Special case for '/=' operator
-                if (ti.Type == TokenType.OPERATOR && ti.Value.Equals("/="))
-                {
-                    llist.Remove(anchor.Next);
-                }
-
-                anchor = anchor.Next;
-            }
-
-            return new List<Token>(llist);
-        }
-
-        /// <summary>
-        /// Used for token determination.
-        /// </summary>
-        /// <returns>Whether or not is it possible to understand what token has to be added to the list.</returns>
-        private bool IsAbleToDetermineToken(char c)
-        {
-            bool matched = false;
-            for (int i = 0; i < allLists.Count; i++) {
-                bool prev = DoesMatch(remembered, allLists[i]);
-                bool next = DoesMatch(remembered + c.ToString(), allLists[i]);
-                if (prev != next)
-                {
-                    return true;
-                }
-                if (prev && next)
-                    matched = true;
-            }
-            return !matched;
-        }
-        /// <summary>
-        /// Constructs token judjing by the 'remembered' variable.
-        /// </summary>
-        /// <returns>Retruns the next token for the list.</returns>
-        private Token DetermineToken(char c)
-        {
-            TokenPosition pos = new TokenPosition(lineNumber, lineChar - remembered.Length + 1);
-
-            for (int i = 0; i < allLists.Count; i++)
-            {
-                if (DoesMatch(remembered, allLists[i]))
-                {
-                    for (int j = 0; j < allLists[i].Count; j++)
+                    else
                     {
-                        if (remembered.Equals(allLists[i][j]))
+                        if (remembered == "//")
                         {
-                            return new Token((TokenType)i, remembered, pos);
+                            // We don't need that in the token list
+                            //finalList.Add(new Token(TokenType.DELIMITER, remembered, new TokenPosition(lineNumber, lineChar - remembered.Length)));
+                            commentLineSkip = true;
                         }
+                        remembered = "";
+                        lastGuess = 0;
+                    }
+                }
+
+                if (!operatorSymbols.Contains(c) && (lastGuess & OPERATOR) > 0)
+                {
+                    finalList.Add(new Token(TokenType.OPERATOR, remembered, new TokenPosition(lineNumber, lineChar - remembered.Length)));
+                    remembered = "";
+                    lastGuess = 0;
+                }
+
+                if (identifierSymbols.Contains(c))
+                {
+                    lastGuess |= IDENTIFIER;
+                }
+                if (literalSymbols.Contains(c))
+                {
+                    lastGuess |= LITERAL;
+                }
+                if (operatorSymbols.Contains(c))
+                {
+                    lastGuess |= OPERATOR;
+                }
+                if (delimiterSymbols.Contains(c))
+                {
+                    if (c != '/' && c != ':')
+                    {
+                        finalList.Add(new Token(TokenType.DELIMITER, c.ToString(), new TokenPosition(lineNumber, lineChar)));
+                        remembered = "";
+                        lastGuess = 0;
+                    }
+                    if (c == '\"')
+                    {
+                        finalList[^1].Value = "\\\"";
+                        startQuoteFound = !startQuoteFound;
+                        rememberedLineNum = lineNumber;
+                        rememberedCharNum = lineChar;
+                    }
+                    lastGuess |= DELIMITER;
+                }
+                if (whitespaceSymbols.Contains(c))
+                {
+                    if (c == '\n')
+                    {
+                        lineNumber++;
+                        lineChar = 0;
+                    }
+                    lastGuess |= WHITESPACE;
+                }
+
+                remembered += c;
+            }
+
+            // Verify constructed tokens
+            HashSet<string> operators = OperatorsInitialization();
+            HashSet<string> delimiters = DelimitersInitialization();
+            HashSet<string> registers = RegistersInitialization();
+            HashSet<string> keywords = KeywordsInitialization();
+            foreach (Token t in finalList)
+            {
+                if (t.Type == TokenType.OPERATOR)
+                {
+                    if (!operators.Contains(t.Value))
+                    {
+                        throw new LexicalErrorException("Unexpected token!!!" + Environment.NewLine + $"  At (Line: {t.Position.Line}, Char: {t.Position.Char}).");
+                    }
+                }
+                else if (t.Type == TokenType.DELIMITER)
+                {
+                    if (!delimiters.Contains(t.Value))
+                    {
+                        throw new LexicalErrorException("Unexpected token!!!" + Environment.NewLine + $"  At (Line: {t.Position.Line}, Char: {t.Position.Char}).");
+                    }
+                }
+                else if (t.Type == TokenType.IDENTIFIER)
+                {
+                    if (keywords.Contains(t.Value))
+                    {
+                        t.Type = TokenType.KEYWORD;
+                    }
+                    else if (registers.Contains(t.Value))
+                    {
+                        t.Type = TokenType.REGISTER;
                     }
                 }
             }
 
-            // If it is number or identifier or register
-            char fc = remembered[0];
-            if ((fc >= 'a' && fc <= 'z') || (fc == '_'))
-            {
-                return new Token(TokenType.IDENTIFIER, remembered, pos);
-            }
-            else if (fc >= '0' && fc <= '9')
-            {
-                return new Token(TokenType.NUMBER, remembered, pos);
-            }
-
-            // If it is comment
-            if ((remembered + c).Equals("//"))
-            {
-                return new Token(TokenType.DELIMITER, remembered + c, pos);
-            }
-
-            // Special case for '/=' operator
-            if ((remembered + c).Equals("/="))
-            {
-                return new Token(TokenType.OPERATOR, remembered + c, pos);
-            }
-
-            return null;
+            return finalList;
         }
 
-        /// <summary>
-        /// Checks if any of the elements from the given list starts with the given sequence of charachters.
-        /// </summary>
-        /// <param name="list">A list with strings.</param>
-        /// <param name="sequence">A string for checking.</param>
-        /// <returns>Whether or not there is a match.</returns>
-        private bool DoesMatch(string sequence, List<string> list)
+        private HashSet<string> KeywordsInitialization()
         {
-            foreach (string entry in list)            
-                if (entry.StartsWith(sequence))                
-                    return true;                           
-            return false;
-        }
-
-        // For convenience
-        private List<string> KeywordsInitialization()
-        {
-            return new List<string>() {
+            return new HashSet<string>() {
                 "pragma",
                 "module",
                 "data",
@@ -360,9 +312,9 @@ namespace ERACompiler.Modules
                 "print"
             };
         }
-        private List<string> OperatorsInitialization()
+        private HashSet<string> OperatorsInitialization()
         {
-            return new List<string>() {
+            return new HashSet<string>() {
                 "+",
                 "-",
                 "*",
@@ -390,9 +342,9 @@ namespace ERACompiler.Modules
                 "->"
             };
         }
-        private List<string> RegistersInitialization()
+        private HashSet<string> RegistersInitialization()
         {
-            List<string> registers = new List<string>();
+            HashSet<string> registers = new HashSet<string>();
             for (int i = 0; i < 28; i++)
             {
                 registers.Add("r" + i.ToString());
@@ -403,9 +355,9 @@ namespace ERACompiler.Modules
             registers.Add("pc");
             return registers;
         }
-        private List<string> DelimitersInitialization()
+        private HashSet<string> DelimitersInitialization()
         {
-            return new List<string>()
+            return new HashSet<string>()
             {
                 ":",
                 ";",
@@ -415,20 +367,10 @@ namespace ERACompiler.Modules
                 ")",
                 "[",
                 "]",
-                "\"",
+                "\\\"",
                 "//",
                 "@"
             };
         }
-        private List<string> WhitespacesInitialization()
-        {
-            return new List<string>() {
-                " ",
-                "\t",
-                "\n",
-                "\r\n"
-            };
-        }
-        
     }
 }
