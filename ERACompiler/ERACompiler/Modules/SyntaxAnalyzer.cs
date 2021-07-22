@@ -954,7 +954,6 @@ namespace ERACompiler.Modules
         /// <returns>A syntax responce instance which contains the AST root node.</returns>
         public SyntaxRule.SyntaxResponse CheckSyntax(List<Token> tokens)
         {
-            tokens.RemoveAll(token => token.Type == TokenType.WHITESPACE);
             ASTNode root = new ASTNode
                 (null, 
                 new List<ASTNode>(), 

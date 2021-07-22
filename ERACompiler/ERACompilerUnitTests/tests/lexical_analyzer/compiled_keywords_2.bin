@@ -6,19 +6,9 @@
 			"position": "Line: 1, Char: 1"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 1, Char: 6"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "_end",
 			"position": "Line: 2, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 2, Char: 5"
 		},
 		{
 			"token_type": "IDENTIFIER",
@@ -26,19 +16,9 @@
 			"position": "Line: 3, Char: 1"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 3, Char: 6"
-		},
-		{
 			"token_type": "IDENTIFIER",
 			"value": "data_1",
 			"position": "Line: 4, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 4, Char: 7"
 		},
 		{
 			"token_type": "IDENTIFIER",

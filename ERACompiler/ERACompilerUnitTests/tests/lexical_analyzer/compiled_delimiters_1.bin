@@ -3,11 +3,6 @@
 		{
 			"token_type": "DELIMITER",
 			"value": ":",
-			"position": "Line: 1, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
 			"position": "Line: 1, Char: 2"
 		},
 		{
@@ -16,19 +11,9 @@
 			"position": "Line: 2, Char: 1"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 2, Char: 2"
-		},
-		{
 			"token_type": "DELIMITER",
 			"value": ".",
 			"position": "Line: 3, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 3, Char: 2"
 		},
 		{
 			"token_type": "DELIMITER",
@@ -36,19 +21,9 @@
 			"position": "Line: 4, Char: 1"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 4, Char: 2"
-		},
-		{
 			"token_type": "DELIMITER",
 			"value": "]",
 			"position": "Line: 5, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 5, Char: 2"
 		},
 		{
 			"token_type": "DELIMITER",
@@ -56,29 +31,14 @@
 			"position": "Line: 6, Char: 1"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 6, Char: 2"
-		},
-		{
 			"token_type": "DELIMITER",
 			"value": ")",
 			"position": "Line: 7, Char: 1"
 		},
 		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 7, Char: 2"
-		},
-		{
 			"token_type": "DELIMITER",
 			"value": "(",
 			"position": "Line: 8, Char: 1"
-		},
-		{
-			"token_type": "WHITESPACE",
-			"value": "\r\n",
-			"position": "Line: 8, Char: 2"
 		}
 	]
 }
